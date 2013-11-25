@@ -219,7 +219,7 @@ class Bitacora_model extends CI_Model
             'id_controlador_accion' => $id_controlador_accion
         );
 
-        self::$CI->db->insert('bitacora', $data);
+        self::$CI->db->insert('sis_bitacora', $data);
 
         if(self::$CI->db->_error_number()) {
             log_message('error', '(Bitacora_model::insert) Usuario: '.self::$CI->session->userdata(USER_LOGGED).', Path: '.$path.', Parametros: '.$parametros.', Error '.self::$CI->db->_error_number().': '.self::$CI->db->_error_message());
@@ -254,7 +254,7 @@ class Bitacora_model extends CI_Model
         );
 
         $id = is_null($id) ? $this->id : $id;
-        $result = $this->db->update('bitacora', $data, array('id' => $id));
+        $result = $this->db->update('sis_bitacora', $data, array('id' => $id));
 
         if(empty($result)) {
             $this->error = true;
@@ -282,7 +282,7 @@ class Bitacora_model extends CI_Model
         if(is_array($id)) {
             // Eliminar un conjunto de registros
             foreach ($id as $idx) {
-                $result = $this->db->delete('bitacora', array('id' => $idx));
+                $result = $this->db->delete('sis_bitacora', array('id' => $idx));
 
                 if(empty($result)) {
                     $this->error = true;
@@ -293,7 +293,7 @@ class Bitacora_model extends CI_Model
             }
         } else {
             // Eliminar un solo registro
-            $result = $this->db->delete('bitacora', array('id' => $id));
+            $result = $this->db->delete('sis_bitacora', array('id' => $id));
 
             if(empty($result)) {
                 $this->error = true;
@@ -325,7 +325,7 @@ class Bitacora_model extends CI_Model
         }
 
         $this->db->where($this->filters);
-        $result = $this->db->delete('bitacora');
+        $result = $this->db->delete('sis_bitacora');
 
         if(empty($result)) {
             $this->error = true;
@@ -348,15 +348,15 @@ class Bitacora_model extends CI_Model
     {
         $result = false;
         
-        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, bitacora.*,
+        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, sis_bitacora.*,
                            usuario.nombre_usuario AS usuario, usuario.nombre, usuario.apellido_paterno, usuario.apellido_materno');
-        $this->db->from('bitacora');
-        $this->db->join('usuario', 'usuario.id = bitacora.id_usuario');
-        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = bitacora.id_controlador_accion');
+        $this->db->from('sis_bitacora');
+        $this->db->join('usuario', 'usuario.id = sis_bitacora.id_usuario');
+        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = sis_bitacora.id_controlador_accion');
         $this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
         $this->db->join('accion', 'accion.id = controlador_x_accion.id_accion');
         $this->db->join('entorno', 'entorno.id = controlador.id_entorno');
-        $this->db->where('bitacora.id', $id);
+        $this->db->where('sis_bitacora.id', $id);
         $query = $this->db->get();
         $result = $query->row();
 
@@ -466,11 +466,11 @@ class Bitacora_model extends CI_Model
     {
         $result = 0;
 
-        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, bitacora.*,
+        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, sis_bitacora.*,
                            usuario.nombre_usuario AS usuario, usuario.nombre, usuario.apellido_paterno, usuario.apellido_materno');
-        $this->db->from('bitacora');
-        $this->db->join('usuario', 'usuario.id = bitacora.id_usuario');
-        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = bitacora.id_controlador_accion');
+        $this->db->from('sis_bitacora');
+        $this->db->join('usuario', 'usuario.id = sis_bitacora.id_usuario');
+        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = sis_bitacora.id_controlador_accion');
         $this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
         $this->db->join('accion', 'accion.id = controlador_x_accion.id_accion');
         $this->db->join('entorno', 'entorno.id = controlador.id_entorno');
@@ -513,11 +513,11 @@ class Bitacora_model extends CI_Model
     {
         $result = 0;
 
-        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, bitacora.*,
+        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, sis_bitacora.*,
                            usuario.nombre_usuario AS usuario, usuario.nombre, usuario.apellido_paterno, usuario.apellido_materno');
-        $this->db->from('bitacora');
-        $this->db->join('usuario', 'usuario.id = bitacora.id_usuario');
-        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = bitacora.id_controlador_accion');
+        $this->db->from('sis_bitacora');
+        $this->db->join('usuario', 'usuario.id = sis_bitacora.id_usuario');
+        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = sis_bitacora.id_controlador_accion');
         $this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
         $this->db->join('accion', 'accion.id = controlador_x_accion.id_accion');
         $this->db->join('entorno', 'entorno.id = controlador.id_entorno');

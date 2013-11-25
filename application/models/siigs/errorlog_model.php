@@ -161,7 +161,8 @@ class Errorlog_model extends CI_Model
             $id_controlador_accion = self::$CI->ControladorAccion_model->getIdByPath($path);
         
             if(empty($id_controlador_accion)) {
-                log_message('error', '(Errorlog_model::insert) No se encuentra la relación entre el controlador y la acción: '.$path.', Error '.self::$CI->db->_error_number().': '.self::$CI->db->_error_message());
+                log_message('error', '(Errorlog_model::insert) No se encuentra la relación entre el controlador y la acción: '.$path.', Error '.
+                            self::$CI->db->_error_number().': '.self::$CI->db->_error_message());
             }
 
             $data = array(
@@ -171,13 +172,15 @@ class Errorlog_model extends CI_Model
                 'descripcion' => $descripcion
             );
 
-            self::$CI->db->insert('error', $data);
+            self::$CI->db->insert('sis_error', $data);
 
             if(self::$CI->db->_error_number()) {
-                log_message('error', '(Errorlog_model::insert) Usuario: '.self::$CI->session->userdata(USER_LOGGED).', Path: '.$path.', Descripción: '.$descripcion.', Error '.self::$CI->db->_error_number().': '.self::$CI->db->_error_message());
+                log_message('error', '(Errorlog_model::insert) Usuario: '.self::$CI->session->userdata(USER_LOGGED).', Path: '.$path.', Descripción: '.
+                            $descripcion.', Error '.self::$CI->db->_error_number().': '.self::$CI->db->_error_message());
             }
         } catch(Exception $e) {
-            log_message('error', '(Errorlog_model::insert) Usuario: '.self::$CI->session->userdata(USER_LOGGED).', Path: '.$path.', Descripción: '.$descripcion.', Error '.$e->getMessage());
+            log_message('error', '(Errorlog_model::insert) Usuario: '.self::$CI->session->userdata(USER_LOGGED).', Path: '.$path.', Descripción: '.
+                        $descripcion.', Error '.$e->getMessage());
         }
     }
 
@@ -192,20 +195,20 @@ class Errorlog_model extends CI_Model
     {
         $result = false;
         
-        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, error.*,
+        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, sis_error.*,
                            usuario.nombre_usuario AS usuario, usuario.nombre, usuario.apellido_paterno, usuario.apellido_materno');
-        $this->db->from('error');
-        $this->db->join('usuario', 'usuario.id = error.id_usuario');
-        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = error.id_controlador_accion');
+        $this->db->from('sis_error');
+        $this->db->join('usuario', 'usuario.id = sis_error.id_usuario');
+        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = sis_error.id_controlador_accion');
         $this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
         $this->db->join('accion', 'accion.id = controlador_x_accion.id_accion');
         $this->db->join('entorno', 'entorno.id = controlador.id_entorno');
-        $this->db->where('error.id', $id);
+        $this->db->where('sis_error.id', $id);
         $query = $this->db->get();
         $result = $query->row();
 
         if($this->db->_error_number()) {
-            log_message('error', __METHOD__.', Error '.self::$CI->db->_error_number().': '.self::$CI->db->_error_message());
+            log_message('sis_error', __METHOD__.', Error '.self::$CI->db->_error_number().': '.self::$CI->db->_error_message());
             return false;
         }
 
@@ -297,11 +300,11 @@ class Errorlog_model extends CI_Model
     {
         $result = 0;
 
-        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, error.*,
+        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, sis_error.*,
                            usuario.nombre_usuario AS usuario, usuario.nombre, usuario.apellido_paterno, usuario.apellido_materno');
-        $this->db->from('error');
-        $this->db->join('usuario', 'usuario.id = error.id_usuario');
-        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = error.id_controlador_accion');
+        $this->db->from('sis_error');
+        $this->db->join('usuario', 'usuario.id = sis_error.id_usuario');
+        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = sis_error.id_controlador_accion');
         $this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
         $this->db->join('accion', 'accion.id = controlador_x_accion.id_accion');
         $this->db->join('entorno', 'entorno.id = controlador.id_entorno');
@@ -340,11 +343,11 @@ class Errorlog_model extends CI_Model
     {
         $result = false;
 
-        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, error.*,
+        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, sis_error.*,
                            usuario.nombre_usuario AS usuario, usuario.nombre, usuario.apellido_paterno, usuario.apellido_materno');
-        $this->db->from('error');
-        $this->db->join('usuario', 'usuario.id = error.id_usuario');
-        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = error.id_controlador_accion');
+        $this->db->from('sis_error');
+        $this->db->join('usuario', 'usuario.id = sis_error.id_usuario');
+        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = sis_error.id_controlador_accion');
         $this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
         $this->db->join('accion', 'accion.id = controlador_x_accion.id_accion');
         $this->db->join('entorno', 'entorno.id = controlador.id_entorno');
