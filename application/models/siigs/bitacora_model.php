@@ -348,14 +348,14 @@ class Bitacora_model extends CI_Model
     {
         $result = false;
         
-        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, sis_bitacora.*,
-                           usuario.nombre_usuario AS usuario, usuario.nombre, usuario.apellido_paterno, usuario.apellido_materno');
+        $this->db->select('sis_entorno.nombre AS entorno, sis_controlador.nombre AS controlador, sis_accion.nombre AS accion, sis_bitacora.*,
+                           sis_usuario.nombre_usuario AS usuario, sis_usuario.nombre,sis_ usuario.apellido_paterno, sis_usuario.apellido_materno');
         $this->db->from('sis_bitacora');
-        $this->db->join('usuario', 'usuario.id = sis_bitacora.id_usuario');
-        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = sis_bitacora.id_controlador_accion');
-        $this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
-        $this->db->join('accion', 'accion.id = controlador_x_accion.id_accion');
-        $this->db->join('entorno', 'entorno.id = controlador.id_entorno');
+        $this->db->join('sis_usuario', 'sis_usuario.id = sis_bitacora.id_usuario');
+        $this->db->join('sis_controlador_x_accion', 'sis_controlador_x_accion.id = sis_bitacora.id_controlador_accion');
+        $this->db->join('sis_controlador', 'sis_controlador.id = sis_controlador_x_accion.id_controlador');
+        $this->db->join('sis_accion', 'sis_accion.id = sis_controlador_x_accion.id_accion');
+        $this->db->join('sis_entorno', 'sis_entorno.id = sis_controlador.id_entorno');
         $this->db->where('sis_bitacora.id', $id);
         $query = $this->db->get();
         $result = $query->row();
@@ -466,14 +466,14 @@ class Bitacora_model extends CI_Model
     {
         $result = 0;
 
-        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, sis_bitacora.*,
-                           usuario.nombre_usuario AS usuario, usuario.nombre, usuario.apellido_paterno, usuario.apellido_materno');
+        $this->db->select('sis_entorno.nombre AS entorno, sis_controlador.nombre AS controlador, sis_accion.nombre AS accion, sis_bitacora.*,
+                           sis_usuario.nombre_usuario AS usuario, sis_usuario.nombre, sis_usuario.apellido_paterno, sis_usuario.apellido_materno');
         $this->db->from('sis_bitacora');
-        $this->db->join('usuario', 'usuario.id = sis_bitacora.id_usuario');
-        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = sis_bitacora.id_controlador_accion');
-        $this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
-        $this->db->join('accion', 'accion.id = controlador_x_accion.id_accion');
-        $this->db->join('entorno', 'entorno.id = controlador.id_entorno');
+        $this->db->join('sis_usuario', 'sis_usuario.id = sis_bitacora.id_usuario');
+        $this->db->join('sis_controlador_x_accion', 'sis_controlador_x_accion.id = sis_bitacora.id_controlador_accion');
+        $this->db->join('sis_controlador', 'sis_controlador.id = sis_controlador_x_accion.id_controlador');
+        $this->db->join('sis_accion', 'sis_accion.id = sis_controlador_x_accion.id_accion');
+        $this->db->join('sis_entorno', 'sis_entorno.id = sis_controlador.id_entorno');
         $this->db->order_by('fecha_hora', 'desc');
         $this->db->order_by('id_entorno', 'desc');
         $this->db->order_by('id_controlador', 'desc');
@@ -513,14 +513,14 @@ class Bitacora_model extends CI_Model
     {
         $result = 0;
 
-        $this->db->select('entorno.nombre AS entorno, controlador.nombre AS controlador, accion.nombre AS accion, sis_bitacora.*,
-                           usuario.nombre_usuario AS usuario, usuario.nombre, usuario.apellido_paterno, usuario.apellido_materno');
+        $this->db->select('sis_entorno.nombre AS entorno, sis_controlador.nombre AS controlador, sis_accion.nombre AS accion, sis_bitacora.*,
+                           sis_usuario.nombre_usuario AS usuario, sis_usuario.nombre, sis_usuario.apellido_paterno, sis_usuario.apellido_materno');
         $this->db->from('sis_bitacora');
-        $this->db->join('usuario', 'usuario.id = sis_bitacora.id_usuario');
-        $this->db->join('controlador_x_accion', 'controlador_x_accion.id = sis_bitacora.id_controlador_accion');
-        $this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
-        $this->db->join('accion', 'accion.id = controlador_x_accion.id_accion');
-        $this->db->join('entorno', 'entorno.id = controlador.id_entorno');
+        $this->db->join('sis_usuario', 'sis_usuario.id = sis_bitacora.id_usuario');
+        $this->db->join('sis_controlador_x_accion', 'sis_controlador_x_accion.id = sis_bitacora.id_controlador_accion');
+        $this->db->join('sis_controlador', 'sis_controlador.id = sis_controlador_x_accion.id_controlador');
+        $this->db->join('sis_accion', 'sis_accion.id = sis_controlador_x_accion.id_accion');
+        $this->db->join('sis_entorno', 'sis_entorno.id = sis_controlador.id_entorno');
 
         if(!empty($this->filters))
             $this->db->where($this->filters);
