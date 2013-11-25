@@ -172,7 +172,7 @@ class Controlador_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$string = 'select a.id as id_entorno,a.nombre as entorno, b.* from entorno a join controlador b on a.id = b.id_entorno order by a.nombre ,b.nombre';
+		$string = 'select a.id as id_entorno,a.nombre as entorno, b.* from sis_entorno a join sis_controlador b on a.id = b.id_entorno order by a.nombre ,b.nombre';
 
 		if ((!empty($this->offset) || $this->offset == 0) && !empty($this->rows))
 		$string .= ' limit '.$this->offset. ','.$this->rows;
@@ -198,7 +198,7 @@ class Controlador_model extends CI_Model {
 	 */
 	public function getNumRows($entorno = 0)
 	{
-		$query = $this->db->query('select count(*) as num from entorno a join controlador b on a.id = b.id_entorno ' . (($entorno == 0) ? '' :' where b.id_entorno = '.$entorno));
+		$query = $this->db->query('select count(*) as num from sis_entorno a join sis_controlador b on a.id = b.id_entorno ' . (($entorno == 0) ? '' :' where b.id_entorno = '.$entorno));
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -219,7 +219,7 @@ class Controlador_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->get_where('controlador', array('id' => $id));
+		$query = $this->db->get_where('sis_controlador', array('id' => $id));
 
 		if (!$query)
 		{
@@ -241,7 +241,7 @@ class Controlador_model extends CI_Model {
 	 */
 	public function getByEntorno($id)
 	{
-		$string = 'select a.id as id_entorno,a.nombre as entorno, b.* from entorno a join controlador b on a.id = b.id_entorno where b.id_entorno = '.$id . ' order by a.nombre ,b.nombre';
+		$string = 'select a.id as id_entorno,a.nombre as entorno, b.* from sis_entorno a join sis_controlador b on a.id = b.id_entorno where b.id_entorno = '.$id . ' order by a.nombre ,b.nombre';
 
 		if ((!empty($this->offset) || $this->offset == 0) && !empty($this->rows))
 		$string .= ' limit '.$this->offset. ','.$this->rows;
@@ -268,7 +268,7 @@ class Controlador_model extends CI_Model {
 	 */
 	public function getAcciones($id)
 	{
-		$query = $this->db->query("select a.id as id, a.nombre as accion , case when b.id_accion is null or b.activo = FALSE then false else true end as activo from accion a left join controlador_x_accion b on a.id = b.id_accion and b.id_controlador =".$id);
+		$query = $this->db->query("select a.id as id, a.nombre as accion , case when b.id_accion is null or b.activo = FALSE then false else true end as activo from sis_accion a left join sis_controlador_x_accion b on a.id = b.id_accion and b.id_controlador =".$id);
 
 		if (!$query)
 		{
@@ -293,7 +293,7 @@ class Controlador_model extends CI_Model {
 	 */
 	public function getPermisos($entorno , $grupo)
 	{
-		$query = $this->db->query("select a.id_entorno,d.id, a.nombre as controlador, b.nombre as accion, case when isnull(c.id) or c.activo = 0 or isnull(c.activo) then 0 else c.id end as id , case when isnull(e.id) then 0 else 1 end as activo from controlador a cross join accion b left join controlador_x_accion c on c.id_accion = b.id and c.id_controlador = a.id left join (grupo d join permiso e on d.id = e.id_grupo and d.id = ".$grupo." ) on e.id_controlador_accion = c.id where a.id_entorno = ".$entorno." order by a.nombre,b.nombre");
+		$query = $this->db->query("select a.id_entorno,d.id, a.nombre as controlador, b.nombre as accion, case when isnull(c.id) or c.activo = 0 or isnull(c.activo) then 0 else c.id end as id , case when isnull(e.id) then 0 else 1 end as activo from sis_controlador a cross join sis_accion b left join sis_controlador_x_accion c on c.id_accion = b.id and c.id_controlador = a.id left join (sis_grupo d join sis_permiso e on d.id = e.id_grupo and d.id = ".$grupo." ) on e.id_controlador_accion = c.id where a.id_entorno = ".$entorno." order by a.nombre,b.nombre");
 
 		if (!$query)
 		{
@@ -321,7 +321,7 @@ class Controlador_model extends CI_Model {
 				'clase' => $this->clase
 		);
 
-		$query = $this->db->insert('controlador', $data);
+		$query = $this->db->insert('sis_controlador', $data);
 
 		if (!$query)
 		{
@@ -349,7 +349,7 @@ class Controlador_model extends CI_Model {
 		);
 
 		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('controlador', $data);
+		$query = $this->db->update('sis_controlador', $data);
 
 		if (!$query)
 		{
@@ -371,8 +371,8 @@ class Controlador_model extends CI_Model {
 	public function accionesUpdate()
 	{
 
-		$this->db->query('delete from permiso where id_controlador_accion in (select id from controlador_x_accion where id_controlador = '. $this->getId() . ' and activo = 1 and id_accion not in ('.implode(",", $this->acciones).'))');
-		$this->db->query('update controlador_x_accion set activo = 0 where id_controlador = '. $this->getId());
+		$this->db->query('delete from sis_permiso where id_controlador_accion in (select id from sis_controlador_x_accion where id_controlador = '. $this->getId() . ' and activo = 1 and id_accion not in ('.implode(",", $this->acciones).'))');
+		$this->db->query('update sis_controlador_x_accion set activo = 0 where id_controlador = '. $this->getId());
 
 		foreach ($this->acciones as $accion)
 		{
@@ -381,7 +381,7 @@ class Controlador_model extends CI_Model {
 					'id_accion' => $accion
 			);
 
-			$exists = $this->db->get_where("controlador_x_accion",$item);
+			$exists = $this->db->get_where("sis_controlador_x_accion",$item);
 
 			if (!$exists)
 			{
@@ -393,7 +393,7 @@ class Controlador_model extends CI_Model {
 			if ($exists->num_rows() > 0)
 			{
 				$this->db->where($item);
-				$query = $this->db->update('controlador_x_accion', array('activo' => '1'));
+				$query = $this->db->update('sis_controlador_x_accion', array('activo' => '1'));
 
 				if (!$query && $remove)
 				{
@@ -405,7 +405,7 @@ class Controlador_model extends CI_Model {
 			else
 			{
 				$item['activo'] = '1';
-				$query = $this->db->insert('controlador_x_accion', $item);
+				$query = $this->db->insert('sis_controlador_x_accion', $item);
 
 				if (!$query)
 				{
@@ -427,7 +427,7 @@ class Controlador_model extends CI_Model {
 	 */
 	public function delete()
 	{
-		$query = $this->db->delete('controlador', array('id' => $this->getId()));
+		$query = $this->db->delete('sis_controlador', array('id' => $this->getId()));
 
 		if (!$query)
 		{

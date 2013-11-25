@@ -278,7 +278,7 @@ class Catalogo_model extends CI_Model {
 		);
 
 		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('accion', $data);
+		$query = $this->db->update('sis_accion', $data);
 
 		if (!$query)
 		{

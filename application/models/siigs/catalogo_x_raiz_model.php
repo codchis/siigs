@@ -175,7 +175,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 	 */
 	public function getByArbol($id)
 	{
-		$catalogos = $this->db->query('SELECT * from raiz_x_catalogo where id_raiz_arbol='.$id.' order by grado_segmentacion');
+		$catalogos = $this->db->query('SELECT * from asu_raiz_x_catalogo where id_raiz_arbol='.$id.' order by grado_segmentacion');
 
 		if (!$catalogos)
 		{
@@ -197,7 +197,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 	 */
 	public function getNivel($id)
 	{
-		$nivel = $this->db->query('SELECT ifnull(max(grado_segmentacion),0) +1 as nivel from raiz_x_catalogo where id_raiz_arbol='.$id);
+		$nivel = $this->db->query('SELECT ifnull(max(grado_segmentacion),0) +1 as nivel from asu_raiz_x_catalogo where id_raiz_arbol='.$id);
 
 		if (!$nivel)
 		{
@@ -219,7 +219,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 	 */
 	public function getByNivel($id)
 	{
-		$nivel = $this->db->query('SELECT tabla_catalogo as nombre,nombre_columna_llave as llave from raiz_x_catalogo where grado_segmentacion='.$id);
+		$nivel = $this->db->query('SELECT tabla_catalogo as nombre,nombre_columna_llave as llave from asu_raiz_x_catalogo where grado_segmentacion='.$id);
 
 		if (!$nivel)
 		{
@@ -242,7 +242,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 	public function getById($id)
 	{
 
-		$query = $this->db->query('select * from raiz_x_catalogo where id='.$id);
+		$query = $this->db->query('select * from asu_raiz_x_catalogo where id='.$id);
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -264,7 +264,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 	public function getRelations($id)
 	{
 
-		$query = $this->db->query('select * from relacion_catalogo where id_raiz_x_catalogo='.$id);
+		$query = $this->db->query('select * from asu_relacion_catalogo where id_raiz_x_catalogo='.$id);
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -296,7 +296,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 		}
 		else
 		{
-			$catpadre = $this->db->query('select * from raiz_x_catalogo where id_raiz_arbol='.$cathijo->id_raiz_arbol.' and grado_segmentacion='.($cathijo->grado_segmentacion-1));
+			$catpadre = $this->db->query('select * from asu_raiz_x_catalogo where id_raiz_arbol='.$cathijo->id_raiz_arbol.' and grado_segmentacion='.($cathijo->grado_segmentacion-1));
 			if (!$catpadre || $catpadre->num_rows() == 0)
 			{
 				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -354,7 +354,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 		'id_raiz_arbol' => $this->id_raiz,
 		);
 
-		$query = $this->db->insert('raiz_x_catalogo',$datos);
+		$query = $this->db->insert('asu_raiz_x_catalogo',$datos);
 
 		if (!$query)
 		{
@@ -378,7 +378,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 					));
 				}
 
-				$query = $this->db->insert_batch('relacion_catalogo',$datos);
+				$query = $this->db->insert_batch('asu_relacion_catalogo',$datos);
 
 				if (!$query)
 				{
@@ -410,7 +410,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 		);
 
 		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('accion', $data);
+		$query = $this->db->update('sis_accion', $data);
 
 		if (!$query)
 		{
@@ -431,7 +431,7 @@ class Catalogo_x_raiz_model extends CI_Model {
 	 */
 	public function delete()
 	{
-		$query = $this->db->delete('raiz_x_catalogo', array('id' => $this->getId()));
+		$query = $this->db->delete('asu_raiz_x_catalogo', array('id' => $this->getId()));
 
 		if (!$query)
 		{

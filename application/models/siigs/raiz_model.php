@@ -97,7 +97,7 @@ class Raiz_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->get('raiz');
+		$query = $this->db->get('asu_raiz');
 
 		if (!$query)
 		{
@@ -119,7 +119,7 @@ class Raiz_model extends CI_Model {
 	 */
 	public function ExistInArbol($id)
 	{
-		$query = $this->db->query('select * from arbol_segmentacion where id_raiz='.$id);
+		$query = $this->db->query('select * from asu_arbol_segmentacion where id_raiz='.$id);
 
 		if (!$query)
 		{
@@ -141,7 +141,7 @@ class Raiz_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->get_where('raiz', array('id' => $id));
+		$query = $this->db->get_where('asu_raiz', array('id' => $id));
 
 		if (!$query)
 		{
@@ -166,7 +166,7 @@ class Raiz_model extends CI_Model {
 				'descripcion' => $this->descripcion
 		);
 
-		$query = $this->db->insert('raiz', $data);
+		$query = $this->db->insert('asu_raiz', $data);
 
 		if (!$query)
 		{
@@ -192,7 +192,7 @@ class Raiz_model extends CI_Model {
 		);
 
 		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('raiz', $data);
+		$query = $this->db->update('asu_raiz', $data);
 
 		if (!$query)
 		{
@@ -214,7 +214,7 @@ class Raiz_model extends CI_Model {
 	public function delete()
 	{
 
-		$query = $this->db->delete('raiz', array('id' => $this->getId()));
+		$query = $this->db->delete('asu_raiz', array('id' => $this->getId()));
 
 		if (!$query)
 		{

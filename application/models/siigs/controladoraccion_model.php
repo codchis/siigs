@@ -94,7 +94,7 @@ class ControladorAccion_model extends CI_Model {
 	 */
 	public function getId($controlador , $accion)
 	{
-		$query = $this->db->get_where('controlador_x_accion', array('id_accion' => $accion , 'id_controlador' => $controlador));
+		$query = $this->db->get_where('sis_controlador_x_accion', array('id_accion' => $accion , 'id_controlador' => $controlador));
 
 		if (!$query)
 		{
@@ -117,7 +117,7 @@ class ControladorAccion_model extends CI_Model {
 	public function getById($id)
 	{
 
-		$query = $this->db->get_where('controlador_x_accion', array('id' => $id));
+		$query = $this->db->get_where('sis_controlador_x_accion', array('id' => $id));
 
 		if (!$query)
 		{
@@ -150,7 +150,7 @@ class ControladorAccion_model extends CI_Model {
  			throw new Exception(__CLASS__);
 		}
 
-		$query = $this->db->query("SELECT c.id FROM entorno a join controlador b on a.id = b.id_entorno join controlador_x_accion c on b.id = c.id_controlador join accion d on c.id_accion = d.id where a.directorio = '".$arreglo[0]."' and b.clase = '".$arreglo[1]."' and d.metodo = '".$arreglo[2]."'");
+		$query = $this->db->query("SELECT c.id FROM sis_entorno a join sis_controlador b on a.id = b.id_entorno join sis_controlador_x_accion c on b.id = c.id_controlador join sis_accion d on c.id_accion = d.id where a.directorio = '".$arreglo[0]."' and b.clase = '".$arreglo[1]."' and d.metodo = '".$arreglo[2]."'");
 
 		if (!$query)
 		{

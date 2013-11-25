@@ -198,7 +198,7 @@ class Menu_model extends CI_Model
 
         $data['nombre'] = $this->nombre;
 
-        $result = $this->db->insert('menu', $data);
+        $result = $this->db->insert('sis_menu', $data);
 
         if( $this->db->_error_number() ) {
             $this->error = true;
@@ -239,7 +239,7 @@ class Menu_model extends CI_Model
         $data['nombre'] = $this->nombre;
 
         $id = is_null($id) ? $this->id : $id;
-        $result = $this->db->update('menu', $data, array('id' => $id));
+        $result = $this->db->update('sis_menu', $data, array('id' => $id));
 
         if( $this->db->_error_number() ) {
             $this->error = true;
@@ -270,7 +270,7 @@ class Menu_model extends CI_Model
         if(is_array($id)) {
             // Eliminar un conjunto de registros
             foreach ($id as $idx) {
-                $result = $this->db->delete('menu', array('id' => $idx));
+                $result = $this->db->delete('sis_menu', array('id' => $idx));
 
                 if(empty($result)) {
                     $this->error = true;
@@ -313,7 +313,7 @@ class Menu_model extends CI_Model
         }
 
         $this->db->where($this->filters);
-        $result = $this->db->delete('menu');
+        $result = $this->db->delete('sis_menu');
 
         if(empty($result)) {
             $this->error = true;
@@ -336,14 +336,14 @@ class Menu_model extends CI_Model
     {
         $result = false;
         
-        $this->db->select('menu.id, menu.id_padre, menu.id_raiz, menu.nombre, menu.id_controlador, entorno.nombre AS nombre_entorno, entorno.id AS id_entorno,
-                          menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, controlador.nombre AS nombre_controlador');
-        $this->db->from('menu');
-        $this->db->join('menu raiz', 'raiz.id=menu.id_raiz', 'left');
-        $this->db->join('menu padre', 'padre.id=menu.id_padre', 'left');
-        $this->db->join('controlador', 'controlador.id=menu.id_controlador', 'left');
-        $this->db->join('entorno', 'entorno.id=controlador.id_entorno', 'left');
-        $this->db->where('menu.id', $id);
+        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador, sis_entorno.nombre AS nombre_entorno, sis_entorno.id AS id_entorno,
+                          sis_menu.ruta, asu_raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
+        $this->db->from('sis_menu');
+        $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
+        $this->db->join('sis_menu padre', 'padre.id=sis_menu.id_padre', 'left');
+        $this->db->join('sis_controlador', 'sis_controlador.id=sis_menu.id_controlador', 'left');
+        $this->db->join('sis_entorno', 'sis_entorno.id=sis_controlador.id_entorno', 'left');
+        $this->db->where('sis_menu.id', $id);
         $query = $this->db->get();
         $result = $query->row();
 
@@ -446,12 +446,12 @@ class Menu_model extends CI_Model
     {
         $result = 0;
         
-        $this->db->select('menu.id, menu.id_padre, menu.id_raiz, menu.nombre, menu.id_controlador,
-                          menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, controlador.nombre AS nombre_controlador');
-        $this->db->from('menu');
-        $this->db->join('menu raiz', 'raiz.id=menu.id_raiz', 'left');
-        $this->db->join('menu padre', 'padre.id=menu.id_padre', 'left');
-        $this->db->join('controlador', 'controlador.id=menu.id_controlador', 'left');
+        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador,
+                          sis_menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
+        $this->db->from('sis_menu');
+        $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
+        $this->db->join('sis_menu padre', 'padre.id=sis_menu.id_padre', 'left');
+        $this->db->join('sis_controlador', 'sis_controlador.id=sis_menu.id_controlador', 'left');
 
         if( !empty($this->filters) )
             $this->db->where($this->filters);
@@ -488,12 +488,12 @@ class Menu_model extends CI_Model
     {
         $result = 0;
 
-        $this->db->select('menu.id, menu.id_padre, menu.id_raiz, menu.nombre, menu.id_controlador,
-                          menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, controlador.nombre AS nombre_controlador');
-        $this->db->from('menu');
-        $this->db->join('menu raiz', 'raiz.id=menu.id_raiz', 'left');
-        $this->db->join('menu padre', 'padre.id=menu.id_padre', 'left');
-        $this->db->join('controlador', 'controlador.id=menu.id_controlador', 'left');
+        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador,
+                          sis_menu.ruta, asu_raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
+        $this->db->from('sis_menu');
+        $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
+        $this->db->join('sis_menu padre', 'padre.id=sis_menu.id_padre', 'left');
+        $this->db->join('sis_controlador', 'sis_controlador.id=sis_menu.id_controlador', 'left');
 
         if( !empty($this->filters) )
             $this->db->where($this->filters);
@@ -518,7 +518,7 @@ class Menu_model extends CI_Model
     }
 
     public function hasChild($id) {
-        $query = $this->db->query('SELECT COUNT(id) as num_children FROM menu WHERE id_padre='.$id);
+        $query = $this->db->query('SELECT COUNT(id) as num_children FROM sis_menu WHERE id_padre='.$id);
         $result = $query->row();
 
         if($result->num_children == 0)
@@ -536,7 +536,7 @@ class Menu_model extends CI_Model
         else
             $cond = ' = '.$padre;
 
-        $query = $this->db->query('SELECT * FROM menu WHERE id_padre '.$cond);
+        $query = $this->db->query('SELECT * FROM sis_menu WHERE id_padre '.$cond);
         $result = $query->result();
         
         return $result;

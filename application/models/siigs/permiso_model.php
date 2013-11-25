@@ -112,7 +112,7 @@ class Permiso_model extends CI_Model {
 	public function getPermission($id)
 	{
 		// obtiene permiso por controlador_x_accion e id_grupo
-		$query = $this->db->get_where('permiso', array('id_controlador_accion' => $id, 'id_grupo' => $this->session->userdata(GROUP_ID)));
+		$query = $this->db->get_where('sis_permiso', array('id_controlador_accion' => $id, 'id_grupo' => $this->session->userdata(GROUP_ID)));
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -134,7 +134,7 @@ class Permiso_model extends CI_Model {
 	{
 		// insert_batch hace inserciones en bloques de 100
 		// y siempre retorna true =(
-		$result = $this->db->insert_batch('permiso', $data); 
+		$result = $this->db->insert_batch('sis_permiso', $data); 
 		if (!$result){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -153,12 +153,12 @@ class Permiso_model extends CI_Model {
 	 */
 	public function deletePermissions($entorno, $grupo)
 	{
-		$this->db->select('permiso.id');
-		$this->db->from('permiso');
-		$this->db->join('controlador_x_accion', 'controlador_x_accion.id = permiso.id_controlador_accion');
-		$this->db->join('controlador', 'controlador.id = controlador_x_accion.id_controlador');
-		$this->db->where('permiso.id_grupo', $grupo);
-		$this->db->where('controlador.id_entorno', $entorno);
+		$this->db->select('sis_permiso.id');
+		$this->db->from('sis_permiso');
+		$this->db->join('sis_controlador_x_accion', 'sis_controlador_x_accion.id = sis_permiso.id_controlador_accion');
+		$this->db->join('sis_controlador', 'sis_controlador.id = sis_controlador_x_accion.id_controlador');
+		$this->db->where('sis_permiso.id_grupo', $grupo);
+		$this->db->where('sis_controlador.id_entorno', $entorno);
 		$query = $this->db->get();
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -177,7 +177,7 @@ class Permiso_model extends CI_Model {
 			if (count($aBorrar) > 0)
 			{
 				$this->db->where_in('id', $aBorrar);
-				$result = $this->db->delete('permiso');
+				$result = $this->db->delete('sis_permiso');
 				if (!$result){
 					$this->msg_error_usr = "Servicio temporalmente no disponible.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();

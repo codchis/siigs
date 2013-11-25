@@ -161,7 +161,7 @@ class Entorno_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->get('entorno');
+		$query = $this->db->get('sis_entorno');
 
 		if (!$query)
 		{
@@ -183,7 +183,7 @@ class Entorno_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->get_where('entorno', array('id' => $id));
+		$query = $this->db->get_where('sis_entorno', array('id' => $id));
 
 		if (!$query)
 		{
@@ -205,7 +205,7 @@ class Entorno_model extends CI_Model {
 	 */
 	public function getByName($nombre)
 	{
-		$query = $this->db->get_where('entorno', array('nombre' => $nombre));
+		$query = $this->db->get_where('sis_entorno', array('nombre' => $nombre));
 
 		if (!$query)
 		{
@@ -234,7 +234,7 @@ class Entorno_model extends CI_Model {
 				'directorio' => $this->directorio
 		);
 
-		$query = $this->db->insert('entorno', $data);
+		$query = $this->db->insert('sis_entorno', $data);
 
 		if (!$query)
 		{
@@ -264,7 +264,7 @@ class Entorno_model extends CI_Model {
 		);
 
 		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('entorno', $data);
+		$query = $this->db->update('sis_entorno', $data);
 
 		if (!$query)
 		{
@@ -285,7 +285,7 @@ class Entorno_model extends CI_Model {
 	 */
 	public function delete()
 	{
-		$query = $this->db->delete('entorno', array('id' => $this->getId()));
+		$query = $this->db->delete('sis_entorno', array('id' => $this->getId()));
 
 		if (!$query)
 		{

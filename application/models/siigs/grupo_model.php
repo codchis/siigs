@@ -104,11 +104,11 @@ class Grupo_model extends CI_Model {
 		else if (!empty($offset))
 			$this->db->limit($offset);
 		if (empty($keywords))
-			$query = $this->db->get('grupo');
+			$query = $this->db->get('sis_grupo');
 		else
 		{
 			$this->db->select('*');
-			$this->db->from('grupo');
+			$this->db->from('sis_grupo');
 			$this->db->like('nombre', $keywords);
 			$this->db->or_like('descripcion', $keywords);
 			$query = $this->db->get();
@@ -132,7 +132,7 @@ class Grupo_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->get_where('grupo', array('id' => $id));
+		$query = $this->db->get_where('sis_grupo', array('id' => $id));
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -152,7 +152,7 @@ class Grupo_model extends CI_Model {
 	 */
 	public function getByName($name)
 	{
-		$query = $this->db->get_where('grupo', array('nombre' => $name));			
+		$query = $this->db->get_where('sis_grupo', array('nombre' => $name));			
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -173,11 +173,11 @@ class Grupo_model extends CI_Model {
 	public function getNumRows($keywords = '')
 	{
 		if (!$keywords)
-			$query = $this->db->get('grupo');
+			$query = $this->db->get('sis_grupo');
 		else
 		{
 			$this->db->select('*');
-			$this->db->from('grupo');
+			$this->db->from('sis_grupo');
 			$this->db->like('nombre', $keywords);
 			$this->db->or_like('descripcion', $keywords);
 			$query = $this->db->get();
@@ -202,7 +202,7 @@ class Grupo_model extends CI_Model {
 			'nombre' => $this->nombre,
 			'descripcion' => $this->descripcion
 		);
-		$result = $this->db->insert('grupo', $data);
+		$result = $this->db->insert('sis_grupo', $data);
 		if (!$result){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -223,7 +223,7 @@ class Grupo_model extends CI_Model {
 				'descripcion' => $this->descripcion
 		);
 		$this->db->where('id' , $this->id);
-		$result = $this->db->update('grupo', $data);
+		$result = $this->db->update('sis_grupo', $data);
 		if (!$result){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -240,7 +240,7 @@ class Grupo_model extends CI_Model {
 	 */
 	public function delete()
 	{
-		$result = $this->db->delete('grupo', array('id' => $this->getId()));
+		$result = $this->db->delete('sis_grupo', array('id' => $this->getId()));
 		if (!$result){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();

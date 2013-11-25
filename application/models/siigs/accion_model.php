@@ -123,7 +123,7 @@ class Accion_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->get('accion');
+		$query = $this->db->get('sis_accion');
 
 		if (!$query)
 		{
@@ -145,7 +145,7 @@ class Accion_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->get_where('accion', array('id' => $id));
+		$query = $this->db->get_where('sis_accion', array('id' => $id));
 
 		if (!$query)
 		{
@@ -172,7 +172,7 @@ class Accion_model extends CI_Model {
 				'metodo' => $this->metodo
 		);
 
-		$query = $this->db->insert('accion', $data);
+		$query = $this->db->insert('sis_accion', $data);
 
 		if (!$query)
 		{
@@ -200,7 +200,7 @@ class Accion_model extends CI_Model {
 		);
 
 		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('accion', $data);
+		$query = $this->db->update('sis_accion', $data);
 
 		if (!$query)
 		{
@@ -222,7 +222,7 @@ class Accion_model extends CI_Model {
 	public function delete()
 	{
 
-		$query = $this->db->delete('accion', array('id' => $this->getId()));
+		$query = $this->db->delete('sis_accion', array('id' => $this->getId()));
 
 		if (!$query)
 		{

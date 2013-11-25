@@ -210,18 +210,18 @@ class Usuario_model extends CI_Model {
 			$this->db->limit($offset);
 		if ($onlyActives === TRUE)
 		{
-			$query = $this->db->get_where('usuario', array('activo' => $onlyActives));
+			$query = $this->db->get_where('sis_usuario', array('activo' => $onlyActives));
 		}
 		else
 		{
 			if (empty($keywords)){
 				
-				$query = $this->db->get('usuario');
+				$query = $this->db->get('sis_usuario');
 			}
 			else
 			{
 				$this->db->select('*');
-				$this->db->from('usuario');
+				$this->db->from('sis_usuario');
 				$this->db->like('nombre_usuario', $keywords);
 				$this->db->or_like('nombre', $keywords);
 				$this->db->or_like('apellido_paterno', $keywords);
@@ -251,13 +251,13 @@ class Usuario_model extends CI_Model {
 	public function getById($id, $viewMode = FALSE)
 	{
 		if (!$viewMode)
-			$query = $this->db->get_where('usuario', array('id' => $id));
+			$query = $this->db->get_where('sis_usuario', array('id' => $id));
 		else
 		{
-			$this->db->select('usuario.*,grupo.nombre as Grupo');
-			$this->db->from('usuario');
-			$this->db->join('grupo', 'grupo.id = usuario.id_grupo');
-			$this->db->where('usuario.id', $id);
+			$this->db->select('sis_usuario.*,sis_grupo.nombre as Grupo');
+			$this->db->from('sis_usuario');
+			$this->db->join('sis_grupo', 'sis_grupo.id = sis_usuario.id_grupo');
+			$this->db->where('sis_usuario.id', $id);
 			$query = $this->db->get();
 		}
 		if (!$query){
@@ -279,7 +279,7 @@ class Usuario_model extends CI_Model {
 	 */
 	public function getByUsername($username)
 	{
-		$query = $this->db->get_where('usuario', array('nombre_usuario' => $username));
+		$query = $this->db->get_where('sis_usuario', array('nombre_usuario' => $username));
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -300,11 +300,11 @@ class Usuario_model extends CI_Model {
 	public function getNumRows($keywords = '')
 	{
 		if (!$keywords)
-			$query = $this->db->get('usuario');
+			$query = $this->db->get('sis_usuario');
 		else 
 		{
 			$this->db->select('*');
-			$this->db->from('usuario');
+			$this->db->from('sis_usuario');
 			$this->db->like('nombre_usuario', $keywords);
 			$this->db->or_like('nombre', $keywords);
 			$this->db->or_like('apellido_paterno', $keywords);
@@ -337,7 +337,7 @@ class Usuario_model extends CI_Model {
 			'activo' => $this->activo,
 			'id_grupo' => $this->id_grupo
 		);
-		$result = $this->db->insert('usuario', $data);
+		$result = $this->db->insert('sis_usuario', $data);
 		if (!$result){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -363,7 +363,7 @@ class Usuario_model extends CI_Model {
 			'id_grupo' => $this->id_grupo
 		);
 		$this->db->where('id' , $this->id);
-		$result = $this->db->update('usuario', $data);
+		$result = $this->db->update('sis_usuario', $data);
 		if (!$result){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -380,7 +380,7 @@ class Usuario_model extends CI_Model {
 	 */
 	public function delete()
 	{
-		$result = $this->db->delete('usuario', array('id' => $this->getId()));
+		$result = $this->db->delete('sis_usuario', array('id' => $this->getId()));
 		if (!$result){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -399,7 +399,7 @@ class Usuario_model extends CI_Model {
 	 */
 	public function authenticate($username, $password)
 	{
-		$query = $this->db->get_where('usuario', array('nombre_usuario' => $username, 'clave' => $password));
+		$query = $this->db->get_where('sis_usuario', array('nombre_usuario' => $username, 'clave' => $password));
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
