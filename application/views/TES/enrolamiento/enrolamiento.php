@@ -112,7 +112,7 @@
                             <td><p align="right">Lugar de Nacimiento</p></td>
                             <td colspan="3"><input name="lnaciminetoT" type="text" id="lnaciminetoT" style="width:78%; margin-left:10px;" >
                             	<input name="lnacimineto" type="hidden" id="lnacimineto" >                              
-                              <a href="/TES/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lnacimineto/lnaciminetoT/datos/" id="fba1" class="cat">Seleccionar</a>
+                              <a href="/TES/Tree/tree/TES/Lugar de Nacimiento/3/check/0/lnacimineto/lnaciminetoT/datos/" id="fba1" class="cat">Seleccionar</a>
                               </td>
                             </tr>
                           <tr>

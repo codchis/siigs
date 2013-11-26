@@ -267,7 +267,7 @@ class Usuario extends CI_Controller {
 		else
 		{
 			try {
-				$this->Usuario_model->setId($this->input->post('id'));
+				$this->Usuario_model->setId($id);
 				$this->Usuario_model->setNombre($this->input->post('nombre'));
 				$this->Usuario_model->setApellidoPaterno($this->input->post('apellido_paterno'));
 				$this->Usuario_model->setApellidoMaterno($this->input->post('apellido_materno'));
@@ -276,7 +276,7 @@ class Usuario extends CI_Controller {
 				$this->Usuario_model->setIdGrupo($this->input->post('id_grupo'));
 				$this->Usuario_model->update();
 				$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
-				Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario actualizado: '.$this->input->post('id'));
+				Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario actualizado: '.$id);
 				redirect(DIR_SIIGS.'/usuario','refresh');
 			}
 			catch (Exception $e){
