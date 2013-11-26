@@ -59,8 +59,8 @@
 		 	                	$descselect.append('<option value="'+datos[0]+'">'+datos[0]+'</option>');
 	 	                	});
 
-	 	                	$('#tdllave').html($td1);
-	 	                	$('#tddesc').html($td2);
+	 	                	$('#tdllave').html($td2);
+	 	                	$('#tddesc').html($td1);
 
 	 	                	//Limpiar las relaciones y cargar de nuevo los datos para relaciones
 

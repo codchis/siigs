@@ -99,15 +99,16 @@ class Catalogo extends CI_Controller {
 	public function load()
 	{
 		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
+		//if (TRUE)
 		{
-
 			 $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
+		//	 $fp = fopen('catalogos/estados.csv', "r");
 			 $cont = 0;
 			 $columnas = array();
 			 $resultado = array();
 			 $rows = array();
 
-			 $consulta = 'select id_cat_tipo_columna as id,descripcion as descripcion from tipo_columna;';
+			 $consulta = 'select id_cat_tipo_columna as id,descripcion as descripcion from asu_tipo_columna;';
 			 $dbtiposdatos = $this->db->query($consulta);
 			 $tiposdatos = array();
 			 foreach ($dbtiposdatos->result() as $item)
@@ -171,11 +172,11 @@ class Catalogo extends CI_Controller {
 	 */
 	public function loadupdate($nombrecat , $update = false)
 	{
-		//if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
-		if (TRUE)
+		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
+		//if (TRUE)
 		{
-		//	 $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
-			 $fp = fopen('catalogos/estados.csv', "r");
+			 $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
+		//	 $fp = fopen('catalogos/estados.csv', "r");
 			 $cont = 0;
 			 $columnas = array();
 			 $resultado = array();
@@ -209,6 +210,7 @@ class Catalogo extends CI_Controller {
 	    	 catch (Exception $e) 
 			 {
 			 	echo Errorlog_model::save($e->getMessage(), __METHOD__);
+			 	return;
 			 }
 			 
 			 try 
@@ -269,6 +271,7 @@ class Catalogo extends CI_Controller {
 			 catch (Exception $e) 
 			 {
 			 	echo Errorlog_model::save($e->getMessage(), __METHOD__);
+			 	die();
 			 }
 			 while (!feof($fp))
 			 {
@@ -638,7 +641,7 @@ class Catalogo extends CI_Controller {
 
 			$this->load->helper('url');
 				
-			$existe = $this->db->query('select * from raiz_x_catalogo where tabla_catalogo="'.$nombre.'"');
+			$existe = $this->db->query('select * from asu_raiz_x_catalogo where tabla_catalogo="'.$nombre.'"');
 			
 			if ($existe->num_rows() > 0)
 			{

@@ -78,6 +78,7 @@ function mostrarErrores(data)
         })
         $(tbl_body).append(tbl_row);
     })
+    alert(div);
     $(div).dialog({ width : 500 , closeOnEscape: true });
 }
 </script>

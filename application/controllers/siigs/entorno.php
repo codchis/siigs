@@ -163,7 +163,7 @@ class Entorno extends CI_Controller {
 	 */
 	public function _ExistEntornoUpdate($nombre_entorno) {
 
-		$where = 'select * from entorno where nombre = "'.
+		$where = 'select * from sis_entorno where nombre = "'.
 				$nombre_entorno.'" and id<>"'.
 				$this->input->post('id').'"';
 

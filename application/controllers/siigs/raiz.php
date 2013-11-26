@@ -237,7 +237,7 @@ class Raiz extends CI_Controller {
 			$catalogos = $this->Catalogo_x_raiz_model->getByArbol($id);
 			
 			$this->db->where("id_raiz",$id);
-			$this->db->delete('arbol_segmentacion');
+			$this->db->delete('asu_arbol_segmentacion');
 			
 			foreach ($catalogos as $item) {
 				
@@ -251,7 +251,7 @@ class Raiz extends CI_Controller {
 				{
 					$consulta = "select ".$tabla.".".$llave." as llave, ";
 					$consulta .= $tabla.".".$descripcion." as descripcion, ";
-					$consulta .= "arbol_segmentacion.id as padre ";
+					$consulta .= "asu_arbol_segmentacion.id as padre ";
 					$consulta .= " from ".$tabla;
 				
 					$padre = $this->Catalogo_x_raiz_model->getByNivel($nivel-1);
@@ -262,9 +262,9 @@ class Raiz extends CI_Controller {
 					{
 						$consulta .= " and ".$tabla.".".$relacion->columna_hijo." = ".$padre->nombre.".".$relacion->columna_padre;
 					}
-					$consulta .= " join arbol_segmentacion on grado_segmentacion=".($nivel-1);
-					$consulta .= " and arbol_segmentacion.id_raiz=".$id;
-					$consulta .= " and arbol_segmentacion.id_tabla_original=".$padre->nombre.".".$padre->llave;
+					$consulta .= " join asu_arbol_segmentacion on grado_segmentacion=".($nivel-1);
+					$consulta .= " and asu_arbol_segmentacion.id_raiz=".$id;
+					$consulta .= " and asu_arbol_segmentacion.id_tabla_original=".$padre->nombre.".".$padre->llave;
 					
 					$filas = $this->db->query($consulta);
 					$datosdump = array();
@@ -280,7 +280,7 @@ class Raiz extends CI_Controller {
 						'descripcion' => $value->descripcion
 						));
 					}
-				if ($this->db->insert_batch('arbol_segmentacion',$datosdump) != 1)
+				if ($this->db->insert_batch('asu_arbol_segmentacion',$datosdump) != 1)
 					{
 					echo 'false';
 					}
@@ -305,7 +305,7 @@ class Raiz extends CI_Controller {
 						'descripcion' => $value->descripcion
 						));
 					}
-					if ($this->db->insert_batch('arbol_segmentacion',$datosdump) != 1)
+					if ($this->db->insert_batch('asu_arbol_segmentacion',$datosdump) != 1)
 					{
 					echo 'false';
 					}
