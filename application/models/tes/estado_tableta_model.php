@@ -337,7 +337,7 @@ class Menu_model extends CI_Model
         $result = false;
         
         $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador, sis_entorno.nombre AS nombre_entorno, sis_entorno.id AS id_entorno,
-                          sis_menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
+                          sis_menu.ruta, asu_raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
         $this->db->from('sis_menu');
         $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
         $this->db->join('sis_menu padre', 'padre.id=sis_menu.id_padre', 'left');
@@ -489,7 +489,7 @@ class Menu_model extends CI_Model
         $result = 0;
 
         $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador,
-                          sis_menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
+                          sis_menu.ruta, asu_raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
         $this->db->from('sis_menu');
         $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
         $this->db->join('sis_menu padre', 'padre.id=sis_menu.id_padre', 'left');
