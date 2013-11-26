@@ -447,5 +447,90 @@ class Usuario_model extends CI_Model {
 		return false;
 	}
 	
+	
+	
+	/////////// recuperar contraseña
+	
+	public function check_data($usuario,$correo)
+	{
+		$query = $this->db->get_where('sis_usuario', array('nombre_usuario' => $usuario, 'correo' => $correo));
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->row();
+		return null;
+	}
+	public function check_token($correo)
+	{
+		$query = $this->db->get_where('sis_usuario', array('correo' => $correo));
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->row();
+		return null;
+	}
+	public function update_pass($pass,$id)
+	{
+		$data = array('clave' => $pass);
+		$this->db->where('id' , $id);
+		$result = $this->db->update('sis_usuario', $data);
+		if (!$result)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		return $result;
+	}
+	
+	////// modificar datos
+	
+	public function getuser($id)
+	{
+		$query = $this->db->get_where('sis_usuario', array('id' => $id));
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->row();
+		return null;
+	}	
+	public function getgrupo($grupo)
+	{
+		$query = $this->db->get_where('sis_grupo', array('id' => $grupo));
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->row();
+		return null;
+	}	
+	public function update_user($id,$clave,$correo)
+	{
+		$data = array('clave' => $clave,'correo' => $correo);
+		$this->db->where('id' , $id);
+		$result = $this->db->update('sis_usuario', $data);
+		if (!$result)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		return $result;
+	}
 }
 ?>

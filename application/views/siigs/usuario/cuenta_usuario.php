@@ -4,7 +4,7 @@
 	if(!empty($msgResult))
     echo $msgResult.'<br /><br />';
 	echo validation_errors(); 
-	echo form_open(DIR_SIIGS.'/cuenta_usuario/update'); ?>
+	echo form_open(DIR_SIIGS.'/usuario/update_info'); ?>
 <br />
 <h6><?php echo $info;?></h6>
 <table border="1">	

@@ -4,7 +4,7 @@
 	if(!empty($msgResult))
     echo $msgResult.'<br /><br />';
 	echo validation_errors(); 
-	echo form_open(DIR_SIIGS.'/sendcorreo/recordar'); ?>
+	echo form_open(DIR_SIIGS.'/usuario/remember'); ?>
 <br />
 <table border="1">
 	<tr>

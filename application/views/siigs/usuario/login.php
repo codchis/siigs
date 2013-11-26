@@ -17,6 +17,6 @@
 		<td colspan=2><input type="submit" name="submit" value="Entrar" /><td>
 	</tr>
     <tr>
-		<td colspan=2><a href="/<?php echo DIR_SIIGS?>/usuario/sendcorreo" id='a1'>¿Olvidaste tu contraseña?</a><td>
+		<td colspan=2><a href="/<?php echo DIR_SIIGS?>/usuario/form_init" id='a1'>¿Olvidaste tu contraseña?</a><td>
 	</tr>
 </table>
