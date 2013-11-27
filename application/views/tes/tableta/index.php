@@ -54,10 +54,17 @@
     </tfoot>
 </table>
 
-<br />
 <input type="submit" value="Eliminar Seleccionados" />
 
 </form>
 <br />
 
 <input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta/insert'" />
+
+<br /><br />
+
+<label>Subir un archivo con la lista de direcciones MAC</label>
+<?php echo form_open_multipart(site_url().DIR_TES.'/tableta/file');?>
+    <input type="file" name="archivo" size="60" />
+    <input type="submit" value="Subir Archivo" />
+</form>

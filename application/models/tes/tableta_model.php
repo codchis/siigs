@@ -182,7 +182,7 @@ class Tableta_model extends CI_Model
         $result = false;
         $data = array();
         
-        $data['mac'] = $this->mac;
+        $data['mac'] = trim($this->mac);
         $data['usuarios_asignados'] = 0;
         $data['id_tes_estado_tableta'] = 1;
 
