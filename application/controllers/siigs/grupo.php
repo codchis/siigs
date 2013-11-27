@@ -153,11 +153,11 @@ class Grupo extends CI_Controller {
 		else
 		{
 			try {
-				$this->Grupo_model->setId($this->input->post('id'));
+				$this->Grupo_model->setId($id);
 				$this->Grupo_model->setDescripcion($this->input->post('descripcion'));
 				$this->Grupo_model->update();
 				$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
-				Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Grupo actualizado: '.$this->input->post('id'));
+				Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Grupo actualizado: '.$id);
 				redirect(DIR_SIIGS.'/grupo','refresh');			
 			}
 			catch(Exception $e){

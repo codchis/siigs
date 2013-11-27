@@ -146,7 +146,7 @@ class Bitacora extends CI_Controller {
      * @access public
      * @return void
      */
-    public function create()
+    public function insert()
     {
         if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
