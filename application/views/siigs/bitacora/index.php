@@ -49,8 +49,8 @@ $(document).ready(function(){
 
         Usuario:
         <?php  if(isset($usuarios)) echo form_dropdown('usuario', $usuarios); ?>
-        Fecha:       <input type="text" name="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" size="10" placeholder="desde" />
-                     <input type="text" name="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" size="10" placeholder="hasta"/> </p>
+        Fecha:       <input type="date" name="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" size="10" placeholder="desde" />
+                     <input type="date" name="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" size="10" placeholder="hasta"/> </p>
         <p>Entorno:
             <?php  if(isset($entornos)) echo form_dropdown('entorno', $entornos); ?>
         Controlador:
@@ -123,4 +123,4 @@ $(document).ready(function(){
 </form>
 <br />
 
-<input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/bitacora/create'" />
+<!--<input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/bitacora/insert'" />-->

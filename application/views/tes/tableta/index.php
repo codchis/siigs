@@ -1,56 +1,4 @@
-<script type="text/javascript">
-DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
-
-$(document).ready(function(){
-    $('#paginador a').click(function(e){
-        e.preventDefault();
-        pag = $(this).attr('href');
-        $('#form_filter_menu').attr('action', pag);
-        $('#form_filter_menu').submit();
-    });
-
-    $('#btnFiltrar').click(function(e){
-        // Eliminar la pagina de la url del action
-        action = $('#form_filter_menu').attr('action');
-        action = action.replace(/\d+(\/)*$/,'');
-
-        $('#form_filter_menu').attr('action',action);
-        $('#form_filter_menu').submit();
-    });
-
-    $('select[name="entorno"]').change(function(e){
-        $.ajax({
-            type: 'POST',
-            url:  '/'+DIR_SIIGS+'/controlador',
-            data: 'id_entorno='+$(this).val(),
-            dataType: 'json'
-        }).done(function(controladores){
-            $('select[name="controlador"] > :not(option[value=0])').remove();
-            
-            $.each(controladores, function(index) {
-                option = $('<option />');
-                option.val(controladores[index].id);
-                option.text(controladores[index].nombre);
-
-                $('select[name="controlador"]').append(option);
-            });
-        });
-    });
-
-});
-</script>
-
 <h2><?=$title;?></h2>
-
-<fieldset>
-    <legend><strong>Opciones de filtrado</strong></legend>
-    <?php echo form_open(site_url().DIR_SIIGS.'/menu/index/'.$pag, array('name'=>'form_filter_menu', 'id'=>'form_filter_menu')); ?>
-        <p><input type="hidden" name="filtrar" value="true" />
-        Raíz: <?php echo form_dropdown('raiz', $menus); ?>
-        <input type="button" name="btnFiltrar" id="btnFiltrar" value="Filtrar" />
-    </form>
-</fieldset>
-
 <br />
 <?php
     if(!empty($msgResult))
@@ -58,17 +6,19 @@ $(document).ready(function(){
 ?>
 <br />
 
-<?php echo form_open(site_url().DIR_SIIGS.'/menu/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
+<?php echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
 
 <table border="1">
     <thead>
         <tr>
             <th></th>
-            <th>Raiz</th>
-            <th>Padre</th>
-            <th>Nombre</th>
-            <th>Ruta</th>
-            <th>Controlador</th>
+            <th>MAC</th>
+            <th>Versi&oacute;n</th>
+            <th>Ultima Actualizaci&oacute;n</th>
+            <th>Status</th>
+            <th>Tipo Censo</th>
+            <th>Unidad Médica</th>
+            <th>Usuarios</th>
             <th></th>
             <th></th>
             <th></th>
@@ -80,14 +30,15 @@ $(document).ready(function(){
             foreach ($registros as $fila) {
                 echo '<tr id="'.$fila->id.'">
                     <td><input type="checkbox" name="registroEliminar[]" value="'.$fila->id.'" /></td>
-                    <td>'.$fila->nombre_raiz.'</td>
-                    <td>'.$fila->nombre_padre.'</td>
-                    <td>'.htmlentities($fila->nombre).'</td>
-                    <td>'.htmlentities($fila->ruta).'</td>
-                    <td><a href="'.site_url().DIR_SIIGS.'/controlador/view/'.$fila->id_controlador.'">'.htmlentities($fila->nombre_controlador).'</a></td>
-                    <td><a href="'.site_url().DIR_SIIGS.'/menu/view/'.$fila->id.'">Ver</a></td>
-                    <td><a href="'.site_url().DIR_SIIGS.'/menu/update/'.$fila->id.'">Modificar</a></td>
-                    <td><a href="'.site_url().DIR_SIIGS.'/menu/delete/'.$fila->id.'"
+                    <td>'.$fila->mac.'</td>
+                    <td>'.$fila->version.'</td>
+                    <td>'.htmlentities(formatFecha($fila->ultima_actualizacion)).'</td>
+                    <td>'.htmlentities($fila->status).'</td>
+                    <td>'.htmlentities($fila->tipo_censo).'</td>
+                    <td>'.htmlentities($fila->id_asu_um).'</td>
+                    <td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>
+                    <td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'">Modificar</a></td>
+                    <td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
                         onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>
                 </tr>';
             }
@@ -109,4 +60,4 @@ $(document).ready(function(){
 </form>
 <br />
 
-<input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/insert'" />
+<input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta/insert'" />

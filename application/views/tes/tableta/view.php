@@ -5,12 +5,12 @@ if(!empty($msgResult)) {
     echo '<h2>'.$title.'</h2>';
     
     echo '<table border="1">
-        <tr><td><strong>Raíz</strong></td><td>'.$registro->nombre_raiz.'</td></tr>
-        <tr><td><strong>Padre</strong></td><td>'.$registro->nombre_padre.'</td></tr>
-        <tr><td><strong>Ruta</strong></td><td>'.$registro->ruta.'</td></tr>
-        <tr><td><strong>Nombre</strong></td><td>'.$registro->nombre.'</td></tr>
-        <tr><td><strong>Entorno</strong></td><td>'.$registro->nombre_entorno.'</td></tr>
-        <tr><td><strong>Controlador</strong></td><td>'.$registro->nombre_controlador.'</td></tr>
+        <tr><td><strong>MAC</strong></td><td>'.$registro->mac.'</td></tr>
+        <tr><td><strong>Versi&oacute;n</strong></td><td>'.$registro->version.'</td></tr>
+        <tr><td><strong>Ultima Actualizaci&oacute;n</strong></td><td>'.formatFecha($registro->ultima_actualizacion).'</td></tr>
+        <tr><td><strong>Estado Tableta</strong></td><td>'.$registro->status.'</td></tr>
+        <tr><td><strong>Tipo de censo</strong></td><td>'.$registro->tipo_censo.'</td></tr>
+        <tr><td><strong>Unidad M&eacute;dica</strong></td><td>'.$registro->id_asu_um.'</td></tr>
     </table>';
 } else {
     echo 'ERROR: Registro no encontrado';

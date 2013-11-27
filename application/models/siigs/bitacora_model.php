@@ -349,7 +349,7 @@ class Bitacora_model extends CI_Model
         $result = false;
         
         $this->db->select('sis_entorno.nombre AS entorno, sis_controlador.nombre AS controlador, sis_accion.nombre AS accion, sis_bitacora.*,
-                           sis_usuario.nombre_usuario AS usuario, sis_usuario.nombre,sis_ usuario.apellido_paterno, sis_usuario.apellido_materno');
+                           sis_usuario.nombre_usuario AS usuario, sis_usuario.nombre, sis_usuario.apellido_paterno, sis_usuario.apellido_materno');
         $this->db->from('sis_bitacora');
         $this->db->join('sis_usuario', 'sis_usuario.id = sis_bitacora.id_usuario');
         $this->db->join('sis_controlador_x_accion', 'sis_controlador_x_accion.id = sis_bitacora.id_controlador_accion');

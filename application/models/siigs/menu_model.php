@@ -417,7 +417,7 @@ class Menu_model extends CI_Model
         //     'id <'    => $id,
         //     'date >'  => $date
         // );
-        $this->filters['menu.'.$columna.' '.$condicion] = $valor;
+        $this->filters['sis_menu.'.$columna.' '.$condicion] = $valor;
     }
 
     /**

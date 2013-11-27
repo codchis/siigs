@@ -187,7 +187,7 @@ class Menu extends CI_Controller {
                     $this->Menu_model->insert();
                     $this->session->set_flashdata('msgResult', 'Registro guardado exitosamente');
 
-                    Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Registro creado: '.$this->Menu_model->id);
+                    Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Registro creado: '.$this->Menu_model->getId());
                     redirect(DIR_SIIGS.'/menu/', 'refresh');
                     die();
                 }

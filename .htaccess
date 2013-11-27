@@ -12,3 +12,7 @@ RewriteRule ^(.*)$ index.php/$1 [L]
 <IfModule !mod_rewrite.c>
 ErrorDocument 404 /codeigniter/index.php
 </IfModule>
+
+# Resuelve error que marca la APC
+php_flag apc.cache_by_default Off
+php_flag apc.enabled Off

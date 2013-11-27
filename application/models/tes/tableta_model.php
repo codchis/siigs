@@ -1,60 +1,60 @@
 <?php
 
 /**
- * Modelo Menu
+ * Modelo Tableta
  *
  * @author     Pascual
- * @created    2013-10-03
+ * @created    2013-11-26
  */
-class Menu_model extends CI_Model
+class Tableta_model extends CI_Model
 {
     /**
      * @access private
-     * @var    int
+     * @var    int(11)
      */
     private $id;
 
     /**
      * @access private
+     * @var    varchar(20)
+     */
+    private $mac;
+
+    /**
+     * @access varchar(10)
      * @var    int
      */
-    private $id_padre;
+    private $version;
 
     /**
      * @access private
-     * @var    int
+     * @var    bit(1)
      */
-    private $id_raiz;
+    private $ultima_actualizacion;
 
     /**
      * @access private
-     * @var    string
+     * @var    int(11)
      */
-    private $nombre;
+    private $id_tes_estado_tableta;
 
     /**
      * @access private
-     * @var    int
+     * @var    int(11)
      */
-    private $id_controlador;
-
+    private $id_tipo_censo;
+    
     /**
      * @access private
-     * @var    boolean
+     * @var    int(11)
      */
-    private $ruta;
+    private $id_asu_um;
 
 
     /********************************************
      * Estas variables no pertenecen a la tabla *
      * ******************************************/
 
-    /**
-     * @access private
-     * @var    array
-     */
-    private $filters;
-    
     /**
      * @access private
      * @var    boolean
@@ -82,9 +82,9 @@ class Menu_model extends CI_Model
         $this->msg_error_usr = '';
         $this->msg_error_log = '';
         
-        /*if( !$this->db->conn_id ) {
+        if( !$this->db->conn_id ) {
             throw new Exception ('ERROR: No se puede conectar con la Base de Datos');
-        }*/
+        }
     }
 
     public function getId()
@@ -92,61 +92,60 @@ class Menu_model extends CI_Model
         return $this->id;
     }
 
+    public function getMac() {
+        return $this->mac;
+    }
+
+    public function getVersion() {
+        return $this->version;
+    }
+
+    public function getUltima_actualizacion() {
+        return $this->ultima_actualizacion;
+    }
+
+    public function getId_tes_estado_tableta() {
+        return $this->id_tes_estado_tableta;
+    }
+
+    public function getId_tipo_censo() {
+        return $this->id_tipo_censo;
+    }
+
+    public function getId_asu_um() {
+        return $this->id_asu_um;
+    }
+    
     public function setId($id)
     {
         return $this->id = $id;
     }
 
-    public function getId_padre()
-    {
-        return $this->id_padre;
+    public function setMac($mac) {
+        $this->mac = $mac;
     }
 
-    public function setId_padre($id_padre)
-    {
-        $this->id_padre = $id_padre;
+    public function setVersion($version) {
+        $this->version = $version;
     }
 
-    public function getId_raiz()
-    {
-        return $this->id_raiz;
+    public function setUltima_actualizacion($ultima_actualizacion) {
+        $this->ultima_actualizacion = $ultima_actualizacion;
     }
 
-    public function setId_raiz($id_raiz)
-    {
-        return $this->id_raiz = $id_raiz;
+    public function setId_tes_estado_tableta($id_tes_estado_tableta) {
+        $this->id_tes_estado_tableta = $id_tes_estado_tableta;
     }
 
-    public function getNombre()
-    {
-        return $this->nombre;
+    public function setId_tipo_censo($id_tipo_censo) {
+        $this->id_tipo_censo = $id_tipo_censo;
     }
 
-    public function setNombre($nombre)
-    {
-        $this->nombre = $nombre;
+    public function setId_asu_um($id_asu_um) {
+        $this->id_asu_um = $id_asu_um;
     }
-
-    public function setId_controlador($id_controlador)
-    {
-        $this->id_controlador = $id_controlador;
-    }
-
-    public function getId_controlador()
-    {
-        $this->id_controlador;
-    }
-
-    public function setRuta($ruta)
-    {
-        $this->ruta = $ruta;
-    }
-
-    public function getRuta()
-    {
-        return $this->ruta;
-    }
-
+    
+    
     /**
      * Devuelve el mensaje de error,
      * en caso de existir un error despues de ejecutar un metodo,
@@ -172,7 +171,6 @@ class Menu_model extends CI_Model
         return false;
     }
 
-
     /**
      * Inserta en la base de datos, la informacion contenida en el objeto
      *
@@ -183,22 +181,12 @@ class Menu_model extends CI_Model
     {
         $result = false;
         $data = array();
+        
+        $data['mac'] = $this->mac;
+        $data['usuarios_asignados'] = 0;
+        $data['id_tes_estado_tableta'] = 1;
 
-        if( isset($this->id_padre) )
-            $data['id_padre'] = $this->id_padre;
-
-        if( isset($this->id_raiz) )
-            $data['id_raiz'] = $this->id_raiz;
-
-        if( isset($this->id_controlador) )
-            $data['id_controlador'] = $this->id_controlador;
-
-        if( isset($this->ruta) )
-            $data['ruta'] = $this->ruta;
-
-        $data['nombre'] = $this->nombre;
-
-        $result = $this->db->insert('sis_menu', $data);
+        $result = $this->db->insert('tes_tableta', $data);
 
         if( $this->db->_error_number() ) {
             $this->error = true;
@@ -223,27 +211,31 @@ class Menu_model extends CI_Model
     public function update($id = null)
     {
         $result = false;
+        $data = array();
+        
+        $data['mac'] = $this->mac;
+        
+        if( !empty($this->id_tes_estado_tableta) )
+            $data['id_tes_estado_tableta'] = $this->id_tes_estado_tableta;
+        
+        if( !empty($this->version) )
+            $data['version' ] = $this->version;
 
-        if( isset($this->id_padre) )
-            $data['id_padre' ] = $this->id_padre;
+        if( !empty($this->ultima_actualizacion) )
+            $data['ultima_actualizacion'] = $this->ultima_actualizacion;
 
-        if( isset($this->id_raiz) )
-            $data['id_raiz'] = $this->id_raiz;
+        if( !empty($this->id_tipo_censo) )
+            $data['id_tipo_censo'] = $this->id_tipo_censo;
 
-        if( isset($this->id_controlador) )
-            $data['id_controlador'] = $this->id_controlador;
-
-        if( isset($this->ruta) )
-            $data['ruta'] = $this->ruta;
-
-        $data['nombre'] = $this->nombre;
+        if( !empty($this->id_asu_um) )
+            $data['id_asu_um'] = $this->id_asu_um;
 
         $id = is_null($id) ? $this->id : $id;
-        $result = $this->db->update('sis_menu', $data, array('id' => $id));
+        $result = $this->db->update('tes_tableta', $data, array('id' => $id));
 
         if( $this->db->_error_number() ) {
             $this->error = true;
-            $this->msg_error_usr = 'No se puede insertar el registro';
+            $this->msg_error_usr = 'No se puede actualizar el registro';
             $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
             throw new Exception();
         } else {
@@ -270,7 +262,7 @@ class Menu_model extends CI_Model
         if(is_array($id)) {
             // Eliminar un conjunto de registros
             foreach ($id as $idx) {
-                $result = $this->db->delete('sis_menu', array('id' => $idx));
+                $result = $this->db->delete('tes_tableta', array('id' => $idx));
 
                 if(empty($result)) {
                     $this->error = true;
@@ -281,7 +273,7 @@ class Menu_model extends CI_Model
             }
         } else {
             // Eliminar un solo registro
-            $result = $this->db->delete('menu', array('id' => $id));
+            $result = $this->db->delete('tes_tableta', array('id' => $id));
 
             if(empty($result)) {
                 $this->error = true;
@@ -295,38 +287,7 @@ class Menu_model extends CI_Model
     }
 
     /**
-     * Elimina el conjunto de registros que cumplen con el o los criterios de filtrado
-     *
-     * @access public
-     * @return int false Si no se ejecutó la inserción, true si se ejecutó la inserción
-     */
-    public function deleteByFilter()
-    {
-        $result = false;
-        
-        if(empty($this->filters)) {
-            $this->error = true;
-            $this->msg_error_usr = 'No se encontraron filtros definidos';
-            $this->msg_error_log = '('.__METHOD__.') => No se encontraron filtros definidos para la eliminación';
-            
-            throw new Exception();
-        }
-
-        $this->db->where($this->filters);
-        $result = $this->db->delete('sis_menu');
-
-        if(empty($result)) {
-            $this->error = true;
-            $this->msg_error_usr = 'No se pueden eliminar los registros';
-            $this->msg_error_log = '('.__METHOD__.') => No se pueden eliminar los registros';
-            throw new Exception();
-        }
-
-        return $result;
-    }
-
-    /**
-     * Obtiene los datos del registro de la menu que tiene el ID especificado
+     * Obtiene los datos del registro que tiene el ID especificado
      *
      * @access public
      * @param  int $id        Si no se establece el valor de ID, se toma el valor del objeto actual
@@ -336,14 +297,12 @@ class Menu_model extends CI_Model
     {
         $result = false;
         
-        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador, sis_entorno.nombre AS nombre_entorno, sis_entorno.id AS id_entorno,
-                          sis_menu.ruta, asu_raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
-        $this->db->from('sis_menu');
-        $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
-        $this->db->join('sis_menu padre', 'padre.id=sis_menu.id_padre', 'left');
-        $this->db->join('sis_controlador', 'sis_controlador.id=sis_menu.id_controlador', 'left');
-        $this->db->join('sis_entorno', 'sis_entorno.id=sis_controlador.id_entorno', 'left');
-        $this->db->where('sis_menu.id', $id);
+        $this->db->select('tes_tableta.*, sis_estado_tableta.descripcion AS status, tes_tipo_censo.descripcion AS tipo_censo');
+        $this->db->from('tes_tableta');
+        $this->db->join('sis_estado_tableta', 'tes_tableta.id_tes_estado_tableta = sis_estado_tableta.id', 'left');
+        $this->db->join('tes_tipo_censo', 'tes_tableta.id_tipo_censo = tes_tipo_censo.id', 'left');
+        $this->db->where('tes_tableta.id', $id);
+        
         $query = $this->db->get();
         $result = $query->row();
 
@@ -356,84 +315,61 @@ class Menu_model extends CI_Model
 
         if(!empty($result)) {
             $this->id = $id;
-            $this->id_padre = $result->id_padre;
-            $this->id_raiz = $result->id_raiz;
-            $this->id_controlador = $result->id_controlador;
-            $this->ruta = $result->ruta;
-            $this->nombre = $result->nombre;
+            $this->mac = $result->mac;
+            $this->version = $result->version;
+            $this->ultima_actualizacion = $result->ultima_actualizacion;
+            $this->usuarios_asignados = $result->usuarios_asignados;
+            $this->id_tes_estado_tableta = $result->id_tes_estado_tableta;
+            $this->id_tipo_censo = $result->id_tipo_censo;
+            $this->id_asu_um = $result->id_asu_um;
+        }
+
+        return $result;
+    }
+    
+    /**
+     * Obtiene los datos del registro la MAC especificada
+     *
+     * @access public
+     * @param  int $mac        Direccion MAC
+     * @return object|boolean Devuelve el objeto con sus datos correspondientes, de lo contrario, false Si no se encontró el registro
+     */
+    public function getByMac($mac)
+    {
+        $result = false;
+        
+        $this->db->select('tes_tableta.*, sis_estado_tableta.descripcion AS status, tes_tipo_censo.descripcion AS tipo_censo');
+        $this->db->from('tes_tableta');
+        $this->db->join('sis_estado_tableta', 'tes_tableta.id_tes_estado_tableta = sis_estado_tableta.id', 'left');
+        $this->db->join('tes_tipo_censo', 'tes_tableta.id_tipo_censo = tes_tipo_censo.id', 'left');
+        $this->db->where('tes_tableta.mac', $mac);
+        
+        $query = $this->db->get();
+        $result = $query->row();
+
+        if($this->db->_error_number()) {
+            $this->error = true;
+            $this->msg_error_usr = 'No se encontraron registros en la busqueda';
+            $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+            throw new Exception();
+        }
+
+        if(!empty($result)) {
+            $this->id = $result->id;
+            $this->mac = $result->mac;
+            $this->version = $result->version;
+            $this->ultima_actualizacion = $result->ultima_actualizacion;
+            $this->usuarios_asignados = $result->usuarios_asignados;
+            $this->id_tes_estado_tableta = $result->id_tes_estado_tableta;
+            $this->id_tipo_censo = $result->id_tipo_censo;
+            $this->id_asu_um = $result->id_asu_um;
         }
 
         return $result;
     }
 
     /**
-     * Agrega una nueva regla de filtrado al arreglo de filtros
-     *
-     * @access public
-     * @param  string $columna   Puede ser cualquier campo del objeto (id, id_usuario, fecha_hora, parametros, id_controlador_accion)
-     * @param  string $condicion Establece la condicion a evaluar, entre los valores permitidos estan: =, !=, >=, <=, like
-     * @param  string $valor     Valor contra el cual se realizará la evaluación del campo
-     * @return void|boolean      Devuelve falso en caso de no poder establecer el filtro
-     */
-    public function addFilter($columna, $condicion, $valor)
-    {
-        $columnasPermitidas = array(
-            'id',
-            'id_padre',
-            'id_raiz',
-            'id_controlador',
-            'ruta',
-        );
-
-        $condicionesPermitidas = array('=', '>', '<', '!=', '>=', '<=', 'like');
-
-        if(!in_array($columna, $columnasPermitidas)) {
-            $this->error = true;
-            $this->msg_error_usr = 'ERROR: Columna no permitida en el filtro';
-            $this->msg_error_log = '('.__METHOD__.') => Columna no permitida en el filtro';
-            
-            throw new Exception();
-        }
-
-        if(!in_array($condicion, $condicionesPermitidas)) {
-            $this->error = true;
-            $this->msg_error_usr = 'ERROR: Condición no permitida en el filtro';
-            $this->msg_error_log = '('.__METHOD__.') => Condición no permitida en el filtro';
-            
-            throw new Exception();
-        }
-
-        if(empty($valor)) {
-            $this->error = true;
-            $this->msg_error_usr = 'ERROR: Debe definir un valor para el filtro';
-            $this->msg_error_log = '('.__METHOD__.') => Debe definir un valor para el filtro';
-            
-            throw new Exception();
-        }
-        
-        // Ejemplo de filtros permitidos por where de active records
-        // $filtros = array(
-        //     'name !=' => $name,
-        //     'id <'    => $id,
-        //     'date >'  => $date
-        // );
-        $this->filters['menu.'.$columna.' '.$condicion] = $valor;
-    }
-
-    /**
-     * Elimina todos los filtros registrados
-     *
-     * @access public
-     * @return void
-     */
-    public function resetFilter()
-    {
-        $this->filters = array();
-    }
-
-    /**
-     * Obtiene todos los registros de la tabla Menu
-     * en caso de existir filtros, estos son aplicados a la consulta
+     * Obtiene todos los registros de la tabla
      *
      * @access public
      * @param  int $offset    Establece el desplazamiento del primer registro a devolver,
@@ -446,22 +382,17 @@ class Menu_model extends CI_Model
     {
         $result = 0;
         
-        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador,
-                          sis_menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
-        $this->db->from('sis_menu');
-        $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
-        $this->db->join('sis_menu padre', 'padre.id=sis_menu.id_padre', 'left');
-        $this->db->join('sis_controlador', 'sis_controlador.id=sis_menu.id_controlador', 'left');
-
-        if( !empty($this->filters) )
-            $this->db->where($this->filters);
+        $this->db->select('tes_tableta.*, sis_estado_tableta.descripcion AS status, tes_tipo_censo.descripcion AS tipo_censo');
+        $this->db->from('tes_tableta');
+        $this->db->join('sis_estado_tableta', 'tes_tableta.id_tes_estado_tableta = sis_estado_tableta.id', 'left');
+        $this->db->join('tes_tipo_censo', 'tes_tableta.id_tipo_censo = tes_tipo_censo.id', 'left');
         
         if(!empty($offset) && !empty($row_count))
             $this->db->limit($offset, $row_count);
         else if (!empty($offset))
             $this->db->limit($offset);
 
-        $query = $this->db->get();
+        $query = $this->db->get();        
         $result = $query->result();
 
         if($this->db->_error_number()) {
@@ -476,9 +407,8 @@ class Menu_model extends CI_Model
         return $result;
     }
 
-
     /**
-     * Obtiene el numero total de registros en la tabla Menu
+     * Obtiene el numero total de registros en la tabla
      * en caso de existir filtros, estos son aplicados a la consulta
      *
      * @access public
@@ -488,22 +418,7 @@ class Menu_model extends CI_Model
     {
         $result = 0;
 
-        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador,
-                          sis_menu.ruta, asu_raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
-        $this->db->from('sis_menu');
-        $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
-        $this->db->join('sis_menu padre', 'padre.id=sis_menu.id_padre', 'left');
-        $this->db->join('sis_controlador', 'sis_controlador.id=sis_menu.id_controlador', 'left');
-
-        if( !empty($this->filters) )
-            $this->db->where($this->filters);
-
-        if(!empty($offset) && !empty($row_count))
-            $this->db->limit($offset, $row_count);
-        else if (!empty($offset))
-            $this->db->limit($offset);
-
-        $result = $this->db->count_all_results();
+        $result = $this->db->count_all_results('tes_tableta');
 
         if($this->db->_error_number()) {
             $this->error = true;
@@ -516,48 +431,5 @@ class Menu_model extends CI_Model
 
         return $result;
     }
-
-    public function hasChild($id) {
-        $query = $this->db->query('SELECT COUNT(id) as num_children FROM sis_menu WHERE id_padre='.$id);
-        $result = $query->row();
-
-        if($result->num_children == 0)
-            return false;
-
-        return true;
-    }
-
-    public function getByPadre($padre) {
-        $cond = '';
-
-        // Obtiene todas las raices
-        if($padre=='NULL' || $padre=='null' || $padre==0)
-            $cond = ' IS NULL';
-        else
-            $cond = ' = '.$padre;
-
-        $query = $this->db->query('SELECT * FROM sis_menu WHERE id_padre '.$cond);
-        $result = $query->result();
-        
-        return $result;
-    }
-
-    /*public function getMenuTree(){
-        $query = $this->db->query('SELECT
-                        menu.id_padre,
-                        menu_padre.nombre AS nombre_padre,
-                        menu.id,
-                        menu.nombre,
-                        menu.nivel
-                    FROM
-                        menu
-                    LEFT JOIN menu AS menu_raiz ON menu.id_raiz = menu_raiz.id
-                    LEFT JOIN menu AS menu_padre ON menu.id_padre = menu_padre.id');
-
-        $result = $query->result_array();
-
-        return $result;
-    }*/
-
 }
 ?>
