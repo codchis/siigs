@@ -71,6 +71,14 @@ class Tableta extends CI_Controller {
         } catch (Exception $e) {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
+        
+        /*$this->load->model(DIR_TES.'/Usuario_tableta_model');
+        
+        echo '<pre>';
+        print_r($this->Usuario_tableta_model->getUsuariosByTableta(2));
+        
+        print_r($this->Usuario_tableta_model->getTabletasByUsuario(1));
+        echo '</pre>';*/
 
         $this->template->write_view('content',DIR_TES.'/tableta/index', $data);
 		$this->template->render();

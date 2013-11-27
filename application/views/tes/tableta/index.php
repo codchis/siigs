@@ -36,6 +36,7 @@
                     <td>'.htmlentities($fila->status).'</td>
                     <td>'.htmlentities($fila->tipo_censo).'</td>
                     <td>'.htmlentities($fila->id_asu_um).'</td>
+                    <td>'.htmlentities($fila->usuarios_asignados).'</td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'">Modificar</a></td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
