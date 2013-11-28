@@ -36,6 +36,7 @@
                     <td>'.htmlentities($fila->status).'</td>
                     <td>'.htmlentities($fila->tipo_censo).'</td>
                     <td>'.htmlentities($fila->id_asu_um).'</td>
+                    <td>'.htmlentities($fila->usuarios_asignados).'</td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'">Modificar</a></td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
@@ -54,10 +55,17 @@
     </tfoot>
 </table>
 
-<br />
 <input type="submit" value="Eliminar Seleccionados" />
 
 </form>
 <br />
 
 <input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta/insert'" />
+
+<br /><br />
+
+<label>Subir un archivo con la lista de direcciones MAC</label>
+<?php echo form_open_multipart(site_url().DIR_TES.'/tableta/file');?>
+    <input type="file" name="archivo" size="60" />
+    <input type="submit" value="Subir Archivo" />
+</form>

@@ -71,6 +71,14 @@ class Tableta extends CI_Controller {
         } catch (Exception $e) {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
+        
+        /*$this->load->model(DIR_TES.'/Usuario_tableta_model');
+        
+        echo '<pre>';
+        print_r($this->Usuario_tableta_model->getUsuariosByTableta(2));
+        
+        print_r($this->Usuario_tableta_model->getTabletasByUsuario(1));
+        echo '</pre>';*/
 
         $this->template->write_view('content',DIR_TES.'/tableta/index', $data);
 		$this->template->render();
@@ -103,7 +111,7 @@ class Tableta extends CI_Controller {
             if(!empty($datos)) {
                 $this->load->library('form_validation');
 
-                $this->form_validation->set_rules('mac', 'MAC', 'trim|xss_clean|max_length[20]|required|callback_validateMac');
+                $this->form_validation->set_rules('mac', 'MAC', 'trim|xss_clean|max_length[20]|required|callback__validateMac');
 
                 if ($this->form_validation->run() === true) {
                     $this->Tableta_model->setMac($datos['mac']);
@@ -239,7 +247,7 @@ class Tableta extends CI_Controller {
         
         try {
             $this->Tableta_model->delete($id);
-            $this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');;
+            $this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
         } catch (Exception $e) {
             $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
         }
@@ -256,19 +264,76 @@ class Tableta extends CI_Controller {
      * @param type $mac
      * @return boolean
      */
-    public function validateMac($mac)
+    public function _validateMac($mac)
 	{
         $result = $this->Tableta_model->getByMac($mac);
         
 		if(!empty($result))
 		{
-			$this->form_validation->set_message('validateMac', 'La direccion MAC ya esta registrada.');
+			$this->form_validation->set_message('_validateMac', 'La direccion MAC ya esta registrada.');
 			return FALSE;
 		}
 		else
 		{
 			return TRUE;
 		}
+	}
+    
+    /**
+     * Registra la lista de tabletas de un archivo csv
+     * 
+     * @return redirect
+     */
+    public function file()
+	{
+        $config['upload_path']   = 'application/updloads';
+		$config['allowed_types'] = 'csv|txt|xls|xlsx';
+		$config['max_size']      = '5120'; //5MB
+        $config['overwrite']     = true;
+        $errores = array();
+        $msjErrores = '';
+        
+		$this->load->library('upload', $config);
+        
+        try {
+            if ( !$this->upload->do_upload('archivo') ) {
+                $this->session->set_flashdata('msgResult', $this->upload->display_errors());
+            } else {
+                $archivo = $this->upload->data();
+                $fichero = @fopen($archivo['full_path'], "r");
+
+                if($fichero) {
+                    while(($linea = fgets($fichero)) !== false) {
+                        $linea = trim($linea);
+                        $result = $this->Tableta_model->getByMac($linea);
+        
+                        if(!empty($result)) {
+                            $errores[] = $linea;
+                        } else {
+                            $this->Tableta_model->setMac($linea);
+                            $this->Tableta_model->insert();
+                        }
+                    }
+
+                    if(!feof($fichero)) {
+                        $this->session->set_flashdata('msgResult', 'Error al leer el archivo '.$archivo['file_name']);
+                    } else {
+                        if(!empty($errores)) {
+                            $msjErrores = 'Las siguientes direccciones MAC ya estan registradas en el sistema: '.implode(', ', $errores).'.';
+                        }
+                        
+                        $this->session->set_flashdata('msgResult', 'Datos registrados correctamente. '.$msjErrores);
+                    }
+                    fclose($fichero);
+                } else {
+                    $this->session->set_flashdata('msgResult', 'Error al leer el archivo '.$archivo['file_name']);
+                }
+            }
+        } catch (Exception $e) {
+            $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+        }
+        
+        redirect(DIR_TES.'/tableta/', 'refresh');
 	}
     
 }

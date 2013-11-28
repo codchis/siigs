@@ -28,6 +28,12 @@ class Tableta_model extends CI_Model
 
     /**
      * @access private
+     * @var    datetime
+     */
+    private $usuarios_asignados;
+    
+    /**
+     * @access private
      * @var    bit(1)
      */
     private $ultima_actualizacion;
@@ -103,6 +109,10 @@ class Tableta_model extends CI_Model
     public function getUltima_actualizacion() {
         return $this->ultima_actualizacion;
     }
+    
+    public function getUsuarios_asignados() {
+        return $this->usuarios_asignados;
+    }
 
     public function getId_tes_estado_tableta() {
         return $this->id_tes_estado_tableta;
@@ -131,6 +141,10 @@ class Tableta_model extends CI_Model
 
     public function setUltima_actualizacion($ultima_actualizacion) {
         $this->ultima_actualizacion = $ultima_actualizacion;
+    }
+    
+    public function setUsuarios_asignados($usuarios_asignados) {
+        $this->usuarios_asignados = $usuarios_asignados;
     }
 
     public function setId_tes_estado_tableta($id_tes_estado_tableta) {
@@ -182,7 +196,7 @@ class Tableta_model extends CI_Model
         $result = false;
         $data = array();
         
-        $data['mac'] = $this->mac;
+        $data['mac'] = trim($this->mac);
         $data['usuarios_asignados'] = 0;
         $data['id_tes_estado_tableta'] = 1;
 
@@ -223,7 +237,10 @@ class Tableta_model extends CI_Model
 
         if( !empty($this->ultima_actualizacion) )
             $data['ultima_actualizacion'] = $this->ultima_actualizacion;
-
+        
+        if( !empty($this->usuarios_asignados) )
+            $data['usuarios_asignados'] = $this->usuarios_asignados;
+        
         if( !empty($this->id_tipo_censo) )
             $data['id_tipo_censo'] = $this->id_tipo_censo;
 
