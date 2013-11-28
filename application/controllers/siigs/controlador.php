@@ -13,6 +13,7 @@ class Controlador extends CI_Controller {
 
 		try
 		{
+                        $this->load->helper('url');
 			$this->load->model(DIR_SIIGS.'/Controlador_model');
 			$this->load->model(DIR_SIIGS.'/Entorno_model');
 		}
@@ -34,7 +35,8 @@ class Controlador extends CI_Controller {
 	{
 		if (empty($this->Controlador_model))
 			return false;
-
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		try
 		{
 			$this->load->library('pagination');
@@ -101,6 +103,8 @@ class Controlador extends CI_Controller {
 	{
 		if (empty($this->Controlador_model))
 			return false;
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		try
 		{
 			$data['title'] = "Detalles del controlador";
@@ -123,13 +127,15 @@ class Controlador extends CI_Controller {
 	 */
 	public function insert($id = FALSE)
 	{
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		$error = false;
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 
 		$data['title'] = 'Crear un nuevo controlador';
 		$this->form_validation->set_rules('id_entorno', 'Entorno', 'required|is_natural_no_zero');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|alpha|max_length[40]');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
 		$this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|xss_clean|required|max_length[100]');
 		$this->form_validation->set_rules('clase', 'Clase', 'trim|xss_clean|required|max_length[30]');
 
@@ -186,6 +192,9 @@ class Controlador extends CI_Controller {
 	 */
 	public function update($id)
 	{
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+                
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 
@@ -260,6 +269,9 @@ class Controlador extends CI_Controller {
 	 */
 	public function accion($id)
 	{
+                //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		//show_error('', 403, 'Acceso denegado');
+                
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 
@@ -319,6 +331,9 @@ class Controlador extends CI_Controller {
 	 */
 	public function delete($id)
 	{
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+                
 		try
 		{
 			if (empty($this->Controlador_model))

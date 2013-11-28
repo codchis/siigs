@@ -13,6 +13,7 @@ class Catalogo_x_raiz extends CI_Controller {
 
 			try
 		{
+                        $this->load->helper('url');
 			$this->load->model(DIR_SIIGS.'/Catalogo_x_raiz_model');
 			$this->load->model(DIR_SIIGS.'/Catalogo_model');
 		}
@@ -34,7 +35,8 @@ class Catalogo_x_raiz extends CI_Controller {
 	{
 		if (empty($this->Catalogo_x_raiz_model))
 			return false;
-
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		try
 		{
 			$data['title'] = "Detalles del raiz x catálogo";
@@ -57,6 +59,9 @@ class Catalogo_x_raiz extends CI_Controller {
 	 */
 	public function insert($id = 0)
 	{
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+                
 		$error = false;
 		$this->load->helper('form');
 		$this->load->library('form_validation');
@@ -194,6 +199,9 @@ class Catalogo_x_raiz extends CI_Controller {
 
 	public function update($id)
 	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+            
 		$this->load->helper('form');
 		$this->load->helper('url');
 		$this->load->library('form_validation');
@@ -265,6 +273,9 @@ class Catalogo_x_raiz extends CI_Controller {
 	 */
 	public function delete($id)
 	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+            
 		try
 		{
 			if (empty($this->Catalogo_x_raiz_model))

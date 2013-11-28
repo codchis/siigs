@@ -13,6 +13,7 @@ class Accion extends CI_Controller {
 
 			try
 		{
+                        $this->load->helper('url');
 			$this->load->model(DIR_SIIGS.'/Accion_model');
 		}
 		catch (Exception $e)
@@ -33,7 +34,8 @@ class Accion extends CI_Controller {
 	{
 		if (empty($this->Accion_model))
 			return false;
-
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		try
 		{
 
@@ -61,7 +63,8 @@ class Accion extends CI_Controller {
 	{
 		if (empty($this->Accion_model))
 			return false;
-
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		try
 		{
 			$data['title'] = "Detalles de la acción";
@@ -84,6 +87,8 @@ class Accion extends CI_Controller {
 	 */
 	public function insert()
 	{
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		$error = false;
 		$this->load->helper('form');
 		$this->load->library('form_validation');
@@ -137,6 +142,8 @@ class Accion extends CI_Controller {
 	 */
 	public function update($id)
 	{
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		$this->load->helper('form');
 		$this->load->helper('url');
 		$this->load->library('form_validation');
@@ -211,7 +218,9 @@ class Accion extends CI_Controller {
 		try
 		{
 			if (empty($this->Accion_model))
-				return false;
+                            return false;
+                        if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+                        show_error('', 403, 'Acceso denegado');
 
 			$this->load->helper('url');
 			$this->Accion_model->setId($id);

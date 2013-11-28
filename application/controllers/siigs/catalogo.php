@@ -13,6 +13,7 @@ class Catalogo extends CI_Controller {
 
 			try
 		{
+                        $this->load->helper('url');
 			$this->load->model(DIR_SIIGS.'/Catalogo_model');
 		}
 		catch (Exception $e)
@@ -33,7 +34,8 @@ class Catalogo extends CI_Controller {
 	{
 		if (empty($this->Catalogo_model))
 			return false;
-
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		try
 		{
 
@@ -47,6 +49,7 @@ class Catalogo extends CI_Controller {
 		}
 
 		$this->template->write_view('content',DIR_SIIGS.'/catalogo/index', $data);
+                
 		$this->template->render();
 	}
 
@@ -61,7 +64,10 @@ class Catalogo extends CI_Controller {
 	{
 		if (empty($this->Catalogo_model))
 			return false;
-
+                
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+                
 		if ($this->input->is_ajax_request())
 		{
 			try
@@ -98,6 +104,9 @@ class Catalogo extends CI_Controller {
 	 */
 	public function load()
 	{
+            //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+            //show_error('', 403, 'Acceso denegado');
+            
 		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
 		//if (TRUE)
 		{
@@ -172,6 +181,9 @@ class Catalogo extends CI_Controller {
 	 */
 	public function loadupdate($nombrecat , $update = false)
 	{
+            //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+            //show_error('', 403, 'Acceso denegado');
+            
 		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
 		//if (TRUE)
 		{
@@ -428,6 +440,9 @@ class Catalogo extends CI_Controller {
 	 */
 	public function insert()
 	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+            
 		$error = false;
 		$this->load->helper('form');
 		$this->load->library('form_validation');
@@ -579,7 +594,9 @@ class Catalogo extends CI_Controller {
 	{
 		if (empty($this->Catalogo_model))
 			return false;
-			
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');		
+                
 		try
 		{
 			$data['title'] = "Modificar datos del catálogo";
@@ -639,6 +656,9 @@ class Catalogo extends CI_Controller {
 			if (empty($this->Catalogo_model))
 				return false;
 
+                        if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+			show_error('', 403, 'Acceso denegado');
+                        
 			$this->load->helper('url');
 				
 			$existe = $this->db->query('select * from asu_raiz_x_catalogo where tabla_catalogo="'.$nombre.'"');

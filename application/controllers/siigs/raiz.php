@@ -14,6 +14,7 @@ class Raiz extends CI_Controller {
 
 			try
 		{
+                        $this->load->helper('url');
 			$this->load->model(DIR_SIIGS.'/Raiz_model');
 			$this->load->model(DIR_SIIGS.'/Catalogo_model');
 			$this->load->model(DIR_SIIGS.'/Catalogo_x_raiz_model');
@@ -25,6 +26,13 @@ class Raiz extends CI_Controller {
 		}
 	}
 
+        public function pruebas()
+        {
+            //$this->Raiz_model->getTree(1);
+            $this->Raiz_model->getChildrenFromNivel(1,1,5);
+           // $this->Raiz_model->getChildrenFromId(781,true);
+        }
+        
 	/**
 	 *Acción por default del controlador, carga la lista
 	 *de Raices disponibles y una lista de opciones
@@ -36,7 +44,9 @@ class Raiz extends CI_Controller {
 	{
 		if (empty($this->Raiz_model))
 			return false;
-
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+                
 		try
 		{
 
@@ -64,7 +74,9 @@ class Raiz extends CI_Controller {
 	{
 		if (empty($this->Raiz_model))
 			return false;
-
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+                
 		try
 		{
 			$data['title'] = "Detalles de la raiz";
@@ -96,6 +108,9 @@ class Raiz extends CI_Controller {
 	 */
 	public function insert()
 	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+            
 		$error = false;
 		$this->load->helper('form');
 		$this->load->library('form_validation');
@@ -145,6 +160,9 @@ class Raiz extends CI_Controller {
 	 */
 	public function update($id)
 	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+            
 		$this->load->helper('form');
 		$this->load->helper('url');
 		$this->load->library('form_validation');
@@ -232,6 +250,9 @@ class Raiz extends CI_Controller {
 	 */
 	public function createasu($id)
 	{
+            //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+	    //	show_error('', 403, 'Acceso denegado');
+            
 		try
 		{
 			$catalogos = $this->Catalogo_x_raiz_model->getByArbol($id);
@@ -330,6 +351,9 @@ class Raiz extends CI_Controller {
 	 */
 	public function delete($id)
 	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+            
 		try
 		{
 			if (empty($this->Raiz_model))

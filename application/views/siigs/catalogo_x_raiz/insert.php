@@ -39,7 +39,7 @@
 	 	           	    	$llaveselect = $('<select name="columna_llave"></select>');
 	 	           	    	$td1.append($llaveselect);
 
-	 	           	    	$campos = dato.campos.split('||');
+	 	           	    	$campos = dato.llave.split('||');
 
 	 	                	$.each($campos, function(i, item) {
 
@@ -51,7 +51,7 @@
 	 	           	    	$descselect = $('<select name="columna_descripcion"></select>');
 	 	           	    	$td2.append($descselect);
 
-		 	           	    $campos = dato.llave.split('||');
+		 	           	    $campos = dato.campos.split('||');
 
 	 	                	$.each($campos, function(i, item) {
 
@@ -59,8 +59,8 @@
 		 	                	$descselect.append('<option value="'+datos[0]+'">'+datos[0]+'</option>');
 	 	                	});
 
-	 	                	$('#tdllave').html($td2);
-	 	                	$('#tddesc').html($td1);
+	 	                	$('#tdllave').html($td1);
+	 	                	$('#tddesc').html($td2);
 
 	 	                	//Limpiar las relaciones y cargar de nuevo los datos para relaciones
 

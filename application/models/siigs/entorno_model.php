@@ -216,6 +216,29 @@ class Entorno_model extends CI_Model {
 		else
 			return $query->row();
 	}
+        
+        	/**
+	 *Obtiene los permisos asignados al grupo
+	 *
+	 *@access  public
+	 *@return  Object
+	 *@param   string $grupo
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function getPermisosByGrupo($grupo)
+	{
+		$query = $this->db->query("SELECT CONCAT(e.directorio,'::',c.clase,'::',a.metodo) AS modulo FROM sis_controlador_x_accion ca 
+                                          INNER JOIN sis_permiso p ON ca.id=P.id_controlador_accion INNER JOIN sis_controlador c ON ca.id_controlador=c.id INNER JOIN sis_entorno e ON c.id_entorno=e.id 
+                                          INNER JOIN sis_accion a ON ca.id_accion=a.id WHERE p.id_grupo=".$grupo);
+		if (!$query)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener la información de los permisos por grupo (getPermisosByGrupo)";
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+	}
 
 	/**
 	 *Inserta en la tabla accion, la informaci�n contenida en el objeto

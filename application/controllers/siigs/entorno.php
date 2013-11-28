@@ -14,6 +14,7 @@ class Entorno extends CI_Controller {
 
 		try
 		{
+                        $this->load->helper('url');
 			$this->load->model(DIR_SIIGS.'/Entorno_model');
 		}
 		catch (Exception $e)
@@ -34,6 +35,8 @@ class Entorno extends CI_Controller {
 	{
 		if (empty($this->Entorno_model))
 			return false;
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		try
 		{
 
@@ -61,6 +64,8 @@ class Entorno extends CI_Controller {
 	{
 		if (empty($this->Entorno_model))
 			return false;
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		try
 		{
 			$data['title'] = "Detalles del entorno";
@@ -83,6 +88,9 @@ class Entorno extends CI_Controller {
 	 */
 	public function insert()
 	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+            
 		$error = false;
 		$this->load->helper('form');
 		$this->load->library('form_validation');
@@ -193,6 +201,8 @@ class Entorno extends CI_Controller {
 	 */
 	public function update($id)
 	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		//Load helpers and libraries
 		$this->load->helper('form');
 		$this->load->helper('url');
@@ -269,6 +279,8 @@ class Entorno extends CI_Controller {
 	 */
 	public function delete($id)
 	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
 		try
 		{
 			if (empty($this->Entorno_model))
