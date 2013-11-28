@@ -234,7 +234,7 @@ class Raiz_model extends CI_Model {
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */
 
-        public function getTree($idarbol , $nivelesocultos = array())
+        public function getTree($idarbol , $nivel, $nivelesocultos = array())
         {
             $consultavalues = " select distinct ";
             $consultafrom = " from ";
@@ -249,6 +249,8 @@ class Raiz_model extends CI_Model {
                 {
                     $cont = 0;
                     $padreactivo = "";
+                    if ($query->num_rows() == 0)
+                        return array();
                     foreach($query->result() as $fila)
                     {
                         if (!in_array($fila->grado_segmentacion,$nivelesocultos))
@@ -289,7 +291,7 @@ class Raiz_model extends CI_Model {
                         }
                     }
                     $consultavalues = substr($consultavalues, 0, count($consultavalues)-3);
-                    $consulta = $consultavalues.$consultafrom. " where tabla1.grado_segmentacion = 1";
+                    $consulta = $consultavalues.$consultafrom. " where tabla1.grado_segmentacion >= ".$nivel;
                     $resultado = $this->db->query($consulta);
                     //var_dump($consulta);
                     if (!$resultado)
@@ -305,9 +307,13 @@ class Raiz_model extends CI_Model {
                 }
         }
         
-        public function getChildrenFromNivel($idarbol, $nivel , $omitidos = null)
+        public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array())
         {
-            $arbol = $this->getTree($idarbol,array());
+            $arbol = $this->getTree($idarbol, $nivel, $omitidos);
+            if (count($arbol) == 0)
+            {
+                return json_encode(array());
+            }
             if ($nivel<=$arbol['niveles'])
             {
                 $resultado = array();
@@ -321,9 +327,9 @@ class Raiz_model extends CI_Model {
                             if ($fila['id_'.$i] != null)
                             {
                                 if ($i == $arbol['niveles'])
-                                    $arraytemp = array('id' => $fila['id_'.$i] , 'padre' => $fila['padre_'.$i] , 'descripcion'=> $fila['descripcion_'.$i]);
+                                    $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> $fila['descripcion_'.$i]);
                                 else
-                                    $arraytemp = array('id' => $fila['id_'.$i], 'padre' => $fila['padre_'.$i], 'descripcion'=> $fila['descripcion_'.$i] , 'hijos'=>array());    
+                                    $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> $fila['descripcion_'.$i] , 'children'=>array());    
 
                                 if (!isset($resultado[$i]))
                                     $resultado[$i] = array();
@@ -337,25 +343,21 @@ class Raiz_model extends CI_Model {
                     }
                     for($i = count($resultado) ; $i > 1;$i--)
                     {
-                        $resultado2 = $resultado;
                         $arreglohijo = $resultado[$i];
                         $arreglopadre = $resultado[$i-1];
-                        $count = 0;
                         foreach ($arreglohijo as $clave1 => $hijo)
                         {
                             foreach ($arreglopadre as $clave2 => $padre)
                             {
-                                
-                                if ($hijo['padre'] == $padre['id'])
+                                if ($hijo['parent'] == $padre['key'])
                                 {
-                                    $count +=1;
-                                    array_push($arreglopadre[$clave2]['hijos'], $resultado[$i][$clave1]);
+                                    array_push($arreglopadre[$clave2]['children'], $resultado[$i][$clave1]);
                                 }
                             }
                         }
                         $resultado[$i-1] = $arreglopadre;
                     }
-                    echo json_encode($resultado[1]);
+                    return json_encode($resultado[1]);
             }
         }
         

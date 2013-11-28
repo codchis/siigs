@@ -26,11 +26,23 @@ class Raiz extends CI_Controller {
 		}
 	}
 
-        public function pruebas()
+        public function getChildrenFromLevel()
         {
-            //$this->Raiz_model->getTree(1);
-            $this->Raiz_model->getChildrenFromNivel(1,1,5);
-           // $this->Raiz_model->getChildrenFromId(781,true);
+            try 
+            {
+		if ($this->input->is_ajax_request())
+		{
+                    $idarbol = $this->input->post('idarbol');
+                    $nivel = $this->input->post('nivel');
+                    $omitidos = $this->input->post('omitidos');
+                    echo $this->Raiz_model->getChildrenFromLevel($idarbol,$nivel,$omitidos);
+		}
+		else echo 'Acceso denegado';
+            }
+            catch(Exception $e)
+            {
+		echo $e->getMessage();
+            }
         }
         
 	/**

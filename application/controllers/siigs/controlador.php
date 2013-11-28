@@ -370,7 +370,7 @@ class Controlador extends CI_Controller {
 			echo json_encode($data['permisos']);
 			exit;
 		}
-		else echo 'loquesea';
+		else echo 'Acceso denegado';
 		}
 		catch(Exception $e){
 			echo $e->getMessage();
