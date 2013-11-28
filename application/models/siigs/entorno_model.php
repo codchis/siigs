@@ -225,7 +225,7 @@ class Entorno_model extends CI_Model {
 	 *@param   string $grupo
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */
-	public function getPermisosByGrupo($grupo)
+	public function getPermissionsByGroup($grupo)
 	{
 		$query = $this->db->query("SELECT CONCAT(e.directorio,'::',c.clase,'::',a.metodo) AS modulo FROM sis_controlador_x_accion ca 
                                           INNER JOIN sis_permiso p ON ca.id=P.id_controlador_accion INNER JOIN sis_controlador c ON ca.id_controlador=c.id INNER JOIN sis_entorno e ON c.id_entorno=e.id 
