@@ -692,4 +692,26 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		}
 	}
 
+	/**
+	 *Acción para servir un array de objetos con los usuarios activos por grupo
+	 *AJAX y devuelve un objeto JSON
+	 *
+	 * @param  int $grupo
+	 * @return Object JSON
+	 */
+	public function getActivesByGroup($grupo)
+	{
+		try {
+			if ($this->input->is_ajax_request())
+			{
+				$data['usuarios'] = $this->Usuario_model->getActivesByGroup($grupo);
+				echo json_encode($data['usuarios']);
+				exit;
+			}
+			else echo 'Acceso denegado';
+		}
+		catch(Exception $e){
+			echo $e->getMessage();
+		}
+	}
 }

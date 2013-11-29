@@ -280,7 +280,7 @@ class Usuario_model extends CI_Model {
 	 */
 	public function getActivesByGroup($group_id)
 	{
-		$query = $this->db->get_where('sis_usuario', array('id_grupo' => $group_id, 'id_grupo' => $group_id, 'activo' => 1));
+		$query = $this->db->get_where('sis_usuario', array('id_grupo' => $group_id, 'activo' => 1));
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
