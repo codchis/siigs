@@ -72,14 +72,6 @@ class Tableta extends CI_Controller {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
         
-        /*$this->load->model(DIR_TES.'/Usuario_tableta_model');
-        
-        echo '<pre>';
-        print_r($this->Usuario_tableta_model->getUsuariosByTableta(2));
-        
-        print_r($this->Usuario_tableta_model->getTabletasByUsuario(1));
-        echo '</pre>';*/
-
         $this->template->write_view('content',DIR_TES.'/tableta/index', $data);
 		$this->template->render();
     }
@@ -280,11 +272,11 @@ class Tableta extends CI_Controller {
 	}
     
     /**
-     * Registra la lista de tabletas de un archivo csv
+     * Registra tabletas desde un archivo csv
      * 
      * @return redirect
      */
-    public function file()
+    public function uploadFile()
 	{
         $config['upload_path']   = 'application/updloads';
 		$config['allowed_types'] = 'csv|txt|xls|xlsx';
@@ -335,6 +327,6 @@ class Tableta extends CI_Controller {
         
         redirect(DIR_TES.'/tableta/', 'refresh');
 	}
-    
+      
 }
 ?>

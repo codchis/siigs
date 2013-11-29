@@ -148,5 +148,79 @@ class Usuario_tableta_model extends CI_Model
         return $result;
     }
     
+    /**
+     * Elimina la relacion entre usuario y tableta
+     *
+     * @access public
+     * @param  int     $id_usuario
+     * @param  int     $id_tableta Si no se proporciona el parametro, se toma el id del objeto actual
+     * @return boolean             Devuelve true Si se elimino el registro exitosamente, false en caso contrario
+     */
+    public function delete($id_usuario, $id_tableta=null)
+    {
+        $result = false;
+        
+        $id_tableta = is_null($id_tableta) ? $this->id_tes_tableta : $id_tableta;
+
+        if(is_array($id_usuario)) {
+            // Eliminar un conjunto de registros
+            foreach ($id_usuario as $idx) {
+                $this->db->where('id_tes_tableta', $id_tableta);
+                $this->db->where('id_usuario', $idx);
+                $result = $this->db->delete('tes_usuario_x_tableta'); 
+
+                if(empty($result)) {
+                    $this->error = true;
+                    $this->msg_error_usr = 'No se puede eliminar el registro';
+                    $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+                    throw new Exception();
+                }
+            }
+        } else {
+            // Eliminar un solo registro
+            $this->db->where('id_tes_tableta', $id_tableta);
+            $this->db->where('id_usuario', $id_usuario);
+            $result = $this->db->delete('tes_usuario_x_tableta'); 
+
+            if(empty($result)) {
+                $this->error = true;
+                $this->msg_error_usr = 'No se puede eliminar el registro';
+                $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+                throw new Exception();
+            }
+        }
+
+        return $result;
+    }
+    
+    /**
+     * Inserta en la base de datos, la informacion contenida en el objeto
+     *
+     * @access public
+     * @return boolean false Si no se ejecutó la inserción, true si se ejecutó la inserción
+     */
+    public function insert($id_usuario=null, $id_tableta=null)
+    {
+        $result = false;
+        $data = array();
+        
+        $data['id_usuario'] = $this->id_usuario ? $this->id_usuario : $id_usuario;
+        $data['id_tes_tableta'] = $this->id_tes_tableta ? $this->id_tes_tableta : $id_tableta;
+
+        $result = $this->db->insert('tes_usuario_x_tableta', $data);
+
+        if( $this->db->_error_number() ) {
+            $this->error = true;
+            $this->msg_error_usr = 'No se puede insertar el registro';
+            $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+            throw new Exception();
+        } else {
+            $this->id_usuario = $data['id_usuario'] ;
+            $this->id_tes_tableta = $data['id_tes_tableta'];
+        }
+
+        return $result;
+    }
+    
 }
 ?>

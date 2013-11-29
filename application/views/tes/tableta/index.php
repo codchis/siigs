@@ -36,7 +36,7 @@
                     <td>'.htmlentities($fila->status).'</td>
                     <td>'.htmlentities($fila->tipo_censo).'</td>
                     <td>'.htmlentities($fila->id_asu_um).'</td>
-                    <td>'.htmlentities($fila->usuarios_asignados).'</td>
+                    <td>'.($fila->usuarios_asignados==0 ? 'No asignados' : '<a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'">Ver</a>').'</td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'">Modificar</a></td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
@@ -65,7 +65,7 @@
 <br /><br />
 
 <label>Subir un archivo con la lista de direcciones MAC</label>
-<?php echo form_open_multipart(site_url().DIR_TES.'/tableta/file');?>
+<?php echo form_open_multipart(site_url().DIR_TES.'/tableta/uploadFile');?>
     <input type="file" name="archivo" size="60" />
     <input type="submit" value="Subir Archivo" />
 </form>
