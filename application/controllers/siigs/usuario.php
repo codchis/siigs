@@ -58,6 +58,10 @@ class Usuario extends CI_Controller {
 						$this->session->set_userdata(USERNAME, strtoupper($rowUser->nombre_usuario));
 						$this->session->set_userdata(USER_LOGGED, $rowUser->id);
 						$this->session->set_userdata(GROUP_ID, strtoupper($rowUser->id_grupo));
+						// obtiene los permisos del grupo al que pertenece el usuario logueado
+						$this->load->model(DIR_SIIGS.'/Entorno_model');
+						$this->session->set_userdata(PERMISSIONS, $this->Entorno_model->getPermissionsByGroup($rowUser->id_grupo));
+						//var_dump($this->session->userdata(PERMISSIONS)); return;
 						Bitacora_model::insert(DIR_SIIGS.'::'.__CLASS__.'::index', 'Sesion iniciada: '.strtoupper($rowUser->nombre_usuario));
 						// redirige a la url de donde provino o a la predeterminada del sistema
 						if (!$this->session->userdata(REDIRECT_TO))

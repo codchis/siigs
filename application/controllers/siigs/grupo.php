@@ -35,6 +35,11 @@ class Grupo extends CI_Controller {
 				return false;
 			if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
+			// validar permisos (buscar dinamicamente las acciones?)
+			$data['permisos'] = Usuario_model::checkCredentials(DIR_SIIGS.'::Permiso::index', current_url());
+			$data['view'] = Usuario_model::checkCredentials(DIR_SIIGS.'::Grupo::view', current_url());
+			$data['update'] = Usuario_model::checkCredentials(DIR_SIIGS.'::Grupo::update', current_url());
+			$data['delete'] = Usuario_model::checkCredentials(DIR_SIIGS.'::Grupo::delete', current_url());
 			$data['title'] = 'Catálogo de Grupos';
 			$this->load->helper('form');
 			$this->load->library('pagination');

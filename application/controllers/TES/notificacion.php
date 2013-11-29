@@ -43,6 +43,27 @@ class Notificacion extends CI_Controller {
 			$data['pag'] = $pag;
 			$data['msgResult'] = $this->session->flashdata('msgResult');
 			
+			if($this->input->post('filtrar')) {
+				// Eliminar el campo hidden y el boton
+				unset($_POST['filtrar'], $_POST['btnFiltrar']);
+				$filtros = array_filter($this->input->post());
+
+				if(!empty($filtros)) {
+					foreach ($filtros as $campo => $valor) {
+						switch ($campo) {
+							case 'fechaIni':
+								$this->Notificacion_model->addFilter('fecha_inicio', '>=', $valor);
+								break;
+							case 'fechaFin':
+								$this->Notificacion_model->addFilter('fecha_inicio', '<=', $valor.' 23:59:59');
+								break;
+						}
+					}
+				}
+			
+				$data = array_merge($data, $filtros);
+			}
+				
 			// Configuración para el Paginador
 			$configPag['base_url']   = '/'.DIR_TES.'/notificacion/index/';
 			$configPag['first_link'] = 'Primero';
@@ -51,10 +72,7 @@ class Notificacion extends CI_Controller {
 			$configPag['total_rows'] = $this->Notificacion_model->getNumRows($this->input->post('busqueda'));
 			$configPag['per_page']   = 20;
 			$this->pagination->initialize($configPag);
-			if ($this->input->post('busqueda'))
-				$data['notifications'] = $this->Notificacion_model->getAll($this->input->post('busqueda'), $configPag['per_page'], $pag);
-			else 
-				$data['notifications'] = $this->Notificacion_model->getAll('', $configPag['per_page'], $pag);
+			$data['notifications'] = $this->Notificacion_model->getAll($this->input->post('busqueda'), $configPag['per_page'], $pag);
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);

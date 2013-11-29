@@ -237,7 +237,7 @@ class Entorno_model extends CI_Model {
 			throw new Exception(__CLASS__);
 		}
 		else
-			return $query->result();
+			return $query->result_array();
 	}
 
 	/**

@@ -1,12 +1,36 @@
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#btnFiltrar').click(function(e){
+        // Eliminar la pagina de la url del action
+        action = $('#form_filter_bitacora').attr('action');
+        action = action.replace(/\d+(\/)*$/,'');
+
+        $('#form_filter_bitacora').attr('action',action);
+        $('#form_filter_bitacora').submit();
+    });
+});
+</script>
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
         echo $msgResult.'<br /><br />'; ?>
 <fieldset style="width: 50%">
     <legend>Opciones de bÃºsqueda</legend>
 <?php echo form_open(DIR_TES.'/notificacion/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
-Buscar notificación
-<input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" /> 
-<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" />
+<p><input type="hidden" name="filtrar" value="true" />
+<table>
+<tr>
+<td>Buscar</td><td colspan='2'> <input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" /></td>
+</tr>
+<tr>
+<td>
+Fecha Inicio:</td><td><input type="date" name="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" /></td>
+             <td><input type="date" name="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" /></td>
+             </tr>
+<tr>
+<td colspan='3'>
+<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" /></td>
+</tr>
+</table>
 </form>
 </fieldset>
 <br />

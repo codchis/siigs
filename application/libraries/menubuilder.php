@@ -88,4 +88,24 @@ class Menubuilder
             $strMenu .= '</li>';
         }
     }
+    
+    /**
+     * Función que valida si se visualiza o no la accion especificada (usada en views)
+     *
+     * @access public
+     * @param  string $strMenu  Variable pasada por referencia donde se guardará la cadena de ul y li
+     * @param  string $id_padre ID del padre de los elementos del arbol de menu
+     * @return void
+     */
+    public static function isGranted($accion)
+    {
+    	if (self::$CI->session->userdata(PERMISSIONS)){
+    		foreach(self::$CI->session->userdata(PERMISSIONS) as $k=>$v) {
+    			if(array_search($accion, $v)) {
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
 }

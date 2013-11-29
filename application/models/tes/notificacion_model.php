@@ -57,9 +57,24 @@ class Notificacion_model extends CI_Model {
    	 */
    	private $tabletas;
    	
+   	/**
+   	 * @access private
+   	 * @var    array
+   	 */
+   	private $filters;
+   	
+   	/**
+   	 * @access private
+   	 * @var    array
+   	 */
+   	private $filtersOr;
+   	
 	public function __construct()
 	{
 		parent::__construct();
+		
+		$this->filters = array();
+		$this->filtersOr = array();
 		
 		$this->load->database();
 		if (!$this->db->conn_id)
@@ -156,18 +171,24 @@ class Notificacion_model extends CI_Model {
 			$this->db->limit($offset, $row_count);
 		else if (!empty($offset))
 			$this->db->limit($offset);
-		if (empty($keywords)){
-			
+		if (empty($keywords) && empty($this->filters)){	
 			$query = $this->db->get('tes_notificacion');
+			echo $this->db->last_query();
+			return $this->getTabletsNames($query->result());
 		}
 		else
 		{
 			$this->db->select('*');
 			$this->db->from('tes_notificacion');
-			$this->db->like('titulo', $keywords);
-			$this->db->or_like('contenido', $keywords);
-			$query = $this->db->get();
+			if (!empty($keywords)){
+				$this->db->where("(titulo LIKE '%$keywords%' OR contenido LIKE '%$keywords%')");
+			}
 		}
+		if( !empty($this->filters) ){
+			$this->db->where($this->filters);
+		}
+		$query = $this->db->get();
+		echo $this->db->last_query();
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -301,6 +322,52 @@ class Notificacion_model extends CI_Model {
 			}
 		}
 		return $notifications;
+	}
+	
+	/**
+	 * Agrega una nueva regla de filtrado al arreglo de filtros
+	 *
+	 * @access public
+	 * @param  string $columna   Puede ser cualquier campo del objeto (id, id_usuario, fecha_hora, parametros, id_controlador_accion)
+	 * @param  string $condicion Establece la condicion a evaluar, entre los valores permitidos estan: =, !=, >=, <=, like
+	 * @param  string $valor     Valor contra el cual se realizará la evaluación del campo
+	 * @return void|boolean      Devuelve falso en caso de no poder establecer el filtro
+	 */
+	public function addFilter($columna, $condicion, $valor)
+	{
+		$columnasPermitidas = array(
+				'titulo',
+				'contenido',
+				'fecha_inicio'
+		);
+	
+		$condicionesPermitidas = array('=', '>', '<', '!=', '>=', '<=', 'like');
+	
+		if(!in_array($columna, $columnasPermitidas)) {
+			$this->error = true;
+			$this->msg_error_usr = 'ERROR: Columna no permitida en el filtro ('.$columna.')';
+			$this->msg_error_log = '('.__METHOD__.') => '.$this->msg_error_usr;
+	
+			throw new Exception(__CLASS__);
+		}
+	
+		if(!in_array($condicion, $condicionesPermitidas)) {
+			$this->error = true;
+			$this->msg_error_usr = 'ERROR: Condición no permitida en el filtro ('.$condicion.')';
+			$this->msg_error_log = '('.__METHOD__.') => '.$this->msg_error_usr;
+	
+			throw new Exception(__CLASS__);
+		}
+	
+		if(empty($valor)) {
+			$this->error = true;
+			$this->msg_error_usr = 'ERROR: Debe definir un valor para el filtro';
+			$this->msg_error_log = '('.__METHOD__.') => '.$this->msg_error_usr;
+	
+			throw new Exception(__CLASS__);
+		}
+	
+		$this->filters[$columna.' '.$condicion] = $valor;
 	}
 }
 ?>

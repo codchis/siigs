@@ -23,6 +23,7 @@ define('USERNAME', 'username');
 define('USER_LOGGED', 'user_id');
 define('GROUP_ID', 'group_id');
 define('REDIRECT_TO', 'redirect_to');
+define('PERMISSIONS', 'permissions');
 
 /*
 |--------------------------------------------------------------------------
