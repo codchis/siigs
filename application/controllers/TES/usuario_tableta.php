@@ -33,10 +33,10 @@ class Usuario_tableta extends CI_Controller {
      */
     public function index($idTableta)
     {
-        /*if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
+        if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
             return false;
-        }*/
+        }
         
         if(!isset($this->Tableta_model))
             return false;
@@ -96,10 +96,10 @@ class Usuario_tableta extends CI_Controller {
      */
     public function insert($id_tableta)
     {
-        /*if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
+        if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
             return false;
-        }*/
+        }
         
         if(!isset($this->Usuario_tableta_model))
             return false;
@@ -134,10 +134,10 @@ class Usuario_tableta extends CI_Controller {
      */
     public function delete($id_usuario, $id_tableta)
     {
-        /*if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
+        if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
             return false;
-        }*/
+        }
 
         if(!isset($this->Tableta_model))
             return false;
