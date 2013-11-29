@@ -17,3 +17,5 @@ nbproject/
 .settings
 .buildpath
 .project
+
+netbeans_ci_code_completion.php
