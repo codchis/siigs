@@ -19,10 +19,11 @@ $(document).ready(function(){
 });
 </script>
 <?php 
+$opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::grupo::insert');
 $permiso_index = Menubuilder::isGranted(DIR_SIIGS.'::permiso::index');
-$grupo_index = Menubuilder::isGranted(DIR_SIIGS.'::grupo::view');
-$grupo_update = Menubuilder::isGranted(DIR_SIIGS.'::grupo::update');
-$grupo_delete = Menubuilder::isGranted(DIR_SIIGS.'::grupo::delete');
+$opcion_index = Menubuilder::isGranted(DIR_SIIGS.'::grupo::view');
+$opcion_update = Menubuilder::isGranted(DIR_SIIGS.'::grupo::update');
+$opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::grupo::delete');
 ?>
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
@@ -40,17 +41,17 @@ Buscar grupo
 		<?php if($permiso_index) { ?><th>&nbsp;</th><?php } ?>
 		<th>Nombre</th>
 		<th>Descripción</th>
-		<?php if($grupo_index) { ?><th></th> <?php } ?>
-		<?php if($grupo_update) { ?><th></th> <?php } ?>
-		<?php if($grupo_delete) { ?><th></th> <?php } ?>
+		<?php if($opcion_index) { ?><th></th> <?php } ?>
+		<?php if($opcion_update) { ?><th></th> <?php } ?>
+		<?php if($opcion_delete) { ?><th></th> <?php } ?>
 	<?php if (isset($groups)) foreach ($groups as $group_item): ?>
 	<tr>
 		<?php if($permiso_index) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/<?php echo $group_item->id ?>/permiso">Permisos</a></td><?php } ?>
 		<td><?php echo $group_item->nombre ?></td>
 		<td><?php echo $group_item->descripcion ?></td>
-		<?php if($grupo_index) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/view/<?php echo $group_item->id ?>">Ver detalles</a></td><?php } ?>
-		<?php if($grupo_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/update/<?php echo $group_item->id ?>">Modificar</a></td><?php } ?>
-		<?php if($grupo_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/delete/<?php echo $group_item->id ?>" onclick="if (confirm('Realmente desea eliminar este grupo?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
+		<?php if($opcion_index) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/view/<?php echo $group_item->id ?>">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/update/<?php echo $group_item->id ?>">Modificar</a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/delete/<?php echo $group_item->id ?>" onclick="if (confirm('Realmente desea eliminar este grupo?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 			</tr>
 	<?php endforeach ?>
     <tfoot>
@@ -59,4 +60,4 @@ Buscar grupo
         </td></tr>
     </tfoot>
 </table>
-<a href="/<?php echo DIR_SIIGS?>/grupo/insert">Crear nuevo</a>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS?>/grupo/insert">Crear nuevo</a><?php } ?>
