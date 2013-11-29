@@ -271,6 +271,27 @@ class Usuario_model extends CI_Model {
 	}
 
 	/**
+	 * Obtiene los usuarios activos del grupo solicitado
+	 *
+	 * @access 		public
+	 * @param 		int			$id			id del usuario
+	 * @param 		boolean		$viewMode	true obtiene el modo visualización, false o null obtiene el registro normal
+	 * @return void|object		false si ocurrió algún error, object si se ejecutó correctamente
+	 */
+	public function getActivesByGroup($group_id)
+	{
+		$query = $this->db->get_where('sis_usuario', array('id_grupo' => $group_id, 'id_grupo' => $group_id, 'activo' => 1));
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return;
+	}
+	
+	/**
 	 * Obtiene el usuario solicitado
 	 *
 	 * @access 		public
