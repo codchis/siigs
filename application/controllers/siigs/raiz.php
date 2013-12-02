@@ -16,6 +16,7 @@ class Raiz extends CI_Controller {
 		{
                         $this->load->helper('url');
 			$this->load->model(DIR_SIIGS.'/Raiz_model');
+                        $this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
 			$this->load->model(DIR_SIIGS.'/Catalogo_model');
 			$this->load->model(DIR_SIIGS.'/Catalogo_x_raiz_model');
 		}
@@ -35,7 +36,10 @@ class Raiz extends CI_Controller {
                     $idarbol = $this->input->post('idarbol');
                     $nivel = $this->input->post('nivel');
                     $omitidos = $this->input->post('omitidos');
-                    echo $this->Raiz_model->getChildrenFromLevel($idarbol,$nivel,$omitidos);
+                    if ($idarbol && $nivel && $omitidos)
+                        echo $this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos);
+                    else
+                        echo "Parámetros incorrectos";
 		}
 		else echo 'Acceso denegado';
             }
@@ -252,6 +256,35 @@ class Raiz extends CI_Controller {
 			}
 		}
 	}
+        
+        /**
+	 *
+	 *Acción para eliminar una raiz, recibe el id de la raiz a eliminar
+	 *
+	 * @param  int $id
+	 * @return void
+	 */
+	public function delete($id)
+	{
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
+            
+		try
+		{
+			if (empty($this->Raiz_model))
+				return false;
+
+			$this->load->helper('url');
+			$this->Raiz_model->setId($id);
+			$this->Raiz_model->delete();
+			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+		}
+		catch(Exception $e)
+		{
+			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+		}
+		redirect(DIR_SIIGS.'/raiz','refresh');
+	}
 
 	 /**
 	 *
@@ -352,34 +385,25 @@ class Raiz extends CI_Controller {
 		{
 			echo Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
-	}	
-	
-	/**
-	 *
-	 *Acción para eliminar una raiz, recibe el id de la raiz a eliminar
-	 *
-	 * @param  int $id
-	 * @return void
-	 */
-	public function delete($id)
-	{
-            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-		show_error('', 403, 'Acceso denegado');
-            
-		try
-		{
-			if (empty($this->Raiz_model))
-				return false;
-
-			$this->load->helper('url');
-			$this->Raiz_model->setId($id);
-			$this->Raiz_model->delete();
-			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
-		}
-		catch(Exception $e)
-		{
-			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
-		}
-		redirect(DIR_SIIGS.'/raiz','refresh');
 	}
+        
+        public function getDataTreeFromId()
+        {
+            try 
+            {
+		if ($this->input->is_ajax_request() || true)
+		{
+                    $claves = $this->input->post('claves');
+                    if ($claves)
+                        echo json_encode($this->ArbolSegmentacion_model->getDescripcionById($claves));
+                    else
+                        echo "Parametros incorrectos";
+		}
+		else echo 'Acceso denegado';
+            }
+            catch(Exception $e)
+            {
+		echo $e->getMessage();
+            }
+        }
 }
