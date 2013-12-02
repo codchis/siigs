@@ -18,11 +18,15 @@
 	</tr>
 	<tr>
 		<td><label for="fecha_inicio">Fecha Inicio</label></td>
-		<td><?php echo $notificacion_item->fecha_inicio ?></td>
+		<td><?php $time = strtotime($notificacion_item->fecha_inicio);
+			echo date('d/m/Y', $time);
+			 ?></td>
 	</tr>
 		<tr>
 		<td><label for="fecha_fin">Fecha Fin</label></td>
-		<td><?php echo $notificacion_item->fecha_fin ?></td>
+		<td><?php $time = strtotime($notificacion_item->fecha_fin);
+			echo date('d/m/Y', $time);
+			 ?></td>
 	</tr>
 	<tr>
 		<td><label for="id_arr_asu">Tabletas</label></td>
