@@ -6,7 +6,26 @@ class Tree extends CI_Controller
 		parent::__construct();
 		$this->load->helper('url');
 	}
-	public function tree($title,$titulo,$seleccion,$tipo,$menu,$id,$text,$datos)
+	/*
+	** Carga el arbol
+	** parametros
+	** title = <title></title>
+	** titulo= titulo del arbol
+	** seleccion tipo de seleccion 1=select. 2=multiselect. 3=multiselect Parcial (Marcan los padres del hijo seleccionado)
+	** tipo = tipo de control radio o check
+	** menu= 1,0 o TRUE,FALSE true crea un menu con trs botones marcartodos, desmarcar y alternar
+	** id= id del campo en el formulario donde se desea imprimir el valor del id del arbol
+	** text= id del campo donde deseamos mostrar el texto
+	** idarbol= id del arbol donde queremos que se empiece a dibujar el arbol defaul=1
+	** nivel= nivel en el que se desea empezar el despliegue hacia abajo
+	** omitidos= niveles omitidos es decir que no se mostraran en el arbol
+	** datos= valor en caso de edit
+	** ejemplo en views :
+	<a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>" id="fba1" class="cat">Seleccionar</a>
+	
+	Trae Estados ->Municipio
+	*/
+	public function tree($title,$titulo,$seleccion,$tipo,$menu,$id,$text,$idarbol=1,$nivel=1,$omitidos=array(),$datos=array())
 	{
 		$data["title"]=$title;
 		$data["titulo"]=str_replace("%20"," ",$titulo);
@@ -15,46 +34,12 @@ class Tree extends CI_Controller
 		$data["menu"]=$menu;
 		$data["id"]=$id;
 		$data["text"]=$text;
-		$data["treeData"]='[
-		{title: "item1 with key and tooltip", tooltip: "Look, a tool tip!" },
-		{title: "chiapas", select: true },
-		{title: "Folder", isFolder: true, key: "id3",
-			children: [
-				{title: "Sub-item 3.1",
-					children: [
-						{title: "Sub-item 3.1.1", key: "id3.1.1" },
-						{title: "Sub-item 3.1.2", key: "id3.1.2" }
-					]
-				},
-				{title: "Sub-item 3.2",
-					children: [
-						{title: "Sub-item 3.2.1", key: "id3.2.1" },
-						{title: "Sub-item 3.2.2", key: "id3.2.2" }
-					]
-				}
-			]
-		},
-		{title: "Document with some children (expanded on init)", key: "id4", expand: true,
-			children: [
-				{title: "Sub-item 4.1 (active on init)", activate: true,
-					children: [
-						{title: "Sub-item 4.1.1", key: "id4.1.1" },
-						{title: "Sub-item 4.1.2", key: "id4.1.2" }
-					]
-				},
-				{title: "Sub-item 4.2 (selected on init)", select: true,
-					children: [
-						{title: "Sub-item 4.2.1", key: "id4.2.1" },
-						{title: "Sub-item 4.2.2", key: "id4.2.2" }
-					]
-				},
-				{title: "Sub-item 4.3 (hideCheckbox)", hideCheckbox: true },
-				{title: "Sub-item 4.4 (unselectable)", unselectable: true }
-			]
-		}
-	];';
-		$this->template->write_view('content',DIR_TES.'/tree/tree.php',$data);
-		$this->template->render();
+		$data["idarbol"]=$idarbol;
+		$data["nivel"]=$nivel;
+		$data["omitidos"]=json_decode(urldecode($omitidos));
+		$data["datos"]=json_decode(urldecode($datos));
+		
+		$this->load->view(DIR_TES.'/tree/tree.php',$data);
 	}
 }
 ?>
