@@ -19,7 +19,7 @@
 		omitidos[0]=null;
 		$.ajax({
 			type: "POST",
-			data: {'idarbol':<?php echo $idarbol;?> ,'nivel':<?php echo $nivel;?> ,'omitidos': <?php echo json_encode($omitidos);?> },
+			data: {'idarbol':<?php echo $idarbol;?> ,'nivel':<?php echo $nivel;?> ,'omitidos': <?php echo json_encode($omitidos);?>,'seleccionados': <?php echo json_encode($datos);?> },
 			//(count($omitidos) > 0) ? explode(',',$omitidos) : 'null';
 			url: '/<?php echo DIR_SIIGS.'/raiz/getChildrenFromLevel';?>',
 			})
