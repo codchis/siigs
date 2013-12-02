@@ -26,29 +26,7 @@ class Raiz extends CI_Controller {
 			$this->template->render();
 		}
 	}
-
-        public function getChildrenFromLevel()
-        {
-            try 
-            {
-		if ($this->input->is_ajax_request())
-		{
-                    $idarbol = $this->input->post('idarbol');
-                    $nivel = $this->input->post('nivel');
-                    $omitidos = $this->input->post('omitidos');
-                    if ($idarbol && $nivel && $omitidos)
-                        echo $this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos);
-                    else
-                        echo "Parámetros incorrectos";
-		}
-		else echo 'Acceso denegado';
-            }
-            catch(Exception $e)
-            {
-		echo $e->getMessage();
-            }
-        }
-        
+       
 	/**
 	 *Acción por default del controlador, carga la lista
 	 *de Raices disponibles y una lista de opciones
@@ -398,6 +376,33 @@ class Raiz extends CI_Controller {
                         echo json_encode($this->ArbolSegmentacion_model->getDescripcionById($claves));
                     else
                         echo "Parametros incorrectos";
+		}
+		else echo 'Acceso denegado';
+            }
+            catch(Exception $e)
+            {
+		echo $e->getMessage();
+            }
+        }
+        
+        public function getChildrenFromLevel()
+        {
+            try 
+            {
+		if ($this->input->is_ajax_request() || true)
+		{
+                    $idarbol = $this->input->post('idarbol');
+                    $nivel = $this->input->post('nivel');
+                    $omitidos = $this->input->post('omitidos');
+                    $seleccionados = $this->input->post('seleccionados');
+                    //$idarbol = 1;
+                    //$nivel = 1;
+                    //$omitidos = array(null);
+                    //$seleccionados = array(775);
+                    if ($idarbol && $nivel && $omitidos && $seleccionados)
+                        echo $this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos,$seleccionados);
+                    else
+                        echo "Parámetros incorrectos";
 		}
 		else echo 'Acceso denegado';
             }

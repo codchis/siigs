@@ -97,7 +97,7 @@ class ArbolSegmentacion_model extends CI_Model {
                 }
         }
         
-        public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array())
+        public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array())
         {
             $arbol = $this->getTree($idarbol, $nivel, $omitidos);
             if (count($arbol) == 0)
@@ -120,7 +120,10 @@ class ArbolSegmentacion_model extends CI_Model {
                                     $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> $fila['descripcion_'.$i]);
                                 else
                                     $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> $fila['descripcion_'.$i] , 'children'=>array());    
-
+                                
+                                if (in_array($fila['id_'.$i],$seleccionados))
+                                        $arraytemp["select"] = true;
+                                
                                 if (!isset($resultado[$i]))
                                     $resultado[$i] = array();
 

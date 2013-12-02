@@ -11,6 +11,7 @@ application/logs/*
 application/config/database.php
 
 catalogos/*
+config/*
 
 *~
 nbproject/
