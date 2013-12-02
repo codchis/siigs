@@ -177,11 +177,28 @@ class ArbolSegmentacion_model extends CI_Model {
             }
         }
         
-        public function getDescripcionById($claves)
+        public function getDescripcionById($claves,$desglose = 0)
         {
             if (count($claves)>0)
             {
-                $query = $this->db->query('select id,descripcion from asu_arbol_segmentacion where id in ('.implode(',',$claves).')');
+                if ($desglose == 0)
+                    $consulta = 'select id,descripcion from asu_arbol_segmentacion where id in ('.implode(',',$claves).')';
+                else
+                {
+                    $consultavalues = 'select a.id,concat("",a.descripcion';
+                    $consultafrom = ') as descripcion from asu_arbol_segmentacion a ';
+                    $consultawhere = ' where a.id in ('.implode(',',$claves).')';
+                       
+                    for($i=1;$i<=$desglose;$i++)   
+                    {
+                        $tablajoin = ($i==1) ? array("a","tb".$i) : array("tb".($i-1),"tb".$i);
+                        $consultavalues .= ",case when ifnull(tb".$i.".descripcion,'') = '' then '' else concat(', ',tb".$i.".descripcion) end";
+                        $consultafrom .= " left outer join asu_arbol_segmentacion ".$tablajoin[1]." on ".$tablajoin[0].".id_padre = ".$tablajoin[1].".id"; 
+                    }
+                    $consulta = $consultavalues . $consultafrom . $consultawhere;
+                    //var_dump($consulta);
+                }
+                $query = $this->db->query($consulta);
 
                 if (!$query)
                 {

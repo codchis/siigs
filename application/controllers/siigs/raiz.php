@@ -372,8 +372,12 @@ class Raiz extends CI_Controller {
 		if ($this->input->is_ajax_request() || true)
 		{
                     $claves = $this->input->post('claves');
+                    $desglose = $this->input->post('desglose');
+                    //$claves = array(775,776);
+                    //$claves = array(895,896);
+                    //$desglose = 2;
                     if ($claves)
-                        echo json_encode($this->ArbolSegmentacion_model->getDescripcionById($claves));
+                        echo json_encode($this->ArbolSegmentacion_model->getDescripcionById($claves,$desglose));
                     else
                         echo "Parametros incorrectos";
 		}
@@ -389,16 +393,16 @@ class Raiz extends CI_Controller {
         {
             try 
             {
-		if ($this->input->is_ajax_request() || true)
+		if ($this->input->is_ajax_request())
 		{
                     $idarbol = $this->input->post('idarbol');
                     $nivel = $this->input->post('nivel');
                     $omitidos = $this->input->post('omitidos');
                     $seleccionados = $this->input->post('seleccionados');
-                    //$idarbol = 1;
-                    //$nivel = 1;
-                    //$omitidos = array(null);
-                    //$seleccionados = array(775);
+//                    $idarbol = 1;
+//                    $nivel = 1;
+//                    $omitidos = array(null);
+//                    $seleccionados = array(775,776);
                     if ($idarbol && $nivel && $omitidos && $seleccionados)
                         echo $this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos,$seleccionados);
                     else
