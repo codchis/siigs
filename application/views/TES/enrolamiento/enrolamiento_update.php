@@ -19,37 +19,28 @@
 				getcurp();
 			}						
 		}); 
-		
 		<?php
-		$alergias="";
-		$afiliaciones="";
-		if(isset($_POST["alergia"]))
+		$alerg="";
+		$afili="";
+		foreach ($alergias as $alergia)
 		{
-			
-			for($i=0;$i<sizeof($_POST["alergia"]);$i++)
-			{
-				$alergias.=$_POST["alergia"][$i]."_";
-			}
+			$alerg.=$alergia->id."_";
 		}
-		if(isset($_POST["afiliacion"]))
+		foreach ($afiliaciones as $afiliacion)
 		{
-			
-			for($i=0;$i<sizeof($_POST["afiliacion"]);$i++)
-			{
-				$afiliaciones.=$_POST["afiliacion"][$i]."_";
-			}
+			$afili.=$afiliacion->id."_";
 		}
 		?>
+		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alerg;?>");	
+		$("#tbenef").load("/tes/Enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afili;?>");		
+		$("#sangre").load("/tes/Enrolamiento/catalog_select/tipo_sanguineo/<?php echo $enrolado->sangre; ?>");	
+		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo $enrolado->nacionalidadid; ?>");
+		$("#compania").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraid; ?>");
+		$("#companiaT").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraTid; ?>");
 		$("#nombre,#paterno,#materno,#fnacimiento,#lnaciminetoT").blur(function()
 		{       
 			getcurp();
 		});	
-		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>");	
-		$("#tbenef").load("/tes/Enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afiliaciones;?>");	
-		$("#sangre").load("/tes/Enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', ''); ?>");	
-		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', ''); ?>");
-		$("#compania").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo set_value('compania', ''); ?>");
-		$("#companiaT").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo set_value('companiaT', ''); ?>");
 		
 		$("#captura").click(function(e) {
             habilitarTutor();
@@ -96,18 +87,7 @@
 		}
 	}
 	function buscarTutor(buscar)
-	{
-		/*$("#idtutor").val("");
-		$("#nombreT").val("");
-		$("#paternoT").val("");
-		$("#maternoT").val("");
-		$("#celularT").val("");
-		$("#curpT").val("");
-		$("#telefonoT").val("");
-		$("#companiaT").val("");
-		$("#sexoT_1").attr("checked",false);
-		$("#sexoT_2").attr("checked",false);*/
-			
+	{			
 		if($("#buscar").val()!="")
 		$("#buscarError").html('');
 		//var buscar = $("#buscar").val();
@@ -232,9 +212,9 @@
 			echo "<div class='$infoclass'>".$msgResult."</div>";
 			if(validation_errors())
 			echo "<div class='error'>".validation_errors()."</div>"; 
-			echo form_open(DIR_TES.'/enrolamiento/insert'); 
+			echo form_open(DIR_TES.'/enrolamiento/update/'.$enrolado->id); 
 		?>
-        <!-- mensaje -->
+      <!-- mensaje -->
         	<table width="100%">
             <tr>
                 <td>
@@ -248,20 +228,20 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombre" type="text" id="nombre" style="width:80%; margin-left:10px;" required value="<?php echo set_value('nombre', ''); ?>"></td>
+                            <td width="31%"><input name="nombre" type="text" id="nombre" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->nombre; ?>"></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px;">
-                                <input type="radio" name="sexo" value="M" <?php echo set_radio('sexo', 'M'); ?> id="sexo_1" onclick="getcurp();" required >
+                                <input type="radio" name="sexo" value="M" <?php if($enrolado->sexo=="M") echo "checked"; ?> id="sexo_1" onclick="getcurp();" required >
                                 Masculino</label>
                               <label>
-                                <input type="radio" name="sexo" value="F" <?php echo set_radio('sexo', 'F'); ?> id="sexo_2" onclick="getcurp();">
+                                <input type="radio" name="sexo" value="F" <?php if($enrolado->sexo=="F") echo "checked"; ?> id="sexo_2" onclick="getcurp();">
                                 Femenino</label>
                              </td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paterno" type="text" id="paterno" style="width:80%; margin-left:10px;" required value="<?php echo set_value('paterno', ''); ?>"></td>
+                            <td><input name="paterno" type="text" id="paterno" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->apellido_paterno; ?>"></td>
                             <td><p align="right">Tipo de Sangre</p></td>
                             <td>
                               <select name="sangre" id="sangre" style="width:80%; margin-left:10px;" required>                           
@@ -270,21 +250,21 @@
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="materno" type="text" id="materno" style="width:80%; margin-left:10px;" required value="<?php echo set_value('materno', ''); ?>"></td>
+                            <td><input name="materno" type="text" id="materno" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->apellido_materno; ?>"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><input name="fnacimiento" type="date" id="fnacimiento" style="width:74%; margin-left:10px;" required value="<?php echo set_value('fnacimiento', ''); ?>"></td>
+                            <td><input name="fnacimiento" type="date" id="fnacimiento" style="width:74%; margin-left:10px;" required value="<?php echo $enrolado->fecha_nacimiento; ?>"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
-                            <td colspan="3"><input name="lnacimientoT" type="text" required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo set_value('lnacimientoT', ''); ?>" readonly="readonly">
-                            	<input name="lnacimiento" type="hidden" id="lnacimiento" value="<?php echo set_value('lnacimiento', ''); ?>">                              
+                            <td colspan="3"><input name="lnacimientoT" type="text" required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo $enrolado->curp; ?>" readonly="readonly">
+                            	<input name="lnacimiento" type="hidden" id="lnacimiento" value="<?php echo $enrolado->curp; ?>">                              
                               <a href='/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>' id="fba1" class="cat">Seleccionar</a><div id="aqui"></div>
                               </td>
                             </tr>
                           <tr>
                             <td><p align="right">CURP</p></td>
-                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo set_value('curp', ''); ?>">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20%" required value="<?php echo set_value('curp2', ''); ?>"></td>
+                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo substr($enrolado->curp,0,12); ?>">
+                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20%" required value="<?php echo substr($enrolado->curp,12,15); ?>"></td>
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" required="required">
                             </select></td>
@@ -317,14 +297,15 @@
                           <tr>
                             <td colspan="2"><p align="right">Madres o Tutores ya Capturados</p></td>
                             <td>
-                              <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" value="<?php echo set_value('buscar', ''); ?>" />
+                              <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" />
                             </td>
                             <td><a href="#" id="buscarCurp" class="cat">Buscar</a></td>
                           </tr>
                           <tr>
-                            <td colspan="2"><p align="right">Capturar Nueva Madre o Tutor</p>                              <label for="captura"></label></td>
+                            <td colspan="2"><p align="right">Capturar Nueva Madre o Tutor</p>                              
+                            <label for="captura"></label></td>
                             <td colspan="2" align="left">
-                              <input type="checkbox" name="captura" id="captura" style="margin-left:10px;" value="1"  <?php echo set_checkbox('captura', '1'); ?>/>
+                              <input type="checkbox" name="captura" id="captura" style="margin-left:10px;" value="1"  />
                               <input name="idtutor" type="hidden" id="idtutor"  />
                               &nbsp;
                               <span id="buscarError" style="color:#F00"></span>
@@ -332,32 +313,32 @@
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">CURP</p></td>
-                            <td width="31%"><input name="curpT" type="text" disabled="disabled" required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo set_value('curpT', ''); ?>" maxlength="18" /></td>
+                            <td width="31%"><input name="curpT" type="text" required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo $enrolado->curpT; ?>" maxlength="18" /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px;">
-                                <input type="radio" name="sexoT" value="M" <?php echo set_radio('sexoT', 'M'); ?> id="sexoT_1" disabled="disabled">
+                                <input type="radio" name="sexoT" value="M" <?php if( $enrolado->sexoT=="M") echo "checked"; ?> id="sexoT_1" disabled="disabled">
                                 Masculino</label>
                               <label>
-                                <input type="radio" name="sexoT" value="F" <?php echo set_radio('sexoT', 'F'); ?> id="sexoT_2" disabled="disabled">
+                                <input type="radio" name="sexoT" value="F" <?php if( $enrolado->sexoT=="F") echo "checked"; ?> id="sexoT_2" disabled="disabled" >
                                 Femenino</label>
                              </td>
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombreT" type="text" disabled="disabled" required="required" id="nombreT" style="width:80%; margin-left:10px;" value="<?php echo set_value('nombreT', ''); ?>" /></td>
+                            <td width="31%"><input name="nombreT" type="text" disabled="disabled" required="required" id="nombreT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->nombreT; ?>" /></td>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><input name="celularT" type="text" disabled="disabled" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo set_value('celularT', ''); ?>" /></td>
+                            <td><input name="celularT" type="text" disabled="disabled" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->celularT; ?>" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paternoT" type="text" disabled="disabled" required="required" id="paternoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('paternoT', ''); ?>" /></td>
+                            <td><input name="paternoT" type="text" disabled="disabled" required="required" id="paternoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->paternoT; ?>" /></td>
                             <td><p align="right">Celular</p></td>
-                            <td><input name="telefonoT" type="text" disabled="disabled" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefonoT', ''); ?>" /></td>
+                            <td><input name="telefonoT" type="text" disabled="disabled" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->telefonoT; ?>" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="maternoT" type="text" disabled="disabled" required="required" id="maternoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('maternoT', ''); ?>" /></td>
+                            <td><input name="maternoT" type="text" disabled="disabled" required="required" id="maternoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->maternoT; ?>" /></td>
                             <td><p align="right">Compania Celular</p></td>
                             <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" disabled="disabled">
                             </select></td>
@@ -375,14 +356,14 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Fecha</p></td>
-                            <td width="31%"><input name="fechacivil" type="date" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo set_value('fechacivil', ''); ?>"></td>
+                            <td width="31%"><input name="fechacivil" type="date" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo $enrolado->fecha_registro; ?>"></td>
                             <td width="25%"><p align="right">&nbsp;</p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar</p></td>
-                            <td colspan="3"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
-                              <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
+                            <td colspan="3"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo $enrolado->curp; ?>" readonly="readonly">
+                              <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo $enrolado->curp; ?>"/>
                               <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>" id="fba1" class="cat">Seleccionar</a>
                           </tr>
                         </table>
@@ -398,27 +379,27 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Calle</p></td>
-                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;" required value="<?php echo set_value('calle', ''); ?>"></td>
+                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->calle_domicilio; ?>"></td>
                             <td width="25%"><p align="right">Número</p></td>
-                            <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo set_value('numero', ''); ?>"></td>
+                            <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->numero_domicilio; ?>"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Colonia</p></td>
-                            <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo set_value('colonia', ''); ?>"></td>
+                            <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->colonia_domicilio; ?>"></td>
                             <td><p align="right">CP</p></td>
-                            <td><input name="cp" type="text" required id="cp" style="width:75%; margin-left:10px;" value="<?php echo set_value('cp', ''); ?>" maxlength="5"></td>
+                            <td><input name="cp" type="text" required id="cp" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->cp_domicilio; ?>" maxlength="5"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Localidad</p></td>
-                            <td colspan="3"><input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
-                              <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
+                            <td colspan="3"><input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo $enrolado->curp; ?>" readonly="readonly">
+                              <input name="localidad" type="hidden" id="localidad" value="<?php echo $enrolado->curp; ?>"/>
                               <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>" id="fba1" class="cat">Seleccionar</a>
                           </tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><input name="telefono" type="text" id="telefono" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefono', ''); ?>" /></td> 
+                            <td><input name="telefono" type="text" id="telefono" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->telefono_domicilio; ?>" /></td> 
                             <td><p align="right">Celular</p></td> 
-                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo set_value('celular', ''); ?>" /></td>                          
+                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->celuar; ?>" /></td>                          
                           </tr>
                           <tr>
                             <td><p align="right">Compania Celular</p></td>
@@ -462,20 +443,13 @@
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php
-								  	  $array=array();
-									  if(isset($_POST["vacuna"])) $array= $_POST["vacuna"];
-									   
-									  echo getArray($array,'vacuna','vn');
-								  ?>
-<div id="vc">
-</div>                           
+                                  <?php echo getArray($vacunas,'vacuna','vn');?>
+                                  <div id="vc">
+                                  </div>                           
                                  </td>
-                                 <td valign="top"> 
+                              <td valign="top"> 
                                    <input type="button" value="Agregar" onclick="add('vacuna','vn','vc');" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="rem('vacuna','vn');" style="height:40px; width:80px;"/>  
-                                   
-                                  </td>
+                                   <input type="button" value="Quitar"  onclick="rem('vacuna','vn');" style="height:40px; width:80px;"/></td>
                               </tr>                     
                           </table>
                         </code>
@@ -499,20 +473,13 @@
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php
-								  	  $array=array();
-									  if(isset($_POST["ira"])) $array= $_POST["ira"];
-									   
-									  echo getArray($array,'ira','in');
-								  ?>
+                                  <?php echo getArray($iras,'ira','in');?>
                                   <div id="ic">
                                   </div>                           
                                  </td>
-                                 <td valign="top"> 
+                              <td valign="top"> 
                                    <input type="button" value="Agregar" onclick="add('ira','in','ic');" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="rem('ira','in');" style="height:40px; width:80px;"/>  
-                                  
-                                  </td>
+                                   <input type="button" value="Quitar"  onclick="rem('ira','in');" style="height:40px; width:80px;"/></td>
                               </tr>                     
                           </table>
                         </code>
@@ -536,20 +503,13 @@
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php
-								  	  $array=array();
-									  if(isset($_POST["eda"])) $array= $_POST["eda"];
-									   
-									  echo getArray($array,'eda','en');
-								  ?>
+                                  <?php echo getArray($edas,'eda','en');?>
                                   <div id="ec">
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
                                    <input type="button" value="Agregar" onclick="add('eda','en','ec');" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="rem('eda','en');" style="height:40px; width:80px;"/>  
-                                   
-                                  </td>
+                                   <input type="button" value="Quitar"  onclick="rem('eda','en');" style="height:40px; width:80px;"/></td>
                               </tr>                     
                           </table>
                         </code>
@@ -573,19 +533,14 @@
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php
-								  	  $array=array();
-									  if(isset($_POST["consulta"])) $array= $_POST["consulta"];
-									   
-									  echo getArray($array,'consulta','ncc');
-								  ?>
+                                  <?php echo getArray($consultas,'consulta','ncc');?>
                                   <div id="ccc">
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
                                    <input type="button" value="Agregar" onclick="add('consulta','ncc','ccc');" style="height:40px; width:80px;"/> 
                                    <input type="button" value="Quitar"  onclick="rem('consulta','ncc');" style="height:40px; width:80px;"/>  
-                                                                      
+                                   
                                   </td>
                               </tr>                     
                           </table>
@@ -610,20 +565,13 @@
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php
-								  	  $array=array();
-									  if(isset($_POST["accion_nutricional"])) $array= $_POST["accion_nutricional"];
-									   
-									  echo getArray($array,'accion_nutricional','nac');
-								  ?>
+                                  <?php echo getArray($nutricionales,'accion_nutricional','nac');?>
                                   <div id="can">
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
                                    <input type="button" value="Agregar" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="rem('accion_nutricional','nac');" style="height:40px; width:80px;"/>  
-                                   
-                                  </td>
+                                   <input type="button" value="Quitar"  onclick="rem('accion_nutricional','nac');" style="height:40px; width:80px;"/></td>
                               </tr>                     
                           </table>
                         </code>
@@ -650,16 +598,14 @@
                                   </div>
   <?php
   $i=0; $grid="";
-  $array=array();
-  if(isset($_POST["cpeso"])) $array= $_POST["cpeso"];
-	foreach($array as $dato)
+	foreach($nutriciones as $dato)
 	{
 		$i++;
 		$dato=(array)$dato;
-		$talla=$_POST["ctalla"][$i-1];
-		$altura=$_POST["caltura"][$i-1];
-		$peso=$_POST["cpeso"][$i-1];
-		$fecha=$_POST["fCNu"][$i-1];
+		$talla=$dato["talla"];
+		$altura=$dato["altura"];
+		$peso=$dato["peso"];
+		$fecha=$dato["fecha"];
 		$clase="row2";
 		if($i%2)$clase="row1";
 		$num=$i;
@@ -681,7 +627,7 @@
 	
 	$grid.='<input type="hidden" id="nNu" value="'.$i.'" />';
 	echo $grid;
-	?>                                  
+	?>
                                   <div id="cNu">
                                   </div>                           
                                  </td>
@@ -721,8 +667,9 @@ function getArray($array,$id,$nu)
 	{
 		$i++;
 		$dato=(array)$dato;
-		$fecha=$_POST["f$id"][$i-1];
-		$x=$_POST[$id][$i-1];
+		$descripcion=$dato["descripcion"];
+		$fecha=$dato["fecha"];
+		$x=$dato["id"];
 		$clase="row2";
 		if($i%2)$clase="row1";
 		$num=$i;
