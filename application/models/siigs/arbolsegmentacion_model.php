@@ -17,6 +17,39 @@ class ArbolSegmentacion_model extends CI_Model {
    	private $msg_error_usr;
 
         /**
+	 * Devuelve los mensajes de error en caso de ocurrir alguna excepción
+	 * 'usr' devuelve el mensaje para la vista de usuario
+	 * 'log' devuelve el mensaje para el log de errores
+	 *
+	 * @access  public
+	 * @return  string|boolean
+	 *  @param  string $value, default 'usr' (Tipo mensaje)
+	 */
+	public function getMsgError($value = 'usr')
+	{
+		if (!empty($this->msg_error_usr))
+		{
+			if ($value == 'usr')
+				return $this->msg_error_usr;
+			else if ($value == 'log')
+				return $this->msg_error_log;
+		}
+		else
+		{
+			return false;
+		}
+	}
+        
+	public function __construct()
+	{
+		$this->load->database();
+		if(!$this->db->conn_id)
+		{
+			throw new Exception("No se pudo conectar a la base de datos");
+		}
+	}
+        
+        /**
 	 * Regresa el objeto del arbol de segmentacion
 	 *
 	 * @access public
@@ -28,6 +61,7 @@ class ArbolSegmentacion_model extends CI_Model {
         {
             $consultavalues = " select distinct ";
             $consultafrom = " from ";
+            //consulta todos los catalogos que forman el arbol de segmentacion requerido
             $query = $this->db->query('select * from asu_raiz_x_catalogo where id_raiz_arbol = ' . $idarbol . ' order by grado_segmentacion');
                 if (!$query)
                 {
@@ -43,22 +77,29 @@ class ArbolSegmentacion_model extends CI_Model {
                         return array();
                     foreach($query->result() as $fila)
                     {
+                        //si el valor del grado de segmentacion existe en la lista de niveles 
+                        //ocultos, entonces se aumenta el contador y se guarda el valor del padre
+                        //activo para su uso posterior
                         if (!in_array($fila->grado_segmentacion,$nivelesocultos))
                         {
                             $cont += 1;
                             
+                            //si no existe ningun catalogo padre activo, se asigna el grado de segmentacion actual
                             if ($padreactivo == "")
                                 $padreactivo = $fila->grado_segmentacion;
                             
+                            //se agrega a la lista de valores el grado de segmentacion del catalogo 
                             $consultavalues .= " tabla".$fila->grado_segmentacion.
                             ".grado_segmentacion as nivel_".$cont.", ";
                             if ($cont == 1)
                             {
+                                //se agrega a la lista de valores el id padre del registro actual
                                 $consultavalues .= "tabla".$padreactivo.
                                 ".id_padre as padre_".$cont.", ";
                             }
                             else
                             {
+                                //se agrega a la lista de valores el id padre del registro actual
                                 $consultavalues .= "tabla".$padreactivo.
                                 ".id as padre_".$cont.", ";
                             }
@@ -81,7 +122,7 @@ class ArbolSegmentacion_model extends CI_Model {
                         }
                     }
                     $consultavalues = substr($consultavalues, 0, count($consultavalues)-3);
-                    $consulta = $consultavalues.$consultafrom. " where tabla1.grado_segmentacion >= ".$nivel;
+                    $consulta = $consultavalues.$consultafrom. " where tabla1.grado_segmentacion = ".$nivel;
                     $resultado = $this->db->query($consulta);
                     //var_dump($consulta);
                     if (!$resultado)
@@ -185,10 +226,12 @@ class ArbolSegmentacion_model extends CI_Model {
                     $consulta = 'select id,descripcion from asu_arbol_segmentacion where id in ('.implode(',',$claves).')';
                 else
                 {
+                    //si se van a hacer joins para informacion adicional, se empieza a crear la estructura de la consulta
                     $consultavalues = 'select a.id,concat("",a.descripcion';
                     $consultafrom = ') as descripcion from asu_arbol_segmentacion a ';
                     $consultawhere = ' where a.id in ('.implode(',',$claves).')';
                        
+                  //crear los joins a partir del numero de niveles de desglose requeridos
                     for($i=1;$i<=$desglose;$i++)   
                     {
                         $tablajoin = ($i==1) ? array("a","tb".$i) : array("tb".($i-1),"tb".$i);

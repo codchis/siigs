@@ -365,11 +365,20 @@ class Raiz extends CI_Controller {
 		}
 	}
         
+        /**
+         * Accion para regresar la descripción e informacion adicional de un arreglo 
+         * de ID's desde el arbol de segmentacion
+         * @param Array $claves Este parametro es pasado por POST y es la lista de valores a consultar
+         * @param Int $desglose parametro pasado por POST y determina si se requiere información adicional
+         * @return Object JSON con la información requerida
+         * @return 'Acceso denegado si la petición no es de tipo AJAX'
+         * **/
+        
         public function getDataTreeFromId()
         {
             try 
             {
-		if ($this->input->is_ajax_request() || true)
+		if ($this->input->is_ajax_request())
 		{
                     $claves = $this->input->post('claves');
                     $desglose = $this->input->post('desglose');
@@ -388,6 +397,17 @@ class Raiz extends CI_Controller {
 		echo $e->getMessage();
             }
         }
+  
+         /**
+         * Accion para regresar el arbol de segmentacion determinado, el objeto regresado contiene
+          * estructura de arbol y es consumida solamente por peticiones AJAX
+         * @param Int $idarbol parametro pasado por POST y determina el arbol a consultar
+         * @param Int $nivel parametro pasado por POST y determina el nivel superior a desglosar en el arbol
+         * @param Array $claves Este parametro es pasado por POST y es la lista de niveles a omitir en el arbol
+         * @param Array $claves Este parametro es pasado por POST y es la lista de valores a preseleccionar en el arbol
+         * @return Object JSON con la información requerida
+         * @return 'Acceso denegado si la petición no es de tipo AJAX'
+         * **/
         
         public function getChildrenFromLevel()
         {
