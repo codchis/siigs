@@ -1,3 +1,6 @@
+<?php
+$datos=json_encode($datos);
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -19,7 +22,11 @@
 		omitidos[0]=null;
 		$.ajax({
 			type: "POST",
-			data: {'idarbol':<?php echo $idarbol;?> ,'nivel':<?php echo $nivel;?> ,'omitidos': <?php echo json_encode($omitidos);?>,'seleccionados': <?php echo json_encode($datos);?> },
+			data: {
+				'idarbol':<?php echo $idarbol;?> ,
+				'nivel':<?php echo $nivel;?> ,
+				'omitidos': <?php echo json_encode($omitidos);?>,
+				'seleccionados': <?php if($datos!="[null]")echo $datos; else {?>[parent.document.getElementById("<?php echo $id;?>").value]<?php }?> },
 			//(count($omitidos) > 0) ? explode(',',$omitidos) : 'null';
 			url: '/<?php echo DIR_SIIGS.'/raiz/getChildrenFromLevel';?>',
 			})
@@ -67,6 +74,7 @@
 					if( node.getEventTargetType(event) == "title" )
 						node.toggleSelect();
 				},
+				
 				onKeydown: function(node, event) 
 				{
 					if( event.which == 32 ) {
