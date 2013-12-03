@@ -1,6 +1,3 @@
-<?php
-$datos=json_encode($datos);
-?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -16,6 +13,18 @@ $datos=json_encode($datos);
 
 <script type="text/javascript">
 	$(function(){
+		$("#btnCollapseAll").click(function(){
+		  $("#tree").dynatree("getRoot").visit(function(node){
+			node.expand(false);
+		  });
+		  return false;
+		});
+		$("#btnExpandAll").click(function(){
+		  $("#tree").dynatree("getRoot").visit(function(node){
+			node.expand(true);
+		  });
+		  return false;
+		});
 		// --- Initialize sample trees
 		var treeData ="";
 		var omitidos=[];
@@ -26,7 +35,7 @@ $datos=json_encode($datos);
 				'idarbol':<?php echo $idarbol;?> ,
 				'nivel':<?php echo $nivel;?> ,
 				'omitidos': <?php echo json_encode($omitidos);?>,
-				'seleccionados': <?php if($datos!="[null]")echo $datos; else {?>[parent.document.getElementById("<?php echo $id;?>").value]<?php }?> },
+				'seleccionados': parent.document.getElementById("<?php echo $id;?>").value.split(',') },
 			//(count($omitidos) > 0) ? explode(',',$omitidos) : 'null';
 			url: '/<?php echo DIR_SIIGS.'/raiz/getChildrenFromLevel';?>',
 			})
@@ -62,11 +71,7 @@ $datos=json_encode($datos);
 					parent.document.getElementById("<?php echo $id;?>").value=selKeys.join(", ");
 					parent.document.getElementById("<?php echo $text;?>").value=selTitle.join(", ");
 				},
-				onQuerySelect: function(select, node) 
-				{
-					if( node.data.isFolder )
-						return false;
-				},
+				
 				onClick: function(node, event) 
 				{
 					// We should not toggle, if target was "checkbox", because this
@@ -82,6 +87,28 @@ $datos=json_encode($datos);
 						return false;
 					}
 				},
+				
+				onPostInit: function(isReloading, isError) {
+					/*var node = $("#tree").dynatree("getTree").getNodeByKey(folder);
+
+					node.visitParents( function (node) {
+					   node.toggleExpand();
+					},true);/
+					$("#tree").dynatree("getRoot").visitParents(function(node){
+						node.toggleExpand(true);
+					});  */
+					var tree = $('#tree').dynatree('getTree');
+					var selKeys = $.map(tree.getSelectedNodes(), function(node){
+						node.makeVisible();
+					});
+					var selNodes = $("#tree").dynatree("getSelectedNodes");
+					var selValor = $.map(selNodes, function(node)
+					{
+						   return "[id=" + node.data.key + ":-Texto=" + node.data.title + "]";
+					});
+					$("#echoSelection").text(selValor.join(", "));
+					  
+				},
 				// The following options are only required, if we have more than one tree on one page:
 				cookieId: "dynatree-Cb2",
 				idPrefix: "dynatree-Cb2-"
@@ -89,6 +116,7 @@ $datos=json_encode($datos);
 		});
 		<!-- End_Exclude -->
 	});
+	
 </script>
 </head>
 <body >
@@ -98,6 +126,9 @@ $datos=json_encode($datos);
 		<a href="#" id="btnSelectAll" class="add">Marcar</a> -
 		<a href="#" id="btnDeselectAll" class="cancelar">Desmarcar</a> -
 		<a href="#" id="btnToggleSelect" class="agregar">Alternar</a>
+        &nbsp;
+        <a href="#" id="btnCollapseAll" class="cancelar">Collapse All </a>
+		<a href="#" id="btnExpandAll" class="add">Expand All </a>
 		<?php } ?>
         <a href="#" onClick="parent.jQuery.fancybox.close();" class="guardar">Ok</a>
 		<h1><?php echo $titulo; ?></h1>
