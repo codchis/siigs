@@ -1,36 +1,12 @@
 <?php
 
 /**
- * Modelo Catalogo
+ * Modelo Cie10
  *
  * @author     Geovanni
- * @created    2013-10-07
+ * @created    2013-12-02
  */
-class Catalogo_model extends CI_Model {
-
-	/**
-	 * @access private
-	 * @var    int
-	 */
-	private $id;
-
-	/**
-	 * @access private
-	 * @var    string
-	 */
-	private $nombre;
-
-	/**
-	 * @access private
-	 * @var    string
-	 */
-	private $campos;
-
-	/**
-	 * @access private
-	 * @var    string
-	 */
-	private $llave;
+class Cie10_model extends CI_Model {
 
 	/**
 	 * @access private
@@ -44,42 +20,26 @@ class Catalogo_model extends CI_Model {
    	 */
    	private $msg_error_usr;
 
-   	/***************************/
-	/*Getters and setters block*/
-   	/***************************/
-   	public function getId() {
-		return $this->id;
-	}
 
-	public function setId($value) {
-		$this->id = $value;
-	}
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $offset;
 
-	public function getNombre() {
-		return $this->nombre;
-	}
-	public function setNombre($value) {
-			$this->nombre = $value;
-	}
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $rows;      
 
-	public function getCampos() {
-		return $this->campos;
+	public function setOffset($value) {
+		$this->offset = $value;
 	}
-	public function setCampos($value) {
-		$this->campos = $value;
+	public function setRows($value) {
+		$this->rows = $value;
 	}
-
-	public function getLLave() {
-		return $this->llave;
-	}
-	public function setLlave($value) {
-		$this->llave = $value;
-	}
-
-	/*******************************/
-	/*Getters and setters block END*/
-	/*******************************/
-
+        
 	/**
 	 * Devuelve los mensajes de error en caso de ocurrir alguna excepción
 	 * 'usr' devuelve el mensaje para la vista de usuario
@@ -113,8 +73,29 @@ class Catalogo_model extends CI_Model {
 		}
 	}
 
+        	/**
+	 *Devuelve el numero de registros
+	 *
+	 *@access  public
+	 *@return  int
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function getNumRows()
+	{
+		$query = $this->db->query('select count(*) as num from cns_cie10');
+		if (!$query)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo cie10";
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->row()->num;
+	}
+        
+        
 	/**
-	 *Devuelve una lista con los catalogos existentes en la DB
+	 *Devuelve una lista con los registros existentes en el catalogo cie10
 	 *
 	 *@access  public
 	 *@return  ArrayObject
@@ -122,18 +103,24 @@ class Catalogo_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$catalogos = $this->db->query('SELECT table_name as nombre FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name LIKE "cat_%"');
-
-		if (!$catalogos)
+                $consulta = 'select a.id as id,a.cie10 as cie10,a.descripcion as descripcion,case when ifnull(b.id,"") = "" then false else true end as eda,case when  ifnull(c.id,"") = "" then false else true end as ira,case when  ifnull(d.id,"") = "" then false else true end as consulta from cns_cie10 a left outer join cns_eda b on b.id_cie10 = a.id left outer join cns_ira c on c.id_cie10 = a.id left outer join cns_consulta d on d.id_cie10 = a.id';
+		if ((!empty($this->offset) || $this->offset == 0) && !empty($this->rows))
+		$consulta .= ' limit '.$this->offset. ','.$this->rows;
+                
+                $datos = $this->db->query($consulta);
+                
+                if (!$datos)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener los datos de los catálogos";
+			$this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo cie10";
 			throw new Exception(__CLASS__);
 		}
 		else
-		return $catalogos->result();
+                {
+                    return $datos->result();
+                }
 	}
-	
+        	
 	/**
 	 *Devuelve los datos de un catalogo pasado como parametro
 	 *

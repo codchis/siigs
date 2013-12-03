@@ -123,7 +123,6 @@ class Catalogo_model extends CI_Model {
 	public function getAll()
 	{
 		$catalogos = $this->db->query('SELECT table_name as nombre FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name LIKE "cat_%"');
-
 		if (!$catalogos)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();

@@ -1,11 +1,11 @@
 <?php
 /**
- * Controlador Catalogo
+ * Controlador Cie10
  *
  * @author     Geovanni
- * @created    2013-10-07
+ * @created    2013-12-02
  */
-class Catalogo extends CI_Controller {
+class Cie10 extends CI_Controller {
 
 	public function __construct()
 	{
@@ -14,7 +14,7 @@ class Catalogo extends CI_Controller {
 			try
 		{
                         $this->load->helper('url');
-			$this->load->model(DIR_SIIGS.'/Catalogo_model');
+			$this->load->model(DIR_TES.'/Cie10_model');
 		}
 		catch (Exception $e)
 		{
@@ -25,22 +25,36 @@ class Catalogo extends CI_Controller {
 
 	/**
 	 *Acción por default del controlador, carga la lista
-	 *de catálogos disponibles y una lista de opciones
+	 *de datos disponibles en el cie10 y una lista de opciones
 	 *No recibe parámetros
 	 *
 	 *@return void
 	 */
-	public function index()
+	public function index($pag = 0)
 	{
-		if (empty($this->Catalogo_model))
+		if (empty($this->Cie10_model))
 			return false;
-                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-		show_error('', 403, 'Acceso denegado');
+               // if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+	//	show_error('', 403, 'Acceso denegado');
 		try
 		{
+                    $this->load->library('pagination');
+                    
+                        //Configuracion para la paginacion
+			$configPag['base_url']   ='/'. DIR_TES.'/cie10/index/';
+			$configPag['first_link'] = 'Primero';
+			$configPag['last_link']  = '&Uacute;ltimo';
+			$configPag['total_rows'] = $this->Cie10_model->getNumRows();
+			$configPag['uri_segment'] = '4';
+			$configPag['per_page']   = 20;
 
-			$data['title'] = 'Lista de catálogos disponibles';
-			$data['catalogos'] = $this->Catalogo_model->getAll();
+			$this->pagination->initialize($configPag);
+
+			$this->Cie10_model->setOffset($pag);
+			$this->Cie10_model->setRows($configPag['per_page']);
+
+			$data['title'] = 'Lista de datos en el catálogo CIE10';
+			$data['datos'] = $this->Cie10_model->getAll();
 			$data['msgResult'] = $this->session->flashdata('msgResult');
 		}
 		catch (Exception $e)
@@ -48,53 +62,41 @@ class Catalogo extends CI_Controller {
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
-		$this->template->write_view('content',DIR_SIIGS.'/catalogo/index', $data);
+		$this->template->write_view('content',DIR_TES.'/cie10/index', $data);
                 
 		$this->template->render();
 	}
 
-	/**
-	 *Acción para visualizar de un catálogo específico, obtiene el objeto
-	 *catalogo por medio del nombre proporcionado
-	 *
-	 * @param  string $nombre Este parametro no puede ser nulo
-	 * @return void
-	 */
-	public function view($nombre)
-	{
-		if (empty($this->Catalogo_model))
-			return false;
-                
-                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-		show_error('', 403, 'Acceso denegado');
-                
+                /***
+         * Accion para agregar elementos del catalogo cie10 a los catalogos de EDA, IRA y Consultas dependiendo de los
+         * parametros pasados
+         * @param Int $id Es el id del registro en el catalogo de CIE10
+         * @param String $catalogo para determinar a que catalogo se va a agregar o quitar el registro
+         * @param Boolean $activo False para quitar del catalogo, true para agregarlo
+         * @return Boolean En caso de error, o errores de referencia, etc.
+         */
+        
+        public function AgregaEnCatalogo(){
+             try 
+            {
 		if ($this->input->is_ajax_request())
 		{
-			try
-			{
-				$data['catalogo_item'] = $this->Catalogo_model->getByName($nombre);
-				echo json_encode($data['catalogo_item']);
-
-			} catch (Exception $e)
-			{
-				echo 'false';
-			}
-		exit;
+                    $id = $this->input->post('id');
+                    $catalogo = $this->input->post('catalogo');
+                    $activo = $this->input->post('activo');
+                    if ($id && $catalogo && $activo)
+                        echo "error";
+                    else
+                        echo "Parametros incorrectos";
 		}
-		try
-		{
-			$data['title'] = "Detalles del catálogo";
-			$data['catalogo_item'] = $this->Catalogo_model->getByName($nombre);
-		}
-		catch (Exception $e)
-		{
-			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-		}
-
-		$this->template->write_view('content',DIR_SIIGS.'/catalogo/view', $data);
-		$this->template->render();
-	}
-
+		else echo 'Acceso denegado';
+            }
+            catch(Exception $e)
+            {
+		echo $e->getMessage();
+            }
+        }
+        
 	/**
 	 *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
 	 *Guarda en la tabla tmp_catalogos toda la estructura del CSV e imprime las columnas del
@@ -112,57 +114,26 @@ class Catalogo extends CI_Controller {
 		{
 			 $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
 		//	 $fp = fopen('catalogos/estados.csv', "r");
-			 $cont = 0;
-			 $columnas = array();
-			 $resultado = array();
-			 $rows = array();
-
-			 $consulta = 'select id_cat_tipo_columna as id,descripcion as descripcion from asu_tipo_columna;';
-			 $dbtiposdatos = $this->db->query($consulta);
-			 $tiposdatos = array();
-			 foreach ($dbtiposdatos->result() as $item)
-			 {
-			 	array_push($tiposdatos, array('clave' => $item->id , 'valor' => $item->descripcion));
-			 }
+                         $columnas = array('cie10','descripcion');
 			 while (!feof($fp))
 			 {
 			  	$data  = explode(",", fgets($fp));
-			  	$cont +=1;
-				$data = preg_replace("!\r?\n!", "", $data);
-
-			  	if ($cont == 1)
-			  	{
-			  		$columnas = $data;
-			  		//elimina la tabla temporal para crear catalogos
-			  		$consulta = 'drop table if exists tmp_catalogo;';
-			  		$query = $this->db->query($consulta);
-			  		//crea la tabla temporal para catalogos con la estructura del CSV
-			  		$consulta = 'create table if not exists tmp_catalogo (';
-			  		foreach ($columnas as $col)
-			  		{
-			  			array_push($resultado, array('columnName' => $col , 'tiposDato' => $tiposdatos));
-			  			$consulta .= $col.' varchar(50),';
-			  		}
-			  		$consulta = substr($consulta, 0,count($consulta)-2);
-			  		$consulta .= ');';
-			  		$query = $this->db->query($consulta);
-
-			  		//enviar el resultado con el numero de columnas del csv
-			  		echo json_encode((object)$resultado);
-			  	}
-			  	else
-			  	{
-			  		//crea los rows con las filas que cumplen con la estructura en el CSV
-			  		if (count($columnas) == count($data))
-			  		{
-				  		$item = array_combine($columnas, $data);
-				  		array_push($rows, $item);
-			  		}
-			  	}
+                                if (count($data) == 2)
+                                {
+                                    $data = preg_replace("!\r?\n!", "", $data);
+                                    {
+                                            //crea los rows con las filas que cumplen con la estructura en el CSV
+                                            if (count($columnas) == count($data))
+                                            {
+                                                    $item = array_combine($columnas, $data);
+                                                    array_push($rows, $item);
+                                            }
+                                    }
+                                }
 			 }
 
 			 //Inserta los datos en lotes a la tabla temporal
-			 $this->db->insert_batch('tmp_catalogo',$rows);
+			 $this->db->insert_batch('cns_cie10',$rows);
 
 		}
 		else
@@ -590,16 +561,16 @@ class Catalogo extends CI_Controller {
 	 * @param  string $nombre
 	 * @return void
 	 */
-	public function update($nombre)
+	public function update()
 	{
-		if (empty($this->Catalogo_model))
+		if (empty($this->Cie10_model))
 			return false;
-                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-		show_error('', 403, 'Acceso denegado');		
+               // if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		//show_error('', 403, 'Acceso denegado');		
                 
 		try
 		{
-			$data['title'] = "Modificar datos del catálogo";
+			$data['title'] = "Modificar datos del catalogo CIE10";
 			$data['catalogo_item'] = $this->Catalogo_model->getByName($nombre);
 		}
 		catch (Exception $e)
