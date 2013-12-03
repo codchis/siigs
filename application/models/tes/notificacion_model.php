@@ -173,8 +173,7 @@ class Notificacion_model extends CI_Model {
 			$this->db->limit($offset);
 		if (empty($keywords) && empty($this->filters)){	
 			$query = $this->db->get('tes_notificacion');
-			echo $this->db->last_query();
-			return $this->getTabletsNames($query->result());
+			return $query->result();
 		}
 		else
 		{
@@ -188,14 +187,13 @@ class Notificacion_model extends CI_Model {
 			$this->db->where($this->filters);
 		}
 		$query = $this->db->get();
-		echo $this->db->last_query();
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			throw new Exception(__CLASS__);
 		}	
 		else
-			return $this->getTabletsNames($query->result());
+			return $query->result();
 		return;
 	}
 
@@ -215,7 +213,7 @@ class Notificacion_model extends CI_Model {
 			throw new Exception(__CLASS__);
 		}
 		else
-			return $this->getTabletsNames($query->result());
+			return $query->result();
 		return;
 	}
 	
@@ -310,18 +308,6 @@ class Notificacion_model extends CI_Model {
 			throw new Exception(__CLASS__);
 		}
 		return $result;
-	}
-	
-	public function getTabletsNames($notifications)
-	{
-		foreach($notifications as $notif){
-			$notif->tabletas = explode(',', $notif->id_arr_asu);
-			$arrSize = count($notif->tabletas);
-			for($i = 0; $i < $arrSize; $i++){
-				$notif->tabletas[$i] = chr($i + 70);
-			}
-		}
-		return $notifications;
 	}
 	
 	/**

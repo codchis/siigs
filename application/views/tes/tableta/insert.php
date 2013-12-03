@@ -13,4 +13,4 @@ echo form_open(site_url().DIR_TES.'/tableta/insert/'); ?>
         <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta/'" /></td></tr>
 </table>
 </form>
-<a href="<?php echo site_url().DIR_TES; ?>/tableta">Regresar a listado</a>
+<a href="<?php echo site_url().DIR_TES; ?>/tableta">Regresar al listado</a>

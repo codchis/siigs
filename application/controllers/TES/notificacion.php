@@ -72,7 +72,14 @@ class Notificacion extends CI_Controller {
 			$configPag['total_rows'] = $this->Notificacion_model->getNumRows($this->input->post('busqueda'));
 			$configPag['per_page']   = 20;
 			$this->pagination->initialize($configPag);
-			$data['notifications'] = $this->Notificacion_model->getAll($this->input->post('busqueda'), $configPag['per_page'], $pag);
+			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+			$notifications = $this->Notificacion_model->getAll($this->input->post('busqueda'), $configPag['per_page'], $pag);
+			foreach($notifications as $notif){
+				$descripciones = $this->ArbolSegmentacion_model->getDescripcionById(explode(',',$notif->id_arr_asu), 0);
+				for($i = 0; $i < count($descripciones); $i++)
+					$notif->tabletas[$i] = $descripciones[$i]->descripcion;
+			}
+			$data['notifications'] = $notifications;
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
@@ -97,8 +104,12 @@ class Notificacion extends CI_Controller {
 			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
 			$data['title'] = 'Ver detalles de la notificación';
-			$notifications = $this->Notificacion_model->getById($id, true);
-			$data['notificacion_item'] = $notifications[0];
+			$notification = $this->Notificacion_model->getById($id, true)[0];			
+			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+			$descripciones = $this->ArbolSegmentacion_model->getDescripcionById(explode(',',$notification->id_arr_asu), 0);
+			for($i = 0; $i < count($descripciones); $i++)
+				$notification->tabletas[$i] = $descripciones[$i]->descripcion;
+			$data['notificacion_item'] = $notification;
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
@@ -184,8 +195,14 @@ class Notificacion extends CI_Controller {
 		$this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'trim|required');
 		$this->form_validation->set_rules('fecha_fin', 'Fecha Fin', 'trim|required');
 		$this->form_validation->set_rules('id_arr_asu', 'Reportar a tabletas', 'required');
- 		
-		$data['notificacion_item'] = $this->Notificacion_model->getById($id)[0];
+
+		$notification = $this->Notificacion_model->getById($id, true)[0];
+		$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+		$descripciones = $this->ArbolSegmentacion_model->getDescripcionById(explode(',',$notification->id_arr_asu), 0);
+		for($i = 0; $i < count($descripciones); $i++)
+			$notification->tabletas[$i] = $descripciones[$i]->descripcion;
+		$data['notificacion_item'] = $notification;
+
 		if ($this->form_validation->run() === FALSE)
 		{
 			$this->template->write_view('content',DIR_TES.'/notificacion/update', $data);

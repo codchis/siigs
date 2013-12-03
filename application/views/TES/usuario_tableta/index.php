@@ -1,15 +1,15 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
 
-<style>
+<style type="text/css">
     label, input { display:block; }
     input.text { margin-bottom:12px; width:95%; padding: .4em; }
     fieldset { padding:0; border:0; margin-top:25px; }
     h1 { font-size: 1.2em; margin: .6em 0; }
     .ui-dialog .ui-state-error { padding: .3em; }
     .validateTips { border: 1px solid transparent; padding: 0.3em; }
-  </style>
+</style>
 
 <h2><?=$title;?></h2>
 <?php
@@ -173,3 +173,6 @@ $(function() {
 </div>
 
 <button id="agregarUsuario">Asignar nuevo usuario a la Tableta</button>
+
+<br /><br />
+<input type="button" name="registrarTableta" id="registrarTableta" value="Regresar al listado de tabletas" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta'" />

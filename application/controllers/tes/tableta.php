@@ -43,12 +43,15 @@ class Tableta extends CI_Controller {
         try {
             $this->load->library('pagination');
             $this->load->helper(array('form', 'formatFecha'));
-
-           $data = array();
+            $this->load->model(array(DIR_TES.'/Tipo_censo_model', DIR_SIIGS.'/ArbolSegmentacion_model'));
+            
+            $data = array();
 
             $data['pag'] = $pag;
             $data['msgResult'] = $this->session->flashdata('msgResult');
             $data['title'] = 'Tableta';
+            $data['tipos_censo'] = $this->Tipo_censo_model->getAll();
+            $data['unidades_medicas'] = array();
             
             $registroEliminar = $this->input->post('registroEliminar');
 
@@ -68,6 +71,14 @@ class Tableta extends CI_Controller {
             $this->pagination->initialize($configPag);
 
             $data['registros'] = $this->Tableta_model->getAll($configPag['per_page'], $pag);
+            
+            // Obtener la descripcion de cada unidad medica
+            foreach ($data['registros'] as $registro) {
+                if(!empty($registro->id_asu_um)) {
+                    $unidad_medica = $this->ArbolSegmentacion_model->getDescripcionById(array($registro->id_asu_um), 2);
+                    $data['unidades_medicas'][$unidad_medica[0]->id] = $unidad_medica[0]->descripcion;
+                }
+            }
         } catch (Exception $e) {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
@@ -113,16 +124,19 @@ class Tableta extends CI_Controller {
                     $this->session->set_flashdata('msgResult', 'Registro guardado exitosamente');
 
                     Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro creado: '.$this->Tableta_model->getId());
-                    redirect(DIR_TES.'/tableta/', 'refresh');
-                    die();
+                    //redirect(DIR_TES.'/tableta/', 'refresh');
+                    //die();
+                } else {
+                    $this->session->set_flashdata('msgResult', validation_errors());
                 }
             }
         } catch (Exception $e) {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
 
-        $this->template->write_view('content',DIR_TES.'/tableta/insert', $data);
-		$this->template->render();
+        //$this->template->write_view('content',DIR_TES.'/tableta/insert', $data);
+		//$this->template->render();
+        redirect(DIR_TES.'/tableta/', 'refresh');
     }
 
     /**
@@ -327,6 +341,39 @@ class Tableta extends CI_Controller {
         
         redirect(DIR_TES.'/tableta/', 'refresh');
 	}
-      
+    
+    /**
+     * Asignar unidad medica y tipo de censo
+     */
+     
+    public function setUM($id)
+    {
+        /*if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
+            show_error('', 403, 'Acceso denegado');
+            return false;
+        }*/
+
+        if(!isset($this->Tableta_model))
+            return false;
+
+        try {
+            $datos = $this->input->post();
+            $this->Tableta_model->getById($id);
+
+            if(!empty($datos)) {
+                $this->Tableta_model->setId_tipo_censo($datos['id_tipo_censo']);
+                $this->Tableta_model->setId_asu_um($datos['id_unidad_medica']);
+
+                $this->Tableta_model->update($id);
+
+                Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro actualizado: '.$id);
+                $this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
+            }
+        } catch (Exception $e) {
+            $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+        }
+        
+        redirect(DIR_TES.'/tableta/', 'refresh');
+    }
 }
 ?>
