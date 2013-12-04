@@ -193,12 +193,39 @@ class ArbolSegmentacion_model extends CI_Model {
                 }
         }
         
+        public function getChildrenFromId($id , $omitidos = array())
+        {
+            $datos = $this->db->query("select * from asu_arbol_segmentacion where id=".$id);
+            
+            if (!$datos)
+            {
+                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion por ID";
+                throw new Exception(__CLASS__);
+            }
+            else
+            {
+                if (count($datos->result()) == 0)
+                    return array();
+                
+                $arregloparcial = $this->getChildrenFromLevel($datos->result()[0]->id_raiz, $datos->result()[0]->grado_segmentacion,$omitidos);
+                $resultado = array();
+                foreach ($arregloparcial as $arreglo)
+                {
+                    if ($arreglo["key"] == $id)
+                      //  array_push ($resultado, $arreglo);
+                        return $arreglo;
+                }
+                //return $resultado;
+            }
+        }
+               
         public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array())
         {
             $arbol = $this->getTree($idarbol, $nivel, $omitidos);
             if (count($arbol) == 0)
             {
-                return json_encode(array());
+                return array();
             }
             if ($nivel<=$arbol['niveles'])
             {
@@ -246,32 +273,40 @@ class ArbolSegmentacion_model extends CI_Model {
                         }
                         $resultado[$i-1] = $arreglopadre;
                     }
-                    return json_encode($resultado[1]);
+                    return $resultado[1];
             }
         }
         
-        public function getChildrenFromId($id , $json = true)
-        {
-            $datos = array();
-            $query = $this->db->query('select * from asu_arbol_segmentacion where id_padre = ' . $id);
-            if (!$query)
-            {
-                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-                    $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion";
-                    throw new Exception(__CLASS__);
-            }
-            else
-            {
-                foreach ($query->result() as $dato) {
-                    array_push($datos, array('valor' =>$dato->descripcion ,'clave' => $dato->id));
-                }
-                if ($json == false)
-                    return $datos;
-                else
-                    echo json_encode($datos);
+//        public function getChildrenFromId($id , $json = true)
+//        {
+//            $datos = array();
+//            $query = $this->db->query('select * from asu_arbol_segmentacion where id_padre = ' . $id);
+//            if (!$query)
+//            {
+//                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+//                    $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion";
+//                    throw new Exception(__CLASS__);
+//            }
+//            else
+//            {
+//                foreach ($query->result() as $dato) {
+//                    array_push($datos, array('valor' =>$dato->descripcion ,'clave' => $dato->id));
+//                }
+//                if ($json == false)
+//                    return $datos;
+//                else
+//                    echo json_encode($datos);
+//                
+//            }
+//        }
                 
-            }
-        }
+        /**
+         * Accion para obtener la descripcion e información adicional del elemento en el ASU
+         * @param Array int $claves arreglo de valores a recuperar
+         * @param Int $desglose Nivel de desglose de información requerida
+         * @return Object
+         * @throws Exception Si ocurre error al recuperar datos de la base de datos
+         */
         
         public function getDescripcionById($claves,$desglose = 0)
         {
