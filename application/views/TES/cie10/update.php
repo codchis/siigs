@@ -1,97 +1,39 @@
-<script type="text/javascript" src="/resources/js/jquery.form.min.js" /></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	
-	var options = {
-		    target:     '',
-		    dataType : 'json',
-		    success:    function(data) {
-				$('#optcampos').html('<thead><tr><th colspan=4>Datos a Modificar/Agregar</td></tr>');
-
-				var errordatos = false;
-		    	$.each(data, function(i, item) {
-					//Agregar un TR
-			    	$tr = $('<tr></tr>');
-			    	if (typeof(item) != 'string')
-			    	{
-			    		$.each(item, function(i, val) {
-						//Agregar un TD
-			    		$td = $('<td>'+val+'</td>');
-			    		$tr.append($td);
-			    		});
-			    	}
-			    	else
-			    	{
-			    		$td = $('<td>'+item+'</td>');
-			    		$tr.append($td);
-			    		errordatos = true;
-				    }
-			    	
-			    	$('#optcampos').append($tr);
-		    	});
-		    	if (errordatos == false)
-		    	{
-			    	tfoot = $('<tfoot></tfoot>');
-			    	tr = $('<tr></tr>');
-			    	td = $('<td colspan=2></td>');
-			    	input = $('<input type="button" value="Confirmar cambios"/>');
-			    	$(input).click(function(){
-				    	subirupdate(true);
-					});
-			    	$(tfoot).append(tr);
-			    	$(tr).append(td);
-			    	$(td).append(input);
-			    	$('#optcampos').append(tfoot);
-				}
-		}
-	};
-
-	$('#btnload').click(function(){
-
-		subirupdate(false);
-	});
-
-	function subirupdate(upd)
-	{
-		if (upd == false)
-			options.url = '/<?php echo DIR_SIIGS.'/catalogo/loadupdate/'.$catalogo_item->nombre;?>';
-		else
-			options.url = '/<?php echo DIR_SIIGS.'/catalogo/loadupdate/'.$catalogo_item->nombre.'/true';?>';
-		
-    	$('#loadcsv').submit();
-	}
-	
-	$('#loadcsv').submit(function() 
-	{
-		$(this).ajaxSubmit(options);
-		return false;
-	});
-	
-});
-</script>
-
+<h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
 echo $msgResult.'<br /><br />';
  ?>
-<h2><?php echo $title; ?></h2>
-<?php
-if (!empty($catalogo_item))
+ <?php
+if (!empty($accion_item))
 {
 ?>
-<form method="post" enctype="application/x-www-form-urlencoded" id="loadcsv">
+<?php echo validation_errors(); ?>
+<?php echo form_open(DIR_SIIGS.'/accion/update/'.$accion_item->id) ?>
 <table>
-<tr>
-<td><input type="file" name="archivocsv" id="btncsv"/></td>
-<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" /></td>
-</tr>
+	<tr>
+		<td><label for="nombre">Nombre</label></td>
+		<td><input type="text" name="nombre" value="<?php echo $accion_item->nombre; ?>" /></td>
+	</tr>
+	<tr>
+		<td><label for="descripcion">Descripci&oacute;n</label></td>
+		<td><textarea name="descripcion"><?php echo $accion_item->descripcion; ?></textarea></td>
+	</tr>
+	<tr>
+		<td><label for="metodo">M&eacute;todo</label></td>
+		<td><textarea name="metodo"><?php echo $accion_item->metodo; ?></textarea></td>
+	</tr>
+	<tr>
+		<td colspan=2>
+		<input type="hidden" name="id" value="<?php echo $accion_item->id; ?>"/>
+		<input type="submit" name="submit" value="Guardar" />
+		<td>
+	</tr>
 </table>
 </form>
-<table id="optcampos">
-</table>
-<?php 
+<?php
 }
 else
 {
-	echo "No se ha encontrado el elemento";
+echo "No se ha encontrado el elemento";
 }
+?>

@@ -50,6 +50,61 @@ class ArbolSegmentacion_model extends CI_Model {
 	}
         
         /**
+	 * Regresa el la información de los padres de una unidad medica en el ASU
+	 *
+	 * @access public
+	 * @return Object arreglo con padres de la um
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+        
+        public function getUMParentsById($clave)
+        {
+            $desglose = $this->db->query('select grado_segmentacion - 1 as desglose from asu_arbol_segmentacion where id='.$clave);
+
+            if (!$desglose)
+            {
+                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion por id";
+                throw new Exception(__CLASS__);
+            }
+            
+            $desglose = $desglose->result()[0]->desglose;
+            
+            //si se van a hacer joins para informacion adicional, se empieza a crear la estructura de la consulta
+            $consultavalues = 'select a.id as parent0';
+            $consultafrom = ' from asu_arbol_segmentacion a ';
+            $consultawhere = ' where a.id = '.$clave;
+
+          //crear los joins a partir del numero de niveles de desglose requeridos
+            for($i=1;$i<=$desglose;$i++)   
+            {
+                $tablajoin = ($i==1) ? array("a","tb".$i) : array("tb".($i-1),"tb".$i);
+                $consultavalues .= ",case when ifnull(tb".$i.".descripcion,'') = '' then '' else tb".$i.".id end as parent".$i;
+                $consultafrom .= " left outer join asu_arbol_segmentacion ".$tablajoin[1]." on ".$tablajoin[0].".id_padre = ".$tablajoin[1].".id"; 
+            }
+            $consulta = $consultavalues . $consultafrom . $consultawhere;
+
+            $query = $this->db->query($consulta);
+            
+            if (!$query)
+            {
+                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion por id";
+                throw new Exception(__CLASS__);
+            }
+            else
+            {
+                $resultado = array();
+                foreach ($query->result()[0] as $fila => $clave)
+                {
+                    array_push($resultado, $clave);
+                }
+                
+                return $resultado;
+            }
+        }  
+        
+        /**
 	 * Regresa el objeto del arbol de segmentacion
 	 *
 	 * @access public
