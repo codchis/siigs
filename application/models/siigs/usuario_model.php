@@ -553,5 +553,78 @@ class Usuario_model extends CI_Model {
 		}
 		return $result;
 	}
+	
+	// obtiene los permisos que pertenescan a un entorno parametros nombre entorno
+	public function get_permiso_entorno($nombre)
+	{
+		$this->db->distinct();
+		$this->db->select('p.id, p.id_grupo, p.fecha, p.id_controlador_accion');
+		$this->db->from('sis_entorno e');
+		$this->db->join('sis_controlador c', 'c.id_entorno = e.id','left');
+		$this->db->join('sis_controlador_x_accion ca', 'ca.id_controlador = c.id','left');
+		$this->db->join('sis_permiso p', 'p.id_controlador_accion = ca.id','left');
+		$this->db->where('e.nombre' , $nombre);
+		$this->db->where('p.id !=' , '');
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+	
+	// obtiene los grupos que pertenescan a un entorno parametros nombre entorno
+	public function get_grupo_entorno($nombre)
+	{
+		$this->db->distinct();
+		$this->db->select('g.id, g.nombre, g.descripcion');
+		$this->db->from('sis_entorno e');
+		$this->db->join('sis_controlador c', 'c.id_entorno = e.id','left');
+		$this->db->join('sis_controlador_x_accion ca', 'ca.id_controlador = c.id','left');
+		$this->db->join('sis_permiso p', 'p.id_controlador_accion = ca.id','left');
+		$this->db->join('sis_grupo g', 'g.id = p.id_grupo','left');
+		$this->db->where('e.nombre' , $nombre);
+		$this->db->where('g.id !=' , '');
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+	
+	// obtiene los usuario que pertenescan a un entorno parametros nombre entorno
+	public function get_usuario_entorno($nombre)
+	{
+		$this->db->distinct();
+		$this->db->select(' u.id, u.nombre_usuario, u.clave, u.nombre, u.apellido_paterno, u.apellido_materno, u.correo, u.activo, u.id_grupo');
+		$this->db->from('sis_entorno e');
+		$this->db->join('sis_controlador c', 'c.id_entorno = e.id','left');
+		$this->db->join('sis_controlador_x_accion ca', 'ca.id_controlador = c.id','left');
+		$this->db->join('sis_permiso p', 'p.id_controlador_accion = ca.id','left');
+		$this->db->join('sis_grupo g', 'g.id = p.id_grupo','left');
+		$this->db->join('sis_usuario u', 'u.id_grupo = g.id','left');
+		$this->db->where('e.nombre' , $nombre);
+		$this->db->where('u.activo' , 1);
+		$this->db->where('u.id !=' , '');
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
 }
 ?>

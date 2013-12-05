@@ -37,6 +37,7 @@ class Enrolamiento_model extends CI_Model
 	
 	// direccion
 	private $calle;
+	private $referencia;
    	private $colonia;
    	private $localidad;
    	private $numero;
@@ -310,6 +311,16 @@ class Enrolamiento_model extends CI_Model
 		$this->lugarcivil = $value;
 	}
 	
+	public function getreferencia()
+	{
+	    return $this->referencia;
+	}
+
+	public function setreferencia($value) 
+	{
+		$this->referencia = $value;
+	}
+	
 	public function getcalle()
 	{
 	    return $this->calle;
@@ -564,8 +575,10 @@ class Enrolamiento_model extends CI_Model
 	// inserta la informacion de una persona enrolada nueva
 	public function insert()
 	{
+		$unico_id=md5(uniqid());
 		$data = array(
 			// basico
+			'id' => $unico_id,
 			'id_nacionalidad' => $this->nacionalidad,
 			'nombre' => $this->nombre,
 			'apellido_paterno' => $this->paterno,
@@ -582,6 +595,7 @@ class Enrolamiento_model extends CI_Model
 			
 			// direccion
 			'calle_domicilio' => $this->calle,
+			'referencia_domicilio' => $this->referencia,
 			'colonia_domicilio' => $this->colonia,
 			'id_asu_localidad_domicilio' => $this->localidad,
 			'numero_domicilio' => $this->numero,
@@ -600,11 +614,13 @@ class Enrolamiento_model extends CI_Model
 		}
 		else
 		{
-			$this->id=$this->db->insert_id();
+			$this->setid($unico_id);
+			$unico_idtutor=md5(uniqid());
 			if($this->idtutor=="")
 			{
 				$data0 = array(
 					// tutor
+					'id' => $unico_idtutor,
 					'nombre' => $this->nombreT,
 					'apellido_paterno' => $this->paternoT,
 					'apellido_materno' => $this->maternoT,
@@ -623,7 +639,7 @@ class Enrolamiento_model extends CI_Model
 				}
 				else
 				{
-					$this->setidtutor($this->db->insert_id());
+					$this->setidtutor($unico_idtutor);
 				}
 			}
 			$data01 = array(
@@ -643,7 +659,7 @@ class Enrolamiento_model extends CI_Model
 				$data1 = array(
 					// alergias
 					'id_persona' => $this->id,
-					'id_ece_alergia' => $this->alergias[$i],
+					'id_alergia' => $this->alergias[$i],
 					
 				);
 				if($this->alergias[$i]!="")
@@ -660,7 +676,7 @@ class Enrolamiento_model extends CI_Model
 			for($i=0;$i<sizeof($this->vacuna);$i++)
 			{
 				$data2 = array(
-					// alergias
+					// vacuna
 					'id_persona' => $this->id,
 					'id_vacuna' => $this->vacuna[$i],
 					'fecha' => $this->fvacuna[$i],
@@ -681,7 +697,7 @@ class Enrolamiento_model extends CI_Model
 			for($i=0;$i<sizeof($this->ira);$i++)
 			{
 				$data3 = array(
-					// alergias
+					// ira
 					'id_persona' => $this->id,
 					'id_ira' => $this->ira[$i],
 					'fecha' => $this->fira[$i],
@@ -702,7 +718,7 @@ class Enrolamiento_model extends CI_Model
 			for($i=0;$i<sizeof($this->eda);$i++)
 			{
 				$data4 = array(
-					// alergias
+					// eda
 					'id_persona' => $this->id,
 					'id_eda' => $this->eda[$i],
 					'fecha' => $this->feda[$i],
@@ -723,7 +739,7 @@ class Enrolamiento_model extends CI_Model
 			for($i=0;$i<sizeof($this->consulta);$i++)
 			{
 				$data5 = array(
-					// alergias
+					// consulta
 					'id_persona' => $this->id,
 					'id_consulta' => $this->consulta[$i],
 					'fecha' => $this->fconsulta[$i],
@@ -744,7 +760,7 @@ class Enrolamiento_model extends CI_Model
 			for($i=0;$i<sizeof($this->accion_nutricional);$i++)
 			{
 				$data6 = array(
-					// alergias
+					// accion nutricional
 					'id_persona' => $this->id,
 					'id_accion_nutricional' => $this->accion_nutricional[$i],
 					'fecha' => $this->faccion_nutricional[$i],
@@ -762,15 +778,15 @@ class Enrolamiento_model extends CI_Model
 				}
 			}
 			
-			for($i=0;$i<sizeof($this->accion_nutricional);$i++)
+			for($i=0;$i<sizeof($this->peso);$i++)
 			{
 				$data7 = array(
-					// alergias
+					// nutricion
 					'id_persona' => $this->id,
 					'peso' => $this->peso[$i],
 					'altura' => $this->altura[$i],
 					'talla' => $this->talla[$i],
-					'fecha' => $this->faccion_nutricional[$i],
+					'fecha' => $this->fnutricion[$i],
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -826,8 +842,9 @@ class Enrolamiento_model extends CI_Model
 			'fecha_registro' => $this->fechacivil,
 			'id_asu_um_tratante' => $this->lugarcivil,
 			
-			// direccion
+			// direccion 
 			'calle_domicilio' => $this->calle,
+			'referencia_domicilio' => $this->referencia,
 			'colonia_domicilio' => $this->colonia,
 			'id_asu_localidad_domicilio' => $this->localidad,
 			'numero_domicilio' => $this->numero,
@@ -860,20 +877,36 @@ class Enrolamiento_model extends CI_Model
 				'id_operadora_celular' => $this->companiaT,
 				'celular' => $this->celularT,
 				);
-			$this->db->where('id' , $this->idtutor);
-			$result0 = $this->db->update('cns_tutor', $data0);
-			if (!$result0)
+			//
+			if($this->idtutor=="")
 			{
-				$this->msg_error_usr = "No se actualizo Tutor.";
-				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				$result0 = $this->db->insert('cns_tutor', $data0);
+				if (!$result0)
+				{
+					$this->msg_error_usr = "No se guardo Tutor.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+				else
+				{
+					$this->setidtutor($this->db->insert_id());
+				}
 			}
-			
+			else
+			{	
+				$this->db->where('id' , $this->idtutor);
+				$result0 = $this->db->update('cns_tutor', $data0);
+				if (!$result0)
+				{
+					$this->msg_error_usr = "No se actualizo Tutor.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+			}
+			// relacion tutor paciente
 			$data01 = array(
 				'id_persona' => $this->id,
 				'id_tutor' => $this->idtutor,						
 				);
-			$result0x = $this->db->delete('cns_persona_x_tutor', array('id_persona' => $this->id));
-			if ($result0x)
+			if ($this->db->delete('cns_persona_x_tutor', array('id_persona' => $this->id)))
 			{
 				$result01 = $this->db->insert('cns_persona_x_tutor', $data01);
 				if (!$result01)
@@ -885,14 +918,13 @@ class Enrolamiento_model extends CI_Model
 			
 			
 			$id_asu_um=1;
-			$result0x = $this->db->delete('cns_persona_x_alergia', array('id_persona' => $this->id));
-					if ($result0x)
+			if ($this->db->delete('cns_persona_x_alergia', array('id_persona' => $this->id)))
 			for($i=0;$i<sizeof($this->alergias);$i++)
 			{
 				$data1 = array(
 					// alergias
 					'id_persona' => $this->id,
-					'id_ece_alergia' => $this->alergias[$i],
+					'id_alergia' => $this->alergias[$i],
 					
 				);
 				if($this->alergias[$i]!="")
@@ -905,12 +937,11 @@ class Enrolamiento_model extends CI_Model
 					}
 				}
 			}
-			$result0x = $this->db->delete('cns_control_vacuna', array('id_persona' => $this->id));
-					if ($result0x)
+			if ($this->db->delete('cns_control_vacuna', array('id_persona' => $this->id)))
 			for($i=0;$i<sizeof($this->vacuna);$i++)
 			{
 				$data2 = array(
-					// alergias
+					// vacuna
 					'id_persona' => $this->id,
 					'id_vacuna' => $this->vacuna[$i],
 					'fecha' => $this->fvacuna[$i],
@@ -928,12 +959,11 @@ class Enrolamiento_model extends CI_Model
 				}
 			}
 			
-			$result0x = $this->db->delete('cns_control_ira', array('id_persona' => $this->id));
-					if ($result0x)
+			if ($this->db->delete('cns_control_ira', array('id_persona' => $this->id)))
 			for($i=0;$i<sizeof($this->ira);$i++)
 			{
 				$data3 = array(
-					// alergias
+					// ira
 					'id_persona' => $this->id,
 					'id_ira' => $this->ira[$i],
 					'fecha' => $this->fira[$i],
@@ -950,12 +980,12 @@ class Enrolamiento_model extends CI_Model
 					}
 				}
 			}
-			$result0x = $this->db->delete('cns_control_eda', array('id_persona' => $this->id));
-					if ($result0x)
+			
+			if ($this->db->delete('cns_control_eda', array('id_persona' => $this->id)))
 			for($i=0;$i<sizeof($this->eda);$i++)
 			{
 				$data4 = array(
-					// alergias
+					// eda
 					'id_persona' => $this->id,
 					'id_eda' => $this->eda[$i],
 					'fecha' => $this->feda[$i],
@@ -973,12 +1003,11 @@ class Enrolamiento_model extends CI_Model
 				}
 			}
 			
-			$result0x = $this->db->delete('cns_control_consulta', array('id_persona' => $this->id));
-					if ($result0x)
+			if ($this->db->delete('cns_control_consulta', array('id_persona' => $this->id)))
 			for($i=0;$i<sizeof($this->consulta);$i++)
 			{
 				$data5 = array(
-					// alergias
+					// consulta
 					'id_persona' => $this->id,
 					'id_consulta' => $this->consulta[$i],
 					'fecha' => $this->fconsulta[$i],
@@ -996,12 +1025,11 @@ class Enrolamiento_model extends CI_Model
 				}
 			}
 			
-			$result0x = $this->db->delete('cns_control_accion_nutricional', array('id_persona' => $this->id));
-					if ($result0x)
+			if ($this->db->delete('cns_control_accion_nutricional', array('id_persona' => $this->id)))
 			for($i=0;$i<sizeof($this->accion_nutricional);$i++)
 			{
 				$data6 = array(
-					// alergias
+					// accion nutricional
 					'id_persona' => $this->id,
 					'id_accion_nutricional' => $this->accion_nutricional[$i],
 					'fecha' => $this->faccion_nutricional[$i],
@@ -1019,17 +1047,16 @@ class Enrolamiento_model extends CI_Model
 				}
 			}
 			
-			$result0x = $this->db->delete('cns_control_nutricional', array('id_persona' => $this->id));
-					if ($result0x)
-			for($i=0;$i<sizeof($this->accion_nutricional);$i++)
+			if ($this->db->delete('cns_control_nutricional', array('id_persona' => $this->id)))
+			for($i=0;$i<sizeof($this->peso);$i++)
 			{
 				$data7 = array(
-					// alergias
+					// nutricion
 					'id_persona' => $this->id,
 					'peso' => $this->peso[$i],
 					'altura' => $this->altura[$i],
 					'talla' => $this->talla[$i],
-					'fecha' => $this->faccion_nutricional[$i],
+					'fecha' => $this->fnutricion[$i],
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -1044,8 +1071,7 @@ class Enrolamiento_model extends CI_Model
 				}
 			}
 			
-			$result0x = $this->db->delete('cns_persona_x_afiliacion', array('id_persona' => $this->id));
-					if ($result0x)
+			if ($this->db->delete('cns_persona_x_afiliacion', array('id_persona' => $this->id)))
 			for($i=0;$i<sizeof($this->afiliacion);$i++)
 			{
 				$data8 = array(
@@ -1152,7 +1178,7 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->db->select('a.id, a.descripcion');
 		$this->db->from('cns_persona_x_alergia p');
-		$this->db->join('cns_alergia a', 'a.id = p.id_ece_alergia');
+		$this->db->join('cns_alergia a', 'a.id = p.id_alergia','left');
 		$this->db->where('p.id_persona', $id);
 		$query = $this->db->get();
 		
@@ -1171,7 +1197,7 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->db->select('a.id, a.descripcion');
 		$this->db->from('cns_persona_x_afiliacion p');
-		$this->db->join('cns_afiliacion a', 'a.id = p.id_afiliacion');
+		$this->db->join('cns_afiliacion a', 'a.id = p.id_afiliacion','left');
 		$this->db->where('p.id_persona', $id);
 		$query = $this->db->get();
 		
@@ -1189,7 +1215,7 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->db->select('a.id, a.descripcion, p.fecha');
 		$this->db->from('cns_control_'.$catalog.' p');
-		$this->db->join('cns_'.$catalog.' a', 'a.id = p.id_'.$catalog);
+		$this->db->join('cns_'.$catalog.' a', 'a.id = p.id_'.$catalog,'left');
 		$this->db->where('p.id_persona', $id);
 		$query = $this->db->get(); 
 		if (!$query)
@@ -1219,10 +1245,15 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	// trae el catalogo seleccionado
-	public function get_catalog($catalog)
+	// trae los datos de las tablas catalagos 
+	public function get_catalog($catalog,$campo="",$id="")
 	{
-		$query = $this->db->get($catalog);
+		$this->db->select('*');
+		$this->db->from($catalog);
+		if($id!="")
+		$this->db->where($campo, $id);
+		$this->db->where('activo', 1);
+		$query = $this->db->get(); 
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -1233,6 +1264,60 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
+	
+	// obtiene el valor de la tabla que se le pase como parametro con un where por un campo
+	public function get_catalog2($catalog,$campo="",$id="")
+	{
+		$this->db->select('*');
+		$this->db->from($catalog);
+		if($id!="")
+		$this->db->where($campo, $id);
+		$query = $this->db->get(); //echo $this->db->last_query();
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+	// obtiene catalogos relevante x entorno
+	
+	public function get_catalog_relevante()
+	{
+		$this->db->select('*');
+		$this->db->from('cns_catalogo_relevante_x_entorno r');
+		$this->db->join('cns_tabla_catalogo c', 'c.id = r.id_tabla_catalogo','left');
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+	public function get_transaction_relevante()
+	{
+		$this->db->select('*');
+		$this->db->from('cns_transaccion_relevante_x_entorno r');
+		$this->db->join('cns_tabla_transaccion c', 'c.id = r.id_tabla_transaccion','left');
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+
 	// obtiene informacion del tutor
 	public function data_tutor($curp)
 	{
@@ -1248,9 +1333,12 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	// valida que no se repita curp
-	public function getByCurp($curp,$tabla)
+	public function getByCurp($curp,$tabla,$id)
 	{
-		$query = $this->db->get_where($tabla, array('curp' => $curp));echo $this->db->last_query();
+		if($id!=""&&$id!=0)
+			$query = $this->db->get_where($tabla, array('curp' => $curp,"id !=" => $id));
+		else
+			$query = $this->db->get_where($tabla, array('curp' => $curp));
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();

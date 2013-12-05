@@ -112,6 +112,7 @@ class Enrolamiento extends CI_Controller
 			if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');*/
 			$this->load->model(DIR_TES.'/Enrolamiento_model');
+			$data['id'] = $id;
 			$data['title'] = 'Ver Paciente';
 			$data['enrolado'] = $this->Enrolamiento_model->getById($id);
 			$data['alergias'] = $this->Enrolamiento_model->getAlergia($id);
@@ -191,7 +192,7 @@ class Enrolamiento extends CI_Controller
  		
 	}
 	// Carga de catalogos dinamicamente
-	public function catalog_select($catalog,$sel)
+	public function catalog_select($catalog,$sel="")
 	{
 		$opcion="";
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
@@ -292,10 +293,11 @@ class Enrolamiento extends CI_Controller
 			if($this->validarForm())
 			{
 				try 
-				{
+				{						
 					$this->addForm();
 					
 					$this->Enrolamiento_model->insert();
+					$this->session->set_flashdata('infoclass','success');
 					$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
 					//Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario Enrolado: '.strtoupper($this->input->post('nombre')));
 					
@@ -351,19 +353,19 @@ class Enrolamiento extends CI_Controller
 		$this->form_validation->set_rules('lnacimientoT', 'Lugar de Nacimiento', 'trim');
 		$this->form_validation->set_rules('curp', 'CURP', 'trim|required');
 		$this->form_validation->set_rules('curp2', 'CURP', 'callback_ifCurpExists');
-		$this->form_validation->set_rules('calle', 'Calle', 'trim|required');
-		$this->form_validation->set_rules('cp', 'Codigo Postal', 'trim|required');
-		$this->form_validation->set_rules('localidad', 'Localidad', 'trim|required');
-		$this->form_validation->set_rules('localidadT', 'Localidad', '');
+		$this->form_validation->set_rules('nacionalidad', 'Nacionalidad', '');
+		$this->form_validation->set_rules('sangre', 'Tipo de Sangre', '');
+		
 		$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
 		$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|required');
 		$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', '');
 		
-		$this->form_validation->set_rules('nacionalidad', 'Nacionalidad', '');
-		$this->form_validation->set_rules('sangre', 'Tipo de Sangre', '');
-		
-		
+		$this->form_validation->set_rules('calle', 'Calle', 'trim|required');
+		$this->form_validation->set_rules('referencia', 'referencia', '');
 		$this->form_validation->set_rules('colonia', 'colonia', '');
+		$this->form_validation->set_rules('cp', 'Codigo Postal', 'trim|required');
+		$this->form_validation->set_rules('localidad', 'Localidad', 'trim|required');
+		$this->form_validation->set_rules('localidadT', 'Localidad', '');
 		$this->form_validation->set_rules('numero', 'numero', '');
 		$this->form_validation->set_rules('celular', 'celular', '');
 		$this->form_validation->set_rules('telefono', 'telefono', '');
@@ -410,7 +412,8 @@ class Enrolamiento extends CI_Controller
 		$this->Enrolamiento_model->setfechacivil($this->input->post('fechacivil'));				
 		$this->Enrolamiento_model->setlugarcivil($this->input->post('lugarcivil'));
 		
-		$this->Enrolamiento_model->setcalle($this->input->post('calle'));				
+		$this->Enrolamiento_model->setcalle($this->input->post('calle'));
+		$this->Enrolamiento_model->setreferencia($this->input->post('referencia'));				
 		$this->Enrolamiento_model->setcolonia($this->input->post('colonia'));
 		$this->Enrolamiento_model->setlocalidad($this->input->post('localidad'));
 		$this->Enrolamiento_model->settelefono($this->input->post('telefono'));
@@ -446,12 +449,13 @@ class Enrolamiento extends CI_Controller
 	// valida el curp del paciente
 	public function ifCurpExists($curp) 
 	{
+		$id=$this->input->post('id');
 		$curp = $this->input->post('curp').$this->input->post('curp2');
 		if (empty($this->Enrolamiento_model))
 			return false;
 		$is_exist = null;
 		try {
-			$is_exist = $this->Enrolamiento_model->getByCurp($curp,'cns_persona');
+			$is_exist = $this->Enrolamiento_model->getByCurp($curp,'cns_persona',$id);
 		}
 		catch(Exception $e){
 		}
@@ -477,11 +481,12 @@ class Enrolamiento extends CI_Controller
 	// valida el curp del padre o tutor
 	public function ifCurpTExists($curp) 
 	{
+		$id=$this->input->post('idtutor');
 		if (empty($this->Enrolamiento_model))
 			return false;
 		$is_exist = null;
 		try {
-			$is_exist = $this->Enrolamiento_model->getByCurp($curp,'cns_tutor');
+			$is_exist = $this->Enrolamiento_model->getByCurp($curp,'cns_tutor',$id);
 		}
 		catch(Exception $e){
 		}

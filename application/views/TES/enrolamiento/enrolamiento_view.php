@@ -1,7 +1,58 @@
     <link href="/resources/css/grid.css" rel="stylesheet" type="text/css" /> 
     <link href="/resources/SpryAssets/SpryAccordion.css" rel="stylesheet" type="text/css" /> 
 	<script src="/resources/SpryAssets/SpryAccordion.js" type="text/javascript"></script>
-    
+    <script>
+	$(document).ready(function()
+	{
+		$.ajax({
+		type: "POST",
+		data: {
+			'claves':[<?php echo $enrolado->id_asu_localidad_nacimiento;?>] ,
+			'desglose':1 },
+		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		})
+		.done(function(dato)
+		{
+			if(dato)
+			{
+				var obj = jQuery.parseJSON( dato );
+				document.getElementById("lnacimientoT").innerHTML=obj[0]["descripcion"];
+			}
+		});
+		
+		$.ajax({
+		type: "POST",
+		data: {
+			'claves':[<?php echo $enrolado->id_asu_um_tratante;?>] ,
+			'desglose':1 },
+		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		})
+		.done(function(dato)
+		{
+			if(dato)
+			{
+				var obj = jQuery.parseJSON( dato );
+				document.getElementById("lugarcivilT").innerHTML=obj[0]["descripcion"];
+			}
+		});
+		
+		$.ajax({
+		type: "POST",
+		data: {
+			'claves':[<?php echo $enrolado->id_asu_localidad_domicilio;?>] ,
+			'desglose':1 },
+		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		})
+		.done(function(dato)
+		{
+			if(dato)
+			{
+				var obj = jQuery.parseJSON( dato );
+				document.getElementById("localidadT").innerHTML=obj[0]["descripcion"];
+			}
+		});
+	});
+	</script>
 	<table align="center" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
     <h2><?php echo $title ?></h2>
         	<table width="100%">
@@ -35,7 +86,7 @@
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
-                            <td colspan="3"><?php echo $enrolado->curp;?></td>
+                            <td colspan="3"><div id="lnacimientoT"></div></td>
                             </tr>
                           <tr>
                             <td><p align="right">CURP</p></td>
@@ -121,7 +172,7 @@
                           </tr>
                           <tr>
                             <td><p align="right">Lugar</p></td>
-                            <td colspan="3"><?php echo $enrolado->curp;?></tr>
+                            <td colspan="3"><div id="lugarcivilT"></div></tr>
                         </table>
                         <br />
                       
@@ -140,6 +191,10 @@
                             <td width="25%"><?php echo $enrolado->numero_domicilio;?></td>
                           </tr>
                           <tr>
+                            <td><p align="right">Referencia</p></td>
+                            <td colspan="3"><?php echo $enrolado->referencia_domicilio;?></td>
+                          </tr>
+                          <tr>
                             <td><p align="right">Colonia</p></td>
                             <td><?php echo $enrolado->colonia_domicilio;?></td>
                             <td><p align="right">CP</p></td>
@@ -147,7 +202,7 @@
                           </tr>
                           <tr>
                             <td><p align="right">Localidad</p></td>
-                            <td colspan="3"><?php echo $enrolado->curp;?></tr>
+                            <td colspan="3"><div id="localidadT"></div></tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
                             <td><?php echo $enrolado->telefono_domicilio;?></td> 
@@ -305,7 +360,7 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control Nutricional</div>
                       <div class="AccordionPanelContent"><br />
-                      <iframe width='100%' style='margin-left:5px;' border=0 height='400' src='/<?php echo DIR_TES?>/Graph/graph/grafica/Nutricion/<?php echo urlencode(($control_nutricional));?>/<?php echo urlencode(($label));?>'></iframe>
+                      <iframe width='100%' style='margin-left:5px;' border=0 height='500' src='/<?php echo DIR_TES?>/Graph/graph/grafica/Nutricion/<?php echo urlencode(($control_nutricional));?>/<?php echo urlencode(($label));?>'></iframe>
                       </div>
                     </div>                                        
                     

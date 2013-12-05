@@ -16,9 +16,82 @@
 			'transitionOut'	: 'elastic',
 			'type'			: 'iframe',				
 			'onClosed'		: function() {
-				getcurp();
+				var  uri=this.href; 
+				uri=uri.substr(uri.search("0")+2,uri.length);
+				uri=uri.substr(0,uri.search("1")-1);
+				var array=document.getElementById(uri.substr(0,uri.search("/"))).value;
+				if(array!="")
+				{
+					$.ajax({
+					type: "POST",
+					data: {
+						'claves':[array] ,
+						'desglose':1 },
+					url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+					})
+					.done(function(dato)
+					{
+						if(dato)
+						{
+							var obj = jQuery.parseJSON( dato );
+							document.getElementById(uri.substr(uri.search("/")+1,uri.length)).value=obj[0]["descripcion"];
+						}
+						if(uri.substr(uri.search("/")+1,uri.length)=="lnacimientoT")
+						getcurp();
+					});
+				}
 			}						
 		}); 
+		$.ajax({
+		type: "POST",
+		data: {
+			'claves':[<?php echo $enrolado->id_asu_localidad_nacimiento;?>] ,
+			'desglose':1 },
+		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		})
+		.done(function(dato)
+		{
+			if(dato)
+			{
+				var obj = jQuery.parseJSON( dato );
+				document.getElementById("lnacimiento").value=obj[0]["id"];
+				document.getElementById("lnacimientoT").value=obj[0]["descripcion"];
+			}
+		});
+		
+		$.ajax({
+		type: "POST",
+		data: {
+			'claves':[<?php echo $enrolado->id_asu_um_tratante;?>] ,
+			'desglose':1 },
+		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		})
+		.done(function(dato)
+		{
+			if(dato)
+			{
+				var obj = jQuery.parseJSON( dato );
+				document.getElementById("lugarcivil").value=obj[0]["id"];
+				document.getElementById("lugarcivilT").value=obj[0]["descripcion"];
+			}
+		});
+		
+		$.ajax({
+		type: "POST",
+		data: {
+			'claves':[<?php echo $enrolado->id_asu_localidad_domicilio;?>] ,
+			'desglose':1 },
+		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		})
+		.done(function(dato)
+		{
+			if(dato)
+			{
+				var obj = jQuery.parseJSON( dato );
+				document.getElementById("localidad").value=obj[0]["id"];
+				document.getElementById("localidadT").value=obj[0]["descripcion"];
+			}
+		});
 		<?php
 		$alerg="";
 		$afili="";
@@ -62,7 +135,6 @@
 			$("#paternoT").removeAttr("disabled");
 			$("#maternoT").removeAttr("disabled");
 			$("#celularT").removeAttr("disabled");
-			$("#curpT").removeAttr("disabled");
 			$("#telefonoT").removeAttr("disabled");
 			$("#companiaT").removeAttr("disabled");
 			$("#sexoT_1").removeAttr("disabled");
@@ -74,7 +146,6 @@
 			$("#paternoT").attr("disabled",true);
 			$("#maternoT").attr("disabled",true);
 			$("#celularT").attr("disabled",true);
-			$("#curpT").attr("disabled",true);
 			$("#telefonoT").attr("disabled",true);
 			$("#companiaT").attr("disabled",true);
 			$("#sexoT_1").attr("disabled",true);	
@@ -87,7 +158,18 @@
 		}
 	}
 	function buscarTutor(buscar)
-	{			
+	{	
+		$("#idtutor").val("");
+		$("#nombreT").val("");
+		$("#paternoT").val("");
+		$("#maternoT").val("");
+		$("#celularT").val("");
+		
+		$("#telefonoT").val("");
+		$("#companiaT").val("");
+		$("#sexoT_1").attr("checked",false);
+		$("#sexoT_2").attr("checked",false);
+				
 		if($("#buscar").val()!="")
 		$("#buscarError").html('');
 		//var buscar = $("#buscar").val();
@@ -128,7 +210,8 @@
 		var no=$("#nombre").val();
 		var se=$("input[name='sexo']:checked").val();
 		var fn=$("#fnacimiento").val();
-		var ed=$("#lnacimientoT").val();
+		var ed=$("#lnacimientoT").val().substr($("#lnacimientoT").val().search(",")+1,$("#lnacimientoT").val().length);
+		ed=$.trim(ed);
 		var a=fn.substr(0,4);
 		var m=fn.substr(5,2);
 		var d=fn.substr(8,2);
@@ -142,11 +225,14 @@
 				type: "POST",
 				data: "json",
 				success:function(data){
-					var obj = jQuery.parseJSON( data );;
-					var curp=obj[0]["curp"];
-					$("#curp").val(curp.substr(0,curp.length-5));
-					$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
-					$("#curp2").val(curp.substr(curp.length-5,5));		
+					var obj = jQuery.parseJSON( data );
+					if(data)
+					{
+						var curp=obj[0]["curp"];
+						$("#curp").val(curp.substr(0,curp.length-5));
+						$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
+						$("#curp2").val(curp.substr(curp.length-5,5));		
+					}
 				}
 			});
 		}
@@ -228,7 +314,8 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombre" type="text" id="nombre" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->nombre; ?>"></td>
+                            <td width="31%"><input name="nombre" type="text" id="nombre" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->nombre; ?>">
+                            <input name="id" type="hidden" id="id" value="<?php echo $id;?>"  /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px;">
@@ -256,9 +343,9 @@
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
-                            <td colspan="3"><input name="lnacimientoT" type="text" required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo $enrolado->curp; ?>" readonly="readonly">
-                            	<input name="lnacimiento" type="hidden" id="lnacimiento" value="<?php echo $enrolado->curp; ?>">                              
-                              <a href='/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>' id="fba1" class="cat">Seleccionar</a><div id="aqui"></div>
+                            <td colspan="3"><input name="lnacimientoT" type="text" required id="lnacimientoT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
+                            	<input name="lnacimiento" type="hidden" id="lnacimiento" value="">                              
+                              <a href='/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/' id="fba1" class="cat">Seleccionar</a><div id="aqui"></div>
                               </td>
                             </tr>
                           <tr>
@@ -297,7 +384,7 @@
                           <tr>
                             <td colspan="2"><p align="right">Madres o Tutores ya Capturados</p></td>
                             <td>
-                              <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" />
+                              <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" <?php echo set_value('buscar', '') ?>/>
                             </td>
                             <td><a href="#" id="buscarCurp" class="cat">Buscar</a></td>
                           </tr>
@@ -326,7 +413,7 @@
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombreT" type="text" disabled="disabled" required="required" id="nombreT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->nombreT; ?>" /></td>
+                            <td width="31%"><input name="nombreT" type="text" disabled="disabled" required="required" id="nombreT" style="width:80%; margin-left:10px;" value="<?php  echo set_value('nombreT', $enrolado->nombreT) ; ?>" /></td>
                             <td><p align="right">Telefono de Casa</p></td>
                             <td><input name="celularT" type="text" disabled="disabled" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->celularT; ?>" /></td>
                           </tr>
@@ -356,15 +443,15 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Fecha</p></td>
-                            <td width="31%"><input name="fechacivil" type="date" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo $enrolado->fecha_registro; ?>"></td>
+                            <td width="31%"><input name="fechacivil" type="date" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date("Y-m-d",strtotime($enrolado->fecha_registro)); ?>"></td>
                             <td width="25%"><p align="right">&nbsp;</p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar</p></td>
-                            <td colspan="3"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo $enrolado->curp; ?>" readonly="readonly">
-                              <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo $enrolado->curp; ?>"/>
-                              <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>" id="fba1" class="cat">Seleccionar</a>
+                            <td colspan="3"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="" readonly="readonly">
+                              <input name="lugarcivil" type="hidden" id="lugarcivil"  value=""/>
+                              <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(null)));?>" id="fba1" class="cat">Seleccionar</a>
                           </tr>
                         </table>
                         <br />
@@ -384,6 +471,10 @@
                             <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->numero_domicilio; ?>"></td>
                           </tr>
                           <tr>
+                            <td><p align="right">Referencia</p></td>
+                            <td colspan="3"><input name="referencia" type="text" id="referencia" style="width:68%; margin-left:10px;"  value="<?php echo $enrolado->referencia_domicilio; ?>" /></td>
+                          </tr>
+                          <tr>
                             <td><p align="right">Colonia</p></td>
                             <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->colonia_domicilio; ?>"></td>
                             <td><p align="right">CP</p></td>
@@ -391,9 +482,9 @@
                           </tr>
                           <tr>
                             <td><p align="right">Localidad</p></td>
-                            <td colspan="3"><input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo $enrolado->curp; ?>" readonly="readonly">
-                              <input name="localidad" type="hidden" id="localidad" value="<?php echo $enrolado->curp; ?>"/>
-                              <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>" id="fba1" class="cat">Seleccionar</a>
+                            <td colspan="3"><input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
+                              <input name="localidad" type="hidden" id="localidad" value=""/>
+                              <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="cat">Seleccionar</a>
                           </tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
