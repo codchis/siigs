@@ -8,6 +8,19 @@
  */
 class Cie10_model extends CI_Model {
 
+    
+    	/**
+	 * @access private
+	 * @var    int
+	 */
+   	private $id;
+
+   	/**
+   	 * @access private
+   	 * @var    string
+   	 */
+   	private $descripcion;
+        
 	/**
 	 * @access private
 	 * @var    string
@@ -39,6 +52,30 @@ class Cie10_model extends CI_Model {
 	public function setRows($value) {
 		$this->rows = $value;
 	}
+        
+           	/***************************/
+	/*Getters and setters block*/
+   	/***************************/
+   	public function getId() {
+		return $this->id;
+	}
+
+	public function setId($value) {
+		$this->id = $value;
+	}
+
+	public function getDescripcion() {
+		return $this->descripcion;
+	}
+
+	public function setDescripcion($value) {
+		$this->descripcion = $value;
+	}
+        
+       	/*******************************/
+	/*Getters and setters block END*/
+	/*******************************/
+
         
 	/**
 	 * Devuelve los mensajes de error en caso de ocurrir alguna excepción
@@ -120,6 +157,111 @@ class Cie10_model extends CI_Model {
                     return $datos->result();
                 }
 	}
+
+	/**
+	 *Devuelve una lista con los registros existentes en el catalogo cie10 omitiendo los ID
+	 *
+	 *@access  public
+	 *@return  ArrayObject
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function getData()
+	{
+                $consulta = 'select cie10,descripcion from cns_cie10';                
+                $datos = $this->db->query($consulta);
+                
+                if (!$datos)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo cie10";
+			throw new Exception(__CLASS__);
+		}
+		else
+                {
+                    return $datos->result();
+                }
+	}
+        
+	/**
+	 *Devuelve una lista con los registros existentes en el catalogo requerido
+	 *
+	 *@access  public
+	 *@return  ArrayObject
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function getCatalogoByName($cat)
+	{
+                $consulta = 'select * from cns_'.$cat;  
+                $datos = $this->db->query($consulta);
+                
+                if (!$datos)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo cie10";
+			throw new Exception(__CLASS__);
+		}
+		else
+                {
+                    return $datos->result();
+                }
+	}
+        
+        
+	/**
+	 *Devuelve la información de un registro del catalogo cie10 por su ID
+	 *
+	 *@access  public
+	 *@return  Object
+	 *@param   int $id ID (Llave primaria)
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function getById($id)
+	{
+		$query = $this->db->get_where('cns_cie10', array('id' => $id));
+
+		if (!$query)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener la información del registro cie10";
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->row();
+	}
+        
+        /**
+         * Accion para agregar registros del CIE10 a otros catalogos como el de EDA, IRA y Consultas
+         * @param type $id el id del registro en el catalogo cie10
+         * @param type $catalogo nombre del catalogo donde se realizara la operacion
+         * @param type $valor agregar o eliminar el registro del catalogo
+         * @return boolean como el resultado de la operación
+         * @throws Exception Si ocurre algun error al consultar y modificar la base de datos
+         */
+        
+        public function agregaEnCatalogo($id,$catalogo,$valor)
+        {   
+            if ($valor == 1)
+            {
+                $consulta = "insert into ".$catalogo." (id_cie10,descripcion,activo) values (".$id.",(select descripcion from cns_cie10 where id='".$id."'),true)";
+            }
+            else
+            {
+                $consulta = "delete from ".$catalogo." where id_cie10=".$id;
+            }
+            
+                $datos = $this->db->query($consulta);
+                
+                if (!$datos)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo cie10";
+			throw new Exception(__CLASS__);
+		}
+		else
+                {
+                    return true;
+                }
+        }
         	
 	/**
 	 *Devuelve los datos de un catalogo pasado como parametro
@@ -258,14 +400,10 @@ class Cie10_model extends CI_Model {
 	 */
 	public function update()
 	{
-		$data = array(
-				'nombre' => $this->nombre,
-				'descripcion' => $this->descripcion,
-				'metodo' => $this->metodo
-		);
+		$data = array('descripcion' => $this->descripcion);
 
 		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('sis_accion', $data);
+		$query = $this->db->update('cns_cie10', $data);
 
 		if (!$query)
 		{

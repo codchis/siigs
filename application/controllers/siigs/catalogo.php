@@ -126,7 +126,12 @@ class Catalogo extends CI_Controller {
 			 }
 			 while (!feof($fp))
 			 {
-			  	$data  = explode(",", fgets($fp));
+			  	$utf8_encode = function($val)
+                                {
+                                    return utf8_encode($val);
+                                };
+			  	$data  = array_map($utf8_encode,explode(",", fgets($fp)));
+                                
 			  	$cont +=1;
 				$data = preg_replace("!\r?\n!", "", $data);
 
@@ -172,7 +177,7 @@ class Catalogo extends CI_Controller {
 	}
 
 	
-		/**
+        /**
 	 *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
 	 *compara los datos recibidos con los datos que contiene actualmente el catálogo, regresa como 
 	 *resultado las filas nuevas y las filas a modificar 

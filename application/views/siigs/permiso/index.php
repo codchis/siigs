@@ -57,7 +57,7 @@
 <label for="id_entorno">Entorno</label>
 <?php echo form_dropdown('id_entorno', $entornos, ($this->input->post('id_entorno')) ? $this->input->post('id_entorno') : '-1', 'id="id_entorno"'); ?>
 <br />
-<div id="acciones"></div>
+<div id="acciones" style="overflow: auto"></div>
 <input type="hidden" name="id_grupo" id="id_grupo" value="<?php echo $id_grupo;?>" />
 <input type="hidden" name="numAcciones" id="numAcciones" value="<?php echo count($actions);?>" />
 <input type="submit" name="btnGuardar" id="btnGuardar" value="Guardar" />

@@ -26,7 +26,12 @@ class Raiz extends CI_Controller {
 			$this->template->render();
 		}
 	}
-       
+        
+        public function prueba(){
+            echo $this->ArbolSegmentacion_model->getChildrenFromLevel(1,1,array());
+            //echo json_encode($this->ArbolSegmentacion_model->getCluesFromId(781));
+        }
+//       
 	/**
 	 *Acción por default del controlador, carga la lista
 	 *de Raices disponibles y una lista de opciones
@@ -275,7 +280,8 @@ class Raiz extends CI_Controller {
 	{
             //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 	    //	show_error('', 403, 'Acceso denegado');
-            
+            if ($this->input->is_ajax_request())
+            {
 		try
 		{
 			$catalogos = $this->Catalogo_x_raiz_model->getByArbol($id);
@@ -334,7 +340,6 @@ class Raiz extends CI_Controller {
 					$consulta = "select ".$llave." as llave, ";
 					$consulta .= $descripcion." as descripcion ";
 					$consulta .= " from ".$tabla;
-					
 					$filas = $this->db->query($consulta);
 					$datosdump = array();
 					foreach ($filas->result() as $key => $value) {
@@ -363,7 +368,126 @@ class Raiz extends CI_Controller {
 		{
 			echo Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
+            }
+            else
+            {
+                echo "Acceso denegado";
+            }
 	}
+        
+        	 /**
+	 *
+	 *Acción para crear o actualizar el ASU a partir de una raiz
+	 *
+	 * @param  int $id
+	 * @return void
+	 */
+	public function updateasu($id)
+	{
+            if ($this->input->is_ajax_request())
+            {
+		try
+		{
+			$catalogos = $this->Catalogo_x_raiz_model->getByArbol($id);
+			
+                        //$this->db->where("id_raiz",$id);
+			//$this->db->delete('asu_arbol_segmentacion');			
+                        
+			foreach ($catalogos as $item) {
+				
+				$iditem = $item->id;
+				$tabla = $item->tabla_catalogo;
+				$nivel = $item->grado_segmentacion;
+				$llave = $item->nombre_columna_llave;
+				$descripcion = $item->nombre_columna_descripcion;
+				
+				if ($nivel > 1)
+				{
+					$consulta = "select ".$tabla.".".$llave." as llave, ";
+					$consulta .= $tabla.".".$descripcion." as descripcion, ";
+					$consulta .= "asu_arbol_segmentacion.id as padre ";
+					$consulta .= " from ".$tabla;
+				
+					$padre = $this->Catalogo_x_raiz_model->getByNivel($nivel-1);
+					$relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
+					
+					$consulta .= " join ".$padre->nombre." on 1=1";
+					foreach ($relaciones as $relacion)
+					{
+						$consulta .= " and ".$tabla.".".$relacion->columna_hijo." = ".$padre->nombre.".".$relacion->columna_padre;
+					}
+					$consulta .= " join asu_arbol_segmentacion on grado_segmentacion=".($nivel-1);
+					$consulta .= " and asu_arbol_segmentacion.id_raiz=".$id;
+					$consulta .= " and asu_arbol_segmentacion.id_tabla_original=".$padre->nombre.".".$padre->llave;
+					
+					$filas = $this->db->query($consulta);
+					$datosdump = array();
+					foreach ($filas->result() as $value) {
+					
+                                            //echo 'select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = '.$value->llave;
+                                            if ($this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave.'"')->num_rows()==0 ||
+                                                    $this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave . '" and (id_padre <> '.$value->padre.' or descripcion <> "'.$value->descripcion.'" )')->num_rows()>0)
+						array_push($datosdump, array(
+						'grado_segmentacion' => $nivel,
+						'id_raiz'=> $id,
+						'id_padre' => $value->padre,
+						'id_tabla_original' => $value->llave,
+						'orden' => '0',
+						'visible' => 'true',
+						'descripcion' => $value->descripcion
+						));
+					}
+                                    if (count($datosdump)>0)
+                                    if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
+                                    {
+                                        echo 'false';
+                                    }
+				}
+				else 
+				{
+					$consulta = "select ".$llave." as llave, ";
+					$consulta .= $descripcion." as descripcion ";
+					$consulta .= " from ".$tabla;
+					
+					$filas = $this->db->query($consulta);
+					$datosdump = array();
+					foreach ($filas->result() as $key => $value) {
+					
+                                           // echo 'select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = '.$value->llave;
+                                           // echo 'select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = '.$value->llave . ' and (id_padre <> 0 or descripcion <> '.$value->descripcion.' )';
+                                            if ($this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave.'"')->num_rows()==0 ||
+                                                    $this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave . '" and (id_padre <> 0 or descripcion <> "'.$value->descripcion.'" )')->num_rows()>0)
+						array_push($datosdump, array(
+						'grado_segmentacion' => $nivel,
+						'id_raiz'=> $id,
+						'id_padre' => '0',
+						'id_tabla_original' => $value->llave,
+						'orden' => '0',
+						'visible' => 'true',
+						'descripcion' => $value->descripcion
+						));
+					}
+                                        if (count($datosdump)>0)
+                                        if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
+					{
+					echo 'false';
+					}
+				}
+				echo "true";
+			}
+			
+		}
+		catch(Exception $e)
+		{
+			echo Errorlog_model::save($e->getMessage(), __METHOD__);
+		}
+            }
+            else
+            {
+                echo "Acceso denegado";
+            }
+	}
+        
         
         /**
          * Accion para regresar la descripción e informacion adicional de un arreglo 
@@ -424,7 +548,7 @@ class Raiz extends CI_Controller {
 //                    $omitidos = array(null);
 //                    $seleccionados = array(775,776);
                     if ($idarbol && $nivel && $omitidos && $seleccionados)
-                        echo $this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos,$seleccionados);
+                        echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos,$seleccionados));
                     else
                         echo "Parámetros incorrectos";
 		}
