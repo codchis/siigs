@@ -193,6 +193,36 @@ class ArbolSegmentacion_model extends CI_Model {
                 }
         }
         
+        public function getCluesFromId($id)
+        {
+             $datos = $this->db->query("select * from asu_arbol_segmentacion where id=".$id);
+            
+            if (!$datos)
+            {
+                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion por ID";
+                throw new Exception(__CLASS__);
+            }
+            else
+            {
+                $nivelmaximo = $this->db->query("select max(grado_segmentacion) as maximo from asu_arbol_segmentacion where id_raiz=".$datos->result()[0]->id_raiz);
+                $nivel = $datos->result()[0]->grado_segmentacion;
+                $nivelmaximo = $nivelmaximo->result()[0]->maximo;
+                $omitidos = array();
+                for($i = $nivel+1 ; $i < $nivelmaximo ; $i ++)
+                    array_push ($omitidos, $i);
+                return $this->getChildrenFromId($id , $omitidos);
+            }
+        }
+        
+        /**
+         * Accion para devolver los hijos de un elemento en el ASU a partir de su ID
+         * @param int $id
+         * @param Array int $omitidos
+         * @return Object
+         * @throws Exception
+         */
+        
         public function getChildrenFromId($id , $omitidos = array())
         {
             $datos = $this->db->query("select * from asu_arbol_segmentacion where id=".$id);
@@ -213,12 +243,19 @@ class ArbolSegmentacion_model extends CI_Model {
                 foreach ($arregloparcial as $arreglo)
                 {
                     if ($arreglo["key"] == $id)
-                      //  array_push ($resultado, $arreglo);
                         return $arreglo;
                 }
-                //return $resultado;
             }
         }
+        
+        /**
+         * Accion para devolver el esquema completo del ASU a partir de un nivel especificado, niveles omitidos y elementos preseleccionados
+         * @param Int $idarbol
+         * @param Int $nivel
+         * @param Array int $omitidos
+         * @param Array int $seleccionados
+         * @return Object
+         */
                
         public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array())
         {
