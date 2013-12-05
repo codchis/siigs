@@ -57,7 +57,7 @@
                     <td>'.htmlentities($fila->tipo_censo).'</td>
                     <td><a href="/'.DIR_TES.'/Tree/tree/TES/Unidad Médica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/'.
                         urlencode(json_encode(array(null))).'/'.urlencode(json_encode(array(($fila->id_asu_um==0 ? null : $fila->id_asu_um)))).'" '.
-                        'class="agregarUM" data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'">'.
+                        'class="agregarUM" data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'">'.
                         ($fila->id_asu_um==0 ? 'No asignado' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
                     <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'">'.($fila->usuarios_asignados==0 ? 'No asignados' : 'Ver').'</a></td>
                     <td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>
@@ -94,6 +94,8 @@
 </form>
 
 <script type="text/javascript">
+actionSetUM = '<?php echo site_url().DIR_TES.'/tableta/setUM/'; ?>';
+
 $(function() {
     DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
     var tipo_censo = $("#id_tipo_censo"),
@@ -123,7 +125,7 @@ $(function() {
     $("#dialog-form").dialog({
         autoOpen: false,
         height: 350,
-        width: 500,
+        width: 600,
         modal: true,
         buttons: {
             "OK": function() {
@@ -178,19 +180,25 @@ $(function() {
         $("#id_unidad_medica").val($(this).data('um'));
         $("#show_um").attr('href', $(this).attr('href'));
         
-        $.ajax({
-            type: "POST",
-            url: '/'+DIR_SIIGS+'/raiz/getDataTreeFromId',
-            data: {
-                "claves": [$(this).data('um')], 
-                "desglose": 3 
-            },
-            success: function(response) {
-                $("#nombre_unidad_medica").val(response[0].descripcion);
-            },
-            dataType: 'json'
-        });
+        $("#form-addUM").attr('action', actionSetUM+$(this).data('tableta'));
         
+        if($(this).data('um') == '')
+            $("#nombre_unidad_medica").val('');
+        else
+        {
+            $.ajax({
+                type: "POST",
+                url: '/'+DIR_SIIGS+'/raiz/getDataTreeFromId',
+                data: {
+                    "claves": [$(this).data('um')], 
+                    "desglose": 3 
+                },
+                success: function(response) {
+                        $("#nombre_unidad_medica").val(response[0].descripcion);
+                },
+                dataType: 'json'
+            });
+        }
         $("#dialog-form").dialog("open");
     });
     
@@ -215,7 +223,7 @@ $(function() {
   
 <div id="dialog-form" title="Asignar unidad médica a la tableta">
     <p class="validateTips"></p>
-    <form name="form-addUM" id="form-addUM" method="post" action="<?php echo site_url().DIR_TES.'/tableta/add_um/'; ?>">
+    <form name="form-addUM" id="form-addUM" method="post" action="<?php echo site_url().DIR_TES.'/tableta/setUM/'; ?>">
         <fieldset>
             <label for="id_tipo_censo">Tipo Censo</label>
             <select name="id_tipo_censo" id="id_tipo_censo" class="text ui-widget-content ui-corner-all">
@@ -228,7 +236,7 @@ $(function() {
             </select>
             <br />
             <label for="nombre_unidad_medica">Unidad Médica</label>
-            <input type="text" name="nombre_unidad_medica" id="nombre_unidad_medica" size="50" value="" readonly />
+            <input type="text" name="nombre_unidad_medica" id="nombre_unidad_medica" size="60" value="" readonly />
             <a href='/<?php echo DIR_TES?>/Tree/tree/TES/Unidad Medica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/
                 <?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(array(1020)));?>' 
                id="show_um">Seleccionar Unidad Médica</a>
