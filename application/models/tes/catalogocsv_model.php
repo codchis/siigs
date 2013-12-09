@@ -6,7 +6,7 @@
  * @author     Geovanni
  * @created    2013-10-07
  */
-class Catalogo_model extends CI_Model {
+class CatalogoCsv_model extends CI_Model {
 
 	/**
 	 * @access private
@@ -122,7 +122,7 @@ class Catalogo_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$catalogos = $this->db->query('SELECT table_name as nombre FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name LIKE "cat_%"');
+		$catalogos = $this->db->query('SELECT table_name as nombre FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name in ('.CATALOGOSCSV.')');
 		if (!$catalogos)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -192,6 +192,34 @@ class Catalogo_model extends CI_Model {
 
 			return (object)$result;
 	}
+        
+        /**
+         * Accion para activar o desactivar registros de catalogos como el de EDA, IRA y Consultas
+         * @param type $id el id del registro en el catalogo
+         * @param type $catalogo nombre del catalogo donde se realizara la operacion
+         * @param type $valor agregar o eliminar el registro del catalogo
+         * @return boolean como el resultado de la operación
+         * @throws Exception Si ocurre algun error al consultar y modificar la base de datos
+         */
+        
+        public function activaEnCatalogo($id,$catalogo,$valor)
+        {   
+
+            $consulta = "update ".$catalogo." set activo = ".(($valor == true) ? 1 : 0)." where id = '".$id."'";
+            $datos = $this->db->query($consulta);
+
+            if (!$datos)
+            {
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al activar el elemento en el catalogo".$catalogo;
+                    throw new Exception(__CLASS__);
+            }
+            else
+            {
+                $this->db->query("update cns_tabla_catalogo set fecha_actualizacion = NOW() where descripcion='".$catalogo."'");
+                return true;
+            }
+        }
 	
 	/**
 	 *Revisa en la base de datos por registros duplicados en los campos pasados por parametro
@@ -213,73 +241,13 @@ class Catalogo_model extends CI_Model {
 		$consulta = "select ".$querycampos." count(*) from tmp_catalogo group by ".substr($querycampos,0,strlen($querycampos)-2)." having count(*) > 1";
 		$query = $this->db->query($consulta);
 		
-		//var_dump($consulta);
-
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al eliminar el catálogo";
+			$this->msg_error_usr = "Ocurrió un error al revisar la llave primaria de los catalogos";
 			throw new Exception(__CLASS__);
 		}
 		else
 			return $query->result();
-	}
-
-	/**
-	 *Inserta en la base datos el catálogo y obtiene los datos
-	 *de la tabla temporal
-	 *
-	 *@access  public
-	 *@param string $create (la consulta para crear el catalogo)
-	 *@param string $select (la consulta para extraer datos de la tabla tmp_catalogo)
-	 *@return  boolean (si la insercion es correcta)
-	 * @throws Exception En caso de algun error al consultar la base de datos
-	 */
-	public function insert($create,$select)
-	{
-
-		$query = $this->db->query($create);
-
-		if (!$query)
-		{
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al insertar el catalogo";
-			throw new Exception(__CLASS__);
-		}
-		else
-		{
-			$query = $this->db->query($select);
-
-			if (!$query)
-			{
-				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-				$this->msg_error_usr = "Ocurrió un error al insertar el catálogo";
-				throw new Exception(__CLASS__);
-			}
-			else
-				return true;
-		}
-	}
-
-	/**
-	 * Elimina el registro actual de la base de datos
-	 *
-	 * @access public
-	 * @return boolean (Si no hubo errores al eliminar)
-	 * @throws Exception En caso de algun error al consultar la base de datos
-	 */
-	public function delete()
-	{
-
-		$query = $this->db->query('drop table '.$this->nombre);
-
-		if (!$query)
-		{
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al eliminar el catálogo";
-			throw new Exception(__CLASS__);
-		}
-		else
-			return true;
 	}
 }

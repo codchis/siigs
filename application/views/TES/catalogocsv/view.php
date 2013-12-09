@@ -24,6 +24,23 @@ foreach ($campos as $campo)
 	echo '<tr><td>'.$datos[0]. '</td><td>' . $datos[1]. '</td><td>' . $datos[2]. '</td><td>' . $datos[3].'</tr>';
 }
 echo '</table>';
+
+if (!empty($datos_cat))
+{
+    if (count($datos_cat)>0)
+    {
+        echo "<table><thead><tr><th colspan = ".count($datos[0]).">Datos del catalogo</td></tr></thead>";
+        foreach ($datos_cat as $dato)
+        {
+            echo "<tr>";
+            foreach($dato as $col)
+                echo "<td>".$col."</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+    }
+}
+
 }
 else
 {

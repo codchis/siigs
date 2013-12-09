@@ -387,7 +387,7 @@ class Catalogo extends CI_Controller {
 			 else 
 			 {
 				 array_push($resultado,array('Numero de registros anteriores',count($rowscat)));
-				 array_push($resultado,array('Numero de registros actuales',$cont-2));
+				 array_push($resultado,array('Numero de registros actuales',$cont-1));
 				 array_push($resultado,array('Numero de registros a insertar',$nuevos));
 				 array_push($resultado,array('Numero de registros a modificar',$modificados));
 				 array_push($resultado,array('Numero de registros sin cambios',$iguales));
@@ -411,14 +411,15 @@ class Catalogo extends CI_Controller {
 				{
 				    $this->db->trans_commit();
 				    echo json_encode(array("Ok","Los datos del catalogo se han modificado correctamente"));
+                                    
 				}
 			 }
 			}
 		}
 		else
 		{
-			 	echo json_encode(array("Error","El archivo no ha sido cargado correctamente."));
-			 	die();
+        	 	echo json_encode(array("Error","El archivo no ha sido cargado correctamente."));
+		 	die();
 		}
 	}
 	
@@ -563,28 +564,6 @@ class Catalogo extends CI_Controller {
 			}
 		}
 	}
-
-//	/**
-//	 *Rellena con ceros a la izquierda el numero entero dado para convertirlo
-//	 *en cadena de un tamaño fijo
-//	 *
-//	 * @param  int $entero el numero a rellenar con ceros a la izquierda     
-//	 *@param   int $largo  numero optimo de caracteres a rellenar
-//	 * @return void
-//	 */
-//
-//	function _rellenar($entero, $largo)
-//	{
-//		// Limpiamos por si se encontraran errores de tipo en las variables
-//		$entero = (int)$entero;
-//		$largo = (int)$largo;
-//		$relleno = '';
-//		if (strlen($entero) < $largo) {
-//
-//			$relleno = str_repeat('0', $largo - strlen($entero));
-//		}
-//		return $relleno . $entero;
-//	}
 
 	/**
 	 *Acción para preparar la actualizacion de un catálogo ya existente,

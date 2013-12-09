@@ -119,9 +119,9 @@ class Cie10 extends CI_Controller {
                     $id = $this->input->post('id');
                     $catalogo = $this->input->post('catalogo');
                     $activo = $this->input->post('activo');
-                   // $id = 1;
-                   // $catalogo = "eda";
-                   // $activo = false;
+                    //$id = 6110;
+                    //$catalogo = "eda";
+                    //$activo = true;
                     if ($id && $catalogo)
                     {
                         $resultado = $this->Cie10_model->agregaEnCatalogo($id,"cns_".$catalogo,$activo);
@@ -141,7 +141,46 @@ class Cie10 extends CI_Controller {
             }
         }
         
-	/**
+         /***
+         * Accion para activar o desactivar elementos en los catalogos IRA EDA Consultas
+         * parametros pasados
+         * @param Int $id Es el id del registro en el catalogo
+         * @param String $catalogo para determinar a que catalogo se va a agregar o quitar el registro
+         * @param Boolean $activo False para quitar del catalogo, true para agregarlo
+         * @return Boolean En caso de error, o errores de referencia, etc.
+         */
+        
+        public function ActivaEnCatalogo(){
+             try 
+            {
+		if ($this->input->is_ajax_request())
+		{
+                    $id = $this->input->post('id');
+                    $catalogo = $this->input->post('catalogo');
+                    $activo = $this->input->post('activo');
+                    //$id = 6110;
+                    //$catalogo = "eda";
+                    //$activo = true;
+                    if ($id && $catalogo)
+                    {
+                        $resultado = $this->Cie10_model->activaEnCatalogo($id,"cns_".$catalogo,$activo);
+                        if ($resultado == true)
+                            echo "ok";
+                        else
+                            echo "error";
+                    }
+                    else
+                        echo "Parametros incorrectos";
+		}
+		else echo 'Acceso denegado';
+            }
+            catch(Exception $e)
+            {
+		echo $e->getMessage();
+            }
+        }
+        
+        /**
 	 *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
 	 *Guarda en la tabla tmp_catalogos toda la estructura del CSV e imprime las columnas del
 	 *archivo
