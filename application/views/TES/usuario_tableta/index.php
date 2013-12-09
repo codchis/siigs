@@ -13,6 +13,9 @@
 
 <h2><?=$title;?></h2>
 <?php
+$showInsert = Menubuilder::isGranted(DIR_TES.'::usuario_tableta::insert');
+$showDelete = Menubuilder::isGranted(DIR_TES.'::usuario_tableta::delete');
+    
 if(!empty($msgResult))
     echo '<strong>'.$msgResult.'</strong><br />';
 
@@ -41,25 +44,28 @@ echo 'Datos generales de la tableta:
 <table border="1">
     <thead>
         <tr>
-            <th></th>
+            <?php if($showDelete) echo '<th></th>'; ?>
             <th>Usuario</th>
             <th>Nombre Completo</th>
             <th>Grupo</th>
-            <th></th>
+            <?php if($showDelete) echo '<th></th>'; ?>
         </tr>
     </thead>
     <tbody>
         <?php
         if(!empty($usuarios)) {
             foreach ($usuarios as $fila) {
-                echo '<tr id="'.$fila['id'].'">
-                    <td><input type="checkbox" name="registroEliminar[]" value="'.$fila['id'].'" /></td>
-                    <td>'.$fila['usuario'].'</td>
+                echo '<tr id="'.$fila['id'].'">';
+                
+                if($showDelete) echo '<td><input type="checkbox" name="registroEliminar[]" value="'.$fila['id'].'" /></td>';
+                
+                echo '<td>'.$fila['usuario'].'</td>
                     <td>'.htmlentities(($fila['nombre'])).'</td>
-                    <td>'.htmlentities(($fila['grupo'])).'</td>
-                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/delete/'.$fila['id'].'/'.$tableta->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>
-                </tr>';
+                    <td>'.htmlentities(($fila['grupo'])).'</td>';
+                
+                if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/usuario_tableta/delete/'.$fila['id'].'/'.$tableta->id.'"
+                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
+                '</tr>';
             }
         } else {
             echo '<tr><td colspan="7"><div align="center">No se encontraron registros en la busqueda</div></td></tr>';
@@ -68,7 +74,10 @@ echo 'Datos generales de la tableta:
     </tbody>
 </table>
 
-<input type="submit" value="Eliminar Seleccionados" />
+<?php 
+    if($showDelete)
+        echo '<input type="submit" value="Eliminar Seleccionados" />';
+?>
 
 </form>
 <br />
@@ -172,7 +181,9 @@ $(function() {
     </form>
 </div>
 
-<button id="agregarUsuario">Asignar nuevo usuario a la Tableta</button>
-
+<?php 
+if($showInsert)
+    echo '<button id="agregarUsuario">Asignar nuevo usuario a la Tableta</button>';
+?>
 <br /><br />
 <input type="button" name="registrarTableta" id="registrarTableta" value="Regresar al listado de tabletas" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta'" />
