@@ -140,7 +140,7 @@ class Cie10_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-                $consulta = 'select a.id as id,a.cie10 as cie10,a.descripcion as descripcion,case when ifnull(b.id,"") = "" then false else true end as eda,case when  ifnull(c.id,"") = "" then false else true end as ira,case when  ifnull(d.id,"") = "" then false else true end as consulta from cns_cie10 a left outer join cns_eda b on b.id_cie10 = a.id left outer join cns_ira c on c.id_cie10 = a.id left outer join cns_consulta d on d.id_cie10 = a.id';
+                $consulta = 'select a.id as id,a.cie10 as cie10,a.descripcion as descripcion,case when ifnull(b.id,"") = "" then false else true end as eda,case when  ifnull(c.id,"") = "" then false else true end as ira,case when  ifnull(d.id,"") = "" then false else true end as consulta from cns_cie10 a left outer join cns_eda b on b.id_cie10 = a.id and b.activo = 1 left outer join cns_ira c on c.id_cie10 = a.id and c.activo = 1 left outer join cns_consulta d on d.id_cie10 = a.id and d.activo = 1';
 		if ((!empty($this->offset) || $this->offset == 0) && !empty($this->rows))
 		$consulta .= ' limit '.$this->offset. ','.$this->rows;
                 
@@ -240,27 +240,71 @@ class Cie10_model extends CI_Model {
         
         public function agregaEnCatalogo($id,$catalogo,$valor)
         {   
-            if ($valor == 1)
+            $existe = $this->db->query("select * from ".$catalogo." where id_cie10='".$id."'");
+                
+            if (!$existe)
             {
-                $consulta = "insert into ".$catalogo." (id_cie10,descripcion,activo) values (".$id.",(select descripcion from cns_cie10 where id='".$id."'),true)";
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo cie10";
+                    throw new Exception(__CLASS__);
             }
             else
             {
-                $consulta = "delete from ".$catalogo." where id_cie10=".$id;
-            }
-            
-                $datos = $this->db->query($consulta);
+                $existe = $existe->num_rows();
                 
+                if ($valor == 1)
+                {
+                    if ($existe == 0)
+                        $consulta = "insert into ".$catalogo." (id_cie10,descripcion,activo) values (".$id.",(select descripcion from cns_cie10 where id='".$id."') , 1)";
+                    else
+                        $consulta = "update ".$catalogo." set descripcion= (select descripcion from cns_cie10 where id='".$id."') , activo = 1 where id_cie10 = '".$id."'";
+                }
+                else
+                {
+                           $consulta = "update ".$catalogo." set descripcion= (select descripcion from cns_cie10 where id='".$id."') , activo = 0 where id_cie10 = '".$id."'";
+                }
+                    $datos = $this->db->query($consulta);
+
                 if (!$datos)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo cie10";
+			$this->msg_error_usr = "Ocurrió un error al agregar el elemento en el catalogo ".$catalogo;
 			throw new Exception(__CLASS__);
 		}
 		else
                 {
+                    $this->db->query("update cns_tabla_catalogo set fecha_actualizacion = NOW() where descripcion='".$catalogo."'");
                     return true;
                 }
+            }
+        }
+        
+        /**
+         * Accion para activar o desactivar registros de catalogos como el de EDA, IRA y Consultas
+         * @param type $id el id del registro en el catalogo
+         * @param type $catalogo nombre del catalogo donde se realizara la operacion
+         * @param type $valor agregar o eliminar el registro del catalogo
+         * @return boolean como el resultado de la operación
+         * @throws Exception Si ocurre algun error al consultar y modificar la base de datos
+         */
+        
+        public function activaEnCatalogo($id,$catalogo,$valor)
+        {   
+
+            $consulta = "update ".$catalogo." set activo = ".(($valor == true) ? 1 : 0)." where id = '".$id."'";
+            $datos = $this->db->query($consulta);
+
+            if (!$datos)
+            {
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al activar el elemento en el catalogo".$catalogo;
+                    throw new Exception(__CLASS__);
+            }
+            else
+            {
+                $this->db->query("update cns_tabla_catalogo set fecha_actualizacion = NOW() where descripcion='".$catalogo."'");
+                return true;
+            }
         }
         	
 	/**
@@ -284,45 +328,7 @@ class Cie10_model extends CI_Model {
 		return $catalogos->result();
 	}
 
-	/**
-	 *Devuelve la informacion de un catalogo por su nombre
-	 *
-	 *@access  public
-	 *@return  Object
-	 *@param   string $nombre (Nombre del catalogo)
-	 * @throws Exception En caso de algun error al consultar la base de datos
-	 */
-	public function getByName($nombre)
-	{
-		$result = array(
-			'nombre' => $nombre
-		);
-		$tblcampos = $this->db->query('describe '.$this->db->database.'.'.$nombre);
-		if (!$tblcampos)
-		{
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener los datos de los catálogos";
-			throw new Exception(__CLASS__);
-		}
-		else
-		{
-			$campos = '';
-			$llave = '';
-			foreach ($tblcampos->result() as $campo)
-			{
-				if ($campo->Key == '')
-					$campos .= $campo->Field.'|'.$campo->Type.'|'.$campo->Null.'|NO||';
-				else
-					$llave .= $campo->Field.'|'.$campo->Type.'|'.$campo->Null.'|YES||';
-			}
-			$result['campos'] = substr($campos, 0,count($campos)-3);;
 
-			$result['llave'] = substr($llave, 0,count($llave)-3);
-		}
-
-			return (object)$result;
-	}
-	
 	/**
 	 *Revisa en la base de datos por registros duplicados en los campos pasados por parametro
 	 *
@@ -355,43 +361,7 @@ class Cie10_model extends CI_Model {
 			return $query->result();
 	}
 
-	/**
-	 *Inserta en la base datos el catálogo y obtiene los datos
-	 *de la tabla temporal
-	 *
-	 *@access  public
-	 *@param string $create (la consulta para crear el catalogo)
-	 *@param string $select (la consulta para extraer datos de la tabla tmp_catalogo)
-	 *@return  boolean (si la insercion es correcta)
-	 * @throws Exception En caso de algun error al consultar la base de datos
-	 */
-	public function insert($create,$select)
-	{
-
-		$query = $this->db->query($create);
-
-		if (!$query)
-		{
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al insertar el catalogo";
-			throw new Exception(__CLASS__);
-		}
-		else
-		{
-			$query = $this->db->query($select);
-
-			if (!$query)
-			{
-				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-				$this->msg_error_usr = "Ocurrió un error al insertar el catálogo";
-				throw new Exception(__CLASS__);
-			}
-			else
-				return true;
-		}
-	}
-
-	/**
+        /**
 	 *Actualiza el objeto actual en la base de datos
 	 *
 	 *@access  public
@@ -415,25 +385,4 @@ class Cie10_model extends CI_Model {
 			return true;
 	}
 
-	/**
-	 * Elimina el registro actual de la base de datos
-	 *
-	 * @access public
-	 * @return boolean (Si no hubo errores al eliminar)
-	 * @throws Exception En caso de algun error al consultar la base de datos
-	 */
-	public function delete()
-	{
-
-		$query = $this->db->query('drop table '.$this->nombre);
-
-		if (!$query)
-		{
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al eliminar el catálogo";
-			throw new Exception(__CLASS__);
-		}
-		else
-			return true;
-	}
 }

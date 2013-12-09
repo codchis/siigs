@@ -283,7 +283,7 @@ class Entorno_model extends CI_Model {
 				'descripcion' => $this->descripcion,
 				'ip' => $this->ip,
 				'hostname' => $this->hostname,
-				'directorios' => $this->directorio
+				'directorio' => $this->directorio
 		);
 
 		$this->db->where('id' , $this->getId());
