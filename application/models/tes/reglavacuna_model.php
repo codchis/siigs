@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Modelo Entorno
+ * Modelo ReglaVacuna
  *
  * @author     Geovanni
- * @created    2013-09-26
+ * @created    2013-!2-09
  */
-class Entorno_model extends CI_Model {
+class ReglaVacuna_model extends CI_Model {
 
 	/**
 	 * @access private
@@ -30,19 +30,7 @@ class Entorno_model extends CI_Model {
 	 * @access private
 	 * @var    string
 	 */
-	private $ip;
-
-	/**
-	 * @access private
-	 * @var    string
-	 */
-	private $hostname;
-
-	/**
-	 * @access private
-	 * @var    string
-	 */
-	private $directorio;
+	private $metodo;
 
 	/**
 	 * @access private
@@ -57,11 +45,12 @@ class Entorno_model extends CI_Model {
    	private $msg_error_usr;
 
    	/***************************/
-   	/*Getters and setters block*/
+	/*Getters and setters block*/
    	/***************************/
-	public function getId() {
+   	public function getId() {
 		return $this->id;
 	}
+
 	public function setId($value) {
 		$this->id = $value;
 	}
@@ -76,29 +65,17 @@ class Entorno_model extends CI_Model {
 	public function getDescripcion() {
 		return $this->descripcion;
 	}
+
 	public function setDescripcion($value) {
 		$this->descripcion = $value;
 	}
 
-	public function getIp() {
-		return $this->ip;
-	}
-	public function setIp($value) {
-		$this->ip = $value;
+	public function getMetodo() {
+		return $this->metodo;
 	}
 
-	public function getHostname() {
-		return $this->hostname;
-	}
-	public function setHostname($value) {
-		$this->hostname = $value;
-	}
-
-	public function getDirectorio() {
-		return $this->directorio;
-	}
-	public function setDirectorio($value) {
-		$this->directorio = $value;
+	public function setMetodo($value) {
+		$this->metodo = $value;
 	}
 	/*******************************/
 	/*Getters and setters block END*/
@@ -124,36 +101,21 @@ class Entorno_model extends CI_Model {
 		}
 		else
 		{
-			return null;
+			return false;
 		}
-	}
-
-
-	/**
-	 * Devuelve la información del objeto en forma de string
-	 *
-	 * @access public
-	 * @return string
-	 *
-	 */
-
-	public function getInfo()
-	{
-		$info = '';
-		$info .= (!empty($this->id) ? $this->id : '');
 	}
 
 	public function __construct()
 	{
 		$this->load->database();
-		 if(!$this->db->conn_id)
-		 {
-		 	throw new Exception("No se pudo conectar a la base de datos");
-		 }
+		if(!$this->db->conn_id)
+		{
+			throw new Exception("No se pudo conectar a la base de datos");
+		}
 	}
 
 	/**
-	 *Devuelve todos los registros de la tabla entorno
+	 *Devuelve todos los registros de la tabla acciones
 	 *
 	 *@access  public
 	 *@return  ArrayObject
@@ -161,12 +123,12 @@ class Entorno_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->get('sis_entorno');
+		$query = $this->db->get('sis_accion');
 
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener los datos de entornos";
+			$this->msg_error_usr = "Ocurrió un error al obtener los datos de acciones";
 			throw new Exception(__CLASS__);
 		}
 		else
@@ -174,7 +136,7 @@ class Entorno_model extends CI_Model {
 	}
 
 	/**
-	 *Devuelve la informaci�n de un entorno por su ID
+	 *Devuelve la información de una accion por su ID
 	 *
 	 *@access  public
 	 *@return  Object
@@ -183,12 +145,12 @@ class Entorno_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->get_where('sis_entorno', array('id' => $id));
+		$query = $this->db->get_where('sis_accion', array('id' => $id));
 
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener la información del entorno";
+			$this->msg_error_usr = "Ocurrió un error al obtener la información de la acción";
 			throw new Exception(__CLASS__);
 		}
 		else
@@ -196,52 +158,7 @@ class Entorno_model extends CI_Model {
 	}
 
 	/**
-	 *Devuelve la informaci�n de un entorno por su nombre
-	 *
-	 *@access  public
-	 *@return  Object
-	 *@param   string $nombre
-	 * @throws Exception En caso de algun error al consultar la base de datos
-	 */
-	public function getByName($nombre)
-	{
-		$query = $this->db->get_where('sis_entorno', array('nombre' => $nombre));
-
-		if (!$query)
-		{
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener la información del entorno (nombre)";
-			throw new Exception(__CLASS__);
-		}
-		else
-			return $query->row();
-	}
-        
-        	/**
-	 *Obtiene los permisos asignados al grupo
-	 *
-	 *@access  public
-	 *@return  Object
-	 *@param   string $grupo
-	 * @throws Exception En caso de algun error al consultar la base de datos
-	 */
-	public function getPermissionsByGroup($grupo)
-	{
-		$query = $this->db->query("SELECT CONCAT(e.directorio,'::',c.clase,'::',a.metodo) AS modulo FROM sis_controlador_x_accion ca 
-                                          INNER JOIN sis_permiso p ON ca.id=p.id_controlador_accion INNER JOIN sis_controlador c ON ca.id_controlador=c.id INNER JOIN sis_entorno e ON c.id_entorno=e.id 
-                                          INNER JOIN sis_accion a ON ca.id_accion=a.id WHERE p.id_grupo=".$grupo);
-		if (!$query)
-		{
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener la información de los permisos por grupo (getPermisosByGrupo)";
-			throw new Exception(__CLASS__);
-		}
-		else
-			return $query->result_array();
-	}
-
-	/**
-	 *Inserta en la tabla accion, la informaci�n contenida en el objeto
+	 *Inserta en la tabla accion, la información contenida en el objeto
 	 *
 	 *@access  public
 	 *@return  int (Id de la inserci�n si no hubo errores al actualizar)
@@ -252,17 +169,15 @@ class Entorno_model extends CI_Model {
 		$data = array(
 				'nombre' => $this->nombre,
 				'descripcion' => $this->descripcion,
-				'ip' => $this->ip,
-				'hostname' => $this->hostname,
-				'directorio' => $this->directorio
+				'metodo' => $this->metodo
 		);
 
-		$query = $this->db->insert('sis_entorno', $data);
+		$query = $this->db->insert('sis_accion', $data);
 
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al insertar el entorno";
+			$this->msg_error_usr = "Ocurrió un error al insertar la acción";
 			throw new Exception(__CLASS__);
 		}
 		else
@@ -281,18 +196,16 @@ class Entorno_model extends CI_Model {
 		$data = array(
 				'nombre' => $this->nombre,
 				'descripcion' => $this->descripcion,
-				'ip' => $this->ip,
-				'hostname' => $this->hostname,
-				'directorio' => $this->directorio
+				'metodo' => $this->metodo
 		);
 
 		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('sis_entorno', $data);
+		$query = $this->db->update('sis_accion', $data);
 
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al actualizar los datos del entorno";
+			$this->msg_error_usr = "Ocurrió un error al actualizar los datos de la acción";
 			throw new Exception(__CLASS__);
 		}
 		else
@@ -308,12 +221,13 @@ class Entorno_model extends CI_Model {
 	 */
 	public function delete()
 	{
-		$query = $this->db->delete('sis_entorno', array('id' => $this->getId()));
+
+		$query = $this->db->delete('sis_accion', array('id' => $this->getId()));
 
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al eliminar el entorno";
+			$this->msg_error_usr = "Ocurrió un error al eliminar la acción";
 			throw new Exception(__CLASS__);
 		}
 		else

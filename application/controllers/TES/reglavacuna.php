@@ -14,7 +14,7 @@ class ReglaVacuna extends CI_Controller {
 			try
 		{
                         $this->load->helper('url');
-			$this->load->model(DIR_SIIGS.'/Accion_model');
+			$this->load->model(DIR_TES.'/ReglaVacuna_model');
 		}
 		catch (Exception $e)
 		{
@@ -32,15 +32,15 @@ class ReglaVacuna extends CI_Controller {
 	 */
 	public function index()
 	{
-		if (empty($this->Accion_model))
+		if (empty($this->ReglaVacuna_model))
 			return false;
-                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+                if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
 		try
 		{
 
 			$data['title'] = 'Lista de acciones disponibles';
-			$data['acciones'] = $this->Accion_model->getAll();
+			$data['acciones'] = $this->ReglaVacuna_model->getAll();
 			$data['msgResult'] = $this->session->flashdata('msgResult');
 		}
 		catch (Exception $e)
@@ -48,7 +48,7 @@ class ReglaVacuna extends CI_Controller {
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
-		$this->template->write_view('content',DIR_SIIGS.'/accion/index', $data);
+		$this->template->write_view('content',DIR_TES.'/reglavacuna/index', $data);
 		$this->template->render();
 	}
 
@@ -61,21 +61,21 @@ class ReglaVacuna extends CI_Controller {
 	 */
 	public function view($id)
 	{
-		if (empty($this->Accion_model))
+		if (empty($this->ReglaVacuna_model))
 			return false;
-                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+                if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
 		try
 		{
 			$data['title'] = "Detalles de la acción";
-			$data['accion_item'] = $this->Accion_model->getById($id);
+			$data['accion_item'] = $this->ReglaVacuna_model->getById($id);
 		}
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
-		$this->template->write_view('content',DIR_SIIGS.'/accion/view', $data);
+		$this->template->write_view('content',DIR_TES.'/reglavacuna/view', $data);
 		$this->template->render();
 	}
 
@@ -87,7 +87,7 @@ class ReglaVacuna extends CI_Controller {
 	 */
 	public function insert()
 	{
-                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+                if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
 		$error = false;
 		$this->load->helper('form');
@@ -100,7 +100,7 @@ class ReglaVacuna extends CI_Controller {
 
 		if ($this->form_validation->run() === FALSE)
 		{
-			$this->template->write_view('content',DIR_SIIGS.'/accion/insert',$data);
+			$this->template->write_view('content',DIR_TES.'/reglavacuna/insert',$data);
 			$this->template->render();
 		}
 		else
@@ -109,16 +109,16 @@ class ReglaVacuna extends CI_Controller {
 			{
 				$this->load->helper('url');
 
-				$this->Accion_model->setNombre($this->input->post('nombre'));
-				$this->Accion_model->setDescripcion($this->input->post('descripcion'));
-				$this->Accion_model->setMetodo($this->input->post('metodo'));
+				$this->ReglaVacuna_model->setNombre($this->input->post('nombre'));
+				$this->ReglaVacuna_model->setDescripcion($this->input->post('descripcion'));
+				$this->ReglaVacuna_model->setMetodo($this->input->post('metodo'));
 
-				$this->Accion_model->insert();
+				$this->ReglaVacuna_model->insert();
 			}
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-				$this->template->write_view('content',DIR_SIIGS.'/accion/insert', $data);
+				$this->template->write_view('content',DIR_TES.'/reglavacuna/insert', $data);
 				$this->template->render();
 				$error = true;
 			}
@@ -126,7 +126,7 @@ class ReglaVacuna extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro insertado correctamente');
-				redirect(DIR_SIIGS.'/accion/index','refresh');
+				redirect(DIR_SIIGS.'/reglavacuna/index','refresh');
 			}
 		}
 	}
@@ -142,7 +142,7 @@ class ReglaVacuna extends CI_Controller {
 	 */
 	public function update($id)
 	{
-                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+                if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
 		$this->load->helper('form');
 		$this->load->helper('url');
@@ -159,32 +159,32 @@ class ReglaVacuna extends CI_Controller {
 		{
 			try
 			{
-				$data['accion_item'] = $this->Accion_model->getById($id);
+				$data['accion_item'] = $this->ReglaVacuna_model->getById($id);
 			}
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 			}
 
-			$this->template->write_view('content',DIR_SIIGS.'/accion/update', $data);
+			$this->template->write_view('content',DIR_TES.'/reglavacuna/update', $data);
 			$this->template->render();
 		}
 		else
 		{
 			try
 			{
-				$this->Accion_model->setNombre($this->input->post('nombre'));
-				$this->Accion_model->setDescripcion($this->input->post('descripcion'));
-				$this->Accion_model->setMetodo($this->input->post('metodo'));
-				$this->Accion_model->setId($this->input->post('id'));
+				$this->ReglaVacuna_model->setNombre($this->input->post('nombre'));
+				$this->ReglaVacuna_model->setDescripcion($this->input->post('descripcion'));
+				$this->ReglaVacuna_model->setMetodo($this->input->post('metodo'));
+				$this->ReglaVacuna_model->setId($this->input->post('id'));
 
-				$this->Accion_model->update();
+				$this->ReglaVacuna_model->update();
 			}
 			catch (Exception $e)
 			{
 				try
 				{
-					$data['accion_item'] = $this->Accion_model->getById($id);
+					$data['accion_item'] = $this->ReglaVacuna_model->getById($id);
 				}
 				catch (Exception $e)
 				{
@@ -192,7 +192,7 @@ class ReglaVacuna extends CI_Controller {
 				}
 
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-				$this->template->write_view('content',DIR_SIIGS.'/accion/update', $data);
+				$this->template->write_view('content',DIR_TES.'/reglavacuna/update', $data);
 				$this->template->render();
 
 				$error = true;
@@ -201,7 +201,7 @@ class ReglaVacuna extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
-				redirect(DIR_SIIGS.'/accion','refresh');
+				redirect(DIR_SIIGS.'/reglavacuna','refresh');
 			}
 		}
 	}
@@ -217,20 +217,20 @@ class ReglaVacuna extends CI_Controller {
 	{
 		try
 		{
-			if (empty($this->Accion_model))
+			if (empty($this->ReglaVacuna_model))
                             return false;
-                        if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+                        if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
                         show_error('', 403, 'Acceso denegado');
 
 			$this->load->helper('url');
-			$this->Accion_model->setId($id);
-			$this->Accion_model->delete();
+			$this->ReglaVacuna_model->setId($id);
+			$this->ReglaVacuna_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
 		}
 		catch(Exception $e)
 		{
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
 		}
-		redirect(DIR_SIIGS.'/accion','refresh');
+		redirect(DIR_SIIGS.'/reglavacuna','refresh');
 	}
 }
