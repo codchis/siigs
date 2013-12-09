@@ -87,7 +87,6 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
             <th>Controlador</th>
             <th>Acción</th>
             <?php if($showView) echo '<th>Ver detalles</th>'; ?>
-            <?php if($showDelete) echo '<th>Eliminar</th>'; ?>
         </tr>
     </thead>
     <tbody>
@@ -106,8 +105,6 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
                     <td>'.htmlentities($fila->controlador).'</td>
                     <td>'.htmlentities($fila->accion).'</td>';
                     if($showView) echo '<td><a href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'">Ver</a></td>';
-                    if($showDelete) echo '<td><a href="'.site_url().DIR_SIIGS.'/bitacora/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
                 echo '</tr>';
             }
         } else {
@@ -121,11 +118,5 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
         </td></tr>
     </tfoot>
 </table>
-
-<br />
-<?php 
-    if($showDelete)
-        echo '<input type="submit" value="Eliminar Seleccionados" />';
-?>
 
 </form>

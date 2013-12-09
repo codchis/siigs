@@ -20,7 +20,7 @@ $(document).ready(function(){
 </script>
 <?php 
 $opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::usuario::insert');
-$opcion_index = Menubuilder::isGranted(DIR_SIIGS.'::usuario::view');
+$opcion_view = Menubuilder::isGranted(DIR_SIIGS.'::usuario::view');
 $opcion_update = Menubuilder::isGranted(DIR_SIIGS.'::usuario::update');
 $opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::usuario::delete');
 ?>
@@ -42,7 +42,7 @@ Buscar usuario
 		<th>Nombre</th>
 		<th>Apellido Paterno</th>
 		<th>Apellido Materno</th>
-		<?php if($opcion_index) { ?><td></td> <?php } ?>
+		<?php if($opcion_view) { ?><td></td> <?php } ?>
 		<?php if($opcion_update) { ?><td></td> <?php } ?>
 		<?php if($opcion_delete) { ?><td></td> <?php } ?>
 	</tr>
@@ -52,7 +52,7 @@ Buscar usuario
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
 		<td><?php echo $user_item->apellido_materno ?></td>
-		<?php if($opcion_index) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/view/<?php echo $user_item->id ?>">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/view/<?php echo $user_item->id ?>">Ver detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/update/<?php echo $user_item->id ?>">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/delete/<?php echo $user_item->id ?>" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>

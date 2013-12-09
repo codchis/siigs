@@ -10,6 +10,12 @@ $(document).ready(function(){
     });
 });
 </script>
+<?php 
+$opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::notificacion::insert');
+$opcion_view = Menubuilder::isGranted(DIR_SIIGS.'::notificacion::view');
+$opcion_update = Menubuilder::isGranted(DIR_SIIGS.'::notificacion::update');
+$opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::notificacion::delete');
+?>
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
         echo $msgResult.'<br /><br />'; ?>
@@ -36,14 +42,14 @@ Fecha Inicio:</td><td><input type="date" name="fechaIni" value="<?php echo isset
 <br />
 <table border="1">
 	<tr>
-		<th>Título</th>
+		<th>Tï¿½tulo</th>
 		<th>Contenido</th>
 		<th>Reportar a tabletas</th>
 		<th>Desde</th>
 		<td>Hasta</td>
-		<td></td>
-		<td></td>
-		<td></td>
+		<?php if($opcion_view) { ?><td></td><?php } ?>
+		<?php if($opcion_update) { ?><td></td><?php } ?>
+		<?php if($opcion_delete) { ?><td></td><?php } ?>
 	</tr>
 	<?php if (isset($notifications)) foreach ($notifications as $notification_item): ?>
 	<tr>
@@ -58,9 +64,9 @@ Fecha Inicio:</td><td><input type="date" name="fechaIni" value="<?php echo isset
 		<td><?php $time = strtotime($notification_item->fecha_fin);
 			echo date('d/m/Y', $time);
 			 ?></td>
-		<td><a href="/<?php echo DIR_TES?>/notificacion/view/<?php echo $notification_item->id ?>">Ver detalles</a></td>
-		<td><a href="/<?php echo DIR_TES?>/notificacion/update/<?php echo $notification_item->id ?>">Modificar</a></td>
-		<td><a href="/<?php echo DIR_TES?>/notificacion/delete/<?php echo $notification_item->id ?>" onclick="if (confirm('Realmente desea eliminar esta notificación?')) { return true; } else {return false;}">Eliminar</a></td>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/view/<?php echo $notification_item->id ?>">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/update/<?php echo $notification_item->id ?>">Modificar</a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/delete/<?php echo $notification_item->id ?>" onclick="if (confirm('Realmente desea eliminar esta notificaciï¿½n?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>
 	<?php endforeach ?>
     <tfoot>
@@ -69,4 +75,4 @@ Fecha Inicio:</td><td><input type="date" name="fechaIni" value="<?php echo isset
         </td></tr>
     </tfoot>
 </table>
-<a href="/<?php echo DIR_TES?>/notificacion/insert">Crear nuevo</a>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/notificacion/insert">Crear nuevo</a><?php } ?>
