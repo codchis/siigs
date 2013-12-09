@@ -118,6 +118,6 @@ $(document).ready(function(){
 
 </form>
 <br />
-<?php if($showDelete) { ?>
+<?php if($showInsert) { ?>
     <input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/insert'" />
 <?php } ?>
