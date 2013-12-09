@@ -292,6 +292,11 @@ class Tableta extends CI_Controller {
      */
     public function uploadFile()
 	{
+        if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
+            show_error('', 403, 'Acceso denegado');
+            return false;
+        }
+        
         $config['upload_path']   = 'application/updloads';
 		$config['allowed_types'] = 'csv|txt|xls|xlsx';
 		$config['max_size']      = '5120'; //5MB
@@ -348,10 +353,10 @@ class Tableta extends CI_Controller {
      
     public function setUM($id)
     {
-        /*if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
+        if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
             return false;
-        }*/
+        }
 
         if(!isset($this->Tableta_model))
             return false;

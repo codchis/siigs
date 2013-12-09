@@ -42,6 +42,11 @@ $(document).ready(function(){
 
 <h2><?=$title;?></h2>
 
+<?php 
+$showDelete = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::delete');
+$showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
+?>
+
 <fieldset>
     <legend><strong>Opciones de filtrado</strong></legend>
     <?php echo form_open(site_url().DIR_SIIGS.'/bitacora/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
@@ -73,7 +78,7 @@ $(document).ready(function(){
 <table border="1">
     <thead>
         <tr>
-            <th></th>
+            <?php if($showDelete) echo '<th></th>'; ?>
             <th>Usuario</th>
             <th>Nombre</th>
             <th>Fecha</th>
@@ -81,29 +86,29 @@ $(document).ready(function(){
             <th>Entorno</th>
             <th>Controlador</th>
             <th>Acción</th>
-            <th>Ver detalles</th>
-            <th>Modificar</th>
-            <th>Eliminar</th>
+            <?php if($showView) echo '<th>Ver detalles</th>'; ?>
+            <?php if($showDelete) echo '<th>Eliminar</th>'; ?>
         </tr>
     </thead>
     <tbody>
         <?php
         if(!empty($registros)) {
             foreach ($registros as $fila) {
-                echo '<tr id="'.$fila->id.'">
-                    <td><input type="checkbox" name="registroEliminar[]" value="'.$fila->id.'" /></td>
-                    <td>'.$fila->usuario.'</td>
+                echo '<tr id="'.$fila->id.'">';
+                    
+                    if($showDelete) echo '<td><input type="checkbox" name="registroEliminar[]" value="'.$fila->id.'" /></td>';
+                    
+                    echo '<td>'.$fila->usuario.'</td>
                     <td>'.$fila->nombre.' '.$fila->apellido_paterno.' '.$fila->apellido_materno.'</td>
                     <td>'.htmlentities($fila->fecha_hora).'</td>
                     <td>'.htmlentities($fila->parametros).'</td>
                     <td>'.htmlentities($fila->entorno).'</td>
                     <td>'.htmlentities($fila->controlador).'</td>
-                    <td>'.htmlentities($fila->accion).'</td>
-                    <td><a href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'">Ver</a></td>
-                    <td><a href="'.site_url().DIR_SIIGS.'/bitacora/update/'.$fila->id.'">Modificar</a></td>
-                    <td><a href="'.site_url().DIR_SIIGS.'/bitacora/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>
-                </tr>';
+                    <td>'.htmlentities($fila->accion).'</td>';
+                    if($showView) echo '<td><a href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'">Ver</a></td>';
+                    if($showDelete) echo '<td><a href="'.site_url().DIR_SIIGS.'/bitacora/delete/'.$fila->id.'"
+                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
+                echo '</tr>';
             }
         } else {
             echo '<tr><td colspan="11"><div align="center">No se encontraron registros en la busqueda</div></td></tr>';
@@ -118,9 +123,9 @@ $(document).ready(function(){
 </table>
 
 <br />
-<input type="submit" value="Eliminar Seleccionados" />
+<?php 
+    if($showDelete)
+        echo '<input type="submit" value="Eliminar Seleccionados" />';
+?>
 
 </form>
-<br />
-
-<!--<input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/bitacora/insert'" />-->

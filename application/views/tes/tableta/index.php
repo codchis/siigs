@@ -23,6 +23,11 @@
         echo '<strong>'.$msgResult.'</strong>';
     
     echo validation_errors();
+    
+    $showInsert = Menubuilder::isGranted(DIR_TES.'::tableta::insert');
+    $showUpdate = Menubuilder::isGranted(DIR_TES.'::tableta::update');
+    $showDelete = Menubuilder::isGranted(DIR_TES.'::tableta::delete');
+    $showView   = Menubuilder::isGranted(DIR_TES.'::tableta::view');
 ?>
 <br />
 
@@ -31,7 +36,7 @@
 <table border="1">
     <thead>
         <tr>
-            <th></th>
+            <?php if($showDelete) echo '<th></th>'; ?>
             <th>MAC</th>
             <th>Versi&oacute;n</th>
             <th>Ultima Actualizaci&oacute;n</th>
@@ -39,18 +44,20 @@
             <th>Tipo Censo</th>
             <th>Unidad Médica</th>
             <th>Usuarios</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <?php if($showView) echo '<th>Ver</th>'; ?>
+            <?php if($showUpdate) echo '<th>Modificar</th>'; ?>
+            <?php if($showDelete) echo '<th>Eliminar</th>'; ?>
         </tr>
     </thead>
     <tbody>
         <?php
         if(!empty($registros)) {
             foreach ($registros as $fila) {
-                echo '<tr id="'.$fila->id.'">
-                    <td><input type="checkbox" name="registroEliminar[]" value="'.$fila->id.'" /></td>
-                    <td>'.$fila->mac.'</td>
+                echo '<tr id="'.$fila->id.'">';
+                
+                if($showDelete) echo '<td><input type="checkbox" name="registroEliminar[]" value="'.$fila->id.'" /></td>';
+                
+                echo '<td>'.$fila->mac.'</td>
                     <td>'.$fila->version.'</td>
                     <td>'.htmlentities(formatFecha($fila->ultima_actualizacion)).'</td>
                     <td>'.htmlentities($fila->status).'</td>
@@ -59,12 +66,15 @@
                         urlencode(json_encode(array(null))).'/'.urlencode(json_encode(array(($fila->id_asu_um==0 ? null : $fila->id_asu_um)))).'" '.
                         'class="agregarUM" data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'">'.
                         ($fila->id_asu_um==0 ? 'No asignado' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'">'.($fila->usuarios_asignados==0 ? 'No asignados' : 'Ver').'</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'">Modificar</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>
-                </tr>';
+                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'">'.($fila->usuarios_asignados==0 ? 'No asignados' : 'Ver').'</a></td>';
+                    
+                    if($showView) echo '<td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>';
+                    
+                    if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'">Modificar</a></td>';
+                    
+                    if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
+                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
+                echo '</tr>';
             }
         } else {
             echo '<tr><td colspan="7"><div align="center">No se encontraron registros en la busqueda</div></td></tr>';
@@ -78,20 +88,23 @@
     </tfoot>
 </table>
 
-<input type="submit" value="Eliminar Seleccionados" />
+<?php if($showDelete) echo '<input type="submit" value="Eliminar Seleccionados" />'; ?>
 
 </form>
 <br />
 
-<input type="button" name="registrarTableta" id="registrarTableta" value="Registrar nuevo" />
-
-<br /><br />
-
-<label>Subir un archivo con la lista de direcciones MAC</label>
-<?php echo form_open_multipart(site_url().DIR_TES.'/tableta/uploadFile');?>
-    <input type="file" name="archivo" size="60" />
-    <input type="submit" value="Subir Archivo" />
-</form>
+<?php 
+if($showInsert) {
+    echo '<input type="button" name="registrarTableta" id="registrarTableta" value="Registrar nuevo" /><br /><br />';
+    ?>
+    <label>Subir un archivo con la lista de direcciones MAC</label>
+    <?php echo form_open_multipart(site_url().DIR_TES.'/tableta/uploadFile');?>
+        <input type="file" name="archivo" size="60" />
+        <input type="submit" value="Subir Archivo" />
+    </form>
+    <?php 
+}
+?>
 
 <script type="text/javascript">
 actionSetUM = '<?php echo site_url().DIR_TES.'/tableta/setUM/'; ?>';
