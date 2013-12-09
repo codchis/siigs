@@ -192,6 +192,34 @@ class CatalogoCsv_model extends CI_Model {
 
 			return (object)$result;
 	}
+        
+        /**
+         * Accion para activar o desactivar registros de catalogos como el de EDA, IRA y Consultas
+         * @param type $id el id del registro en el catalogo
+         * @param type $catalogo nombre del catalogo donde se realizara la operacion
+         * @param type $valor agregar o eliminar el registro del catalogo
+         * @return boolean como el resultado de la operación
+         * @throws Exception Si ocurre algun error al consultar y modificar la base de datos
+         */
+        
+        public function activaEnCatalogo($id,$catalogo,$valor)
+        {   
+
+            $consulta = "update ".$catalogo." set activo = ".(($valor == true) ? 1 : 0)." where id = '".$id."'";
+            $datos = $this->db->query($consulta);
+
+            if (!$datos)
+            {
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al activar el elemento en el catalogo".$catalogo;
+                    throw new Exception(__CLASS__);
+            }
+            else
+            {
+                $this->db->query("update cns_tabla_catalogo set fecha_actualizacion = NOW() where descripcion='".$catalogo."'");
+                return true;
+            }
+        }
 	
 	/**
 	 *Revisa en la base de datos por registros duplicados en los campos pasados por parametro

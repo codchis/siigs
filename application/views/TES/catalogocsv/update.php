@@ -1,6 +1,40 @@
 <script type="text/javascript" src="/resources/js/jquery.form.min.js" /></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    
+            $('.check_activar').change(function(){
+           $.ajax({
+               context : this,
+               type: "POST",
+               data: {'id':$(this).attr("id"),'catalogo':$(this).attr("catalogo"),'activo':((this.checked) ? 1 : 0)},
+               url: '/<?php echo DIR_TES.'/catalogocsv/ActivaEnCatalogo';?>'
+           })
+             .done(function(result)
+               {
+	                if (result == 'error')
+	                {
+                            alert("Ocurrió un error al aplicar los cambios al catálogo");
+                            if ($(this).is(':checked'))
+                            {
+                                $(this).removeAttr("checked");
+                            }
+                            else
+	                	$(this).attr("checked",false);
+                        }
+                        else
+                        {
+                            if ($(this).is(':checked'))
+                            {
+                                $("label[for='"+$(this).attr("id")+"']").html("Desactivar");
+                            }
+                            else
+                            {
+	                	$("label[for='"+$(this).attr("id")+"']").html("Activar");
+                            }
+                        }
+	       });
+       });
+    
 	var options = {
 		    target:     '',
 		    dataType : 'json',
@@ -89,6 +123,38 @@ if (!empty($catalogo_item))
 <table id="optcampos">
 </table>
 <?php 
+if (!empty($datos))
+{
+?>
+<table>
+    <thead>
+        <tr>
+        <?php foreach(array_keys((array)$datos[0]) as $claves) {
+            if ($claves != 'activo') {?>
+            <td><?php echo $claves;?></td>
+            <?php } } ?>
+            <td>Activar</td>
+        </tr>
+    </thead>
+    <?php foreach($datos as $dato) { ?>
+    <tr>
+        <?php foreach($dato as $clave => $item) { 
+                if ($clave != 'activo')
+                {
+        ?>
+                    <td><?php echo $item; ?></td>
+           <?php }
+                
+        } ?>
+        <td>
+            <input class="check_activar" type="checkbox" id="<?php echo $dato->id;?>" catalogo="<?php echo $catalogo_item->nombre; ?>" <?php echo ($dato->activo == false) ? "" : "checked" ; ?> >
+            <label for="<?php echo $dato->id;?>"><?php echo ($dato->activo == false) ? "Activar" : "Desactivar" ; ?></label>
+        </td>
+    </tr>
+    <?php } ?>
+</table>
+<?php
+}
 }
 else
 {

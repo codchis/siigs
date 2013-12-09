@@ -72,7 +72,6 @@ class CatalogoCsv extends CI_Controller {
 		{
 			$data['title'] = "Detalles del catálogo";
 			$data['catalogo_item'] = $this->CatalogoCsv_model->getByName($nombre);
-                        $data['datos_cat'] = $this->CatalogoCsv_model->getAllData($nombre);
 		}
 		catch (Exception $e)
 		{
@@ -308,6 +307,44 @@ class CatalogoCsv extends CI_Controller {
 			return array_unique($arr,SORT_REGULAR);
 	}
 	
+         /***
+         * Accion para activar o desactivar elementos en los catalogos IRA EDA Consultas
+         * parametros pasados
+         * @param Int $id Es el id del registro en el catalogo
+         * @param String $catalogo para determinar a que catalogo se va a agregar o quitar el registro
+         * @param Boolean $activo False para quitar del catalogo, true para agregarlo
+         * @return Boolean En caso de error, o errores de referencia, etc.
+         */
+        
+        public function ActivaEnCatalogo(){
+             try 
+            {
+		if ($this->input->is_ajax_request())
+		{
+                    $id = $this->input->post('id');
+                    $catalogo = $this->input->post('catalogo');
+                    $activo = $this->input->post('activo');
+                    //$id = 6110;
+                    //$catalogo = "eda";
+                    //$activo = true;
+                    if ($id && $catalogo)
+                    {
+                        $resultado = $this->CatalogoCsv_model->activaEnCatalogo($id,$catalogo,$activo);
+                        if ($resultado == true)
+                            echo "ok";
+                        else
+                            echo "error";
+                    }
+                    else
+                        echo "Parametros incorrectos";
+		}
+		else echo 'Acceso denegado';
+            }
+            catch(Exception $e)
+            {
+		echo $e->getMessage();
+            }
+        }
 
 	/**
 	 *Acción para preparar la actualizacion de un catálogo ya existente,
@@ -329,6 +366,7 @@ class CatalogoCsv extends CI_Controller {
 		{
 			$data['title'] = "Modificar datos del catálogo";
 			$data['catalogo_item'] = $this->CatalogoCsv_model->getByName($nombre);
+                        $data['datos'] = $this->CatalogoCsv_model->getAllData($nombre);
 		}
 		catch (Exception $e)
 		{
