@@ -58,7 +58,7 @@
                 if($showDelete) echo '<td><input type="checkbox" name="registroEliminar[]" value="'.$fila->id.'" /></td>';
                 
                 echo '<td>'.$fila->mac.'</td>
-                    <td>'.$fila->version.'</td>
+                    <td>'.$fila->id_version.'</td>
                     <td>'.htmlentities(formatFecha($fila->ultima_actualizacion)).'</td>
                     <td>'.htmlentities($fila->status).'</td>
                     <td>'.htmlentities($fila->tipo_censo).'</td>
