@@ -269,8 +269,8 @@ class Controlador extends CI_Controller {
 	 */
 	public function accion($id)
 	{
-                //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-		//show_error('', 403, 'Acceso denegado');
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		show_error('', 403, 'Acceso denegado');
                 
 		$this->load->helper('form');
 		$this->load->library('form_validation');
