@@ -19,10 +19,10 @@ $(document).ready(function(){
 });
 </script>
 <?php 
-$opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::enrolamiento::insert');
-$opcion_view = Menubuilder::isGranted(DIR_SIIGS.'::enrolamiento::view');
-$opcion_update = Menubuilder::isGranted(DIR_SIIGS.'::enrolamiento::update');
-$opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::enrolamiento::delete');
+$opcion_insert = Menubuilder::isGranted(DIR_TES.'::enrolamiento::insert');
+$opcion_view = Menubuilder::isGranted(DIR_TES.'::enrolamiento::view');
+$opcion_update = Menubuilder::isGranted(DIR_TES.'::enrolamiento::update');
+$opcion_delete = Menubuilder::isGranted(DIR_TES.'::enrolamiento::delete');
 ?>
 <h2><?php echo $title ?></h2>
 <?php 
