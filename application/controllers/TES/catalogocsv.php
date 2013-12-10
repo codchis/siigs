@@ -91,8 +91,8 @@ class CatalogoCsv extends CI_Controller {
 	 */
 	public function loadupdate($nombrecat , $update = false)
 	{
-            //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-            //show_error('', 403, 'Acceso denegado');
+		if (!$this->input->is_ajax_request())
+                show_error('', 403, 'Acceso denegado');
             
 		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
 		//if (TRUE)
@@ -317,6 +317,10 @@ class CatalogoCsv extends CI_Controller {
          */
         
         public function ActivaEnCatalogo(){
+            
+            if (!$this->input->is_ajax_request())
+            show_error('', 403, 'Acceso denegado');
+                
              try 
             {
 		if ($this->input->is_ajax_request())

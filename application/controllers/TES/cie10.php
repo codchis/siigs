@@ -112,6 +112,10 @@ class Cie10 extends CI_Controller {
          */
         
         public function AgregaEnCatalogo(){
+            
+		if (!$this->input->is_ajax_request())
+                show_error('', 403, 'Acceso denegado');
+            
              try 
             {
 		if ($this->input->is_ajax_request())
@@ -151,6 +155,10 @@ class Cie10 extends CI_Controller {
          */
         
         public function ActivaEnCatalogo(){
+                        
+            if (!$this->input->is_ajax_request())
+            show_error('', 403, 'Acceso denegado');
+            
              try 
             {
 		if ($this->input->is_ajax_request())
@@ -189,9 +197,10 @@ class Cie10 extends CI_Controller {
 	 */
 	public function load()
 	{
-            //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-            //show_error('', 403, 'Acceso denegado');
             
+            if (!$this->input->is_ajax_request())
+            show_error('', 403, 'Acceso denegado');
+                        
 		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
 		//if (TRUE)
 		{
@@ -516,43 +525,4 @@ class Cie10 extends CI_Controller {
 			return array_unique($arr,SORT_REGULAR);
 	}
 
-	/**
-	 *
-	 *Acci�n para eliminar un catalogo, recibe el nombre del catalogo a eliminar
-	 *
-	 * @param  string $nombre
-	 * @return void
-	 */
-	public function delete($nombre)
-	{
-		try
-		{
-			
-			if (empty($this->Catalogo_model))
-				return false;
-
-                        if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-			show_error('', 403, 'Acceso denegado');
-                        
-			$this->load->helper('url');
-				
-			$existe = $this->db->query('select * from asu_raiz_x_catalogo where tabla_catalogo="'.$nombre.'"');
-			
-			if ($existe->num_rows() > 0)
-			{
-			$this->session->set_flashdata('msgResult', 'No se puede eliminar el catálogo porque forma parte de un Arbol');
-			redirect(DIR_SIIGS.'/catalogo','refresh');
-			die();
-			}
-		
-			$this->Catalogo_model->setNombre($nombre);
-			$this->Catalogo_model->delete();
-			$this->session->set_flashdata('msgResult', 'Catálogo eliminado exitosamente');
-		}
-		catch(Exception $e)
-		{
-			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
-		}
-		redirect(DIR_SIIGS.'/catalogo','refresh');
-	}
 }
