@@ -160,7 +160,7 @@ class Catalogo_x_raiz extends CI_Controller {
 		try
 		{
 			$this->load->helper('form');
-			if (/*$this->input->is_ajax_request()*/true)
+			if ($this->input->is_ajax_request())
 			{
 				$nivel = $this->Catalogo_x_raiz_model->getById($id);
 
