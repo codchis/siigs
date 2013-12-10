@@ -11,10 +11,11 @@ $(document).ready(function(){
 });
 </script>
 <?php 
-$opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::notificacion::insert');
-$opcion_view = Menubuilder::isGranted(DIR_SIIGS.'::notificacion::view');
-$opcion_update = Menubuilder::isGranted(DIR_SIIGS.'::notificacion::update');
-$opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::notificacion::delete');
+$opcion_insert = Menubuilder::isGranted(DIR_TES.'::notificacion::insert');
+$opcion_view = Menubuilder::isGranted(DIR_TES.'::notificacion::view');
+$opcion_update = Menubuilder::isGranted(DIR_TES.'::notificacion::update');
+$opcion_delete = Menubuilder::isGranted(DIR_TES.'::notificacion::delete');
+echo $opcion_insert.'-'.$opcion_view.'-'.$opcion_update.'-'.$opcion_delete;
 ?>
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
