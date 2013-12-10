@@ -66,7 +66,7 @@ class Tableta extends CI_Controller {
             $configPag['last_link']   = '&Uacute;ltimo';
             $configPag['uri_segment'] = 4;
             $configPag['total_rows']  = $this->Tableta_model->getNumRows();
-            $configPag['per_page']    = 5;
+            $configPag['per_page']    = REGISTROS_PAGINADOR;
 
             $this->pagination->initialize($configPag);
 

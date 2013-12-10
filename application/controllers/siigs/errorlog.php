@@ -117,7 +117,7 @@ class Errorlog extends CI_Controller {
             $configPag['last_link']   = '&Uacute;ltimo';
             $configPag['uri_segment'] = 4;
             $configPag['total_rows']  = $this->Errorlog_model->getNumRows();
-            $configPag['per_page']    = 20;
+            $configPag['per_page']    = REGISTROS_PAGINADOR;
 
             $this->pagination->initialize($configPag);
 

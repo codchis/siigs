@@ -38,7 +38,7 @@ class Tree extends CI_Controller
 		$data["nivel"]=$nivel;
 		$data["omitidos"]=json_decode(urldecode($omitidos));
 		
-		$this->load->view(DIR_TES.'/tree/tree.php',$data);
+		$this->load->view(DIR_TES.'/tree/tree',$data);
 	}
 }
 ?>
