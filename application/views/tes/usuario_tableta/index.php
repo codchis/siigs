@@ -33,7 +33,7 @@ echo 'Datos generales de la tableta:
     </tr>
     <tr>
         <td>'.$tableta->mac.'</td>
-        <td>'.$tableta->version.'</td>
+        <td>'.$tableta->id_version.'</td>
         <td>'.formatFecha($tableta->ultima_actualizacion).'</td>
         <td>'.$tableta->status.'</td>
         <td>'.$tableta->tipo_censo.'</td>
