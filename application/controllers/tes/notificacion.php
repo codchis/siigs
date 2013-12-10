@@ -1,6 +1,6 @@
 <?php
 /**
- * Controlador Notificación
+ * Controlador Notificaciï¿½n
  *
  * @author     	Rogelio
  * @created		2013-11-26
@@ -90,10 +90,10 @@ class Notificacion extends CI_Controller {
 	}
 
 	/**
-	 * Visualiza los datos de la notificación recibida
+	 * Visualiza los datos de la notificaciï¿½n recibida
 	 *
 	 * @access		public
-	 * @param		int 		$id 	id de notificación a visualizar
+	 * @param		int 		$id 	id de notificaciï¿½n a visualizar
 	 * @return 		void
 	 */
 	public function view($id)
@@ -103,7 +103,7 @@ class Notificacion extends CI_Controller {
 				return false;
 			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
-			$data['title'] = 'Ver detalles de la notificación';
+			$data['title'] = 'Ver detalles de la notificaciï¿½n';
 			$notification = $this->Notificacion_model->getById($id, true)[0];			
 			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
 			$descripciones = $this->ArbolSegmentacion_model->getDescripcionById(explode(',',$notification->id_arr_asu), 0);
@@ -119,7 +119,7 @@ class Notificacion extends CI_Controller {
 	}
 
 	/**
-	 * 1) Prepara el formulario para la inserciÃ³n de una notificación nueva
+	 * 1) Prepara el formulario para la inserciÃ³n de una notificaciï¿½n nueva
 	 * 2) Realiza las validaciones necesarias sobre cada campo del registro
 	 *
 	 * @access		public
@@ -131,12 +131,12 @@ class Notificacion extends CI_Controller {
 			return false;
 		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 			show_error('', 403, 'Acceso denegado');
-		$data['title'] = 'Crear una nueva notificación';
+		$data['title'] = 'Crear una nueva notificaciï¿½n';
 		$this->load->model(DIR_TES.'/notificacion_model');
 		$this->load->helper('form');
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('titulo', 'Titulo', 'trim|required|max_length[60]');
-		$this->form_validation->set_rules('contenido', 'Contenido', 'trim|required|max_length[300]');
+		$this->form_validation->set_rules('titulo', 'Titulo', 'trim|xss_clean|required|max_length[60]');
+		$this->form_validation->set_rules('contenido', 'Contenido', 'trim|xss_clean|required|max_length[300]');
 		$this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'trim|required');
 		$this->form_validation->set_rules('fecha_fin', 'Fecha Fin', 'trim|required');
 		$this->form_validation->set_rules('id_arr_asu', 'Reportar a tabletas', 'required');
@@ -162,7 +162,7 @@ class Notificacion extends CI_Controller {
 				$this->Notificacion_model->setIdsTabletas($this->input->post('id_arr_asu'));
 				$this->Notificacion_model->insert();
 				$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
-				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificación agregada: '.strtoupper($this->input->post('titulo')));
+				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificaciï¿½n agregada: '.strtoupper($this->input->post('titulo')));
 				redirect(DIR_TES.'/notificacion','refresh');
 			}
 			catch (Exception $e){
@@ -174,11 +174,11 @@ class Notificacion extends CI_Controller {
 	}
 
 	/**
-	 * 1) Prepara el formulario para la modificaciÃ³n de una notificación existente
+	 * 1) Prepara el formulario para la modificaciÃ³n de una notificaciï¿½n existente
 	 * 2) Realiza las validaciones necesarias sobre cada campo del registro
 	 *
 	 * @access		public
-	 * @param		int 		$id 	id de la notificación a modificar
+	 * @param		int 		$id 	id de la notificaciï¿½n a modificar
 	 * @return 		void
 	 */
 	public function update($id)
@@ -187,11 +187,11 @@ class Notificacion extends CI_Controller {
 			return false;
 		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 			show_error('', 403, 'Acceso denegado');
-		$data['title'] = 'Modificar notificación';
+		$data['title'] = 'Modificar notificaciï¿½n';
  		$this->load->helper('form');
  		$this->load->library('form_validation');
-		$this->form_validation->set_rules('titulo', 'Titulo', 'trim|required|max_length[60]');
-		$this->form_validation->set_rules('contenido', 'Contenido', 'trim|required|max_length[300]');
+		$this->form_validation->set_rules('titulo', 'Titulo', 'trim|xss_clean|required|max_length[60]');
+		$this->form_validation->set_rules('contenido', 'Contenido', 'trim|xss_clean|required|max_length[300]');
 		$this->form_validation->set_rules('fecha_inicio', 'Fecha Inicio', 'trim|required');
 		$this->form_validation->set_rules('fecha_fin', 'Fecha Fin', 'trim|required');
 		$this->form_validation->set_rules('id_arr_asu', 'Reportar a tabletas', 'required');
@@ -219,7 +219,7 @@ class Notificacion extends CI_Controller {
 				$this->Notificacion_model->setIdsTabletas($this->input->post('id_arr_asu'));
 				$this->Notificacion_model->update();
 				$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
-				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificación actualizada: '.$id);
+				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificaciï¿½n actualizada: '.$id);
 				redirect(DIR_TES.'/notificacion','refresh');
 			}
 			catch (Exception $e){
@@ -231,10 +231,10 @@ class Notificacion extends CI_Controller {
 	}
 
 	/**
-	 * Solicita la eliminaciÃ³n de la notificación recibida
+	 * Solicita la eliminaciÃ³n de la notificaciï¿½n recibida
 	 *
 	 * @access		public
-	 * @param		int 		$id 	id de notificación a eliminar
+	 * @param		int 		$id 	id de notificaciï¿½n a eliminar
 	 * @return 		void
 	 */
 	public function delete($id)
@@ -247,7 +247,7 @@ class Notificacion extends CI_Controller {
 			$this->Notificacion_model->setId($id);
 			$this->Notificacion_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
-			Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificación eliminada: '.$id);
+			Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificaciï¿½n eliminada: '.$id);
 		}
 		catch (Exception $e){
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
