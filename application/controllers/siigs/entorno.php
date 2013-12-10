@@ -96,7 +96,7 @@ class Entorno extends CI_Controller {
 		$this->load->library('form_validation');
 
 		$data['title'] = 'Crear un nuevo entorno';
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|alpha|max_length[15]|callback__ExistEntorno');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[15]|callback__ExistEntorno');
 		$this->form_validation->set_rules('ip', 'Ip', 'trim|xss_clean|required|min_length[7]|max_length[15]|valid_ip');
 		$this->form_validation->set_rules('descripcion', 'Descripci�n', 'trim|xss_clean|required|max_length[100]');
 		$this->form_validation->set_rules('hostname', 'Hostname', 'trim|xss_clean|required|max_length[100]');
@@ -211,7 +211,7 @@ class Entorno extends CI_Controller {
 		$error = false;
 
 		$data['title'] = 'Modificar entorno';
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|alpha|max_length[15]|callback__ExistEntornoUpdate');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[15]|callback__ExistEntornoUpdate');
 		$this->form_validation->set_rules('ip', 'Ip', 'trim|xss_clean|required|min_length[7]|max_length[15]|valid_ip');
 		$this->form_validation->set_rules('descripcion', 'Descripción', 'trim|xss_clean|required|max_length[100]');
 		$this->form_validation->set_rules('hostname', 'Hostname', 'trim|xss_clean|required|max_length[100]');

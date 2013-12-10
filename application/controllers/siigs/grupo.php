@@ -106,8 +106,8 @@ class Grupo extends CI_Controller {
 		$data['title'] = 'Crear un nuevo grupo';
 		$this->load->helper('form');
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|alpha_numeric|required|callback__ifGroupExists|max_length[20]');
-		$this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|max_length[100]');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|alpha_numeric|required|callback__ifGroupExists|max_length[20]');
+		$this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|xss_clean|max_length[100]');
 		if ($this->form_validation->run() === FALSE)
 		{
 			$this->template->write_view('content',DIR_SIIGS.'/grupo/insert', $data);
@@ -148,7 +148,7 @@ class Grupo extends CI_Controller {
 		$data['title'] = 'Modificar grupo';
  		$this->load->helper('form');
  		$this->load->library('form_validation');
-		$this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|max_length[100]');
+		$this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|xss_clean|max_length[100]');
 		$data['group_item'] = $this->Grupo_model->getById($id);
 		if ($this->form_validation->run() === FALSE)
 		{
