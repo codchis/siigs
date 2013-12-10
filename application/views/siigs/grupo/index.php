@@ -21,7 +21,7 @@ $(document).ready(function(){
 <?php 
 $opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::grupo::insert');
 $permiso_index = Menubuilder::isGranted(DIR_SIIGS.'::permiso::index');
-$opcion_index = Menubuilder::isGranted(DIR_SIIGS.'::grupo::view');
+$opcion_view = Menubuilder::isGranted(DIR_SIIGS.'::grupo::view');
 $opcion_update = Menubuilder::isGranted(DIR_SIIGS.'::grupo::update');
 $opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::grupo::delete');
 ?>
@@ -41,7 +41,7 @@ Buscar grupo
 		<?php if($permiso_index) { ?><th>&nbsp;</th><?php } ?>
 		<th>Nombre</th>
 		<th>Descripción</th>
-		<?php if($opcion_index) { ?><th></th> <?php } ?>
+		<?php if($opcion_view) { ?><th></th> <?php } ?>
 		<?php if($opcion_update) { ?><th></th> <?php } ?>
 		<?php if($opcion_delete) { ?><th></th> <?php } ?>
 	<?php if (isset($groups)) foreach ($groups as $group_item): ?>
@@ -49,7 +49,7 @@ Buscar grupo
 		<?php if($permiso_index) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/<?php echo $group_item->id ?>/permiso">Permisos</a></td><?php } ?>
 		<td><?php echo $group_item->nombre ?></td>
 		<td><?php echo $group_item->descripcion ?></td>
-		<?php if($opcion_index) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/view/<?php echo $group_item->id ?>">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/view/<?php echo $group_item->id ?>">Ver detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/update/<?php echo $group_item->id ?>">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/delete/<?php echo $group_item->id ?>" onclick="if (confirm('Realmente desea eliminar este grupo?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 			</tr>

@@ -18,7 +18,12 @@ $(document).ready(function(){
     
 });
 </script>
-
+<?php 
+$opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::enrolamiento::insert');
+$opcion_view = Menubuilder::isGranted(DIR_SIIGS.'::enrolamiento::view');
+$opcion_update = Menubuilder::isGranted(DIR_SIIGS.'::enrolamiento::update');
+$opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::enrolamiento::delete');
+?>
 <h2><?php echo $title ?></h2>
 <?php 
 if(!empty($msgResult))
@@ -39,9 +44,9 @@ Buscar usuario
 		<th>Nombre</th>
 		<th>Ap. Paterno</th>
 		<th>Ap. Materno</th>
-		<td></td>
-		<td></td>
-		<td></td>
+		<?php if($opcion_view) { ?><td></td><?php } ?>
+		<?php if($opcion_update) { ?><td></td><?php } ?>
+		<?php if($opcion_delete) { ?><td></td><?php } ?>
 	</tr>
 	<?php if (isset($users)) foreach ($users as $user_item): ?>
 	<tr>
@@ -49,9 +54,9 @@ Buscar usuario
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
 		<td><?php echo $user_item->apellido_materno ?></td>
-		<td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>">Ver detalles</a></td>
-		<td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>">Modificar</a></td>
-		<td><a href="/<?php echo DIR_TES?>/enrolamiento/delete/<?php echo $user_item->id ?>" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar</a></td>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>">Modificar</a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/delete/<?php echo $user_item->id ?>" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>
 	<?php endforeach ?>
     <tfoot>
@@ -60,4 +65,4 @@ Buscar usuario
         </td></tr>
     </tfoot>
 </table>
-<a href="/<?php echo DIR_TES?>/enrolamiento/insert">Crear nuevo</a>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/enrolamiento/insert">Crear nuevo</a><?php } ?>

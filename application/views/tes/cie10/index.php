@@ -6,7 +6,7 @@ $(document).ready(function(){
            $.ajax({
                context : this,
                type: "POST",
-               data: {'id':$(this).attr("id"),'catalogo':$(this).attr("catalogo"),'activo':((this.checked) ? 1 : 0)},
+               data: {'id':$(this).attr("valor"),'catalogo':$(this).attr("catalogo"),'activo':((this.checked) ? 1 : 0)},
                url: '/<?php echo DIR_TES.'/cie10/AgregaEnCatalogo';?>'
            })
              .done(function(result)
@@ -14,7 +14,7 @@ $(document).ready(function(){
 	                if (result == 'error')
 	                {
                             alert("Ocurrió un error al aplicar los cambios al catálogo");
-                            if ($(this).checked == true)
+                            if ($(this).is(':checked'))
                             {
                                 $(this).removeAttr("checked");
                             }
@@ -23,12 +23,14 @@ $(document).ready(function(){
                         }
                         else
                         {
-                            if ($(this).checked == true)
+                            if ($(this).is(':checked'))
                             {
-                                $(this).removeAttr("checked");
+                                $("label[for='"+$(this).attr("id")+"']").html("Quitar");
                             }
                             else
-	                	$(this).attr("checked",false);
+                            {
+	                	$("label[for='"+$(this).attr("id")+"']").html("Agregar");
+                            }
                         }
 	       });
             });
@@ -124,7 +126,7 @@ echo $msgResult.'<br /><br />';
             </a>
         </th>
         <th>
-            <a href="/<?php echo DIR_TES; ?>/cie10/view/consultas">
+            <a href="/<?php echo DIR_TES; ?>/cie10/view/consulta">
             Consultas
             </a>
         </th>
@@ -136,15 +138,15 @@ echo $msgResult.'<br /><br />';
 		<td><?php echo $item->descripcion ?></td>
                 <td><a href="/<?php echo DIR_TES; ?>/cie10/update/<?php echo $item->id ?>">Modificar</a></td>
                 <td>
-                    <input class="check_catalogo" type="checkbox" id="eda<?php echo $item->id;?>" catalogo="eda" <?php echo ($item->eda == false) ? "" : "checked" ; ?> >
+                    <input class="check_catalogo" type="checkbox" id="eda<?php echo $item->id;?>" valor="<?php echo $item->id;?>" catalogo="eda" <?php echo ($item->eda == false) ? "" : "checked" ; ?> >
                     <label for="eda<?php echo $item->id;?>"><?php echo ($item->eda == false) ? "Agregar" : "Quitar" ; ?></label>
                 </td>
                 <td>
-                    <input class="check_catalogo" type="checkbox" id="<?php echo $item->id;?>" catalogo="ira" <?php echo ($item->ira == false) ? "" : "checked" ; ?> >
+                    <input class="check_catalogo" type="checkbox" id="ira<?php echo $item->id;?>" valor="<?php echo $item->id;?>" catalogo="ira" <?php echo ($item->ira == false) ? "" : "checked" ; ?> >
                     <label for="ira<?php echo $item->id;?>"><?php echo ($item->ira == false) ? "Agregar" : "Quitar" ; ?></label>
                 </td>
                 <td>
-                    <input class="check_catalogo" type="checkbox" id="<?php echo $item->id;?>" catalogo="consulta" <?php echo ($item->consulta == false) ? "" : "checked" ; ?> >
+                    <input class="check_catalogo" type="checkbox" id="consulta<?php echo $item->id;?>" valor="<?php echo $item->id;?>" catalogo="consulta" <?php echo ($item->consulta == false) ? "" : "checked" ; ?> >
                     <label for="consulta<?php echo $item->id;?>"><?php echo ($item->consulta == false) ? "Agregar" : "Quitar" ; ?></label>
                 </td>
 		<!--td><a href="/<?php //echo DIR_TES; ?>/cie10/delete/<?php echo $item->cie10 ?>" onclick="if (confirm('Realmente desea eliminar este registro?')) { return true; } else {return false;}">Eliminar</a></td-->

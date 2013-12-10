@@ -19,6 +19,7 @@ define('DIR_READ_MODE', 0755);
 define('DIR_WRITE_MODE', 0777);
 define('DIR_SIIGS', 'siigs');
 define('DIR_TES', 'tes');
+define('CATALOGOSCSV', '"cns_vacuna","cns_nacionalidad","cns_accion_nutricional","cns_afiliacion","cns_operadora_celular","cns_alergia","cns_tipo_sanguineo"');
 define('USERNAME', 'username');
 define('USER_LOGGED', 'user_id');
 define('GROUP_ID', 'group_id');

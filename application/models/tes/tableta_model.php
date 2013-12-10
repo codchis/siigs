@@ -24,7 +24,7 @@ class Tableta_model extends CI_Model
      * @access varchar(10)
      * @var    int
      */
-    private $version;
+    private $id_version;
 
     /**
      * @access private
@@ -102,8 +102,8 @@ class Tableta_model extends CI_Model
         return $this->mac;
     }
 
-    public function getVersion() {
-        return $this->version;
+    public function getIdVersion() {
+        return $this->id_version;
     }
 
     public function getUltima_actualizacion() {
@@ -135,8 +135,8 @@ class Tableta_model extends CI_Model
         $this->mac = $mac;
     }
 
-    public function setVersion($version) {
-        $this->version = $version;
+    public function setIdVersion($id_version) {
+        $this->id_version = $id_version;
     }
 
     public function setUltima_actualizacion($ultima_actualizacion) {
@@ -232,8 +232,8 @@ class Tableta_model extends CI_Model
         if( !empty($this->id_tes_estado_tableta) )
             $data['id_tes_estado_tableta'] = $this->id_tes_estado_tableta;
         
-        if( !empty($this->version) )
-            $data['version' ] = $this->version;
+        if( !empty($this->id_version) )
+            $data['id_version'] = $this->id_version;
 
         if( !empty($this->ultima_actualizacion) )
             $data['ultima_actualizacion'] = $this->ultima_actualizacion;
@@ -333,7 +333,7 @@ class Tableta_model extends CI_Model
         if(!empty($result)) {
             $this->id = $id;
             $this->mac = $result->mac;
-            $this->version = $result->version;
+            $this->id_version = $result->id_version;
             $this->ultima_actualizacion = $result->ultima_actualizacion;
             $this->usuarios_asignados = $result->usuarios_asignados;
             $this->id_tes_estado_tableta = $result->id_tes_estado_tableta;
@@ -374,7 +374,7 @@ class Tableta_model extends CI_Model
         if(!empty($result)) {
             $this->id = $result->id;
             $this->mac = $result->mac;
-            $this->version = $result->version;
+            $this->id_version = $result->id_version;
             $this->ultima_actualizacion = $result->ultima_actualizacion;
             $this->usuarios_asignados = $result->usuarios_asignados;
             $this->id_tes_estado_tableta = $result->id_tes_estado_tableta;

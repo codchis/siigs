@@ -112,6 +112,10 @@ class Cie10 extends CI_Controller {
          */
         
         public function AgregaEnCatalogo(){
+            
+		if (!$this->input->is_ajax_request())
+                show_error('', 403, 'Acceso denegado');
+            
              try 
             {
 		if ($this->input->is_ajax_request())
@@ -119,9 +123,9 @@ class Cie10 extends CI_Controller {
                     $id = $this->input->post('id');
                     $catalogo = $this->input->post('catalogo');
                     $activo = $this->input->post('activo');
-                   // $id = 1;
-                   // $catalogo = "eda";
-                   // $activo = false;
+                    //$id = 6110;
+                    //$catalogo = "eda";
+                    //$activo = true;
                     if ($id && $catalogo)
                     {
                         $resultado = $this->Cie10_model->agregaEnCatalogo($id,"cns_".$catalogo,$activo);
@@ -141,7 +145,50 @@ class Cie10 extends CI_Controller {
             }
         }
         
-	/**
+         /***
+         * Accion para activar o desactivar elementos en los catalogos IRA EDA Consultas
+         * parametros pasados
+         * @param Int $id Es el id del registro en el catalogo
+         * @param String $catalogo para determinar a que catalogo se va a agregar o quitar el registro
+         * @param Boolean $activo False para quitar del catalogo, true para agregarlo
+         * @return Boolean En caso de error, o errores de referencia, etc.
+         */
+        
+        public function ActivaEnCatalogo(){
+                        
+            if (!$this->input->is_ajax_request())
+            show_error('', 403, 'Acceso denegado');
+            
+             try 
+            {
+		if ($this->input->is_ajax_request())
+		{
+                    $id = $this->input->post('id');
+                    $catalogo = $this->input->post('catalogo');
+                    $activo = $this->input->post('activo');
+                    //$id = 6110;
+                    //$catalogo = "eda";
+                    //$activo = true;
+                    if ($id && $catalogo)
+                    {
+                        $resultado = $this->Cie10_model->activaEnCatalogo($id,"cns_".$catalogo,$activo);
+                        if ($resultado == true)
+                            echo "ok";
+                        else
+                            echo "error";
+                    }
+                    else
+                        echo "Parametros incorrectos";
+		}
+		else echo 'Acceso denegado';
+            }
+            catch(Exception $e)
+            {
+		echo $e->getMessage();
+            }
+        }
+        
+        /**
 	 *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
 	 *Guarda en la tabla tmp_catalogos toda la estructura del CSV e imprime las columnas del
 	 *archivo
@@ -150,9 +197,10 @@ class Cie10 extends CI_Controller {
 	 */
 	public function load()
 	{
-            //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-            //show_error('', 403, 'Acceso denegado');
             
+            if (!$this->input->is_ajax_request())
+            show_error('', 403, 'Acceso denegado');
+                        
 		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
 		//if (TRUE)
 		{
@@ -477,43 +525,4 @@ class Cie10 extends CI_Controller {
 			return array_unique($arr,SORT_REGULAR);
 	}
 
-	/**
-	 *
-	 *Acci�n para eliminar un catalogo, recibe el nombre del catalogo a eliminar
-	 *
-	 * @param  string $nombre
-	 * @return void
-	 */
-	public function delete($nombre)
-	{
-		try
-		{
-			
-			if (empty($this->Catalogo_model))
-				return false;
-
-                        if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-			show_error('', 403, 'Acceso denegado');
-                        
-			$this->load->helper('url');
-				
-			$existe = $this->db->query('select * from asu_raiz_x_catalogo where tabla_catalogo="'.$nombre.'"');
-			
-			if ($existe->num_rows() > 0)
-			{
-			$this->session->set_flashdata('msgResult', 'No se puede eliminar el catálogo porque forma parte de un Arbol');
-			redirect(DIR_SIIGS.'/catalogo','refresh');
-			die();
-			}
-		
-			$this->Catalogo_model->setNombre($nombre);
-			$this->Catalogo_model->delete();
-			$this->session->set_flashdata('msgResult', 'Catálogo eliminado exitosamente');
-		}
-		catch(Exception $e)
-		{
-			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
-		}
-		redirect(DIR_SIIGS.'/catalogo','refresh');
-	}
 }

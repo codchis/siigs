@@ -1,3 +1,10 @@
+<?php 
+$opcion_accion = Menubuilder::isGranted(DIR_SIIGS.'::controlador::accion');
+$opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::controlador::insert');
+$opcion_view = Menubuilder::isGranted(DIR_SIIGS.'::controlador::view');
+$opcion_update = Menubuilder::isGranted(DIR_SIIGS.'::controlador::update');
+$opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::controlador::delete');
+?>
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
@@ -36,10 +43,10 @@ echo $msgResult.'<br /><br />';
 	<th>Nombre</th>
 	<th>Descripci&oacute;n</th>
 	<th>Clase</th>
-	<th>Detalles</th>
-	<th>Acciones</th>
-	<th>Modificar</th>
-	<th>Eliminar</th>
+	<?php if($opcion_view) { ?><th>Detalles</th><?php } ?>
+	<?php if($opcion_accion) { ?><th>Acciones</th><?php } ?>
+	<?php if($opcion_update) { ?><th>Modificar</th><?php } ?>
+	<?php if($opcion_delete) { ?><th>Eliminar</th><?php } ?>
 	</tr>
 </thead>
 <?php foreach ($controladores as $controlador_item): ?>
@@ -48,10 +55,10 @@ echo $msgResult.'<br /><br />';
 		<td><?php echo $controlador_item->nombre ?></td>
 		<td><?php echo $controlador_item->descripcion ?></td>
 		<td><?php echo $controlador_item->clase ?></td>
-		<td><a href="/<?php echo DIR_SIIGS; ?>/controlador/view/<?php echo $controlador_item->id ?>">Ver detalles</a></td>
-		<td><a href="/<?php echo DIR_SIIGS; ?>/controlador/accion/<?php echo $controlador_item->id ?>">Ver acciones</a></td>
-		<td><a href="/<?php echo DIR_SIIGS; ?>/controlador/update/<?php echo $controlador_item->id ?>">Modificar</a></td>
-		<td><a href="/<?php echo DIR_SIIGS; ?>/controlador/delete/<?php echo $controlador_item->id ?>" onclick="if (confirm('Realmente desea eliminar este controlador?')) { return true; } else {return false;}">Eliminar</a></td>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/view/<?php echo $controlador_item->id ?>">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_accion) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/accion/<?php echo $controlador_item->id ?>">Ver acciones</a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/update/<?php echo $controlador_item->id ?>">Modificar</a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/delete/<?php echo $controlador_item->id ?>" onclick="if (confirm('Realmente desea eliminar este controlador?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 		<td></td>
 	</tr>
 <?php endforeach ?>
@@ -62,7 +69,7 @@ echo $msgResult.'<br /><br />';
 </tfoot>
 <tr>
 	<td colspan=8 >
-	<a href="/<?php echo DIR_SIIGS; ?>/controlador/insert/<?php echo $id_entorno;?>">Crear Nuevo</a>
+	<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS; ?>/controlador/insert/<?php echo $id_entorno;?>">Crear Nuevo</a><?php } ?>
 	</td>
 </tr>
 </table>
@@ -75,7 +82,7 @@ echo $msgResult.'<br /><br />';
 </thead>
 <tr>
 	<td >
-	<a href="/<?php echo DIR_SIIGS; ?>/controlador/insert/<?php echo $id_entorno;?>">Crear Nuevo</a>
+	<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS; ?>/controlador/insert/<?php echo $id_entorno;?>">Crear Nuevo</a><?php } ?>
 	</td>
 </tr>
 </table>

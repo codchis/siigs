@@ -157,10 +157,13 @@ class Catalogo_x_raiz extends CI_Controller {
 
 	public function check($id)
 	{
+		if (!$this->input->is_ajax_request())
+                show_error('', 403, 'Acceso denegado');
+                
 		try
 		{
 			$this->load->helper('form');
-			if (/*$this->input->is_ajax_request()*/true)
+			if ($this->input->is_ajax_request())
 			{
 				$nivel = $this->Catalogo_x_raiz_model->getById($id);
 

@@ -23,6 +23,11 @@
         echo '<strong>'.$msgResult.'</strong>';
     
     echo validation_errors();
+    
+    $showInsert = Menubuilder::isGranted(DIR_TES.'::tableta::insert');
+    $showUpdate = Menubuilder::isGranted(DIR_TES.'::tableta::update');
+    $showDelete = Menubuilder::isGranted(DIR_TES.'::tableta::delete');
+    $showView   = Menubuilder::isGranted(DIR_TES.'::tableta::view');
 ?>
 <br />
 
@@ -31,7 +36,7 @@
 <table border="1">
     <thead>
         <tr>
-            <th></th>
+            <?php if($showDelete) echo '<th></th>'; ?>
             <th>MAC</th>
             <th>Versi&oacute;n</th>
             <th>Ultima Actualizaci&oacute;n</th>
@@ -39,32 +44,37 @@
             <th>Tipo Censo</th>
             <th>Unidad Médica</th>
             <th>Usuarios</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <?php if($showView) echo '<th>Ver</th>'; ?>
+            <?php if($showUpdate) echo '<th>Modificar</th>'; ?>
+            <?php if($showDelete) echo '<th>Eliminar</th>'; ?>
         </tr>
     </thead>
     <tbody>
         <?php
         if(!empty($registros)) {
             foreach ($registros as $fila) {
-                echo '<tr id="'.$fila->id.'">
-                    <td><input type="checkbox" name="registroEliminar[]" value="'.$fila->id.'" /></td>
-                    <td>'.$fila->mac.'</td>
-                    <td>'.$fila->version.'</td>
+                echo '<tr id="'.$fila->id.'">';
+                
+                if($showDelete) echo '<td><input type="checkbox" name="registroEliminar[]" value="'.$fila->id.'" /></td>';
+                
+                echo '<td>'.$fila->mac.'</td>
+                    <td>'.$fila->id_version.'</td>
                     <td>'.htmlentities(formatFecha($fila->ultima_actualizacion)).'</td>
                     <td>'.htmlentities($fila->status).'</td>
                     <td>'.htmlentities($fila->tipo_censo).'</td>
                     <td><a href="/'.DIR_TES.'/Tree/tree/TES/Unidad Médica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/'.
                         urlencode(json_encode(array(null))).'/'.urlencode(json_encode(array(($fila->id_asu_um==0 ? null : $fila->id_asu_um)))).'" '.
-                        'class="agregarUM" data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'">'.
+                        'class="agregarUM" data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'">'.
                         ($fila->id_asu_um==0 ? 'No asignado' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'">'.($fila->usuarios_asignados==0 ? 'No asignados' : 'Ver').'</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'">Modificar</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>
-                </tr>';
+                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'">'.($fila->usuarios_asignados==0 ? 'No asignados' : 'Ver').'</a></td>';
+                    
+                    if($showView) echo '<td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>';
+                    
+                    if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'">Modificar</a></td>';
+                    
+                    if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
+                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
+                echo '</tr>';
             }
         } else {
             echo '<tr><td colspan="7"><div align="center">No se encontraron registros en la busqueda</div></td></tr>';
@@ -78,22 +88,27 @@
     </tfoot>
 </table>
 
-<input type="submit" value="Eliminar Seleccionados" />
+<?php if($showDelete) echo '<input type="submit" value="Eliminar Seleccionados" />'; ?>
 
 </form>
 <br />
 
-<input type="button" name="registrarTableta" id="registrarTableta" value="Registrar nuevo" />
-
-<br /><br />
-
-<label>Subir un archivo con la lista de direcciones MAC</label>
-<?php echo form_open_multipart(site_url().DIR_TES.'/tableta/uploadFile');?>
-    <input type="file" name="archivo" size="60" />
-    <input type="submit" value="Subir Archivo" />
-</form>
+<?php 
+if($showInsert) {
+    echo '<input type="button" name="registrarTableta" id="registrarTableta" value="Registrar nuevo" /><br /><br />';
+    ?>
+    <label>Subir un archivo con la lista de direcciones MAC</label>
+    <?php echo form_open_multipart(site_url().DIR_TES.'/tableta/uploadFile');?>
+        <input type="file" name="archivo" size="60" />
+        <input type="submit" value="Subir Archivo" />
+    </form>
+    <?php 
+}
+?>
 
 <script type="text/javascript">
+actionSetUM = '<?php echo site_url().DIR_TES.'/tableta/setUM/'; ?>';
+
 $(function() {
     DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
     var tipo_censo = $("#id_tipo_censo"),
@@ -123,7 +138,7 @@ $(function() {
     $("#dialog-form").dialog({
         autoOpen: false,
         height: 350,
-        width: 500,
+        width: 600,
         modal: true,
         buttons: {
             "OK": function() {
@@ -178,19 +193,25 @@ $(function() {
         $("#id_unidad_medica").val($(this).data('um'));
         $("#show_um").attr('href', $(this).attr('href'));
         
-        $.ajax({
-            type: "POST",
-            url: '/'+DIR_SIIGS+'/raiz/getDataTreeFromId',
-            data: {
-                "claves": [$(this).data('um')], 
-                "desglose": 3 
-            },
-            success: function(response) {
-                $("#nombre_unidad_medica").val(response[0].descripcion);
-            },
-            dataType: 'json'
-        });
+        $("#form-addUM").attr('action', actionSetUM+$(this).data('tableta'));
         
+        if($(this).data('um') == '')
+            $("#nombre_unidad_medica").val('');
+        else
+        {
+            $.ajax({
+                type: "POST",
+                url: '/'+DIR_SIIGS+'/raiz/getDataTreeFromId',
+                data: {
+                    "claves": [$(this).data('um')], 
+                    "desglose": 3 
+                },
+                success: function(response) {
+                        $("#nombre_unidad_medica").val(response[0].descripcion);
+                },
+                dataType: 'json'
+            });
+        }
         $("#dialog-form").dialog("open");
     });
     
@@ -215,7 +236,7 @@ $(function() {
   
 <div id="dialog-form" title="Asignar unidad médica a la tableta">
     <p class="validateTips"></p>
-    <form name="form-addUM" id="form-addUM" method="post" action="<?php echo site_url().DIR_TES.'/tableta/add_um/'; ?>">
+    <form name="form-addUM" id="form-addUM" method="post" action="<?php echo site_url().DIR_TES.'/tableta/setUM/'; ?>">
         <fieldset>
             <label for="id_tipo_censo">Tipo Censo</label>
             <select name="id_tipo_censo" id="id_tipo_censo" class="text ui-widget-content ui-corner-all">
@@ -228,7 +249,7 @@ $(function() {
             </select>
             <br />
             <label for="nombre_unidad_medica">Unidad Médica</label>
-            <input type="text" name="nombre_unidad_medica" id="nombre_unidad_medica" size="50" value="" readonly />
+            <input type="text" name="nombre_unidad_medica" id="nombre_unidad_medica" size="60" value="" readonly />
             <a href='/<?php echo DIR_TES?>/Tree/tree/TES/Unidad Medica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/
                 <?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(array(1020)));?>' 
                id="show_um">Seleccionar Unidad Médica</a>

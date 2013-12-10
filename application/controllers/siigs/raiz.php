@@ -278,8 +278,6 @@ class Raiz extends CI_Controller {
 	 */
 	public function createasu($id)
 	{
-            //if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-	    //	show_error('', 403, 'Acceso denegado');
             if ($this->input->is_ajax_request())
             {
 		try

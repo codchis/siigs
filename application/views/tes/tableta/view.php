@@ -6,7 +6,7 @@ if(!empty($msgResult)) {
     
     echo '<table border="1">
         <tr><td><strong>MAC</strong></td><td>'.$registro->mac.'</td></tr>
-        <tr><td><strong>Versi&oacute;n</strong></td><td>'.$registro->version.'</td></tr>
+        <tr><td><strong>Versi&oacute;n</strong></td><td>'.$registro->id_version.'</td></tr>
         <tr><td><strong>Ultima Actualizaci&oacute;n</strong></td><td>'.formatFecha($registro->ultima_actualizacion).'</td></tr>
         <tr><td><strong>Estado Tableta</strong></td><td>'.$registro->status.'</td></tr>
         <tr><td><strong>Tipo de censo</strong></td><td>'.$registro->tipo_censo.'</td></tr>
