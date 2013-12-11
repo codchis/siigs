@@ -28,7 +28,7 @@ class Raiz extends CI_Controller {
 	}
         
         public function prueba(){
-            echo $this->ArbolSegmentacion_model->getChildrenFromLevel(1,1,array());
+            echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel(1,1,array()));
             //echo json_encode($this->ArbolSegmentacion_model->getCluesFromId(781));
         }
 //       
@@ -315,6 +315,7 @@ class Raiz extends CI_Controller {
 					$consulta .= " and asu_arbol_segmentacion.id_tabla_original=".$padre->nombre.".".$padre->llave;
 					
 					$filas = $this->db->query($consulta);
+                                                                                
 					$datosdump = array();
 					foreach ($filas->result() as $value) {
 						
@@ -328,7 +329,8 @@ class Raiz extends CI_Controller {
 						'descripcion' => $value->descripcion
 						));
 					}
-				if ($this->db->insert_batch('asu_arbol_segmentacion',$datosdump) != 1)
+                                        if (count($datosdump)>0)
+                                        if ($this->db->insert_batch('asu_arbol_segmentacion',$datosdump) != 1)
 					{
 					echo 'false';
 					}
@@ -352,13 +354,13 @@ class Raiz extends CI_Controller {
 						'descripcion' => $value->descripcion
 						));
 					}
+                                        if (count($datosdump)>0)
 					if ($this->db->insert_batch('asu_arbol_segmentacion',$datosdump) != 1)
 					{
 					echo 'false';
 					}
 				}
 				echo "true";
-				//var_dump($consulta."<br/>");
 			}
 			
 		}

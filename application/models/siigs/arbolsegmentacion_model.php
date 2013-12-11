@@ -179,7 +179,7 @@ class ArbolSegmentacion_model extends CI_Model {
                     $consultavalues = substr($consultavalues, 0, count($consultavalues)-3);
                     $consulta = $consultavalues.$consultafrom. " where tabla1.grado_segmentacion = ".$nivel;
                     $resultado = $this->db->query($consulta);
-                    //var_dump($consulta);
+
                     if (!$resultado)
                     {
                         $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -259,15 +259,34 @@ class ArbolSegmentacion_model extends CI_Model {
                
         public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array())
         {
-            $arbol = $this->getTree($idarbol, $nivel, $omitidos);
-            if (count($arbol) == 0)
+            $fecha_update_asu = $this->db->query("select max(fecha_update) as fecha from asu_arbol_segmentacion where id_raiz=".$idarbol);
+            if (!$fecha_update_asu)
             {
-                return array();
+                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                $this->msg_error_usr = "Ocurrió un error al obtener la ultima actualizacion del asu";
+                throw new Exception(__CLASS__);
             }
-            if ($nivel<=$arbol['niveles'])
+
+            $fecha_update_asu = $fecha_update_asu->result()[0]->fecha;
+            $ruta = 'asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($fecha_update_asu).'.json';
+            
+            if (file_exists($ruta))
             {
-                $resultado = array();
-                $niveltemp = array();
+                $str_datos = file_get_contents($ruta);
+                $datos = json_decode($str_datos,true);
+                return $datos;
+            }
+            else
+            {  
+                $arbol = $this->getTree($idarbol, $nivel, $omitidos);
+                if (count($arbol) == 0)
+                {
+                    return array();
+                }
+                if ($nivel<=$arbol['niveles'])
+                {
+                    $resultado = array();
+                    $niveltemp = array();
 
                     for($i = 1 ; $i<=$arbol['niveles'];$i++)
                     {
@@ -280,10 +299,10 @@ class ArbolSegmentacion_model extends CI_Model {
                                     $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> $fila['descripcion_'.$i]);
                                 else
                                     $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> $fila['descripcion_'.$i] , 'children'=>array());    
-                                
+
                                 if (in_array($fila['id_'.$i],$seleccionados))
                                         $arraytemp["select"] = true;
-                                
+
                                 if (!isset($resultado[$i]))
                                     $resultado[$i] = array();
 
@@ -310,7 +329,21 @@ class ArbolSegmentacion_model extends CI_Model {
                         }
                         $resultado[$i-1] = $arreglopadre;
                     }
+                    
+                    try
+                    {
+                    $fh = fopen($ruta, 'w')
+                    or die("Error al abrir fichero para el asu");
+                    
+                    fwrite($fh, json_encode($resultado[1],JSON_UNESCAPED_UNICODE));
+                    fclose($fh);
+                    }
+                    catch(Exception $e)
+                    {
+                        $this->msg_error_log = "(". __METHOD__.") => " .'ASU'.': '."No se pudo crear el archivo JSON para el asu (".$ruta.") ::".$e->getMessage();        
+                    }
                     return $resultado[1];
+                }
             }
         }
         

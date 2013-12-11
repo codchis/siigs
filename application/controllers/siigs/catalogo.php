@@ -195,7 +195,7 @@ class Catalogo extends CI_Controller {
 		//if (TRUE)
 		{
 			 $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
-		//	 $fp = fopen('catalogos/estados.csv', "r");
+			 //$fp = fopen('catalogos/estados.csv', "r");
 			 $cont = 0;
 			 $columnas = array();
 			 $resultado = array();
@@ -311,8 +311,6 @@ class Catalogo extends CI_Controller {
 			  		}
 			  		if ($errorcols)
 			  		{
-			  			var_dump($campos);
-			  			var_dump($columnas);
 			  			echo json_encode(array("Error","Las columnas del CSV no coinciden con la estructura de la tabla"));
 			  			die();
 			  		}
