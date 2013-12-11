@@ -62,7 +62,7 @@
                     <td>'.htmlentities(formatFecha($fila->ultima_actualizacion)).'</td>
                     <td>'.htmlentities($fila->status).'</td>
                     <td>'.htmlentities($fila->tipo_censo).'</td>
-                    <td><a href="/'.DIR_TES.'/Tree/tree/TES/Unidad Médica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/'.
+                    <td><a href="/'.DIR_TES.'/tree/create/TES/Unidad Médica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/'.
                         urlencode(json_encode(array(null))).'/'.urlencode(json_encode(array(($fila->id_asu_um==0 ? null : $fila->id_asu_um)))).'" '.
                         'class="agregarUM" data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'">'.
                         ($fila->id_asu_um==0 ? 'No asignado' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
@@ -250,7 +250,7 @@ $(function() {
             <br />
             <label for="nombre_unidad_medica">Unidad Médica</label>
             <input type="text" name="nombre_unidad_medica" id="nombre_unidad_medica" size="60" value="" readonly />
-            <a href='/<?php echo DIR_TES?>/Tree/tree/TES/Unidad Medica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/
+            <a href='/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/
                 <?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(array(1020)));?>' 
                id="show_um">Seleccionar Unidad Médica</a>
             <input type="hidden" name="id_unidad_medica" id="id_unidad_medica" />

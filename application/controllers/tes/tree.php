@@ -25,7 +25,7 @@ class Tree extends CI_Controller
 	
 	Trae Estados ->Municipio
 	*/
-	public function tree($title,$titulo,$seleccion,$tipo,$menu,$id,$text,$idarbol=1,$nivel=1,$omitidos=array(NULL),$datos=array(NULL))
+	public function create($title,$titulo,$seleccion,$tipo,$menu,$id,$text,$idarbol=1,$nivel=1,$omitidos=array(NULL),$datos=array(NULL))
 	{
 		$data["title"]=$title;
 		$data["titulo"]=str_replace("%20"," ",$titulo);
@@ -38,7 +38,7 @@ class Tree extends CI_Controller
 		$data["nivel"]=$nivel;
 		$data["omitidos"]=json_decode(urldecode($omitidos));
 		
-		$this->load->view(DIR_TES.'/tree/tree.php',$data);
+		$this->load->view(DIR_TES.'/tree/tree',$data);
 	}
 }
 ?>

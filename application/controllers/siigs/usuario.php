@@ -188,13 +188,13 @@ class Usuario extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('id_grupo', 'Grupo', 'is_natural_no_zero');
 		$this->form_validation->set_message('is_natural_no_zero', 'Debe seleccionar un grupo válido');
-		$this->form_validation->set_rules('nombre_usuario', 'Nombre de Usuario', 'trim|alpha|required|min_length[5]|max_length[15]|callback__ifUserExists');
-		$this->form_validation->set_rules('clave', 'Clave', 'trim|required|min_length[5]|max_length[12]|matches[repiteclave]|md5');
-		$this->form_validation->set_rules('repiteclave', 'Repetir Clave', 'trim|required');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|required|max_length[40]');
-		$this->form_validation->set_rules('apellido_paterno', 'Apellido Paterno', 'trim|required|max_length[25]');
-		$this->form_validation->set_rules('apellido_materno', 'Apellido Materno', 'trim|max_length[25]');
-		$this->form_validation->set_rules('correo', 'Email', 'trim|required|valid_email|max_length[50]');
+		$this->form_validation->set_rules('nombre_usuario', 'Nombre de Usuario', 'trim|xss_clean|required|min_length[5]|max_length[15]|callback__ifUserExists');
+		$this->form_validation->set_rules('clave', 'Clave', 'trim|xss_clean|required|min_length[5]|max_length[12]|matches[repiteclave]|md5');
+		$this->form_validation->set_rules('repiteclave', 'Repetir Clave', 'trim|xss_clean|required');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
+		$this->form_validation->set_rules('apellido_paterno', 'Apellido Paterno', 'trim|xss_clean|required|max_length[25]');
+		$this->form_validation->set_rules('apellido_materno', 'Apellido Materno', 'trim|xss_clean|max_length[25]');
+		$this->form_validation->set_rules('correo', 'Email', 'trim|required|valid_email|xss_clean|max_length[50]');
 		$arrGrupos = $this->grupo_model->getAll();
 		$data['grupos'][0] = '-- Seleccione una opción --';
 		foreach ($arrGrupos as $grupo) 
@@ -251,10 +251,10 @@ class Usuario extends CI_Controller {
  		$this->load->library('form_validation');
  		$this->form_validation->set_rules('id_grupo', 'Grupo', 'is_natural_no_zero');
  		$this->form_validation->set_message('is_natural_no_zero', 'Debe seleccionar un grupo válido');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|required|max_length[40]');
-		$this->form_validation->set_rules('apellido_paterno', 'Apellido Paterno', 'trim|required|max_length[25]');
-		$this->form_validation->set_rules('apellido_materno', 'Apellido Materno', 'trim|max_length[25]');
-		$this->form_validation->set_rules('correo', 'Email', 'trim|required|valid_email|max_length[50]');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
+		$this->form_validation->set_rules('apellido_paterno', 'Apellido Paterno', 'trim|xss_clean|required|max_length[25]');
+		$this->form_validation->set_rules('apellido_materno', 'Apellido Materno', 'trim|xss_clean|max_length[25]');
+		$this->form_validation->set_rules('correo', 'Email', 'trim|xss_clean|required|valid_email|max_length[50]');
 		$arrGrupos = $this->grupo_model->getAll();
 		$data['grupos'][0] = '-- Seleccione una opcion --';
 		foreach ($arrGrupos as $grupo) 

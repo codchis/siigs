@@ -131,7 +131,7 @@
 		<a href="#" id="btnExpandAll" class="add">Expand All </a>
 		<?php } ?>
         <a href="#" onClick="parent.jQuery.fancybox.close();" class="guardar">Ok</a>
-		<h1><?php echo $titulo; ?></h1>
+        <h1><?php echo htmlentities(urldecode($titulo)); ?></h1>
        <div>Seleccionado: <span id="echoSelection">-</span></div>
 	<div id="tree"></div>
 	
