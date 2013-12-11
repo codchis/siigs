@@ -16,21 +16,22 @@ class ReglaVacuna_model extends CI_Model {
 
 	/**
 	 * @access private
-	 * @var    string
+	 * @var    int
 	 */
-	private $nombre;
-
+	private $id_vacuna;
+        
 	/**
 	 * @access private
-	 * @var    string
+	 * @var    int
 	 */
-	private $descripcion;
-
+	private $id_vacuna;
+        
 	/**
 	 * @access private
-	 * @var    string
+	 * @var    int
 	 */
-	private $metodo;
+	private $id_vacuna;
+
 
 	/**
 	 * @access private
@@ -123,12 +124,12 @@ class ReglaVacuna_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->get('sis_accion');
+		$query = $this->db->query("SELECT a.id,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1");
 
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener los datos de acciones";
+			$this->msg_error_usr = "Ocurrió un error al obtener los datos de regla";
 			throw new Exception(__CLASS__);
 		}
 		else
@@ -150,7 +151,7 @@ class ReglaVacuna_model extends CI_Model {
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener la información de la acción";
+			$this->msg_error_usr = "Ocurrió un error al obtener la información de la regla";
 			throw new Exception(__CLASS__);
 		}
 		else
@@ -177,7 +178,7 @@ class ReglaVacuna_model extends CI_Model {
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al insertar la acción";
+			$this->msg_error_usr = "Ocurrió un error al insertar la regla";
 			throw new Exception(__CLASS__);
 		}
 		else
@@ -205,7 +206,7 @@ class ReglaVacuna_model extends CI_Model {
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al actualizar los datos de la acción";
+			$this->msg_error_usr = "Ocurrió un error al actualizar los datos de la regla";
 			throw new Exception(__CLASS__);
 		}
 		else
@@ -227,7 +228,7 @@ class ReglaVacuna_model extends CI_Model {
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al eliminar la acción";
+			$this->msg_error_usr = "Ocurrió un error al eliminar la regla";
 			throw new Exception(__CLASS__);
 		}
 		else

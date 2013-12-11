@@ -201,7 +201,7 @@ class Controlador extends CI_Controller {
 		$error = false;
 
 		$data['title'] = 'Modificar controlador';
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|alpha|max_length[40]');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
 		$this->form_validation->set_rules('descripcion', 'Descripción', 'trim|xss_clean|required|max_length[100]');
 		$this->form_validation->set_rules('clase', 'Clase', 'trim|xss_clean|required|max_length[30]');
 
