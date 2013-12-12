@@ -28,7 +28,7 @@ class Enrolamiento extends CI_Controller
 		try{
 			if (empty($this->Usuario_model))
 				return false;
-			if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
 			$this->load->model(DIR_TES.'/Enrolamiento_model');
 			$data['title'] = 'Lista Enrolados';
@@ -66,7 +66,7 @@ class Enrolamiento extends CI_Controller
 		{
 			if (empty($this->Usuario_model))
 				return false;
-			if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
 			$this->load->model(DIR_TES.'/Enrolamiento_model');
 			$data['title'] = 'Ver Paciente';
@@ -109,7 +109,7 @@ class Enrolamiento extends CI_Controller
 		{
 			if (empty($this->Usuario_model))
 				return false;
-			if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
 			$this->load->model(DIR_TES.'/Enrolamiento_model');
 			$data['id'] = $id;
@@ -305,7 +305,7 @@ class Enrolamiento extends CI_Controller
 			if (empty($this->Enrolamiento_model))
 				return false;
 		
-		if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 			show_error('', 403, 'Acceso denegado');
 			
 			if($this->validarForm())
