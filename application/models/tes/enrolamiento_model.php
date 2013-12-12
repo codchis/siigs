@@ -570,12 +570,35 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->nacionalidad = $value;
 	}
+	// insert cns_control_XXXX json sincrinizacion
+	public function cns_insert($tabla,$array)
+	{
+		$result = $this->db->insert($tabla, $array); $fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a"); fputs($fp, $this->db->last_query()."\r\n"); //echo $this->db->last_query()."; <br>";
+		if (!$result)
+		{
+			$this->msg_error_usr = "Error $tabla.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+		}
+	}
 	
+	// update cns_control_XXXX json sincrinizacion
+	public function cns_update($tabla,$array,$id)
+	{
+		$this->db->where('id' , $id);
+		$result = $this->db->update($tabla, $array); $fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a");fputs($fp, $this->db->last_query()."\r\n"); //echo $this->db->last_query()."; <br>";
+		if (!$result)
+		{
+			$this->msg_error_usr = "Error $tabla.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+		}
+	}
 	
 	// inserta la informacion de una persona enrolada nueva
 	public function insert()
 	{
 		$unico_id=md5(uniqid());
+		$compania=$this->compania;
+		if($compania=="")$compania=NULL;
 		$data = array(
 			// basico
 			'id' => $unico_id,
@@ -602,8 +625,8 @@ class Enrolamiento_model extends CI_Model
 			'cp_domicilio' => $this->cp,
 			
 			'telefono_domicilio' => $this->telefono,
-			'id_operadora_celular' => $this->compania,
-			'celuar' => $this->celular,
+			'id_operadora_celular' => $compania,
+			'celular' => $this->celular,
 			);
 		$result = $this->db->insert('cns_persona', $data);
 		if (!$result)
@@ -618,6 +641,8 @@ class Enrolamiento_model extends CI_Model
 			$unico_idtutor=md5(uniqid());
 			if($this->idtutor=="")
 			{
+				$companiaT=$this->companiaT;
+				if($companiaT=="")$companiaT=NULL;
 				$data0 = array(
 					// tutor
 					'id' => $unico_idtutor,
@@ -628,7 +653,7 @@ class Enrolamiento_model extends CI_Model
 					'sexo' => $this->sexoT,
 					
 					'telefono' => $this->telefonoT,
-					'id_operadora_celular' => $this->companiaT,
+					'id_operadora_celular' => $companiaT,
 					'celular' => $this->celularT,
 					);
 				$result0 = $this->db->insert('cns_tutor', $data0);
@@ -826,6 +851,8 @@ class Enrolamiento_model extends CI_Model
 	// actualiza la informacion del paciente
 	public function update()
 	{
+		$compania=$this->compania;
+		if($compania=="")$compania=NULL;
 		$data = array(
 			// basico
 			'id_nacionalidad' => $this->nacionalidad,
@@ -851,11 +878,11 @@ class Enrolamiento_model extends CI_Model
 			'cp_domicilio' => $this->cp,
 			
 			'telefono_domicilio' => $this->telefono,
-			'id_operadora_celular' => $this->compania,
-			'celuar' => $this->celular,
+			'id_operadora_celular' => $compania,
+			'celular' => $this->celular,
 			);
 		$this->db->where('id' , $this->id);
-		$result = $this->db->update('cns_persona', $data);
+		$result = $this->db->update('cns_persona', $data); 
 		if (!$result)
 		{
 			$this->msg_error_usr = "Actualizacion Fallida.";
@@ -864,7 +891,8 @@ class Enrolamiento_model extends CI_Model
 		}
 		else
 		{
-			
+			$companiaT=$this->companiaT;
+			if($companiaT=="")$companiaT=NULL;
 			$data0 = array(
 				// tutor
 				'nombre' => $this->nombreT,
@@ -874,7 +902,7 @@ class Enrolamiento_model extends CI_Model
 				'sexo' => $this->sexoT,
 				
 				'telefono' => $this->telefonoT,
-				'id_operadora_celular' => $this->companiaT,
+				'id_operadora_celular' => $companiaT,
 				'celular' => $this->celularT,
 				);
 			//
@@ -1093,6 +1121,23 @@ class Enrolamiento_model extends CI_Model
 		}
 		return $result;
 	}
+	// actualiza estatus de tableta
+	public function update_status_tableta($mac,$staus,$version,$fecha)
+	{
+		$data = array
+		(
+			'id_tes_estado_tableta' => $status,
+			'version'               => $version,
+			'ultima_actualizacion'  => $fecha,
+		);
+		$this->db->where('mac' , $mac);
+		$result0 = $this->db->update('tes_tableta', $data);
+		if (!$result0)
+		{
+			$this->msg_error_usr = "No se actualizo Tutor.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+		}
+	}
 	// devuelve la lista de usuarios enrolados
 	public function getListEnrolamiento($keywords = '', $offset = null, $row_count = null)
 	{
@@ -1246,13 +1291,15 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	// trae los datos de las tablas catalagos 
-	public function get_catalog($catalog,$campo="",$id="")
+	public function get_catalog($catalog,$campo="",$id="",$orden="")
 	{
 		$this->db->select('*');
 		$this->db->from($catalog);
 		if($id!="")
 		$this->db->where($campo, $id);
 		$this->db->where('activo', 1);
+		if($orden!="")
+		$this->db->order_by($orden, "asc");
 		$query = $this->db->get(); 
 		if (!$query)
 		{
@@ -1266,13 +1313,15 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	// obtiene el valor de la tabla que se le pase como parametro con un where por un campo
-	public function get_catalog2($catalog,$campo="",$id="")
+	public function get_catalog2($catalog,$campo1="",$id1="",$campo2="",$id2="")
 	{
 		$this->db->select('*');
 		$this->db->from($catalog);
-		if($id!="")
-		$this->db->where($campo, $id);
-		$query = $this->db->get(); //echo $this->db->last_query();
+		if($id1!="")
+		$this->db->where($campo1, $id1);
+		if($id2!="")
+		$this->db->where($campo2, $id2);
+		$query = $this->db->get(); $fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a"); fputs($fp, $this->db->last_query()."\r\n"); 
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -1306,7 +1355,24 @@ class Enrolamiento_model extends CI_Model
 		$this->db->select('*');
 		$this->db->from('cns_transaccion_relevante_x_entorno r');
 		$this->db->join('cns_tabla_transaccion c', 'c.id = r.id_tabla_transaccion','left');
-		$query = $this->db->get(); 
+		$query = $this->db->get(); //echo $this->db->last_query();
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+	
+	public function get_version()
+	{
+		$this->db->select('host');
+		$this->db->select_max('version');
+		$this->db->from('tes_version');
+		$query = $this->db->get(); //echo $this->db->last_query();
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -1335,7 +1401,7 @@ class Enrolamiento_model extends CI_Model
 	// valida que no se repita curp
 	public function getByCurp($curp,$tabla,$id)
 	{
-		if($id!=""&&$id!=0)
+		if($id!="")
 			$query = $this->db->get_where($tabla, array('curp' => $curp,"id !=" => $id));
 		else
 			$query = $this->db->get_where($tabla, array('curp' => $curp));

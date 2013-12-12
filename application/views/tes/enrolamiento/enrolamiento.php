@@ -67,7 +67,7 @@
 		{       
 			getcurp();
 		});	
-		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>");	
+		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>/tipo/tipo");	
 		$("#tbenef").load("/tes/Enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afiliaciones;?>");	
 		$("#sangre").load("/tes/Enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', ''); ?>");	
 		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', ''); ?>");
@@ -162,11 +162,21 @@
 			}
 		});
 	}
+	function omitirAcentos(text) 
+	{
+		var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
+		var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+		for (var i=0; i<acentos.length; i++) 
+			text = text.replace(acentos.charAt(i), original.charAt(i));
+		
+		return text;
+	}
+
 	function getcurp()
 	{
-		var ap=$("#paterno").val();
-		var am=$("#materno").val();
-		var no=$("#nombre").val();
+		var ap=omitirAcentos($("#paterno").val());
+		var am=omitirAcentos($("#materno").val());
+		var no=omitirAcentos($("#nombre").val());
 		var se=$("input[name='sexo']:checked").val();
 		var fn=$("#fnacimiento").val();
 		var ed=$("#lnacimientoT").val().substr($("#lnacimientoT").val().search(",")+1,$("#lnacimientoT").val().length);
@@ -209,7 +219,7 @@
 		
 		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" required="required" style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="date" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
-		
+		$("#f"+id+num).val(new Date().toJSON().slice(0,10));
 		$("#"+id+num).load("/tes/Enrolamiento/catalog_select/"+id);
 	}
 	function rem(id,n)
@@ -303,7 +313,7 @@
                             <td><p align="right">Lugar de Nacimiento</p></td>
                             <td colspan="3"><input name="lnacimientoT" type="text" required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo set_value('lnacimientoT', ''); ?>" readonly="readonly">
                             	<input name="lnacimiento" type="hidden" id="lnacimiento" value="<?php echo set_value('lnacimiento', ''); ?>">                              
-                              <a href='/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>' id="fba1" class="cat">Seleccionar</a><div id="aqui"></div>
+                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>' id="fba1" class="cat">Seleccionar</a><div id="aqui"></div>
                               </td>
                             </tr>
                           <tr>
@@ -408,7 +418,7 @@
                             <td><p align="right">Lugar</p></td>
                             <td colspan="3"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(null)));?>/" id="fba1" class="cat">Seleccsionar</a>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(null)));?>/" id="fba1" class="cat">Seleccsionar</a>
                           </tr>
                         </table>
                         <br />
@@ -441,7 +451,7 @@
                             <td><p align="right">Localidad</p></td>
                             <td colspan="3"><input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="cat">Seleccionar</a>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="cat">Seleccionar</a>
                           </tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>

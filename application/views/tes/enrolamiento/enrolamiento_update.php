@@ -104,7 +104,7 @@
 			$afili.=$afiliacion->id."_";
 		}
 		?>
-		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alerg;?>");	
+		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alerg;?>/tipo");	
 		$("#tbenef").load("/tes/Enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afili;?>");		
 		$("#sangre").load("/tes/Enrolamiento/catalog_select/tipo_sanguineo/<?php echo $enrolado->sangre; ?>");	
 		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo $enrolado->nacionalidadid; ?>");
@@ -203,11 +203,21 @@
 			}
 		});
 	}
+	function omitirAcentos(text) 
+	{
+		var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
+		var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+		for (var i=0; i<acentos.length; i++) 
+			text = text.replace(acentos.charAt(i), original.charAt(i));
+		
+		return text;
+	}
+
 	function getcurp()
 	{
-		var ap=$("#paterno").val();
-		var am=$("#materno").val();
-		var no=$("#nombre").val();
+		var ap=omitirAcentos($("#paterno").val());
+		var am=omitirAcentos($("#materno").val());
+		var no=omitirAcentos($("#nombre").val());
 		var se=$("input[name='sexo']:checked").val();
 		var fn=$("#fnacimiento").val();
 		var ed=$("#lnacimientoT").val().substr($("#lnacimientoT").val().search(",")+1,$("#lnacimientoT").val().length);
@@ -345,7 +355,7 @@
                             <td><p align="right">Lugar de Nacimiento</p></td>
                             <td colspan="3"><input name="lnacimientoT" type="text" required id="lnacimientoT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
                             	<input name="lnacimiento" type="hidden" id="lnacimiento" value="">                              
-                              <a href='/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/' id="fba1" class="cat">Seleccionar</a><div id="aqui"></div>
+                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/' id="fba1" class="cat">Seleccionar</a><div id="aqui"></div>
                               </td>
                             </tr>
                           <tr>
@@ -451,7 +461,7 @@
                             <td><p align="right">Lugar</p></td>
                             <td colspan="3"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value=""/>
-                              <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(null)));?>" id="fba1" class="cat">Seleccionar</a>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(null)));?>/" id="fba1" class="cat">Seleccionar</a>
                           </tr>
                         </table>
                         <br />
@@ -484,13 +494,13 @@
                             <td><p align="right">Localidad</p></td>
                             <td colspan="3"><input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value=""/>
-                              <a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="cat">Seleccionar</a>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="cat">Seleccionar</a>
                           </tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
                             <td><input name="telefono" type="text" id="telefono" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->telefono_domicilio; ?>" /></td> 
                             <td><p align="right">Celular</p></td> 
-                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->celuar; ?>" /></td>                          
+                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->celular; ?>" /></td>                          
                           </tr>
                           <tr>
                             <td><p align="right">Compania Celular</p></td>

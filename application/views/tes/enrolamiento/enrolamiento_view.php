@@ -207,7 +207,7 @@
                             <td><p align="right">Telefono de Casa</p></td>
                             <td><?php echo $enrolado->telefono_domicilio;?></td> 
                             <td><p align="right">Celular</p></td> 
-                            <td><?php echo $enrolado->celuar;?></td>                          
+                            <td><?php echo $enrolado->celular;?></td>                          
                           </tr>
                           <tr>
                             <td><p align="right">Compania Celular</p></td>

@@ -25,11 +25,11 @@ class Enrolamiento extends CI_Controller
 	// lista enrolados
 	public function index($pag = 0)
 	{
-		/*try{
+		try{
 			if (empty($this->Usuario_model))
 				return false;
 			if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-				show_error('', 403, 'Acceso denegado');*/
+				show_error('', 403, 'Acceso denegado');
 			$this->load->model(DIR_TES.'/Enrolamiento_model');
 			$data['title'] = 'Lista Enrolados';
 			$this->load->helper('form');
@@ -50,10 +50,10 @@ class Enrolamiento extends CI_Controller
 				$data['users'] = $this->Enrolamiento_model->getListEnrolamiento($this->input->post('busqueda'), $configPag['per_page'], $pag);
 			else 
 				$data['users'] = $this->Enrolamiento_model->getListEnrolamiento('', $configPag['per_page'], $pag);
-		/*}
+		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-		}*/
+		}
 		//$this->load->view('usuario/index', $data);
  		$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_list', $data);
  		$this->template->render();
@@ -62,12 +62,12 @@ class Enrolamiento extends CI_Controller
 	// ver enrolado (id)
 	public function view($id)
 	{
-		/*try 
+		try 
 		{
 			if (empty($this->Usuario_model))
 				return false;
 			if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-				show_error('', 403, 'Acceso denegado');*/
+				show_error('', 403, 'Acceso denegado');
 			$this->load->model(DIR_TES.'/Enrolamiento_model');
 			$data['title'] = 'Ver Paciente';
 			$data['enrolado'] = $this->Enrolamiento_model->getById($id);
@@ -92,11 +92,11 @@ class Enrolamiento extends CI_Controller
 			$data['label']=json_encode(array("d1"=>"Talla","d2"=>"Peso","d3"=>"Altura"));
 			$data['control_nutricional']=json_encode($array);
 			
-		/*}
+		}
 		catch(Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-		}*/
+		}
  		$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_view', $data);
  		$this->template->render();
 	}
@@ -105,12 +105,12 @@ class Enrolamiento extends CI_Controller
 	
 	public function update($id)
 	{
-		/*try 
+		try 
 		{
 			if (empty($this->Usuario_model))
 				return false;
 			if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-				show_error('', 403, 'Acceso denegado');*/
+				show_error('', 403, 'Acceso denegado');
 			$this->load->model(DIR_TES.'/Enrolamiento_model');
 			$data['id'] = $id;
 			$data['title'] = 'Ver Paciente';
@@ -138,11 +138,11 @@ class Enrolamiento extends CI_Controller
 			$data['label']=json_encode(array("d1"=>"Talla","d2"=>"Peso","d3"=>"Altura"));
 			$data['control_nutricional']=json_encode($array);
 			
-		/*}
+		}
 		catch(Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-		}*/
+		}
 		try
 		{
 			if (empty($this->Enrolamiento_model))
@@ -199,7 +199,7 @@ class Enrolamiento extends CI_Controller
 		$datos=$this->Enrolamiento_model->get_catalog("cns_".$catalog);
 		if(sizeof($datos)!=0)
 		{
-			$opcion.="<option>Seleccione...</option>";
+			$opcion.="<option value=''>Seleccione...</option>";
 			foreach($datos as $dato)
 			{
 				$id=$dato->id;
@@ -214,22 +214,40 @@ class Enrolamiento extends CI_Controller
 		echo "<option>No hay Datos</option>";
 	}
 	// control de multi check para alergias
-	public function catalog_check($catalog,$tipo,$col,$sel="")
+	public function catalog_check($catalog,$tipo,$col,$sel="",$orden="")
 	{
 		$opcion="";
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
-		$datos=$this->Enrolamiento_model->get_catalog("cns_".$catalog);
+		$datos=$this->Enrolamiento_model->get_catalog("cns_".$catalog,"","",$orden);
 		if(sizeof($datos)!=0)
 		{
-			$i=0;$a=0;
-			$opcion='<table width="85%"><tr>';
+			$i=0;$a=0;$y=0;$temp="";$x=0;
+			$opcion='<table width="85%" ><tr>';
 			foreach($datos as $dato)
 			{
 				$id=$dato->id;
 				$descripcion=$dato->descripcion;
 				$che="";
+				if($catalog=="alergia")
+				{
+					if($temp!=$dato->tipo)
+					{
+						if($y>0)
+						{
+							$x++;
+							$opcion.="</tr></table>";
+							if($x==$col){$opcion.="<tr>"; $x=0;}
+						}
+						$opcion.="<td width='33%' valign='top'><table border=2><tr><th bgcolor='#CCC'> ".$dato->tipo." </th></tr><tr>";		
+						$y++;				
+					}
+					else $opcion.="</tr><tr>";
+					$temp=$dato->tipo;
+					
+				}
 				if(stripos(".".$sel,$id))$che="checked";
-				if($a==$col){$opcion.="</tr><tr>"; $a=0;}
+				if($a==$col&&$catalog!="alergia"){$opcion.="</tr><tr>"; $a=0;}
+				
 				$opcion.="<td width='33%' valign='top'><label><input name='".$catalog."[]' id='$catalog$i' type='$tipo' value='$id' $che> $descripcion</label></td>";
 				$i++;$a++;
 			}
@@ -286,9 +304,9 @@ class Enrolamiento extends CI_Controller
 		{
 			if (empty($this->Enrolamiento_model))
 				return false;
-		/*
+		
 		if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-			show_error('', 403, 'Acceso denegado');*/
+			show_error('', 403, 'Acceso denegado');
 			
 			if($this->validarForm())
 			{
@@ -365,7 +383,7 @@ class Enrolamiento extends CI_Controller
 		$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', 'xss_clean');
 		
 		$this->form_validation->set_rules('nacionalidad', 'Nacionalidad', '');
-		$this->form_validation->set_rules('sangre', 'Tipo de Sangre', '');
+		$this->form_validation->set_rules('sangre', 'Tipo de Sangre', 'required');
 		
 		$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
 		$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|required');
@@ -384,8 +402,8 @@ class Enrolamiento extends CI_Controller
 		$this->form_validation->set_rules('numero', 'numero', 'xss_clean');
 		$this->form_validation->set_rules('celular', 'celular', 'xss_clean');
 		$this->form_validation->set_rules('telefono', 'telefono', 'xss_clean');
-		$this->form_validation->set_rules('compania', 'compania', '');
-		$this->form_validation->set_rules('companiaT', 'companiaT', '');
+		$this->form_validation->set_rules('compania', 'compania', 'trim');
+		$this->form_validation->set_rules('companiaT', 'companiaT', 'trim');
 		
 		$this->form_validation->set_rules('buscar', 'buscar', 'xss_clean');
 		$this->form_validation->set_rules('captura', 'captura', '');
