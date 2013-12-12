@@ -37,6 +37,14 @@ $(document).ready(function(){
         });
     });
 
+    Modernizr.load({
+        test: Modernizr.inputtypes.date,
+        nope: "js/jquery-ui.custom.js",
+        callback: function() {
+          $("input[type=date]").datepicker();
+        }
+      });
+
 });
 </script>
 
