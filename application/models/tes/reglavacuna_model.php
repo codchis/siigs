@@ -19,18 +19,36 @@ class ReglaVacuna_model extends CI_Model {
 	 * @var    int
 	 */
 	private $id_vacuna;
+
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $id_vacuna_previa;
         
 	/**
 	 * @access private
 	 * @var    int
 	 */
-	private $id_vacuna;
+	private $dia_inicio_nacido;
         
 	/**
 	 * @access private
 	 * @var    int
 	 */
-	private $id_vacuna;
+	private $dia_fin_nacido;
+        
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $dia_inicio_previa;
+        
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $dia_fin_previa;
 
 
 	/**
@@ -51,34 +69,53 @@ class ReglaVacuna_model extends CI_Model {
    	public function getId() {
 		return $this->id;
 	}
-
 	public function setId($value) {
 		$this->id = $value;
 	}
 
-	public function getNombre() {
-		return $this->nombre;
+        public function getIdVacuna() {
+		return $this->id_vacuna;
 	}
-	public function setNombre($value) {
-			$this->nombre = $value;
-	}
-
-	public function getDescripcion() {
-		return $this->descripcion;
+	public function setIdVacuna($value) {
+		$this->id_vacuna = $value;
 	}
 
-	public function setDescripcion($value) {
-		$this->descripcion = $value;
+        public function getIdVacunaPrevia() {
+		return $this->id_vacuna_previa;
+	}
+	public function setIdVacunaPrevia($value) {
+		$this->id_vacuna_previa = $value;
+	}
+        
+        public function getDiaInicioNacido() {
+		return $this->dia_inicio_nacido;
+	}
+	public function setDiaInicioNacido($value) {
+		$this->dia_inicio_nacido = $value;
+	}
+        
+        public function getDiaFinNacido() {
+		return $this->dia_fin_nacido;
+	}
+	public function setDiaFinNacido($value) {
+		$this->dia_fin_nacido = $value;
 	}
 
-	public function getMetodo() {
-		return $this->metodo;
+        public function getDiaInicioPrevia() {
+		return $this->dia_inicio_previa;
 	}
-
-	public function setMetodo($value) {
-		$this->metodo = $value;
+	public function setDiaInicioPrevia($value) {
+		$this->dia_inicio_previa = $value;
 	}
-	/*******************************/
+        
+        public function getDiaFinPrevia() {
+		return $this->dia_fin_previa;
+	}
+	public function setDiaFinPrevia($value) {
+		$this->dia_fin_previa = $value;
+	}
+        
+        /*******************************/
 	/*Getters and setters block END*/
 	/*******************************/
 
@@ -124,7 +161,7 @@ class ReglaVacuna_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->query("SELECT a.id,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1");
+		$query = $this->db->query("SELECT distinct a.id,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1");
 
 		if (!$query)
 		{
@@ -146,7 +183,7 @@ class ReglaVacuna_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->get_where('sis_accion', array('id' => $id));
+		$query = $this->db->query("SELECT distinct a.id,a.id_vacuna,a.id_vacuna_secuencial,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 where a.id=".$id);
 
 		if (!$query)
 		{
@@ -168,12 +205,16 @@ class ReglaVacuna_model extends CI_Model {
 	public function insert()
 	{
 		$data = array(
-				'nombre' => $this->nombre,
-				'descripcion' => $this->descripcion,
-				'metodo' => $this->metodo
+				'id_vacuna' => $this->id_vacuna,
+                                'id_vacuna_secuencial' => $this->id_vacuna_previa,
+				'dia_inicio_aplicacion_nacido' => ($this->dia_inicio_nacido == 0) ? null : $this->dia_inicio_nacido,
+				'dia_fin_aplicacion_nacido' => ($this->dia_fin_nacido == 0) ? null : $this->dia_fin_nacido,
+                                'dia_inicio_aplicacion_secuencial' => ($this->dia_inicio_previa == 0) ? null : $this->dia_inicio_previa,
+                                'dia_fin_aplicacion_secuencial' => ($this->dia_fin_previa == 0) ? null : $this->dia_fin_previa,
+                                'ultima_actualizacion' => date('Y-m-d H:i:s')
 		);
 
-		$query = $this->db->insert('sis_accion', $data);
+		$query = $this->db->insert('cns_regla_vacuna', $data);
 
 		if (!$query)
 		{
@@ -182,7 +223,10 @@ class ReglaVacuna_model extends CI_Model {
 			throw new Exception(__CLASS__);
 		}
 		else
-			return $this->db->insert_id($query);
+                {
+                    $this->db->query("update cns_tabla_catalogo set fecha_actualizacion = NOW() where descripcion='cns_regla_vacuna'");
+                    return $this->db->insert_id($query);
+                }
 	}
 
 	/**
@@ -195,13 +239,17 @@ class ReglaVacuna_model extends CI_Model {
 	public function update()
 	{
 		$data = array(
-				'nombre' => $this->nombre,
-				'descripcion' => $this->descripcion,
-				'metodo' => $this->metodo
+				'id_vacuna' => $this->id_vacuna,
+                                'id_vacuna_secuencial' => $this->id_vacuna_previa,
+				'dia_inicio_aplicacion_nacido' => ($this->dia_inicio_nacido == 0) ? null : $this->dia_inicio_nacido,
+				'dia_fin_aplicacion_nacido' => ($this->dia_fin_nacido == 0) ? null : $this->dia_fin_nacido,
+                                'dia_inicio_aplicacion_secuencial' => ($this->dia_inicio_previa == 0) ? null : $this->dia_inicio_previa,
+                                'dia_fin_aplicacion_secuencial' => ($this->dia_fin_previa == 0) ? null : $this->dia_fin_previa,
+                                'ultima_actualizacion' => date('Y-m-d H:i:s')
 		);
 
 		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('sis_accion', $data);
+		$query = $this->db->update('cns_regla_vacuna', $data);
 
 		if (!$query)
 		{
@@ -210,7 +258,10 @@ class ReglaVacuna_model extends CI_Model {
 			throw new Exception(__CLASS__);
 		}
 		else
-			return true;
+                {
+                    $this->db->query("update cns_tabla_catalogo set fecha_actualizacion = NOW() where descripcion='cns_regla_vacuna'");
+                    return true;
+                }
 	}
 
 	/**
@@ -223,7 +274,7 @@ class ReglaVacuna_model extends CI_Model {
 	public function delete()
 	{
 
-		$query = $this->db->delete('sis_accion', array('id' => $this->getId()));
+		$query = $this->db->delete('cns_regla_vacuna', array('id' => $this->getId()));
 
 		if (!$query)
 		{
@@ -232,6 +283,9 @@ class ReglaVacuna_model extends CI_Model {
 			throw new Exception(__CLASS__);
 		}
 		else
-			return true;
+                {
+                    $this->db->query("update cns_tabla_catalogo set fecha_actualizacion = NOW() where descripcion='cns_regla_vacuna'");
+                    return true;
+                }
 	}
 }

@@ -68,7 +68,7 @@ class ReglaVacuna extends CI_Controller {
 		try
 		{
 			$data['title'] = "Detalles de la regla";
-			$data['accion_item'] = $this->ReglaVacuna_model->getById($id);
+			$data['regla_item'] = $this->ReglaVacuna_model->getById($id);
 		}
 		catch (Exception $e)
 		{
@@ -115,9 +115,18 @@ class ReglaVacuna extends CI_Controller {
 			{
 				$this->load->helper('url');
 
-				$this->ReglaVacuna_model->setNombre($this->input->post('aplicacion_inicio'));
-				$this->ReglaVacuna_model->setDescripcion($this->input->post('aplicacion_fin'));
-				$this->ReglaVacuna_model->setMetodo($this->input->post('tipo_aplicacion'));
+				$this->ReglaVacuna_model->setIdVacuna($this->input->post('id_vacuna'));
+				$this->ReglaVacuna_model->setIdVacunaPrevia($this->input->post('id_vacuna_previa'));
+				if ($this->input->post('tipo_aplicacion') == 'nacimiento')
+                                {
+                                    $this->ReglaVacuna_model->setDiaInicioNacido($this->input->post('aplicacion_inicio'));
+                                    $this->ReglaVacuna_model->setDiaFinNacido($this->input->post('aplicacion_fin'));
+                                }
+                                else
+                                {
+                                    $this->ReglaVacuna_model->setDiaInicioPrevia($this->input->post('aplicacion_inicio'));
+                                    $this->ReglaVacuna_model->setDiaFinPrevia($this->input->post('aplicacion_fin'));                                    
+                                }
 
 				$this->ReglaVacuna_model->insert();
 			}
@@ -132,7 +141,7 @@ class ReglaVacuna extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro insertado correctamente');
-				redirect(DIR_SIIGS.'/reglavacuna/index','refresh');
+				redirect(DIR_TES.'/reglavacuna/index','refresh');
 			}
 		}
 	}
@@ -157,15 +166,21 @@ class ReglaVacuna extends CI_Controller {
 		$error = false;
 
 		$data['title'] = 'Modificar regla para vacuna';
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|alpha|max_length[30]');
-		$this->form_validation->set_rules('descripcion', 'Descripción', 'trim|xss_clean|required|max_length[100]');
-		$this->form_validation->set_rules('metodo', 'Método', 'trim|xss_clean|required|max_length[30]');
+		$this->form_validation->set_rules('aplicacion_inicio', 'Inicio aplicación', 'trim|xss_clean|required|is_natural_no_zero');
+		$this->form_validation->set_rules('aplicacion_fin', 'Fin aplicación', 'trim|xss_clean|required|is_natural_no_zero');
+		$this->form_validation->set_rules('id_vacuna', 'Vacuna', 'trim|xss_clean|required|is_natural_no_zero');
+                $this->form_validation->set_rules('tipo_aplicacion', 'Tipo de aplicación', 'trim|xss_clean|required');
 
+                $vacunas = $this->db->query("select id,descripcion from cns_vacuna where activo=1")->result();
+                $data['vacunas'][0] = 'Elige una vacuna';
+		foreach ($vacunas as $item) {
+			$data['vacunas'][$item->id] = $item->descripcion;
+		}
 		if ($this->form_validation->run() === FALSE)
 		{
 			try
 			{
-				$data['accion_item'] = $this->ReglaVacuna_model->getById($id);
+				$data['regla_item'] = $this->ReglaVacuna_model->getById($id);
 			}
 			catch (Exception $e)
 			{
@@ -179,10 +194,19 @@ class ReglaVacuna extends CI_Controller {
 		{
 			try
 			{
-				$this->ReglaVacuna_model->setNombre($this->input->post('nombre'));
-				$this->ReglaVacuna_model->setDescripcion($this->input->post('descripcion'));
-				$this->ReglaVacuna_model->setMetodo($this->input->post('metodo'));
-				$this->ReglaVacuna_model->setId($this->input->post('id'));
+                            $this->ReglaVacuna_model->setId($this->input->post('id'));
+				$this->ReglaVacuna_model->setIdVacuna($this->input->post('id_vacuna'));
+				$this->ReglaVacuna_model->setIdVacunaPrevia($this->input->post('id_vacuna_previa'));
+				if ($this->input->post('tipo_aplicacion') == 'nacimiento')
+                                {
+                                    $this->ReglaVacuna_model->setDiaInicioNacido($this->input->post('aplicacion_inicio'));
+                                    $this->ReglaVacuna_model->setDiaFinNacido($this->input->post('aplicacion_fin'));
+                                }
+                                else
+                                {
+                                    $this->ReglaVacuna_model->setDiaInicioPrevia($this->input->post('aplicacion_inicio'));
+                                    $this->ReglaVacuna_model->setDiaFinPrevia($this->input->post('aplicacion_fin'));                                    
+                                }
 
 				$this->ReglaVacuna_model->update();
 			}
@@ -190,7 +214,7 @@ class ReglaVacuna extends CI_Controller {
 			{
 				try
 				{
-					$data['accion_item'] = $this->ReglaVacuna_model->getById($id);
+					$data['regla_item'] = $this->ReglaVacuna_model->getById($id);
 				}
 				catch (Exception $e)
 				{
@@ -207,7 +231,7 @@ class ReglaVacuna extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
-				redirect(DIR_SIIGS.'/reglavacuna','refresh');
+				redirect(DIR_TES.'/reglavacuna','refresh');
 			}
 		}
 	}
@@ -237,6 +261,6 @@ class ReglaVacuna extends CI_Controller {
 		{
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
 		}
-		redirect(DIR_SIIGS.'/reglavacuna','refresh');
+		redirect(DIR_TES.'/reglavacuna','refresh');
 	}
 }

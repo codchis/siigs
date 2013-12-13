@@ -4,11 +4,14 @@ echo $msgResult.'<br /><br />';
  ?>
 <h2><?php echo $title; ?></h2>
 <?php
-if (!empty($accion_item))
+if (!empty($regla_item))
 {
-echo '<h2>[ '.$accion_item->nombre.' ]</h2>';
-echo '<h5>Descripci&oacute;n: '.$accion_item->descripcion.'</h5><br/>';
-echo '<h5>M&eacute;todo: '.$accion_item->metodo.'</h5><br/>';
+echo '<h2>[Regla para aplicacion de vacuna]</h2>';
+echo '<h5>Vacuna: '.$regla_item->vacuna.'</h5><br/>';
+echo '<h5>Tipo de aplicaci&oacute;n: '.$regla_item->aplicacion.'</h5><br/>';
+echo '<h5>Desde (dias): '.$regla_item->desde.'</h5><br/>';
+echo '<h5>Hasta (dias): '.$regla_item->hasta.'</h5><br/>';
+echo '<h5>Vacuna Previa: '.$regla_item->previa.'</h5><br/>';
 }
 else
 {
