@@ -80,7 +80,7 @@ class Catalogo_x_raiz extends CI_Controller {
 
 				if ($data['nivel']>1)
 				{
-					$catalogo_padre = $this->Catalogo_x_raiz_model->getByNivel($data['nivel']-1)->nombre;
+					$catalogo_padre = $this->Catalogo_x_raiz_model->getByNivel($id,$data['nivel']-1)->nombre;
 					$data['catalogo_padre'] = $catalogo_padre;
 				}
 				else

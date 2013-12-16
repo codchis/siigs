@@ -1,4 +1,3 @@
-<?php var_dump($catalogo_padre);?>
 <script type="text/javascript">
 
       $(document).ready(function() {

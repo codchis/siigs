@@ -213,13 +213,14 @@ class Catalogo_x_raiz_model extends CI_Model {
 	 *Devuelve el catalogo padre de un elemento raiz_x_catalogo
 	 *
 	 *@access  public
-	 *@param   int $id
+	 *@param   int $idarbol
+         *@param   int $nivel
 	 *@return  ArrayObject
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */
-	public function getByNivel($id)
+	public function getByNivel($idarbol,$nivel)
 	{
-		$nivel = $this->db->query('SELECT tabla_catalogo as nombre,nombre_columna_llave as llave from asu_raiz_x_catalogo where grado_segmentacion='.$id);
+		$nivel = $this->db->query('SELECT tabla_catalogo as nombre,nombre_columna_llave as llave from asu_raiz_x_catalogo where grado_segmentacion='.$nivel." and id_raiz_arbol=".$idarbol);
 
 		if (!$nivel)
 		{
