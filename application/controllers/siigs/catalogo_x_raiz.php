@@ -155,6 +155,15 @@ class Catalogo_x_raiz extends CI_Controller {
 
 	}
 
+        /**
+         * Accion que sirve para revisar inconsistencias en el arbol de segmentacion
+         * Recibe como parametro el catalogo x raiz y revisa que todos los registros tengan
+         * un correspondiente en el catalogo padre.
+         * Solo se permite su acceso por medio de peticiones AJAX
+         * 
+         * @param type $id Id del catalogo_x_raiz
+         * @return boolean
+         */
 	public function check($id)
 	{
 		if (!$this->input->is_ajax_request())
@@ -199,77 +208,10 @@ class Catalogo_x_raiz extends CI_Controller {
 			echo 'false'.$data['msgResult'];
 		}
 	}
-
-	public function update($id)
-	{
-            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
-		show_error('', 403, 'Acceso denegado');
-            
-		$this->load->helper('form');
-		$this->load->helper('url');
-		$this->load->library('form_validation');
-
-		$error = false;
-
-		$data['title'] = 'Modificar catálogo';
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|alpha|max_length[30]');
-		$this->form_validation->set_rules('descripcion', 'Descripción', 'trim|xss_clean|required|max_length[100]');
-		$this->form_validation->set_rules('metodo', 'Método', 'trim|xss_clean|required|max_length[30]');
-
-		if ($this->form_validation->run() === FALSE)
-		{
-			try
-			{
-				$data['accion_item'] = $this->Accion_model->getById($id);
-			}
-			catch (Exception $e)
-			{
-				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-			}
-
-			$this->template->write_view('content',DIR_SIIGS.'/accion/update', $data);
-			$this->template->render();
-		}
-		else
-		{
-			try
-			{
-				$this->Accion_model->setNombre($this->input->post('nombre'));
-				$this->Accion_model->setDescripcion($this->input->post('descripcion'));
-				$this->Accion_model->setMetodo($this->input->post('metodo'));
-				$this->Accion_model->setId($this->input->post('id'));
-
-				$this->Accion_model->update();
-			}
-			catch (Exception $e)
-			{
-				try
-				{
-					$data['accion_item'] = $this->Accion_model->getById($id);
-				}
-				catch (Exception $e)
-				{
-					$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-				}
-
-				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-				$this->template->write_view('content',DIR_SIIGS.'/accion/update', $data);
-				$this->template->render();
-
-				$error = true;
-			}
-
-			if ($error == false)
-			{
-				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
-				redirect(DIR_SIIGS.'/accion','refresh');
-			}
-		}
-	}
-
+	
 	/**
 	 *
-	 *Acción para eliminar una accion, recibe el id de la accion a eliminar
+	 *Acción para eliminar un catalogo en el arbol, recibe el id del catalogo en la raiz a eliminar
 	 *
 	 * @param  int $id
 	 * @return void
