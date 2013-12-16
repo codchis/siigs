@@ -3,6 +3,8 @@
 /**
  * Modelo Bitacora
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Pascual
  * @created    2013-09-26
  */

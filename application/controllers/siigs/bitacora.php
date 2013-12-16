@@ -3,6 +3,8 @@
 /**
  * Controlador Bitacora
  *
+ * @package    SIIGS
+ * @subpackage Controlador
  * @author     Pascual
  * @created    2013-09-26
  */

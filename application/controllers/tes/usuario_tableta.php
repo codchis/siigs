@@ -3,6 +3,8 @@
 /**
  * Controlador Usuario_tableta
  *
+ * @package    TES
+ * @subpackage Controlador
  * @author     Pascual
  * @created    2013-11-27
  */

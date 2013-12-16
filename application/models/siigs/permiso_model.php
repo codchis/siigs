@@ -2,8 +2,10 @@
 /**
  * Modelo Permiso
  *
- * @author     Rogelio
- * @created    2013-10-01
+ * @package		SIIGS
+ * @subpackage	Modelo
+ * @author     	Rogelio
+ * @created    	2013-10-01
  */
 class Permiso_model extends CI_Model {
 	/**

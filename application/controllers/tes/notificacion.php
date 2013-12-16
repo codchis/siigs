@@ -2,6 +2,8 @@
 /**
  * Controlador Notificaci�n
  *
+ * @package		SIIGS
+ * @subpackage	Controlador
  * @author     	Rogelio
  * @created		2013-11-26
  */
