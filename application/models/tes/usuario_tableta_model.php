@@ -3,6 +3,8 @@
 /**
  * Modelo Estado_tableta
  *
+ * @package    TES
+ * @subpackage Modelo
  * @author     Pascual
  * @created    2013-11-27
  */

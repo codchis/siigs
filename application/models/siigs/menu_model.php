@@ -3,6 +3,8 @@
 /**
  * Modelo Menu
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Pascual
  * @created    2013-10-03
  */

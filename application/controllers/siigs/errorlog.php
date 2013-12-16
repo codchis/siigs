@@ -3,9 +3,10 @@
 /**
  * Controlador Errorlog
  *
+ * @package    SIIGS
+ * @subpackage Controlador
  * @author     Pascual
  * @created    2013-10-02
- * @las_update 2013-10-02
  */
 class Errorlog extends CI_Controller {
     

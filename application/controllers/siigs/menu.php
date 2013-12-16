@@ -3,6 +3,8 @@
 /**
  * Controlador Menu
  *
+ * @package    SIIGS
+ * @subpackage Controlador
  * @author     Pascual
  * @created    2013-10-07
  */
