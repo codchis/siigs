@@ -1,5 +1,25 @@
+<link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+<script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
+    
 <script type="text/javascript">
 DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
+var objFecha = new Date();
+
+var optionsFecha = {
+    changeMonth: true,
+    changeYear: true,
+    duration: "fast",
+    dateFormat: 'mm-dd-yy',
+    constrainInput: true,
+    firstDay: 1,
+    closeText: 'X',
+    showOn: 'both',
+    buttonImage: '/resources/images/calendar.gif',
+    buttonImageOnly: true,
+    buttonText: 'Clic para seleccionar una fecha',
+    yearRange: '2005:'+objFecha.getFullYear(),
+    showButtonPanel: false
+};
 
 $(document).ready(function(){
     $('#paginador a').click(function(e){
@@ -36,15 +56,15 @@ $(document).ready(function(){
             });
         });
     });
-
-    Modernizr.load({
-        test: Modernizr.inputtypes.date,
-        nope: "js/jquery-ui.custom.js",
-        callback: function() {
-          $("input[type=date]").datepicker();
-        }
-      });
-
+    
+    $("#fechaIni").datepicker(optionsFecha);
+    $("#fechaFin").datepicker(optionsFecha);
+    
+    $("#limpiaFecha").click(function(){
+        $("#fechaIni").val('');
+        $("#fechaFin").val('');
+    });
+    
 });
 </script>
 
@@ -62,8 +82,10 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
 
         Usuario:
         <?php  if(isset($usuarios)) echo form_dropdown('usuario', $usuarios); ?>
-        Fecha:       <input type="date" name="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" size="10" placeholder="desde" />
-                     <input type="date" name="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" size="10" placeholder="hasta"/> </p>
+        Fecha: <input type="text" name="fechaIni" id="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" size="10" placeholder="desde" />
+               <input type="text" name="fechaFin" id="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" size="10" placeholder="hasta" /> 
+               <input type="button" value="Limpiar Fechas" id="limpiaFecha" />
+        </p>
         <p>Entorno:
             <?php  if(isset($entornos)) echo form_dropdown('entorno', $entornos); ?>
         Controlador:
