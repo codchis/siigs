@@ -1,4 +1,18 @@
+<div id="loading" style="height:100px;width:100px;position:absolute;top:0px;left:0px;display:none;z-index:1000;background-color:black;">
+    
+</div>
 <script>
+$(document).ready(function(){
+   
+   $(document).bind("ajaxSend", function(){
+   $("#loading").show();
+ }).bind("ajaxComplete", function(){
+   $("#loading").hide();
+ }).bind("ajaxError",function(){
+   $("#loading").hide();  
+ });
+ 
+});
 
 function generarAsu(raiz)
 {

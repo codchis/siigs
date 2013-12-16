@@ -1,3 +1,30 @@
+<script>
+$(document).ready(function(){
+    $('#frm_update').submit(function(){
+        if($('select[name=id_vacuna]').val()*1<=0)
+        {
+            alert('Debe elegir una vacuna antes de guardar');
+            return false;            
+        }
+        
+        if ($('#dia_inicio').val()*1 >= $('#dia_fin').val()*1)     
+        {
+            alert('El dia inicial de la aplicación debe ser mayor al dia final');
+            return false;
+        }
+        if ($('input[name=tipo_aplicacion]').is(':checked') == false)
+        {
+            alert('Debe elegir el tipo de aplicación');
+            return false;
+        }
+        if ($('input[name=tipo_aplicacion]:checked').val() == 'previa' && $('select[name=id_vacuna_previa]').val()*1<=0)
+        {
+            alert('Debe elegir el tipo de vacuna previa para esta regla');
+            return false;
+        }
+    });
+});
+</script>
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
@@ -8,7 +35,7 @@ if (!empty($regla_item))
 {
 ?>
 <?php echo validation_errors(); ?>
-<?php echo form_open(DIR_TES.'/reglavacuna/update/'.$regla_item->id) ?>
+<?php echo form_open(DIR_TES.'/reglavacuna/update/'.$regla_item->id , array('id'=>'frm_update')) ?>
 <table>
 	<tr>
 		<td><label for="nombre">Vacuna:</label></td>
@@ -25,8 +52,8 @@ if (!empty($regla_item))
 	</tr>
 	<tr>
                 <td><label for="descripcion">D&iacute;as de aplicaci&oacute;n:</label></td>
-                <td>Desde:<br/><input type="text" name="aplicacion_inicio" value="<?php echo $regla_item->desde;?>"/></td>
-                <td>Hasta:<br/><input type="text" name="aplicacion_fin" value="<?php echo $regla_item->hasta;?>"/></td>
+                <td>Desde:<br/><input type="text" name="aplicacion_inicio" value="<?php echo $regla_item->desde;?>" id="dia_inicio"/></td>
+                <td>Hasta:<br/><input type="text" name="aplicacion_fin" value="<?php echo $regla_item->hasta;?>" id="dia_fin"/></td>
 	</tr>
 	<tr>
 		<td colspan=2>

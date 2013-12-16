@@ -24,7 +24,7 @@ class Controlador extends CI_Controller {
 		}
 	}
 	/**
-	 *Acci�n por default del controlador, carga la lista
+	 *Acción por default del controlador, carga la lista
 	 *de controladores disponibles y una lista de opciones
 	 *Recibe un parametro en caso de filtrado por entornos
 	 *
@@ -356,6 +356,7 @@ class Controlador extends CI_Controller {
 	 *Acción para servir un array de objetos con los permisos asignados a
 	 *un entorno y grupo determinados, esta accion solo es accedida por peticiones
 	 *AJAX y devuelve un objeto JSON
+         *Solo se permite su acceso por medio de peticiones AJAX
 	 *
 	 * @param  int $entorno
 	 * @param  int $grupo

@@ -1,9 +1,9 @@
 <?php
 /**
- * Controlador Catalogo
+ * Controlador CatalogoCsv
  *
  * @author     Geovanni
- * @created    2013-10-07
+ * @created    2013-12-06
  */
 class CatalogoCsv extends CI_Controller {
 
@@ -25,7 +25,7 @@ class CatalogoCsv extends CI_Controller {
 
 	/**
 	 *Acción por default del controlador, carga la lista
-	 *de catálogos disponibles y una lista de opciones
+	 *de catálogoscsv disponibles y una lista de opciones
 	 *No recibe parámetros
 	 *
 	 *@return void
@@ -55,7 +55,7 @@ class CatalogoCsv extends CI_Controller {
 
 	/**
 	 *Acción para visualizar de un catálogo específico, obtiene el objeto
-	 *catalogo por medio del nombre proporcionado
+	 *catalogocsv por medio del nombre proporcionado
 	 *
 	 * @param  string $nombre Este parametro no puede ser nulo
 	 * @return void
@@ -86,6 +86,7 @@ class CatalogoCsv extends CI_Controller {
 	 *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
 	 *compara los datos recibidos con los datos que contiene actualmente el catálogo, regresa como 
 	 *resultado las filas nuevas y las filas a modificar 
+         *Solo se permite su acceso por medio de peticiones AJAX
 	 *
 	 * @return void
 	 */

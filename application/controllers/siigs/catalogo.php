@@ -98,7 +98,7 @@ class Catalogo extends CI_Controller {
 	/**
 	 *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
 	 *Guarda en la tabla tmp_catalogos toda la estructura del CSV e imprime las columnas del
-	 *archivo
+	 *archivo. Solo se permite su acceso por medio de peticiones AJAX
 	 *
 	 * @return void
 	 */
@@ -181,7 +181,8 @@ class Catalogo extends CI_Controller {
         /**
 	 *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
 	 *compara los datos recibidos con los datos que contiene actualmente el catálogo, regresa como 
-	 *resultado las filas nuevas y las filas a modificar 
+	 *resultado las filas nuevas y las filas a modificar.
+         * Solo se permite su acceso por medio de peticiones AJAX
 	 *
 	 * @return void
 	 */
@@ -627,7 +628,7 @@ class Catalogo extends CI_Controller {
 
 	/**
 	 *
-	 *Acci�n para eliminar un catalogo, recibe el nombre del catalogo a eliminar
+	 *Acción para eliminar un catalogo, recibe el nombre del catalogo a eliminar
 	 *
 	 * @param  string $nombre
 	 * @return void

@@ -12,7 +12,12 @@ $(document).ready(function(){
             alert('El dia inicial de la aplicación debe ser mayor al dia final');
             return false;
         }
-        if ($('input[name=tipo_aplicacion]').is(':checked') && $('select[name=id_vacuna_previa]').val()*1<=0)
+        if ($('input[name=tipo_aplicacion]').is(':checked') == false)
+        {
+            alert('Debe elegir el tipo de aplicación');
+            return false;
+        }
+        if ($('input[name=tipo_aplicacion]:checked').val() == 'previa' && $('select[name=id_vacuna_previa]').val()*1<=0)
         {
             alert('Debe elegir el tipo de vacuna previa para esta regla');
             return false;
