@@ -26,7 +26,7 @@ class Accion extends CI_Controller {
 	/**
 	 *Acción por default del controlador, carga la lista
 	 *de acciones disponibles y una lista de opciones
-	 *No recibe par�metros
+	 *No recibe parámetros
 	 *
 	 *@return void
 	 */

@@ -268,7 +268,7 @@ class ArbolSegmentacion_model extends CI_Model {
             }
 
             $fecha_update_asu = $fecha_update_asu->result()[0]->fecha;
-            $ruta = 'asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($fecha_update_asu).'.json';
+            $ruta = 'application/json/asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($fecha_update_asu).'.json';
             
             if (file_exists($ruta))
             {

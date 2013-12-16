@@ -25,8 +25,8 @@ class ReglaVacuna extends CI_Controller {
 
 	/**
 	 *Acción por default del controlador, carga la lista
-	 *de acciones disponibles y una lista de opciones
-	 *No recibe par�metros
+	 *de reglas de vacunas disponibles y una lista de opciones
+	 *No recibe parámetros
 	 *
 	 *@return void
 	 */
@@ -53,8 +53,8 @@ class ReglaVacuna extends CI_Controller {
 	}
 
 	/**
-	 *Acción para visualizar de una accion específica, obtiene el objeto
-	 *accion por medio del id proporcionado.
+	 *Acción para visualizar de una regla específica, obtiene el objeto
+	 *regla_vacuna por medio del id proporcionado.
 	 *
 	 * @param  int $id Este parametro no puede ser nulo
 	 * @return void
@@ -80,7 +80,7 @@ class ReglaVacuna extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la insercion de nuevas acciones , realiza la validacion
+	 *Acción para preparar la insercion de nuevas reglas , realiza la validacion
 	 *del formulario del lado cliente
 	 *
 	 *@return void
@@ -147,7 +147,7 @@ class ReglaVacuna extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la actualizacion de una accion ya existente,
+	 *Acción para preparar la actualizacion de una regla ya existente,
 	 *recibe un ID para obtener los valores de esa accion y mostrarlos
 	 *en la vista update , realiza la validacion del formulario del lado
 	 *del cliente
@@ -238,7 +238,7 @@ class ReglaVacuna extends CI_Controller {
 
 	/**
 	 *
-	 *Acción para eliminar una accion, recibe el id de la accion a eliminar
+	 *Acción para eliminar una regla, recibe el id de la regla a eliminar
 	 *
 	 * @param  int $id
 	 * @return void
