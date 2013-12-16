@@ -167,7 +167,7 @@ class Catalogo_model extends CI_Model {
 		$result = array(
 			'nombre' => $nombre
 		);
-		$tblcampos = $this->db->query('describe '.$this->db->database.'.'.$nombre);
+		$tblcampos = $this->db->query('describe '.$nombre);
 		if (!$tblcampos)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
