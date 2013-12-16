@@ -2,6 +2,8 @@
 /**
  * Modelo Usuario
  *
+ * @package		TES
+ * @subpackage	Modelo
  * @author     	Rogelio
  * @created		2013-11-26
  */
@@ -198,10 +200,10 @@ class Notificacion_model extends CI_Model {
 	}
 
 	/**
-	 * Obtiene la notificaci�n solicitada
+	 * Obtiene la notificaci�n solicitada
 	 *
 	 * @access 		public
-	 * @param 		int			$id			id de notificaci�n
+	 * @param 		int			$id			id de notificaci�n
 	 * @return void|object		false si ocurrió algún error, object si se ejecutó correctamente
 	 */
 	public function getById($id)
@@ -245,7 +247,7 @@ class Notificacion_model extends CI_Model {
 	}
 	
 	/**
-	 * Inserta en la base de datos los datos de la notificaci�n (datos en propiedades)
+	 * Inserta en la base de datos los datos de la notificaci�n (datos en propiedades)
 	 *
 	 * @access		public
 	 * @return 		boolean					false si ocurrió algún error, true si se ejecutó correctamente
@@ -269,7 +271,7 @@ class Notificacion_model extends CI_Model {
 	}
 	
 	/**
-	 * Actualiza en la base de datos los datos de la notificaci�n (datos en propiedades)
+	 * Actualiza en la base de datos los datos de la notificaci�n (datos en propiedades)
 	 *
 	 * @access		public
 	 * @return 		boolean					false si ocurrió algún error, true si se ejecutó correctamente
@@ -294,7 +296,7 @@ class Notificacion_model extends CI_Model {
 	}
 	
 	/**
-	 * Elimina de la base de datos la notificaci�n (id en propiedades)
+	 * Elimina de la base de datos la notificaci�n (id en propiedades)
 	 *
 	 * @access		public
 	 * @return 		boolean					false si ocurrió algún error, true si se ejecutó correctamente

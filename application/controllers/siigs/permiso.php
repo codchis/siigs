@@ -2,6 +2,8 @@
 /**
  * Controlador Permiso
  *
+ * @package		SIIGS
+ * @subpackage	Controlador
  * @author     	Rogelio
  * @created		2013-10-01
  */
