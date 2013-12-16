@@ -6,9 +6,35 @@
 	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
     <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
+    
+    <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/resources/ui/jquery-ui-1.8.17.custom.js"></script>
     <script>
+	var g=new Date();
+		var option = 
+		{
+			changeMonth: true,
+			changeYear: true,
+			duration:"fast",
+			dateFormat: 'dd/mm/yy',
+			constrainInput: true,
+			firstDay: 1,
+			closeText: 'X',
+			showOn: 'both',
+			buttonImage: '/resources/images/calendar.gif',
+			buttonImageOnly: true,
+			buttonText: 'Clic para seleccionar una fecha',
+			yearRange: '1900:'+g.getFullYear(),
+			showButtonPanel: false
+		}
 	$(document).ready(function()
 	{
+		$("#buscar").autocomplete({
+				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/"
+		})
+		
+		$("#fnacimiento").datepicker(option);
+		$("#fechacivil").datepicker(option);
 		$("a#fba1").fancybox({
 			'width'             : '50%',
 			'height'            : '60%',				
@@ -119,7 +145,7 @@
             habilitarTutor();
         });
 		$("#buscarCurp").click(function(e) {
-            buscarTutor($("#buscar").val());
+            buscarTutor($("#buscar").val().substr(0,18));
 			return false;
         });
 		$("#curpT").blur(function(e) {
@@ -131,28 +157,28 @@
 	{
 		if(document.getElementById("captura").checked)
 		{
-			$("#nombreT").removeAttr("disabled");
-			$("#paternoT").removeAttr("disabled");
-			$("#maternoT").removeAttr("disabled");
-			$("#celularT").removeAttr("disabled");
-			$("#telefonoT").removeAttr("disabled");
-			$("#companiaT").removeAttr("disabled");
-			$("#sexoT_1").removeAttr("disabled");
-			$("#sexoT_2").removeAttr("disabled");
+			$("#nombreT").removeAttr("readonly");
+			$("#paternoT").removeAttr("readonly");
+			$("#maternoT").removeAttr("readonly");
+			$("#celularT").removeAttr("readonly");
+			$("#telefonoT").removeAttr("readonly");
+			$("#companiaT").removeAttr("readonly");
+			$("#sexoT_1").removeAttr("readonly");
+			$("#sexoT_2").removeAttr("readonly");
 		}
 		else
 		{
-			$("#nombreT").attr("disabled",true);
-			$("#paternoT").attr("disabled",true);
-			$("#maternoT").attr("disabled",true);
-			$("#celularT").attr("disabled",true);
-			$("#telefonoT").attr("disabled",true);
-			$("#companiaT").attr("disabled",true);
-			$("#sexoT_1").attr("disabled",true);	
-			$("#sexoT_2").attr("disabled",true);
+			$("#nombreT").attr("readonly",true);
+			$("#paternoT").attr("readonly",true);
+			$("#maternoT").attr("readonly",true);
+			$("#celularT").attr("readonly",true);
+			$("#telefonoT").attr("readonly",true);
+			$("#companiaT").attr("readonly",true);
+			$("#sexoT_1").attr("readonly",true);	
+			$("#sexoT_2").attr("readonly",true);
 			var buscar=$("#curpT").val();
 			if($("#buscar").val()!="")
-				buscar=$("#buscar").val();
+				buscar=$("#buscar").val().substr(0,18);
 			if(buscar!="")		
 			buscarTutor(buscar);		
 		}
@@ -222,29 +248,35 @@
 		var fn=$("#fnacimiento").val();
 		var ed=$("#lnacimientoT").val().substr($("#lnacimientoT").val().search(",")+1,$("#lnacimientoT").val().length);
 		ed=$.trim(ed);
-		var a=fn.substr(0,4);
-		var m=fn.substr(5,2);
-		var d=fn.substr(8,2);
+		var d=fn.substr(0,2);
+		var m=fn.substr(3,2);
+		var a=fn.substr(6,4);
+		var x=parseInt(a)+"";
+		
 		if(ap!=""&&am!=""&&no!=""&&se!=""&&fn!=""&&ed!="")
 		{
-			$("#curp").val("");
-			$("#curpl").html("");		
-			$("#curp2").val("");
-			$.ajax({
-				url: "/<?php echo DIR_TES?>/obtenercurp/curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
-				type: "POST",
-				data: "json",
-				success:function(data){
-					var obj = jQuery.parseJSON( data );
-					if(data)
-					{
-						var curp=obj[0]["curp"];
-						$("#curp").val(curp.substr(0,curp.length-5));
-						$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
-						$("#curp2").val(curp.substr(curp.length-5,5));		
+			if(x.length>3)
+			{
+				$("#curp").val("");
+				$("#curpl").html("");		
+				$("#curp2").val("");
+				$.ajax({
+					url: "/<?php echo DIR_TES?>/obtenercurp/curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
+					type: "POST",
+					data: "json",
+					success:function(data){
+						var obj = jQuery.parseJSON( data );
+						if(data)
+						{
+							var curp=obj[0]["curp"];
+							$("#curp").val(curp.substr(0,curp.length-5));
+							$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
+							$("#curp2").val(curp.substr(curp.length-5,5));		
+						}
 					}
-				}
-			});
+				});
+			}
+			else {$("#fnacimiento").val("");$("#fnacimiento").attr("placeholder","dd/mm/yyyy"); $("#fnacimiento").focus();};
 		}
 	 	return false;
 	}
@@ -258,9 +290,10 @@
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
 		
-		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" required="required" style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="date" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
+		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" required="required" style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
-		
+		$("#f"+id+num).val($.datepicker.formatDate('dd/mm/yy', new Date()));
+		$("#f"+id+num).datepicker(option);
 		$("#"+id+num).load("/tes/Enrolamiento/catalog_select/"+id);
 	}
 	function rem(id,n)
@@ -285,7 +318,7 @@
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
 		
-		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" required="required" style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" required="required" style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" required="required" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="date" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
+		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" required="required" style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" required="required" style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" required="required" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 		$("#cNu").append(campo);
 	}
 	function remNutricional()
@@ -349,7 +382,7 @@
                             <td><p align="right">Apellido Materno</p></td>
                             <td><input name="materno" type="text" id="materno" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->apellido_materno; ?>"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><input name="fnacimiento" type="date" id="fnacimiento" style="width:74%; margin-left:10px;" required value="<?php echo $enrolado->fecha_nacimiento; ?>"></td>
+                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d/m/Y', strtotime($enrolado->fecha_nacimiento)); ?>" placeholder="dd/mm/yyyy"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
@@ -361,7 +394,7 @@
                           <tr>
                             <td><p align="right">CURP</p></td>
                             <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo substr($enrolado->curp,0,12); ?>">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20%" required value="<?php echo substr($enrolado->curp,12,15); ?>"></td>
+                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20.5%" required value="<?php echo substr($enrolado->curp,12,15); ?>"></td>
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" required="required">
                             </select></td>
@@ -414,30 +447,30 @@
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px;">
-                                <input type="radio" name="sexoT" value="M" <?php if( $enrolado->sexoT=="M") echo "checked"; ?> id="sexoT_1" disabled="disabled">
+                                <input type="radio" name="sexoT" value="M" <?php if( $enrolado->sexoT=="M") echo "checked"; ?> id="sexoT_1" >
                                 Masculino</label>
                               <label>
-                                <input type="radio" name="sexoT" value="F" <?php if( $enrolado->sexoT=="F") echo "checked"; ?> id="sexoT_2" disabled="disabled" >
+                                <input type="radio" name="sexoT" value="F" <?php if( $enrolado->sexoT=="F") echo "checked"; ?> id="sexoT_2"  >
                                 Femenino</label>
                              </td>
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombreT" type="text" disabled="disabled" required="required" id="nombreT" style="width:80%; margin-left:10px;" value="<?php  echo set_value('nombreT', $enrolado->nombreT) ; ?>" /></td>
+                            <td width="31%"><input name="nombreT" type="text" required="required" id="nombreT" style="width:80%; margin-left:10px;" value="<?php  echo set_value('nombreT', $enrolado->nombreT) ; ?>" readonly="readonly" /></td>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><input name="celularT" type="text" disabled="disabled" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->celularT; ?>" /></td>
+                            <td><input name="celularT" type="text" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->celularT; ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paternoT" type="text" disabled="disabled" required="required" id="paternoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->paternoT; ?>" /></td>
+                            <td><input name="paternoT" type="text" required="required" id="paternoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->paternoT; ?>" readonly="readonly" /></td>
                             <td><p align="right">Celular</p></td>
-                            <td><input name="telefonoT" type="text" disabled="disabled" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->telefonoT; ?>" /></td>
+                            <td><input name="telefonoT" type="text" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->telefonoT; ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="maternoT" type="text" disabled="disabled" required="required" id="maternoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->maternoT; ?>" /></td>
+                            <td><input name="maternoT" type="text" required="required" id="maternoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->maternoT; ?>" readonly="readonly" /></td>
                             <td><p align="right">Compania Celular</p></td>
-                            <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" disabled="disabled">
+                            <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" >
                             </select></td>
                           </tr>
                         </table>
@@ -453,7 +486,7 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Fecha</p></td>
-                            <td width="31%"><input name="fechacivil" type="date" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date("Y-m-d",strtotime($enrolado->fecha_registro)); ?>"></td>
+                            <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date("d/m/Y",strtotime($enrolado->fecha_registro)); ?>" placeholder="dd/mm/yyyy"></td>
                             <td width="25%"><p align="right">&nbsp;</p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
@@ -718,10 +751,15 @@
 					<th width="18%" align="left"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'.$num.'" required="required" style="width:85%;" value="'.$peso.'"></th> 
 					<th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'.$num.'" required="required" style="width:85%;" value="'.$altura.'"></th>  
 					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'" required="required" style="width:85%;" value="'.$talla.'"></th>  
-					<th width="36%"><input name="fCNu[]" type="date" id="fCNu'.$num.'" value="'.date("Y-m-d",strtotime($fecha)).'"></th>
+					<th width="36%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("d/m/Y",strtotime($fecha)).'"></th>
 				</tr>
 				</table> 
-			  </div></span>';
+			  </div></span>
+			  <script>
+			  $(document).ready(function()
+				{
+					$("#fCNu'.$num.'").datepicker(option);
+				});</script>';
 			  
 		 
 	 }
@@ -782,10 +820,15 @@ function getArray($array,$id,$nu)
 					<th width="50%" align="left"><select name="'.$id.'[]" id="'.$id.$num.'" required="required" style="width:95%;"></select>
 					<script>$("#'.$id.$num.'").load("/tes/Enrolamiento/catalog_select/'.$id.'/'.$x.'");</script>
 					</th>
-					<th width="40%" align="left"><input name="f'.$id.'[]" type="date" id="f'.$id.$num.'" value="'.date("Y-m-d",strtotime($fecha)).'"></th>
+					<th width="40%" align="left"><input name="f'.$id.'[]" type="text" id="f'.$id.$num.'" value="'.date("d/m/Y",strtotime($fecha)).'"></th>
 				</tr>
 				</table> 
-			  </div></span>';
+			  </div></span>
+			  <script>
+	$(document).ready(function()
+	{
+		$("#f'.$id.$num.'").datepicker(option);
+	});</script>';
 			  
 		 
 	 }
