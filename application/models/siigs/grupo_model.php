@@ -2,6 +2,8 @@
 /**
  * Modelo Grupo
  *
+ * @package		SIIGS
+ * @subpackage	Modelo
  * @author     	Rogelio
  * @created		2013-09-25
  */

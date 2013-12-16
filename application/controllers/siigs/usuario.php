@@ -2,6 +2,8 @@
 /**
  * Controlador Usuario
  *
+ * @package		SIIGS
+ * @subpackage	Controlador
  * @author     	Rogelio
  * @created		2013-09-25
  */
