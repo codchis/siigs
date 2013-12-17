@@ -54,10 +54,10 @@ class Notificacion extends CI_Controller {
 					foreach ($filtros as $campo => $valor) {
 						switch ($campo) {
 							case 'fechaIni':
-								$this->Notificacion_model->addFilter('fecha_inicio', '>=', $valor);
+								$this->Notificacion_model->addFilter('fecha_inicio', '>=', date('Y-m-d', strtotime($valor)));
 								break;
 							case 'fechaFin':
-								$this->Notificacion_model->addFilter('fecha_inicio', '<=', $valor.' 23:59:59');
+								$this->Notificacion_model->addFilter('fecha_inicio', '<=', date('Y-m-d', strtotime($valor)).' 23:59:59');
 								break;
 						}
 					}
@@ -159,8 +159,8 @@ class Notificacion extends CI_Controller {
 			try {
 				$this->Notificacion_model->setTitulo(strtoupper($this->input->post('titulo')));
 				$this->Notificacion_model->setContenido($this->input->post('contenido'));
-				$this->Notificacion_model->setFechaInicio($this->input->post('fecha_inicio'));
-				$this->Notificacion_model->setFechaFin($this->input->post('fecha_fin'));
+				$this->Notificacion_model->setFechaInicio(date('Y-m-d', strtotime($this->input->post('fecha_inicio'))));
+				$this->Notificacion_model->setFechaFin(date('Y-m-d', strtotime($this->input->post('fecha_fin'))));
 				$this->Notificacion_model->setIdsTabletas($this->input->post('id_arr_asu'));
 				$this->Notificacion_model->insert();
 				$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
@@ -216,8 +216,8 @@ class Notificacion extends CI_Controller {
 				$this->Notificacion_model->setId($id);
 				$this->Notificacion_model->setTitulo(strtoupper($this->input->post('titulo')));
 				$this->Notificacion_model->setContenido($this->input->post('contenido'));
-				$this->Notificacion_model->setFechaInicio($this->input->post('fecha_inicio'));
-				$this->Notificacion_model->setFechaFin($this->input->post('fecha_fin'));
+				$this->Notificacion_model->setFechaInicio(date('Y-m-d', strtotime($this->input->post('fecha_inicio'))));
+				$this->Notificacion_model->setFechaFin(date('Y-m-d', strtotime($this->input->post('fecha_fin'))));
 				$this->Notificacion_model->setIdsTabletas($this->input->post('id_arr_asu'));
 				$this->Notificacion_model->update();
 				$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');

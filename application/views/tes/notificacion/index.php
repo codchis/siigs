@@ -1,4 +1,24 @@
+<link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+<script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
 <script type="text/javascript">
+var objFecha = new Date();
+
+var optionsFecha = {
+    changeMonth: true,
+    changeYear: true,
+    duration: "fast",
+    dateFormat: 'dd-mm-yy',
+    constrainInput: true,
+    firstDay: 1,
+    closeText: 'X',
+    showOn: 'both',
+    buttonImage: '/resources/images/calendar.gif',
+    buttonImageOnly: true,
+    buttonText: 'Clic para seleccionar una fecha',
+    yearRange: '2005:'+objFecha.getFullYear(),
+    showButtonPanel: false
+};
+
 $(document).ready(function(){
     $('#btnFiltrar').click(function(e){
         // Eliminar la pagina de la url del action
@@ -8,6 +28,15 @@ $(document).ready(function(){
         $('#form_filter_bitacora').attr('action',action);
         $('#form_filter_bitacora').submit();
     });
+
+    $("#fechaIni").datepicker(optionsFecha);
+    $("#fechaFin").datepicker(optionsFecha);
+    
+    $("#limpiaFecha").click(function(){
+        $("#fechaIni").val('');
+        $("#fechaFin").val('');
+    });
+    
 });
 </script>
 <?php 
@@ -25,16 +54,18 @@ $opcion_delete = Menubuilder::isGranted(DIR_TES.'::notificacion::delete');
 <p><input type="hidden" name="filtrar" value="true" />
 <table>
 <tr>
-<td>Buscar</td><td colspan='2'> <input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" /></td>
+<td>Buscar</td>
+<td colspan='4'> <input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" /></td>
 </tr>
 <tr>
-<td>
-Fecha Inicio:</td><td><input type="date" name="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" /></td>
-             <td><input type="date" name="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" /></td>
-             </tr>
+<td>Fecha Inicio:</td><td><input type="text" id="fechaIni" name="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" /></td>
+<td>Fecha Fin:</td><td><input type="text" id="fechaFin" name="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" /></td>
+</tr>
 <tr>
-<td colspan='3'>
+<td colspan='2'>
 <input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" /></td>
+<td colspan='2'>
+<input type="button" value="Limpiar Fechas" id="limpiaFecha" /></td>
 </tr>
 </table>
 </form>
