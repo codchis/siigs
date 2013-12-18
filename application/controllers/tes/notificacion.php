@@ -1,6 +1,6 @@
 <?php
 /**
- * Controlador Notificaci�n
+ * Controlador Notificación
  *
  * @package		TES
  * @subpackage	Controlador
