@@ -1,7 +1,9 @@
 <?php
 /**
  * Controlador Catalogo
- *
+ * 
+ * @package    SIIGS
+ * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-10-07
  */

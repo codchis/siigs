@@ -2,6 +2,8 @@
 /**
  * Controlador ReglaVacuna
  *
+ * @package    TES
+ * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-12-09
  */
@@ -53,7 +55,7 @@ class ReglaVacuna extends CI_Controller {
 	}
 
 	/**
-	 *Acción para visualizar de una regla específica, obtiene el objeto
+	 *Acción para visualizar información de una regla específica, obtiene el objeto
 	 *regla_vacuna por medio del id proporcionado.
 	 *
 	 * @param  int $id Este parametro no puede ser nulo
@@ -148,7 +150,7 @@ class ReglaVacuna extends CI_Controller {
 
 	/**
 	 *Acción para preparar la actualizacion de una regla ya existente,
-	 *recibe un ID para obtener los valores de esa accion y mostrarlos
+	 *recibe un ID para obtener los valores de esa regla y mostrarlos
 	 *en la vista update , realiza la validacion del formulario del lado
 	 *del cliente
 	 *

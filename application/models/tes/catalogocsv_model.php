@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Modelo Catalogo
+ * Modelo CatalogoCsv
  *
+ * @package    TES
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-10-07
  */

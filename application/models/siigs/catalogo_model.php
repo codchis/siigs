@@ -3,6 +3,8 @@
 /**
  * Modelo Catalogo
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-10-07
  */

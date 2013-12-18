@@ -3,6 +3,8 @@
 /**
  * Modelo ArbolSegmentacion
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-12-02
  */
@@ -274,6 +276,8 @@ class ArbolSegmentacion_model extends CI_Model {
             {
                 $str_datos = file_get_contents($ruta);
                 $datos = json_decode($str_datos,true);
+                if (count($seleccionados)>0)
+                $datos = $this->_addSelectedItems($datos,$seleccionados);
                 return $datos;
             }
             else
@@ -345,6 +349,22 @@ class ArbolSegmentacion_model extends CI_Model {
                     return $resultado[1];
                 }
             }
+        }
+        
+        public function _addSelectedItems($datos,$seleccionados)
+        {
+            foreach($datos as $clave => $dato)
+            {
+                if (array_key_exists('children', $dato) && count($dato['children'])>0)
+                {
+                    $dato['children'] = $this->_addSelectedItems($dato['children'],$seleccionados);
+                }
+                if (in_array($dato["key"],$seleccionados))
+                {
+                    $datos[$clave]["select"] = true;
+                }
+            }
+            return $datos;
         }
         
 //        public function getChildrenFromId($id , $json = true)

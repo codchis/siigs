@@ -2,6 +2,8 @@
 /**
  * Controlador CatalogoCsv
  *
+ * @package    TES
+ * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-12-06
  */
@@ -309,7 +311,7 @@ class CatalogoCsv extends CI_Controller {
 	}
 	
          /***
-         * Accion para activar o desactivar elementos en los catalogos IRA EDA Consultas
+         * Accion para activar o desactivar elementos en los catalogos indicados en el parametro
          * parametros pasados
          * @param Int $id Es el id del registro en el catalogo
          * @param String $catalogo para determinar a que catalogo se va a agregar o quitar el registro

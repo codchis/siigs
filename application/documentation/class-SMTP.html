@@ -7,7 +7,7 @@
 	<title>Class SMTP | </title>
 
 	<script type="text/javascript" src="resources/combined.js?2175304063"></script>
-	<script type="text/javascript" src="elementlist.js?3434746792"></script>
+	<script type="text/javascript" src="elementlist.js?2074150803"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -37,6 +37,20 @@
 				<li><a href="package-Session.html">Session<span></span></a>
 						<ul>
 				<li><a href="package-Session.Libraries.html">Libraries</a>
+						</li>
+							</ul></li>
+				<li><a href="package-SIIGS.html">SIIGS<span></span></a>
+						<ul>
+				<li><a href="package-SIIGS.Controlador.html">Controlador</a>
+						</li>
+				<li><a href="package-SIIGS.Modelo.html">Modelo</a>
+						</li>
+							</ul></li>
+				<li><a href="package-TES.html">TES<span></span></a>
+						<ul>
+				<li><a href="package-TES.Controlador.html">Controlador</a>
+						</li>
+				<li><a href="package-TES.Modelo.html">Modelo</a>
 						</li>
 							</ul></li>
 			</ul>
@@ -139,7 +153,7 @@ Ryan</p>
 				<code><code><a href="class-PHPMailer.html#_SmtpSend">PHPMailer::SmtpSend()</a></code></code> <br />
 				<b>Used by:</b>
 				<code><code><a href="class-PHPMailer.html#_SmtpConnect">PHPMailer::SmtpConnect()</a></code></code> <br />
-		<b>Located at</b> <a href="source-class-SMTP.html#39-816" title="Go to source code">system/libraries/PHPMailer/class.smtp.php</a><br />
+		<b>Located at</b> system/libraries/PHPMailer/class.smtp.php<br />
 	</div>
 
 
@@ -157,7 +171,7 @@ Ryan</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-SMTP.html#85-96" title="Go to source code">__construct</a>( )</code>
+		<code>__construct( )</code>
 
 		<div class="description short">
 			
@@ -190,7 +204,7 @@ Ryan</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Connect">#</a>
-		<code><a href="source-class-SMTP.html#102-160" title="Go to source code">Connect</a>( <span>mixed <var>$host</var></span>, <span>mixed <var>$port</var> = <span class="php-num">0</span></span>, <span>mixed <var>$tval</var> = <span class="php-num">30</span></span> )</code>
+		<code>Connect( <span>mixed <var>$host</var></span>, <span>mixed <var>$port</var> = <span class="php-num">0</span></span>, <span>mixed <var>$tval</var> = <span class="php-num">30</span></span> )</code>
 
 		<div class="description short">
 			
@@ -235,7 +249,7 @@ not specified the default is 30 seconds to try on the connection.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_StartTLS">#</a>
-		<code><a href="source-class-SMTP.html#162-205" title="Go to source code">StartTLS</a>( )</code>
+		<code>StartTLS( )</code>
 
 		<div class="description short">
 			
@@ -275,7 +289,7 @@ allowed) SMTP CODE 454 TLS not available due to temporary reason</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Authenticate">#</a>
-		<code><a href="source-class-SMTP.html#207-266" title="Go to source code">Authenticate</a>( <span>mixed <var>$username</var></span>, <span>mixed <var>$password</var></span> )</code>
+		<code>Authenticate( <span>mixed <var>$username</var></span>, <span>mixed <var>$password</var></span> )</code>
 
 		<div class="description short">
 			
@@ -314,7 +328,7 @@ Returns true if successfully authenticated.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Connected">#</a>
-		<code><a href="source-class-SMTP.html#268-287" title="Go to source code">Connected</a>( )</code>
+		<code>Connected( )</code>
 
 		<div class="description short">
 			
@@ -351,7 +365,7 @@ Returns true if successfully authenticated.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Close">#</a>
-		<code><a href="source-class-SMTP.html#289-304" title="Go to source code">Close</a>( )</code>
+		<code>Close( )</code>
 
 		<div class="description short">
 			
@@ -386,7 +400,7 @@ good to use this function without first trying to use QUIT.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Data">#</a>
-		<code><a href="source-class-SMTP.html#310-452" title="Go to source code">Data</a>( <span>mixed <var>$msg_data</var></span> )</code>
+		<code>Data( <span>mixed <var>$msg_data</var></span> )</code>
 
 		<div class="description short">
 			
@@ -437,7 +451,7 @@ CODE ERROR : 500,501,503,421</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Hello">#</a>
-		<code><a href="source-class-SMTP.html#454-489" title="Go to source code">Hello</a>( <span>mixed <var>$host</var> = <span class="php-quote">''</span></span> )</code>
+		<code>Hello( <span>mixed <var>$host</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
 			
@@ -469,6 +483,43 @@ server are in the same known state.</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="SendHello" id="_SendHello">
+
+		<td class="attributes"><code>
+			 private 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_SendHello">#</a>
+		<code>SendHello( <span>mixed <var>$hello</var></span>, <span>mixed <var>$host</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Sends a HELO/EHLO command.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Sends a HELO/EHLO command.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="Mail" id="_Mail">
 
 		<td class="attributes"><code>
@@ -480,7 +531,7 @@ server are in the same known state.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Mail">#</a>
-		<code><a href="source-class-SMTP.html#522-566" title="Go to source code">Mail</a>( <span>mixed <var>$from</var></span> )</code>
+		<code>Mail( <span>mixed <var>$from</var></span> )</code>
 
 		<div class="description short">
 			
@@ -529,7 +580,7 @@ command.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Quit">#</a>
-		<code><a href="source-class-SMTP.html#568-618" title="Go to source code">Quit</a>( <span>mixed <var>$close_on_error</var> = <span class="php-keyword1">true</span></span> )</code>
+		<code>Quit( <span>mixed <var>$close_on_error</var> = <span class="php-keyword1">true</span></span> )</code>
 
 		<div class="description short">
 			
@@ -572,7 +623,7 @@ no error or the $close_on_error argument is true.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Recipient">#</a>
-		<code><a href="source-class-SMTP.html#620-661" title="Go to source code">Recipient</a>( <span>mixed <var>$to</var></span> )</code>
+		<code>Recipient( <span>mixed <var>$to</var></span> )</code>
 
 		<div class="description short">
 			
@@ -617,7 +668,7 @@ SMTP CODE ERROR : 500,501,503,421</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Reset">#</a>
-		<code><a href="source-class-SMTP.html#663-705" title="Go to source code">Reset</a>( )</code>
+		<code>Reset( )</code>
 
 		<div class="description short">
 			
@@ -660,7 +711,7 @@ progress. Returns true if successful false otherwise.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_SendAndMail">#</a>
-		<code><a href="source-class-SMTP.html#707-752" title="Go to source code">SendAndMail</a>( <span>mixed <var>$from</var></span> )</code>
+		<code>SendAndMail( <span>mixed <var>$from</var></span> )</code>
 
 		<div class="description short">
 			
@@ -711,7 +762,7 @@ logged in and send them an email.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Turn">#</a>
-		<code><a href="source-class-SMTP.html#754-774" title="Go to source code">Turn</a>( )</code>
+		<code>Turn( )</code>
 
 		<div class="description short">
 			
@@ -756,7 +807,7 @@ be implimented in the future</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getError">#</a>
-		<code><a href="source-class-SMTP.html#776-783" title="Go to source code">getError</a>( )</code>
+		<code>getError( )</code>
 
 		<div class="description short">
 			
@@ -774,6 +825,49 @@ be implimented in the future</p>
 				<h4>Returns</h4>
 				<div class="list">
 					<code>array</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="get_lines" id="_get_lines">
+
+		<td class="attributes"><code>
+			 private 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_get_lines">#</a>
+		<code>get_lines( )</code>
+
+		<div class="description short">
+			
+<p>Read in as many lines as possible either before eof or socket timeout occurs
+on the operation. With SMTP we can tell if we have more lines to read if the 4th
+character is '-' symbol. If it is a space then we don't need to read anything
+else.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Read in as many lines as possible either before eof or socket timeout occurs
+on the operation. With SMTP we can tell if we have more lines to read if the 4th
+character is '-' symbol. If it is a space then we don't need to read anything
+else.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
 				</div>
 
 
@@ -804,8 +898,7 @@ be implimented in the future</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-SMTP.html#47-51" title="Go to source code"><var>$SMTP_PORT</var></a>
-		</td>
+<var>$SMTP_PORT</var>		</td>
 		<td class="value"><code><span class="php-num">25</span></code></td>
 		<td class="description"><div>
 			<a href="#$SMTP_PORT" class="anchor">#</a>
@@ -831,8 +924,7 @@ be implimented in the future</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-SMTP.html#53-57" title="Go to source code"><var>$CRLF</var></a>
-		</td>
+<var>$CRLF</var>		</td>
 		<td class="value"><code><span class="php-quote">&quot;\r\n&quot;</span></code></td>
 		<td class="description"><div>
 			<a href="#$CRLF" class="anchor">#</a>
@@ -858,8 +950,7 @@ be implimented in the future</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-SMTP.html#59-63" title="Go to source code"><var>$do_debug</var></a>
-		</td>
+<var>$do_debug</var>		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
 			<a href="#$do_debug" class="anchor">#</a>
@@ -885,8 +976,7 @@ be implimented in the future</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-SMTP.html#65-69" title="Go to source code"><var>$do_verp</var></a>
-		</td>
+<var>$do_verp</var>		</td>
 		<td class="value"><code><span class="php-keyword1">false</span></code></td>
 		<td class="description"><div>
 			<a href="#$do_verp" class="anchor">#</a>
@@ -912,8 +1002,7 @@ be implimented in the future</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-SMTP.html#71-75" title="Go to source code"><var>$Version</var></a>
-		</td>
+<var>$Version</var>		</td>
 		<td class="value"><code><span class="php-quote">'5.2.1'</span></code></td>
 		<td class="description"><div>
 			<a href="#$Version" class="anchor">#</a>
@@ -928,6 +1017,72 @@ be implimented in the future</p>
 				
 <p>Sets the SMTP PHPMailer Version number</p>
 
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="smtp_conn" id="$smtp_conn">
+		<td class="attributes"><code>
+			private  
+			mixed
+		</code></td>
+
+		<td class="name">
+<var>$smtp_conn</var>		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$smtp_conn" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="error" id="$error">
+		<td class="attributes"><code>
+			private  
+			mixed
+		</code></td>
+
+		<td class="name">
+<var>$error</var>		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$error" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="helo_rply" id="$helo_rply">
+		<td class="attributes"><code>
+			private  
+			mixed
+		</code></td>
+
+		<td class="name">
+<var>$helo_rply</var>		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$helo_rply" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
 
 			</div>
 		</div></td>

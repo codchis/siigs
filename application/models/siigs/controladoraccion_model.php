@@ -3,6 +3,8 @@
 /**
  * Modelo ControladorAccion
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-09-26
  */
