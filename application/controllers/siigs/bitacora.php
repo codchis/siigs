@@ -44,7 +44,7 @@ class Bitacora extends CI_Controller {
 
         try {
             $this->load->library('pagination');
-            $this->load->helper('form');
+            $this->load->helper(array('form', 'formatFecha'));
             $this->load->model( array(DIR_SIIGS.'/Usuario_model', DIR_SIIGS.'/Entorno_model', DIR_SIIGS.'/Controlador_model', DIR_SIIGS.'/Accion_model') );
 
             $filtros = array();
@@ -102,10 +102,10 @@ class Bitacora extends CI_Controller {
                                 $this->Bitacora_model->addFilter('id_usuario', '=', $valor);
                                 break;
                             case 'fechaIni':
-                                $this->Bitacora_model->addFilter('fecha_hora', '>=', $valor);
+                                $this->Bitacora_model->addFilter('fecha_hora', '>=', formatFecha($valor, "Y-m-d"));
                                 break;
                             case 'fechaFin':
-                                $this->Bitacora_model->addFilter('fecha_hora', '<=', $valor.' 23:59:59');
+                                $this->Bitacora_model->addFilter('fecha_hora', '<=', formatFecha($valor, "Y-m-d").' 23:59:59');
                                 break;
                             case 'entorno':
                                 $this->Bitacora_model->addFilter('id_entorno', '=', $valor);

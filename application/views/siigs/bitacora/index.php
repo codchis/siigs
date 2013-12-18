@@ -9,7 +9,7 @@ var optionsFecha = {
     changeMonth: true,
     changeYear: true,
     duration: "fast",
-    dateFormat: 'mm-dd-yy',
+    dateFormat: 'dd-mm-yy',
     constrainInput: true,
     firstDay: 1,
     closeText: 'X',
@@ -129,7 +129,7 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
                     
                     echo '<td>'.$fila->usuario.'</td>
                     <td>'.$fila->nombre.' '.$fila->apellido_paterno.' '.$fila->apellido_materno.'</td>
-                    <td>'.htmlentities($fila->fecha_hora).'</td>
+                    <td>'.htmlentities(formatFecha($fila->fecha_hora)).'</td>
                     <td>'.htmlentities($fila->parametros).'</td>
                     <td>'.htmlentities($fila->entorno).'</td>
                     <td>'.htmlentities($fila->controlador).'</td>
