@@ -2,7 +2,7 @@
 /**
  * Controlador Notificaci�n
  *
- * @package		SIIGS
+ * @package		TES
  * @subpackage	Controlador
  * @author     	Rogelio
  * @created		2013-11-26
