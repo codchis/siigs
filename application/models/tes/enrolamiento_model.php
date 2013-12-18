@@ -3,7 +3,7 @@
  * Modelo Usuario
  *
  * @package     TES
- * @subpackage  enrolamiento
+ * @subpackage  Modelo
  * @author     	Eliecer
  * @created     2013-12-17
  */

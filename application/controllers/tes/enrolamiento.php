@@ -3,7 +3,7 @@
  * Controller Usuario
  *
  * @package     TES
- * @subpackage  enrolamiento
+ * @subpackage  Controlador
  * @author     	Eliecer
  * @created     2013-12-17
  */

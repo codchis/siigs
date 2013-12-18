@@ -3,7 +3,7 @@
  * Controlador Servicios
  *
  * @package    TES
- * @subpakage  enrolamiento
+ * @subpakage  Controlador
  * @author     Eliecer
  * @created    2013-11-27
  */
