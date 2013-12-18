@@ -2,7 +2,10 @@
 /**
  * Modelo Usuario
  *
+ * @package     TES
+ * @subpackage  enrolamiento
  * @author     	Eliecer
+ * @created     2013-12-17
  */
 class Enrolamiento_model extends CI_Model 
 {
@@ -16,7 +19,7 @@ class Enrolamiento_model extends CI_Model
 	private static $CI;
 	
 	/**
-	 * @variablas
+	 * @variables
 	 */
 	// Basico 
 	private $id;
@@ -52,7 +55,7 @@ class Enrolamiento_model extends CI_Model
 	// historial de alergias
 	private $alergias= array();
 	
-	// vacunacioin
+	// vacunacion
 	private $vacuna= array();
 	private $fvacuna= array();
 	
@@ -570,10 +573,16 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->nacionalidad = $value;
 	}
-	// insert cns_control_XXXX json sincrinizacion
+	/**
+	 *Hace insert de las tablas cns_control_x que se reciben en la sincronizacion secuencial
+	 *se recibe el parametro $tabla de tipo String que representa la tabla a la que se le hara la insercion
+	 *el parametro $array tipo array() contiene los datos  
+	 *
+	 */
 	public function cns_insert($tabla,$array)
 	{
-		$result = $this->db->insert($tabla, $array); $fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a"); fputs($fp, $this->db->last_query()."\r\n"); //echo $this->db->last_query()."; <br>";
+		$result = $this->db->insert($tabla, $array); 
+		$fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a"); fputs($fp, $this->db->last_query()."\r\n"); 
 		if (!$result)
 		{
 			$this->msg_error_usr = "Error $tabla.";
@@ -581,7 +590,12 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	
-	// update cns_control_XXXX json sincrinizacion
+	/**
+	 *Este metodo trabaja hace update de la sincronizacion de los datos que se repitan el id
+	 *se recibe el parametro $tabla de tipo String que representa la tabla a la que se le hara la insercion
+	 *el parametro $array tipo array() contiene los datos  
+	 *
+	 */
 	public function cns_update($tabla,$array,$id)
 	{
 		$this->db->where('id' , $id);
@@ -593,7 +607,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	
-	// inserta la informacion de una persona enrolada nueva
+	/**
+	 *Hace insert de la persona capturada o enrolada en la parte web
+	 *@return el resultado de la consulta
+	 *
+	 */
 	public function insert()
 	{
 		$unico_id=md5(uniqid());
@@ -610,10 +628,10 @@ class Enrolamiento_model extends CI_Model
 			'curp' => $this->curp,
 			'sexo' => $this->sexo,
 			'id_tipo_sanguineo' => $this->sangre,
-			'fecha_nacimiento' => $this->fnacimiento,
+			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)),
 			
 			// civil
-			'fecha_registro' => $this->fechacivil,
+			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
 			'id_asu_um_tratante' => $this->lugarcivil,
 			
 			// direccion
@@ -667,6 +685,16 @@ class Enrolamiento_model extends CI_Model
 					$this->setidtutor($unico_idtutor);
 				}
 			}
+			else
+			{	
+				$this->db->where('id' , $this->idtutor);
+				$result0 = $this->db->update('cns_tutor', $data0);
+				if (!$result0)
+				{
+					$this->msg_error_usr = "No se actualizo Tutor.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+			}
 			$data01 = array(
 				'id_persona' => $this->id,
 				'id_tutor' => $this->idtutor,						
@@ -704,7 +732,7 @@ class Enrolamiento_model extends CI_Model
 					// vacuna
 					'id_persona' => $this->id,
 					'id_vacuna' => $this->vacuna[$i],
-					'fecha' => $this->fvacuna[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -725,7 +753,7 @@ class Enrolamiento_model extends CI_Model
 					// ira
 					'id_persona' => $this->id,
 					'id_ira' => $this->ira[$i],
-					'fecha' => $this->fira[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -746,7 +774,7 @@ class Enrolamiento_model extends CI_Model
 					// eda
 					'id_persona' => $this->id,
 					'id_eda' => $this->eda[$i],
-					'fecha' => $this->feda[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -767,7 +795,7 @@ class Enrolamiento_model extends CI_Model
 					// consulta
 					'id_persona' => $this->id,
 					'id_consulta' => $this->consulta[$i],
-					'fecha' => $this->fconsulta[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -788,7 +816,7 @@ class Enrolamiento_model extends CI_Model
 					// accion nutricional
 					'id_persona' => $this->id,
 					'id_accion_nutricional' => $this->accion_nutricional[$i],
-					'fecha' => $this->faccion_nutricional[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->faccion_nutricional[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -811,7 +839,7 @@ class Enrolamiento_model extends CI_Model
 					'peso' => $this->peso[$i],
 					'altura' => $this->altura[$i],
 					'talla' => $this->talla[$i],
-					'fecha' => $this->fnutricion[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -848,7 +876,10 @@ class Enrolamiento_model extends CI_Model
 		return $result;
 	}
 	
-	// actualiza la informacion del paciente
+	/**
+	 *Actualiza la informacion del paciente enrolado
+	 *@return el resulatdo de la consulta
+	 */
 	public function update()
 	{
 		$compania=$this->compania;
@@ -863,10 +894,10 @@ class Enrolamiento_model extends CI_Model
 			'curp' => $this->curp,
 			'sexo' => $this->sexo,
 			'id_tipo_sanguineo' => $this->sangre,
-			'fecha_nacimiento' => $this->fnacimiento,
+			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)),
 			
 			// civil
-			'fecha_registro' => $this->fechacivil,
+			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
 			'id_asu_um_tratante' => $this->lugarcivil,
 			
 			// direccion 
@@ -908,6 +939,8 @@ class Enrolamiento_model extends CI_Model
 			//
 			if($this->idtutor=="")
 			{
+				$unico_idtutor=md5(uniqid());
+				$data0['id']=$unico_idtutor;
 				$result0 = $this->db->insert('cns_tutor', $data0);
 				if (!$result0)
 				{
@@ -916,7 +949,8 @@ class Enrolamiento_model extends CI_Model
 				}
 				else
 				{
-					$this->setidtutor($this->db->insert_id());
+					$this->setidtutor($unico_idtutor);
+					$this->idtutor=$unico_idtutor;
 				}
 			}
 			else
@@ -972,7 +1006,7 @@ class Enrolamiento_model extends CI_Model
 					// vacuna
 					'id_persona' => $this->id,
 					'id_vacuna' => $this->vacuna[$i],
-					'fecha' => $this->fvacuna[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -994,7 +1028,7 @@ class Enrolamiento_model extends CI_Model
 					// ira
 					'id_persona' => $this->id,
 					'id_ira' => $this->ira[$i],
-					'fecha' => $this->fira[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -1016,7 +1050,7 @@ class Enrolamiento_model extends CI_Model
 					// eda
 					'id_persona' => $this->id,
 					'id_eda' => $this->eda[$i],
-					'fecha' => $this->feda[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -1038,7 +1072,7 @@ class Enrolamiento_model extends CI_Model
 					// consulta
 					'id_persona' => $this->id,
 					'id_consulta' => $this->consulta[$i],
-					'fecha' => $this->fconsulta[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -1060,7 +1094,7 @@ class Enrolamiento_model extends CI_Model
 					// accion nutricional
 					'id_persona' => $this->id,
 					'id_accion_nutricional' => $this->accion_nutricional[$i],
-					'fecha' => $this->faccion_nutricional[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->faccion_nutricional[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -1084,7 +1118,7 @@ class Enrolamiento_model extends CI_Model
 					'peso' => $this->peso[$i],
 					'altura' => $this->altura[$i],
 					'talla' => $this->talla[$i],
-					'fecha' => $this->fnutricion[$i],
+					'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -1121,8 +1155,15 @@ class Enrolamiento_model extends CI_Model
 		}
 		return $result;
 	}
-	// actualiza estatus de tableta
-	public function update_status_tableta($mac,$staus,$version,$fecha)
+	/**
+	 *Hace update de la tableta que este sincronizando dependiendo del resultado
+	 *se recibe el parametro $mac de tipo String que representa la tableta 
+	 *parametro $status String que recibe en ese momento la tableta
+	 *$version String version de la tableta
+	 *$fecha datetime fecha del vento
+	 *
+	 */
+	public function update_status_tableta($mac,$status,$version,$fecha)
 	{
 		$data = array
 		(
@@ -1138,7 +1179,12 @@ class Enrolamiento_model extends CI_Model
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 		}
 	}
-	// devuelve la lista de usuarios enrolados
+	/**
+	 *Este metodo retorna el ist de las personas enroladas
+	 *se recibe el parametro $keywords de tipo String que representa la busqueda
+	 *@return el resultado de la consulta 
+	 *
+	 */
 	public function getListEnrolamiento($keywords = '', $offset = null, $row_count = null)
 	{
 		if(!empty($offset) && !empty($row_count))
@@ -1170,7 +1216,12 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return;
 	}
-	// devuelve el numero de resultados para la paginacion
+	/**
+	 *Devuelve el numero de filas en la tabla cns_persona
+	 *se recibe el parametro $keywords de tipo String que representa la busqueda
+	 *@return numero de filas
+	 *
+	 */
 	public function getNumRows($keywords = '')
 	{
 		if (!$keywords)
@@ -1193,10 +1244,14 @@ class Enrolamiento_model extends CI_Model
 		}
 		return $query->num_rows;
 	}
-	// obtener datos de un usuario enrolado
+	/**
+	 *Hace un select de las tablas cns_persona para general el view
+	 *se recibe el parametro $id de tipo int que representa el id de la persona
+	 *@return los datos de la persona
+	 *
+	 */
 	public function getById($id)
 	{
-		//$query = $this->db->get_where('cns_persona', array('id' => $id));
 		
 		$this->db->select('p.*,s.id as sangre, s.descripcion as tsangre, n.id as nacionalidadid, n.descripcion as nacionalidad, o.id as operadoraid,o.descripcion as operadora, t.curp as curpT, t.nombre as nombreT, t.apellido_paterno as paternoT, t.apellido_materno as maternoT, t.sexo as sexoT, t.telefono as telefonoT, t.celular as celularT,o1.id as operadoraTid, o1.descripcion as operadoraT');
 		$this->db->from('cns_persona p');
@@ -1208,7 +1263,6 @@ class Enrolamiento_model extends CI_Model
 		$this->db->join('cns_operadora_celular o1', 'o1.id = t.id_operadora_celular','left');
 		$this->db->where('p.id', $id);
 		$query = $this->db->get();
-		//echo $this->db->last_query();
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -1218,7 +1272,12 @@ class Enrolamiento_model extends CI_Model
 			return $query->row();
 		return;
 	}
-	// get alergias por persona
+	/**
+	 *Hace select de las alergias asociadas a una perssona
+	 *se recibe el parametro $id de tipo int que representa el id de la persona
+	 *@return result
+	 *
+	 */
 	public function getAlergia($id = '')
 	{
 		$this->db->select('a.id, a.descripcion');
@@ -1237,7 +1296,12 @@ class Enrolamiento_model extends CI_Model
 		return;
 	}
 	
-	// get tipo afiliacion
+	/**
+	 *Hace select  las afiliaciones asociadas a una persona
+	 *se recibe el parametro $id de tipo int que representa el identificado de la persona
+	 *@return result
+	 *
+	 */
 	public function getAfiliaciones($id = '')
 	{
 		$this->db->select('a.id, a.descripcion');
@@ -1255,7 +1319,12 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return;
 	}
-	// optiene informacion catalago persona
+	/**
+	 *Hace select de los catalogos que tengan relacion con una persona para mostrarlos en el view
+	 *se recibe el parametro $catalog de tipo String que representa la tabla 
+	 *el parametro $id tipo int contiene el id de la persona  
+	 *@return result
+	 */
 	public function get_catalog_view($catalog,$id)
 	{
 		$this->db->select('a.id, a.descripcion, p.fecha');
@@ -1273,7 +1342,12 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	// optiene informacion control_nutricional
+	/**
+	 *Hace select de las tabla
+	 *se recibe el parametro $id de tipo int 
+	 *@return result
+	 *
+	 */
 	public function get_control_nutricional($id)
 	{
 		$this->db->select('*');
@@ -1290,7 +1364,14 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	// trae los datos de las tablas catalagos 
+	/**
+	 *Hace select de las tablas cns_x que representa a los catalogos
+	 *se recibe el parametro $catalog de tipo String que representa la tabla 
+	 *el parametro $campo tipo string contiene un campo para el where si haci se requiere
+	 *el parametro $id tipo string contiene el valor para hacer el where
+	 * y el parametro orden para incluir un ordenamiento representa un campo de la tabla
+	 *@return result
+	 */
 	public function get_catalog($catalog,$campo="",$id="",$orden="")
 	{
 		$this->db->select('*');
@@ -1312,15 +1393,38 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	
-	// obtiene el valor de la tabla que se le pase como parametro con un where por un campo
-	public function get_catalog2($catalog,$campo1="",$id1="",$campo2="",$id2="")
+	/**
+	 *obtiene el count de una tabla
+	 *se recibe el parametro $catalog de tipo String que representa la tabla 
+	 *@return un entero
+	 *
+	 */
+	public function get_catalog_count($catalog)
 	{
+		return $this->db->count_all($catalog);
+	}
+	
+	/**
+	 *Hace select de las tablas que se le pasen como parametro
+	 *se recibe el parametro $catalog de tipo String que representa la tabla 
+	 *el parametro $campo1 y $campo2 tipo string son campos dentro de esa tabla para hacer el where
+	 *el parametro id1 y id2 son el valor para hacer el where
+	 *y el los parametros l1 y l2 son para hacer el limite de una consulta
+	 *@return result
+	 */
+	public function get_catalog2($catalog,$campo1="",$id1="",$campo2="",$id2="",$l1="",$l2="")
+	{
+		if($catalog=="tes_notificacion")
+		$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
+		else
 		$this->db->select('*');
 		$this->db->from($catalog);
 		if($id1!="")
 		$this->db->where($campo1, $id1);
 		if($id2!="")
 		$this->db->where($campo2, $id2);
+		if($l2!="")
+		$this->db->limit($l2, $l1);
 		$query = $this->db->get(); $fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a"); fputs($fp, $this->db->last_query()."\r\n"); 
 		if (!$query)
 		{
@@ -1332,8 +1436,13 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	// obtiene catalogos relevante x entorno
-	
+	 
+	/**
+	 *obtiene catalogos relevante x entorno para la sincronizacion
+	 *
+	 *@return result
+	 *
+	 */
 	public function get_catalog_relevante()
 	{
 		$this->db->select('*');
@@ -1350,6 +1459,13 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
+	
+	/**
+	 *Obtiene las transacciones relevante spara la sincronizacion
+	 *
+	 *@return result
+	 *
+	 */
 	public function get_transaction_relevante()
 	{
 		$this->db->select('*');
@@ -1367,6 +1483,12 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	
+	/**
+	 *obtiene cual es la ultima version de apk de la tableta
+	 *
+	 *@retun result 
+	 *
+	 */
 	public function get_version()
 	{
 		$this->db->select('host');
@@ -1384,7 +1506,12 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 
-	// obtiene informacion del tutor
+	/**
+	 *obtiene informacion del tutor
+	 *se recibe el parametro $curp de tipo String 
+	 *@retun result
+	 *
+	 */
 	public function data_tutor($curp)
 	{
 		$query = $this->db->get_where('cns_tutor', array('curp' => $curp));
@@ -1398,7 +1525,38 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	// valida que no se repita curp
+	/**
+	 *obtiene informacion del tutor para genberar el autocomplete
+	 *se recibe el parametro $keywords de tipo String para hacer la busqueda
+	 *@return result
+	 *
+	 */
+	public function autocomplete_tutor($keywords)
+	{
+		$this->db->select('*');
+		$this->db->from('cns_tutor');
+		$this->db->like('curp', $keywords);
+		$this->db->or_like('nombre', $keywords);
+		$this->db->or_like('apellido_paterno', $keywords);
+		$this->db->or_like('apellido_materno', $keywords);
+		$this->db->or_like('CONCAT(nombre," ",apellido_paterno," ",apellido_materno)', $keywords);
+		$query = $this->db->get();
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+	/**
+	 *valida que no se repita la curp en personas y tutor
+	 *se recibe el parametro $tabla de tipo String que representa la tabla 
+	 *el parametro $curp tipo string para el where y el id de la persona
+	 *@return result
+	 */
 	public function getByCurp($curp,$tabla,$id)
 	{
 		if($id!="")
