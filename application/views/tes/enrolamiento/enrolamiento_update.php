@@ -9,6 +9,7 @@
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="/resources/ui/jquery-ui-1.8.17.custom.js"></script>
+    <script type="text/javascript" src="/resources/js/validaciones.js"></script>
     <script>
 	var g=new Date();
 		var option = 
@@ -357,7 +358,7 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombre" type="text" id="nombre" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->nombre; ?>">
+                            <td width="31%"><input name="nombre" type="text" required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->nombre; ?>" maxlength="35">
                             <input name="id" type="hidden" id="id" value="<?php echo $id;?>"  /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
@@ -371,7 +372,7 @@
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paterno" type="text" id="paterno" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->apellido_paterno; ?>"></td>
+                            <td><input name="paterno" type="text" required id="paterno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->apellido_paterno; ?>" maxlength="20"></td>
                             <td><p align="right">Tipo de Sangre</p></td>
                             <td>
                               <select name="sangre" id="sangre" style="width:80%; margin-left:10px;" required>                           
@@ -380,7 +381,7 @@
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="materno" type="text" id="materno" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->apellido_materno; ?>"></td>
+                            <td><input name="materno" type="text" required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->apellido_materno; ?>" maxlength="20"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
                             <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d/m/Y', strtotime($enrolado->fecha_nacimiento)); ?>" placeholder="dd/mm/yyyy"></td>
                           </tr>
@@ -393,8 +394,8 @@
                             </tr>
                           <tr>
                             <td><p align="right">CURP</p></td>
-                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo substr($enrolado->curp,0,12); ?>">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20.5%" required value="<?php echo substr($enrolado->curp,12,15); ?>"></td>
+                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo substr($enrolado->curp,0,12); ?>" onkeypress="return validar(event,'NL',this.id)">
+                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20.5%" required value="<?php echo substr($enrolado->curp,12,15); ?>" onkeypress="return validar(event,'NL',this.id)"></td>
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" required="required">
                             </select></td>
@@ -443,7 +444,7 @@
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">CURP</p></td>
-                            <td width="31%"><input name="curpT" type="text" required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo $enrolado->curpT; ?>" maxlength="18" /></td>
+                            <td width="31%"><input name="curpT" type="text" required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo $enrolado->curpT; ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)"/></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px;">
@@ -456,19 +457,19 @@
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombreT" type="text" required="required" id="nombreT" style="width:80%; margin-left:10px;" value="<?php  echo set_value('nombreT', $enrolado->nombreT) ; ?>" readonly="readonly" /></td>
+                            <td width="31%"><input name="nombreT" type="text" required="required" id="nombreT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php  echo set_value('nombreT', $enrolado->nombreT) ; ?>" maxlength="35" readonly="readonly"/></td>
                             <td><p align="right">Telefono de Casa</p></td>
                             <td><input name="celularT" type="text" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->celularT; ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paternoT" type="text" required="required" id="paternoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->paternoT; ?>" readonly="readonly" /></td>
+                            <td><input name="paternoT" type="text" required="required" id="paternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->paternoT; ?>" maxlength="20" readonly="readonly" /></td>
                             <td><p align="right">Celular</p></td>
                             <td><input name="telefonoT" type="text" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->telefonoT; ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="maternoT" type="text" required="required" id="maternoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->maternoT; ?>" readonly="readonly" /></td>
+                            <td><input name="maternoT" type="text" required="required" id="maternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->maternoT; ?>" maxlength="20" readonly="readonly" /></td>
                             <td><p align="right">Compania Celular</p></td>
                             <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" >
                             </select></td>
