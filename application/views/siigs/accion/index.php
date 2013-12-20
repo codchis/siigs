@@ -28,7 +28,7 @@ echo $msgResult.'<br /><br />';
 		<td><?php echo $accion_item->metodo ?></td>
 		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/view/<?php echo $accion_item->id ?>">Ver detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/update/<?php echo $accion_item->id ?>">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/delete/<?php echo $accion_item->id ?>" onclick="if (confirm('Realmente desea eliminar esta acci�n?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/delete/<?php echo $accion_item->id ?>" onclick="if (confirm('Realmente desea eliminar esta acción?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>
 <?php endforeach ?>
 <tr>

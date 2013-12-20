@@ -1,8 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Modelo Usuario
+ * Controller Usuario
  *
+ * @package     TES
+ * @subpackage  Controlador
  * @author     	Eliecer
+ * @created     2013-12-17
  */
 class Enrolamiento extends CI_Controller 
 {
@@ -22,7 +25,11 @@ class Enrolamiento extends CI_Controller
 		}
 	}
 	
-	// lista enrolados
+	/**
+	 *Este es el metodo por default, obtiene el listado de las perosnas
+	 *se recibe el parametro $pag de tipo int que representa la paginacion
+	 *
+	 */
 	public function index($pag = 0)
 	{
 		try{
@@ -59,7 +66,11 @@ class Enrolamiento extends CI_Controller
  		$this->template->render();
 	}
 	
-	// ver enrolado (id)
+	/**
+	 *Crea la pagina para ver la infromacion de la persona
+	 *se recibe el parametro $id de tipo int que representa el identificador de la persona
+	 *
+	 */
 	public function view($id)
 	{
 		try 
@@ -101,7 +112,11 @@ class Enrolamiento extends CI_Controller
  		$this->template->render();
 	}
 	
-	// Editar
+	/**
+	 *Crea el fromulario para editar la informacion de la persona
+	 *se recibe el parametro $id de tipo int que representa el idientificador de la persona
+	 *
+	 */
 	
 	public function update($id)
 	{
@@ -191,7 +206,12 @@ class Enrolamiento extends CI_Controller
 		}
  		
 	}
-	// Carga de catalogos dinamicamente
+	/**
+	 *Genera los options de un campo tipo select 
+	 *se recibe el parametro $catalog de tipo String que representa la tabla
+	 *parametro sel para decidir si hay un valor preseleccionado
+	 *
+	 */
 	public function catalog_select($catalog,$sel="")
 	{
 		$opcion="";
@@ -213,8 +233,16 @@ class Enrolamiento extends CI_Controller
 		else
 		echo "<option>No hay Datos</option>";
 	}
-	// control de multi check para alergias
-	public function catalog_check($catalog,$tipo,$col,$sel="",$orden="")
+	/**
+	 *Crea un grupo de radio o check con la informacion de los catalogos
+	 *se recibe el parametro $catalog de tipo String que representa la tabla
+	 *$tipo representa el tipo de control radio o check
+	 *$col es el numero de columnas por las que estara dividido la distribucion
+	 *$sel para determinar si hay un dato preseleccionado
+	 *$orden determina el orden de la visualizacion
+	 *
+	 */
+	public function catalog_check($catalog,$tipo,$col=1,$sel="",$orden="")
 	{
 		$opcion="";
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
@@ -257,7 +285,29 @@ class Enrolamiento extends CI_Controller
 		else
 		echo "No hay Datos";
 	}
-	// obtener datos tutor
+	/**
+	 *Crea el autocomplete de los datos del tutor
+	 *
+	 */
+	public function autocomplete()
+	{
+		$term=$_GET["term"];
+		$this->load->model(DIR_TES.'/Enrolamiento_model');
+		$datos=$this->Enrolamiento_model->autocomplete_tutor($term);
+		$array = array();
+		$i=0;
+		foreach($datos as $data)
+		{
+				$array[$i] = trim(($data->curp)." => ".$data->nombre." ".$data->apellido_paterno." ".$data->apellido_materno);
+				$i++;
+		}
+		echo json_encode($array);
+	}
+	/**
+	 *Obtiene inofrmacion del tutor
+	 *se recibe el parametro $curp de tipo string 
+	 *
+	 */
 	public function data_tutor($curp)
 	{
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
@@ -296,7 +346,10 @@ class Enrolamiento extends CI_Controller
 		
 		echo json_encode($array);
 	}
-	// insert enrolamiento
+	/**
+	 *prepara los datos para insertarlos
+	 *
+	 */
 	public  function insert()
 	{
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
@@ -355,7 +408,10 @@ class Enrolamiento extends CI_Controller
 	}
 	
 	
-	// validar fromulario
+	/**
+	 *valida los datos de entrada en el formulario
+	 *
+	 */
 	public function validarForm()
 	{
 		$data['titulo'] = 'Nuevo Enrolamiento';
@@ -418,7 +474,10 @@ class Enrolamiento extends CI_Controller
 		return $this->form_validation->run();
 	}
 	
-	// agregar valores a los atributos de la tabla
+	/**
+	 *Pase de parametros para la insercion o actualizacion
+	 *
+	 */
 	public function addForm()
 	{
 		$this->Enrolamiento_model->setnacionalidad($this->input->post('nacionalidad'));				

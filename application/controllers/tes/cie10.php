@@ -2,6 +2,8 @@
 /**
  * Controlador Cie10
  *
+ * @package    TES
+ * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-12-02
  */

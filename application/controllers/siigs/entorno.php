@@ -2,7 +2,9 @@
 
 /**
  * Controlador Entorno
- *
+ * 
+ * @package    SIIGS
+ * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-09-26
  */
@@ -98,7 +100,7 @@ class Entorno extends CI_Controller {
 		$data['title'] = 'Crear un nuevo entorno';
 		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[15]|callback__ExistEntorno');
 		$this->form_validation->set_rules('ip', 'Ip', 'trim|xss_clean|required|min_length[7]|max_length[15]|valid_ip');
-		$this->form_validation->set_rules('descripcion', 'Descripci�n', 'trim|xss_clean|required|max_length[100]');
+		$this->form_validation->set_rules('descripcion', 'Descripción', 'trim|xss_clean|required|max_length[100]');
 		$this->form_validation->set_rules('hostname', 'Hostname', 'trim|xss_clean|required|max_length[100]');
 		$this->form_validation->set_rules('directorio', 'Directorio', 'trim|xss_clean|required|max_length[20]');
 

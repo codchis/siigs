@@ -2,8 +2,6 @@
 /**
  * Modelo Usuario
  *
- * @package		SIIGS
- * @subpackage	Modelo
  * @author     	Rogelio
  * @created		2013-09-25
  */
@@ -604,7 +602,7 @@ class Usuario_model extends CI_Model {
 	}
 	
 	// obtiene los usuario que pertenescan a un entorno parametros nombre entorno
-	public function get_usuario_entorno($nombre)
+	public function get_usuario_entorno($nombre,$inusuario="")
 	{
 		$this->db->distinct();
 		$this->db->select(' u.id, u.nombre_usuario, u.clave, u.nombre, u.apellido_paterno, u.apellido_materno, u.correo, u.activo, u.id_grupo');
@@ -617,6 +615,8 @@ class Usuario_model extends CI_Model {
 		$this->db->where('e.nombre' , $nombre);
 		$this->db->where('u.activo' , 1);
 		$this->db->where('u.id !=' , '');
+		if($inusuario!="")
+		$this->db->where_in('e.id' , $inusuario);
 		$query = $this->db->get(); 
 		if (!$query)
 		{

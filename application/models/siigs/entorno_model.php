@@ -3,6 +3,8 @@
 /**
  * Modelo Entorno
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-09-26
  */
@@ -174,7 +176,7 @@ class Entorno_model extends CI_Model {
 	}
 
 	/**
-	 *Devuelve la informaci�n de un entorno por su ID
+	 *Devuelve la información de un entorno por su ID
 	 *
 	 *@access  public
 	 *@return  Object
@@ -196,7 +198,7 @@ class Entorno_model extends CI_Model {
 	}
 
 	/**
-	 *Devuelve la informaci�n de un entorno por su nombre
+	 *Devuelve la información de un entorno por su nombre
 	 *
 	 *@access  public
 	 *@return  Object
@@ -241,10 +243,10 @@ class Entorno_model extends CI_Model {
 	}
 
 	/**
-	 *Inserta en la tabla accion, la informaci�n contenida en el objeto
+	 *Inserta en la tabla entorno la información contenida en el objeto
 	 *
 	 *@access  public
-	 *@return  int (Id de la inserci�n si no hubo errores al actualizar)
+	 *@return  int (Id de la inserción si no hubo errores al actualizar)
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */
 	public function insert()

@@ -1,7 +1,9 @@
 <?php
 /**
  * Controlador Accion
- *
+ * 
+ * @package    SIIGS
+ * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-09-26
  */

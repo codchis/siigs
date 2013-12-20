@@ -3,6 +3,8 @@
 /**
  * Modelo Raiz
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-10-07
  */
@@ -132,7 +134,7 @@ class Raiz_model extends CI_Model {
 	}
 
 	/**
-	 *Devuelve la informaci�n de una raiz por su ID
+	 *Devuelve la información de una raiz por su ID
 	 *
 	 *@access  public
 	 *@return  Object

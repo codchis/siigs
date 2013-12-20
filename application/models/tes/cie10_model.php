@@ -3,6 +3,8 @@
 /**
  * Modelo Cie10
  *
+ * @package    TES
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-12-02
  */
@@ -333,7 +335,7 @@ class Cie10_model extends CI_Model {
 	 *Revisa en la base de datos por registros duplicados en los campos pasados por parametro
 	 *
 	 * @access public
-	 *@param   string $campo (varios campos delimitados por | )
+	 * @param   string $campo (varios campos delimitados por | )
 	 * @return boolean (Si no hubo errores al eliminar)
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */

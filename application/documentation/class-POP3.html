@@ -7,7 +7,7 @@
 	<title>Class POP3 | </title>
 
 	<script type="text/javascript" src="resources/combined.js?2175304063"></script>
-	<script type="text/javascript" src="elementlist.js?3434746792"></script>
+	<script type="text/javascript" src="elementlist.js?2074150803"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -37,6 +37,20 @@
 				<li><a href="package-Session.html">Session<span></span></a>
 						<ul>
 				<li><a href="package-Session.Libraries.html">Libraries</a>
+						</li>
+							</ul></li>
+				<li><a href="package-SIIGS.html">SIIGS<span></span></a>
+						<ul>
+				<li><a href="package-SIIGS.Controlador.html">Controlador</a>
+						</li>
+				<li><a href="package-SIIGS.Modelo.html">Modelo</a>
+						</li>
+							</ul></li>
+				<li><a href="package-TES.html">TES<span></span></a>
+						<ul>
+				<li><a href="package-TES.Controlador.html">Controlador</a>
+						</li>
+				<li><a href="package-TES.Modelo.html">Modelo</a>
 						</li>
 							</ul></li>
 			</ul>
@@ -142,7 +156,7 @@ POP3 connection, authentication and disconnection.</p>
 				<a href="http://www.gnu.org/copyleft/lesser.html">Distributed under the Lesser General Public License (LGPL)</a><br />
 				<b>Author:</b>
 				Richard Davey<br />
-		<b>Located at</b> <a href="source-class-POP3.html#39-409" title="Go to source code">system/libraries/PHPMailer/class.pop3.php</a><br />
+		<b>Located at</b> system/libraries/PHPMailer/class.pop3.php<br />
 	</div>
 
 
@@ -160,7 +174,7 @@ POP3 connection, authentication and disconnection.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-POP3.html#128-137" title="Go to source code">__construct</a>( )</code>
+		<code>__construct( )</code>
 
 		<div class="description short">
 			
@@ -197,7 +211,7 @@ POP3 connection, authentication and disconnection.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Authorise">#</a>
-		<code><a href="source-class-POP3.html#139-190" title="Go to source code">Authorise</a>( <span>string <var>$host</var></span>, <span>integer <var>$port</var> = <span class="php-keyword1">false</span></span>, <span>integer <var>$tval</var> = <span class="php-keyword1">false</span></span>, <span>string <var>$username</var></span>, <span>string <var>$password</var></span>, <span>mixed <var>$debug_level</var> = <span class="php-num">0</span></span> )</code>
+		<code>Authorise( <span>string <var>$host</var></span>, <span>integer <var>$port</var> = <span class="php-keyword1">false</span></span>, <span>integer <var>$tval</var> = <span class="php-keyword1">false</span></span>, <span>string <var>$username</var></span>, <span>string <var>$password</var></span>, <span>mixed <var>$debug_level</var> = <span class="php-num">0</span></span> )</code>
 
 		<div class="description short">
 			
@@ -245,7 +259,7 @@ POP3 connection, authentication and disconnection.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Connect">#</a>
-		<code><a href="source-class-POP3.html#192-266" title="Go to source code">Connect</a>( <span>string <var>$host</var></span>, <span>integer <var>$port</var> = <span class="php-keyword1">false</span></span>, <span>integer <var>$tval</var> = <span class="php-num">30</span></span> )</code>
+		<code>Connect( <span>string <var>$host</var></span>, <span>integer <var>$port</var> = <span class="php-keyword1">false</span></span>, <span>integer <var>$tval</var> = <span class="php-num">30</span></span> )</code>
 
 		<div class="description short">
 			
@@ -291,7 +305,7 @@ POP3 connection, authentication and disconnection.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Login">#</a>
-		<code><a href="source-class-POP3.html#268-312" title="Go to source code">Login</a>( <span>string <var>$username</var> = <span class="php-quote">''</span></span>, <span>string <var>$password</var> = <span class="php-quote">''</span></span> )</code>
+		<code>Login( <span>string <var>$username</var> = <span class="php-quote">''</span></span>, <span>string <var>$password</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
 			
@@ -335,7 +349,7 @@ POP3 connection, authentication and disconnection.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_Disconnect">#</a>
-		<code><a href="source-class-POP3.html#314-322" title="Go to source code">Disconnect</a>( )</code>
+		<code>Disconnect( )</code>
 
 		<div class="description short">
 			
@@ -349,6 +363,211 @@ POP3 connection, authentication and disconnection.</p>
 
 
 
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getResponse" id="_getResponse">
+
+		<td class="attributes"><code>
+			 private 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getResponse">#</a>
+		<code>getResponse( <span>integer <var>$size</var> = <span class="php-num">128</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Get the socket response back. $size is the maximum number of bytes to
+retrieve</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get the socket response back. $size is the maximum number of bytes to
+retrieve</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$size</var></dt>
+					<dd><code>integer</code><br>$size</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="sendString" id="_sendString">
+
+		<td class="attributes"><code>
+			 private 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_sendString">#</a>
+		<code>sendString( <span>string <var>$string</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Send a string down the open socket connection to the POP3 server</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Send a string down the open socket connection to the POP3 server</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$string</var></dt>
+					<dd><code>string</code><br>$string</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="checkResponse" id="_checkResponse">
+
+		<td class="attributes"><code>
+			 private 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_checkResponse">#</a>
+		<code>checkResponse( <span>string <var>$string</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Checks the POP3 server response for +OK or -ERR</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Checks the POP3 server response for +OK or -ERR</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$string</var></dt>
+					<dd><code>string</code><br>$string</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="displayErrors" id="_displayErrors">
+
+		<td class="attributes"><code>
+			 private 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_displayErrors">#</a>
+		<code>displayErrors( )</code>
+
+		<div class="description short">
+			
+<p>If debug is enabled, display the error message array</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>If debug is enabled, display the error message array</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="catchWarning" id="_catchWarning">
+
+		<td class="attributes"><code>
+			 private 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_catchWarning">#</a>
+		<code>catchWarning( <span>integer <var>$errno</var></span>, <span>string <var>$errstr</var></span>, <span>string <var>$errfile</var></span>, <span>integer <var>$errline</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Takes over from PHP for the socket warning handler</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Takes over from PHP for the socket warning handler</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$errno</var></dt>
+					<dd><code>integer</code><br>$errno</dd>
+					<dt><var>$errstr</var></dt>
+					<dd><code>string</code><br>$errstr</dd>
+					<dt><var>$errfile</var></dt>
+					<dd><code>string</code><br>$errfile</dd>
+					<dt><var>$errline</var></dt>
+					<dd><code>integer</code><br>$errline</dd>
+				</dl></div>
 
 
 
@@ -379,8 +598,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#60-64" title="Go to source code"><var>$POP3_PORT</var></a>
-		</td>
+<var>$POP3_PORT</var>		</td>
 		<td class="value"><code><span class="php-num">110</span></code></td>
 		<td class="description"><div>
 			<a href="#$POP3_PORT" class="anchor">#</a>
@@ -406,8 +624,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#66-70" title="Go to source code"><var>$POP3_TIMEOUT</var></a>
-		</td>
+<var>$POP3_TIMEOUT</var>		</td>
 		<td class="value"><code><span class="php-num">30</span></code></td>
 		<td class="description"><div>
 			<a href="#$POP3_TIMEOUT" class="anchor">#</a>
@@ -433,8 +650,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#72-76" title="Go to source code"><var>$CRLF</var></a>
-		</td>
+<var>$CRLF</var>		</td>
 		<td class="value"><code><span class="php-quote">&quot;\r\n&quot;</span></code></td>
 		<td class="description"><div>
 			<a href="#$CRLF" class="anchor">#</a>
@@ -460,8 +676,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#78-82" title="Go to source code"><var>$do_debug</var></a>
-		</td>
+<var>$do_debug</var>		</td>
 		<td class="value"><code><span class="php-num">2</span></code></td>
 		<td class="description"><div>
 			<a href="#$do_debug" class="anchor">#</a>
@@ -487,8 +702,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#84-88" title="Go to source code"><var>$host</var></a>
-		</td>
+<var>$host</var>		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
 			<a href="#$host" class="anchor">#</a>
@@ -514,8 +728,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#90-94" title="Go to source code"><var>$port</var></a>
-		</td>
+<var>$port</var>		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
 			<a href="#$port" class="anchor">#</a>
@@ -541,8 +754,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#96-100" title="Go to source code"><var>$tval</var></a>
-		</td>
+<var>$tval</var>		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
 			<a href="#$tval" class="anchor">#</a>
@@ -568,8 +780,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#102-106" title="Go to source code"><var>$username</var></a>
-		</td>
+<var>$username</var>		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
 			<a href="#$username" class="anchor">#</a>
@@ -595,8 +806,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#108-112" title="Go to source code"><var>$password</var></a>
-		</td>
+<var>$password</var>		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
 			<a href="#$password" class="anchor">#</a>
@@ -622,8 +832,7 @@ POP3 connection, authentication and disconnection.</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-POP3.html#114-118" title="Go to source code"><var>$Version</var></a>
-		</td>
+<var>$Version</var>		</td>
 		<td class="value"><code><span class="php-quote">'5.2.1'</span></code></td>
 		<td class="description"><div>
 			<a href="#$Version" class="anchor">#</a>
@@ -638,6 +847,72 @@ POP3 connection, authentication and disconnection.</p>
 				
 <p>Sets the POP3 PHPMailer Version number</p>
 
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="pop_conn" id="$pop_conn">
+		<td class="attributes"><code>
+			private  
+			mixed
+		</code></td>
+
+		<td class="name">
+<var>$pop_conn</var>		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$pop_conn" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="connected" id="$connected">
+		<td class="attributes"><code>
+			private  
+			mixed
+		</code></td>
+
+		<td class="name">
+<var>$connected</var>		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$connected" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="error" id="$error">
+		<td class="attributes"><code>
+			private  
+			mixed
+		</code></td>
+
+		<td class="name">
+<var>$error</var>		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$error" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
 
 			</div>
 		</div></td>

@@ -1,7 +1,9 @@
 <?php
 /**
  * Controlador Raiz_x_Catalogo
- *
+ * 
+ * @package    SIIGS
+ * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-10-16
  */

@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Modelo Estado_tableta
+ * Modelo Tipo_censo
  *
+ * @package    TES
+ * @subpackage Modelo
  * @author     Pascual
  * @created    2013-12-02
  */

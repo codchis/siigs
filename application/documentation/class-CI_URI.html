@@ -7,7 +7,7 @@
 	<title>Class CI_URI | </title>
 
 	<script type="text/javascript" src="resources/combined.js?2175304063"></script>
-	<script type="text/javascript" src="elementlist.js?3434746792"></script>
+	<script type="text/javascript" src="elementlist.js?2074150803"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -37,6 +37,20 @@
 				<li><a href="package-Session.html">Session<span></span></a>
 						<ul>
 				<li><a href="package-Session.Libraries.html">Libraries</a>
+						</li>
+							</ul></li>
+				<li><a href="package-SIIGS.html">SIIGS<span></span></a>
+						<ul>
+				<li><a href="package-SIIGS.Controlador.html">Controlador</a>
+						</li>
+				<li><a href="package-SIIGS.Modelo.html">Modelo</a>
+						</li>
+							</ul></li>
+				<li><a href="package-TES.html">TES<span></span></a>
+						<ul>
+				<li><a href="package-TES.Controlador.html">Controlador</a>
+						</li>
+				<li><a href="package-TES.Modelo.html">Modelo</a>
 						</li>
 							</ul></li>
 			</ul>
@@ -169,7 +183,7 @@
 				ExpressionEngine Dev Team<br />
 				<b>Link:</b>
 				<a href="http://codeigniter.com/user_guide/libraries/uri.html">http://codeigniter.com/user_guide/libraries/uri.html</a><br />
-		<b>Located at</b> <a href="source-class-CI_URI.html#18-650" title="Go to source code">system/core/URI.php</a><br />
+		<b>Located at</b> system/core/URI.php<br />
 	</div>
 
 
@@ -187,7 +201,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-CI_URI.html#61-74" title="Go to source code">__construct</a>( )</code>
+		<code>__construct( )</code>
 
 		<div class="description short">
 			
@@ -223,7 +237,7 @@ so it's not available normally as other classes are.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#__fetch_uri_string">#</a>
-		<code><a href="source-class-CI_URI.html#79-147" title="Go to source code">_fetch_uri_string</a>( )</code>
+		<code>_fetch_uri_string( )</code>
 
 		<div class="description short">
 			
@@ -260,7 +274,7 @@ so it's not available normally as other classes are.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#__set_uri_string">#</a>
-		<code><a href="source-class-CI_URI.html#151-165" title="Go to source code">_set_uri_string</a>( <span>string <var>$str</var></span> )</code>
+		<code>_set_uri_string( <span>string <var>$str</var></span> )</code>
 
 		<div class="description short">
 			
@@ -291,6 +305,85 @@ so it's not available normally as other classes are.</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="_detect_uri" id="__detect_uri">
+
+		<td class="attributes"><code>
+			 private 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#__detect_uri">#</a>
+		<code>_detect_uri( )</code>
+
+		<div class="description short">
+			
+<p>Detects the URI</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Detects the URI</p>
+
+<p>This function will detect the URI automatically and fix the query string if
+necessary.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="_parse_cli_args" id="__parse_cli_args">
+
+		<td class="attributes"><code>
+			 private 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#__parse_cli_args">#</a>
+		<code>_parse_cli_args( )</code>
+
+		<div class="description short">
+			
+<p>Parse cli arguments</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Parse cli arguments</p>
+
+<p>Take each command line argument and assume it is a URI segment.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="_filter_uri" id="__filter_uri">
 
 		<td class="attributes"><code>
@@ -302,7 +395,7 @@ so it's not available normally as other classes are.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#__filter_uri">#</a>
-		<code><a href="source-class-CI_URI.html#244-268" title="Go to source code">_filter_uri</a>( <span>string <var>$str</var></span> )</code>
+		<code>_filter_uri( <span>string <var>$str</var></span> )</code>
 
 		<div class="description short">
 			
@@ -344,7 +437,7 @@ so it's not available normally as other classes are.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#__remove_url_suffix">#</a>
-		<code><a href="source-class-CI_URI.html#272-284" title="Go to source code">_remove_url_suffix</a>( )</code>
+		<code>_remove_url_suffix( )</code>
 
 		<div class="description short">
 			
@@ -377,7 +470,7 @@ so it's not available normally as other classes are.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#__explode_segments">#</a>
-		<code><a href="source-class-CI_URI.html#288-307" title="Go to source code">_explode_segments</a>( )</code>
+		<code>_explode_segments( )</code>
 
 		<div class="description short">
 			
@@ -412,7 +505,7 @@ $this-&gt;segments array.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#__reindex_segments">#</a>
-		<code><a href="source-class-CI_URI.html#310-327" title="Go to source code">_reindex_segments</a>( )</code>
+		<code>_reindex_segments( )</code>
 
 		<div class="description short">
 			
@@ -450,7 +543,7 @@ segment array and the actual segments.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_segment">#</a>
-		<code><a href="source-class-CI_URI.html#331-344" title="Go to source code">segment</a>( <span>integer <var>$n</var></span>, <span>boolean <var>$no_result</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code>segment( <span>integer <var>$n</var></span>, <span>boolean <var>$no_result</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			
@@ -496,7 +589,7 @@ segment array and the actual segments.</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_rsegment">#</a>
-		<code><a href="source-class-CI_URI.html#348-363" title="Go to source code">rsegment</a>( <span>integer <var>$n</var></span>, <span>boolean <var>$no_result</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code>rsegment( <span>integer <var>$n</var></span>, <span>boolean <var>$no_result</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			
@@ -544,7 +637,7 @@ the same result as $this-&gt;segment()</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_uri_to_assoc">#</a>
-		<code><a href="source-class-CI_URI.html#367-391" title="Go to source code">uri_to_assoc</a>( <span>integer <var>$n</var> = <span class="php-num">3</span></span>, <span>array <var>$default</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code>uri_to_assoc( <span>integer <var>$n</var> = <span class="php-num">3</span></span>, <span>array <var>$default</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -597,7 +690,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_ruri_to_assoc">#</a>
-		<code><a href="source-class-CI_URI.html#392-404" title="Go to source code">ruri_to_assoc</a>( <span>integer <var>$n</var> = <span class="php-num">3</span></span>, <span>array <var>$default</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code>ruri_to_assoc( <span>integer <var>$n</var> = <span class="php-num">3</span></span>, <span>array <var>$default</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -641,7 +734,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#__uri_to_assoc">#</a>
-		<code><a href="source-class-CI_URI.html#408-489" title="Go to source code">_uri_to_assoc</a>( <span>integer <var>$n</var> = <span class="php-num">3</span></span>, <span>array <var>$default</var> = <span class="php-keyword1">array</span>()</span>, <span>string <var>$which</var> = <span class="php-quote">'segment'</span></span> )</code>
+		<code>_uri_to_assoc( <span>integer <var>$n</var> = <span class="php-num">3</span></span>, <span>array <var>$default</var> = <span class="php-keyword1">array</span>()</span>, <span>string <var>$which</var> = <span class="php-quote">'segment'</span></span> )</code>
 
 		<div class="description short">
 			
@@ -687,7 +780,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_assoc_to_uri">#</a>
-		<code><a href="source-class-CI_URI.html#493-511" title="Go to source code">assoc_to_uri</a>( <span>array <var>$array</var></span> )</code>
+		<code>assoc_to_uri( <span>array <var>$array</var></span> )</code>
 
 		<div class="description short">
 			
@@ -729,7 +822,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_slash_segment">#</a>
-		<code><a href="source-class-CI_URI.html#515-526" title="Go to source code">slash_segment</a>( <span>integer <var>$n</var></span>, <span>string <var>$where</var> = <span class="php-quote">'trailing'</span></span> )</code>
+		<code>slash_segment( <span>integer <var>$n</var></span>, <span>string <var>$where</var> = <span class="php-quote">'trailing'</span></span> )</code>
 
 		<div class="description short">
 			
@@ -773,7 +866,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_slash_rsegment">#</a>
-		<code><a href="source-class-CI_URI.html#530-541" title="Go to source code">slash_rsegment</a>( <span>integer <var>$n</var></span>, <span>string <var>$where</var> = <span class="php-quote">'trailing'</span></span> )</code>
+		<code>slash_rsegment( <span>integer <var>$n</var></span>, <span>string <var>$where</var> = <span class="php-quote">'trailing'</span></span> )</code>
 
 		<div class="description short">
 			
@@ -817,7 +910,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#__slash_segment">#</a>
-		<code><a href="source-class-CI_URI.html#545-569" title="Go to source code">_slash_segment</a>( <span>integer <var>$n</var></span>, <span>string <var>$where</var> = <span class="php-quote">'trailing'</span></span>, <span>string <var>$which</var> = <span class="php-quote">'segment'</span></span> )</code>
+		<code>_slash_segment( <span>integer <var>$n</var></span>, <span>string <var>$where</var> = <span class="php-quote">'trailing'</span></span>, <span>string <var>$which</var> = <span class="php-quote">'segment'</span></span> )</code>
 
 		<div class="description short">
 			
@@ -863,7 +956,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_segment_array">#</a>
-		<code><a href="source-class-CI_URI.html#573-582" title="Go to source code">segment_array</a>( )</code>
+		<code>segment_array( )</code>
 
 		<div class="description short">
 			
@@ -900,7 +993,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_rsegment_array">#</a>
-		<code><a href="source-class-CI_URI.html#586-595" title="Go to source code">rsegment_array</a>( )</code>
+		<code>rsegment_array( )</code>
 
 		<div class="description short">
 			
@@ -937,7 +1030,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_total_segments">#</a>
-		<code><a href="source-class-CI_URI.html#599-608" title="Go to source code">total_segments</a>( )</code>
+		<code>total_segments( )</code>
 
 		<div class="description short">
 			
@@ -974,7 +1067,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_total_rsegments">#</a>
-		<code><a href="source-class-CI_URI.html#612-621" title="Go to source code">total_rsegments</a>( )</code>
+		<code>total_rsegments( )</code>
 
 		<div class="description short">
 			
@@ -1011,7 +1104,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_uri_string">#</a>
-		<code><a href="source-class-CI_URI.html#625-634" title="Go to source code">uri_string</a>( )</code>
+		<code>uri_string( )</code>
 
 		<div class="description short">
 			
@@ -1048,7 +1141,7 @@ supplied segment. For example, if this is your URI:</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_ruri_string">#</a>
-		<code><a href="source-class-CI_URI.html#639-648" title="Go to source code">ruri_string</a>( )</code>
+		<code>ruri_string( )</code>
 
 		<div class="description short">
 			
@@ -1096,8 +1189,7 @@ supplied segment. For example, if this is your URI:</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-CI_URI.html#31-37" title="Go to source code"><var>$keyval</var></a>
-		</td>
+<var>$keyval</var>		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
 		<td class="description"><div>
 			<a href="#$keyval" class="anchor">#</a>
@@ -1123,8 +1215,7 @@ supplied segment. For example, if this is your URI:</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-CI_URI.html#38-44" title="Go to source code"><var>$uri_string</var></a>
-		</td>
+<var>$uri_string</var>		</td>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
 			<a href="#$uri_string" class="anchor">#</a>
@@ -1150,8 +1241,7 @@ supplied segment. For example, if this is your URI:</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-CI_URI.html#45-51" title="Go to source code"><var>$segments</var></a>
-		</td>
+<var>$segments</var>		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
 		<td class="description"><div>
 			<a href="#$segments" class="anchor">#</a>
@@ -1177,8 +1267,7 @@ supplied segment. For example, if this is your URI:</p>
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-CI_URI.html#52-59" title="Go to source code"><var>$rsegments</var></a>
-		</td>
+<var>$rsegments</var>		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
 		<td class="description"><div>
 			<a href="#$rsegments" class="anchor">#</a>
