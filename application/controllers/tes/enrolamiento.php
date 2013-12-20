@@ -30,7 +30,7 @@ class Enrolamiento extends CI_Controller
 	 *se recibe el parametro $pag de tipo int que representa la paginacion
 	 *
 	 */
-	public function index($pag = 0)
+	public function index($pag = 0, $id="")
 	{
 		try{
 			if (empty($this->Usuario_model))
@@ -42,7 +42,9 @@ class Enrolamiento extends CI_Controller
 			$this->load->helper('form');
 			$this->load->library('pagination');
 			
+			$data['id']  = $id;
 			$data['pag'] = $pag;
+			$data['infoclass'] = $this->session->flashdata('infoclass');
 			$data['msgResult'] = $this->session->flashdata('msgResult');
 			
 			// Configuración para el Paginador
@@ -173,12 +175,13 @@ class Enrolamiento extends CI_Controller
 					$this->Enrolamiento_model->setId($id);
 					$this->addForm();
 					// actualizar si todo bien
-					$this->Enrolamiento_model->update();
+					$id=$this->Enrolamiento_model->update();
+					$data['id'] = $id;
 					$this->session->set_flashdata('infoclass','success');
-					$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
+					$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
 					//Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario Enrolado: '.strtoupper($this->input->post('nombre')));
 					
-					redirect(DIR_TES.'/enrolamiento','refresh');
+ 					$this->index(0,$id);
 				}
 				catch (Exception $e)
 				{
@@ -212,11 +215,11 @@ class Enrolamiento extends CI_Controller
 	 *parametro sel para decidir si hay un valor preseleccionado
 	 *
 	 */
-	public function catalog_select($catalog,$sel="")
+	public function catalog_select($catalog,$sel="",$orden="")
 	{
 		$opcion="";
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
-		$datos=$this->Enrolamiento_model->get_catalog("cns_".$catalog);
+		$datos=$this->Enrolamiento_model->get_catalog("cns_".$catalog,"","",$orden);
 		if(sizeof($datos)!=0)
 		{
 			$opcion.="<option value=''>Seleccione...</option>";
@@ -346,6 +349,113 @@ class Enrolamiento extends CI_Controller
 		
 		echo json_encode($array);
 	}
+	public function file_to_card($id)
+	{
+		header("Pragma: public");
+		header("Expires: 0");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
+		header("Content-Type: application/force-download");
+		header("Content-Type: application/octet-stream");
+		header("Content-Type: application/download");
+		header("Content-Disposition: attachment;filename=enrolamiento.tes ");
+		header("Content-Transfer-Encoding: binary ");
+		
+		$this->load->model(DIR_TES.'/Enrolamiento_model');
+		$data="";
+		$enrolado =(array)$this->Enrolamiento_model->getById($id);
+		$data.=$enrolado["id"]."$";
+		$data.=$enrolado["curp"]."$";	
+		$data.=$enrolado["nombre"]."$";
+		$data.=$enrolado["apellido_paterno"]."$";
+		$data.=$enrolado["apellido_materno"]."$";
+		$data.=$enrolado["sexo"]."$";
+		$data.=$enrolado["id_tipo_sanguineo"]."$";
+		$data.=$enrolado["fecha_nacimiento"]."$";
+		$data.=$enrolado["id_asu_localidad_nacimiento"]."$";
+		$data.=$enrolado["calle_domicilio"]."$";
+		$data.=$enrolado["numero_domicilio"]."$";
+		$data.=$enrolado["colonia_domicilio"]."$";
+		$data.=$enrolado["id_asu_localidad_domicilio"]."$";
+		$data.=$enrolado["cp_domicilio"]."$";
+		$data.=$enrolado["telefono_domicilio"]."$";
+		$data.=$enrolado["fecha_registro"]."$";
+		$data.=$enrolado["id_asu_um_tratante"]."$";
+		$data.=$enrolado["celular"]."$";
+		$data.=$enrolado["ultima_actualizacion"]."$";
+		$data.=$enrolado["id_nacionalidad"]."$";
+		$data.=$enrolado["id_operadora_celular"]."~";
+		
+		$data.=$enrolado["idT"]."$";
+		$data.=$enrolado["curpT"]."$";
+		$data.=$enrolado["nombreT"]."$";
+		$data.=$enrolado["paternoT"]."$";
+		$data.=$enrolado["maternoT"]."$";
+		$data.=$enrolado["sexoT"]."$";
+		$data.=$enrolado["telefonoT"]."$";
+		$data.=$enrolado["celularT"]."$";
+		$data.=$enrolado["operadoraTid"]."~";
+		/*
+		$data.=$enrolado["celularT"]."$";
+		$data.=$enrolado["operadoraTid"]."~";*/
+		
+		$alergias = $this->Enrolamiento_model->getAlergia($id);
+		foreach($alergias as $x)
+		{
+			$data.=$x->id."°";
+		}
+		$data=substr($data,0,strlen($data)-2)."~";
+		$afiliaciones = $this->Enrolamiento_model->getAfiliaciones($id);
+		foreach($afiliaciones as $x)
+		{
+			$data.=$x->id."°";
+		}
+		$data=substr($data,0,strlen($data)-2)."~";
+		$vacunas=$this->Enrolamiento_model->get_catalog_view("vacuna",$id);
+		foreach($vacunas as $x)
+		{
+			$data.=$x->id."$";
+			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+		}
+		$data=substr($data,0,strlen($data)-2)."~";
+		$iras=$this->Enrolamiento_model->get_catalog_view("ira",$id);
+		foreach($iras as $x)
+		{
+			$data.=$x->id."$";
+			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+		}
+		$data=substr($data,0,strlen($data)-2)."~";
+		$edas=$this->Enrolamiento_model->get_catalog_view("eda",$id);
+		foreach($edas as $x)
+		{
+			$data.=$x->id."$";
+			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+		}
+		$data=substr($data,0,strlen($data)-2)."~";
+		$consultas=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
+		foreach($consultas as $x)
+		{
+			$data.=$x->id."$";
+			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+		}
+		$data=substr($data,0,strlen($data)-2)."~";
+		$anutricional=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
+		foreach($anutricional as $x)
+		{
+			$data.=$x->id."$";
+			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+		}
+		$data=substr($data,0,strlen($data)-2)."~";
+		$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
+		foreach($nutricion as $x)
+		{
+			$data.=$x->peso."$";
+			$data.=$x->altura."$";
+			$data.=$x->talla."$";
+			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+		}
+		$data=substr($data,0,strlen($data)-2);
+		echo $data;
+	}
 	/**
 	 *prepara los datos para insertarlos
 	 *
@@ -367,12 +477,12 @@ class Enrolamiento extends CI_Controller
 				{						
 					$this->addForm();
 					
-					$this->Enrolamiento_model->insert();
+					$id=$this->Enrolamiento_model->insert();
 					$this->session->set_flashdata('infoclass','success');
 					$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
 					//Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario Enrolado: '.strtoupper($this->input->post('nombre')));
 					
-					redirect(DIR_TES.'/enrolamiento','refresh');
+ 					$this->index(0,$id);					
 				}
 				catch (Exception $e)
 				{

@@ -133,7 +133,7 @@
 		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alerg;?>/tipo");	
 		$("#tbenef").load("/tes/Enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afili;?>");		
 		$("#sangre").load("/tes/Enrolamiento/catalog_select/tipo_sanguineo/<?php echo $enrolado->sangre; ?>");	
-		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo $enrolado->nacionalidadid; ?>");
+		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo $enrolado->nacionalidadid; ?>/descripcion");
 		$("#compania").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraid; ?>");
 		$("#companiaT").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraTid; ?>");
 		$("#nombre,#paterno,#materno,#fnacimiento,#lnaciminetoT").blur(function()

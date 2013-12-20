@@ -101,7 +101,7 @@
 		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>/tipo/tipo");	
 		$("#tbenef").load("/tes/Enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afiliaciones;?>");	
 		$("#sangre").load("/tes/Enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', ''); ?>");	
-		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', ''); ?>");
+		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', ''); ?>/descripcion/descripcion");
 		$("#compania").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo set_value('compania', ''); ?>");
 		$("#companiaT").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo set_value('companiaT', ''); ?>");
 		
@@ -457,7 +457,7 @@
                             <td><p align="right">Lugar</p></td>
                             <td colspan="3"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(null)));?>/" id="fba1" class="cat">Seleccsionar</a>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="cat">Seleccionar</a>
                           </tr>
                         </table>
                         <br />
