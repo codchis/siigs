@@ -682,4 +682,21 @@ class Raiz extends CI_Controller {
 		echo $e->getMessage();
             }
         }
+              
+        /**
+         * Accion para obtener los registros de un ASU determinado en cierto nivel y con un ID de filtro
+         * @param int $idarbol
+         * @param Int $nivel Nivel de desglose de información requerida
+         * @param Int $filtro (Opcional) filtrar por un valor determinado
+         * @return Object
+         * @throws Exception Si ocurre error al recuperar datos de la base de datos
+         */
+        
+        public function getDataKeyPar($idarbol,$nivel,$filtro = 0)
+        {
+            if (!$this->input->is_ajax_request())
+            show_error('', 403, 'Acceso denegado');
+            
+            echo json_encode($this->ArbolSegmentacion_model->getDataKeyPar($idarbol,$nivel,$filtro));
+        }
 }

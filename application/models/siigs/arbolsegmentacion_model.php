@@ -435,4 +435,31 @@ class ArbolSegmentacion_model extends CI_Model {
                 }
             }
         }
+            
+         /**
+         * Accion para obtener los registros de un ASU determinado en cierto nivel y con un ID de filtro
+         * @param int $idarbol
+         * @param Int $nivel Nivel de desglose de información requerida
+         * @param Int $filtro (Opcional) filtrar por un valor determinado
+         * @return Object
+         * @throws Exception Si ocurre error al recuperar datos de la base de datos
+         */
+        
+        public function getDataKeyPar($idarbol,$nivel,$filtro = 0)
+        {
+            $consulta = 'select id,descripcion from asu_arbol_segmentacion where id_raiz='.$idarbol." and grado_segmentacion=".$nivel.(($filtro != 0) ? " and id_padre=".$filtro : '');
+            var_dump($consulta);
+            $query = $this->db->query($consulta);
+
+            if (!$query)
+            {
+                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion por nivel y filtro";
+                throw new Exception(__CLASS__);
+            }
+            else
+            {
+                return $query->result();
+            }
+        }
 }
