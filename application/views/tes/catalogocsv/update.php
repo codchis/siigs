@@ -81,7 +81,14 @@ $(document).ready(function(){
 
 	$('#btnload').click(function(){
 
-		subirupdate(false);
+            var filename = $("#btncsv").val();
+            var extension = filename.replace(/^.*\./, '');
+            if (extension == filename || extension.toLowerCase() != 'csv')
+            {
+                alert('Solo se aceptan archivos con extensión csv');
+                return false;
+            }
+            subirupdate(false);
 	});
 
 	function subirupdate(upd)
@@ -115,7 +122,7 @@ if (!empty($catalogo_item))
 <form method="post" enctype="application/x-www-form-urlencoded" id="loadcsv">
 <table>
 <tr>
-<td><input type="file" name="archivocsv" id="btncsv"/></td>
+<td>[Archivo csv separado por comas]<input type="file" name="archivocsv" id="btncsv"/></td>
 <td><input type="button" name="btnload" id="btnload" value="Cargar Datos" /></td>
 </tr>
 </table>

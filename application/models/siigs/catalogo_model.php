@@ -3,6 +3,8 @@
 /**
  * Modelo Catalogo
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-10-07
  */
@@ -223,6 +225,47 @@ class Catalogo_model extends CI_Model {
 		}
 		else
 			return $query->result();
+	}
+        
+	/**
+	 *Revisa en la base de datos por registros que no coincidan con el tipo de dato
+         * pasado como parametro en el campo indicado
+	 *
+	 * @access public
+	 *@param   string $campo (varios campos delimitados por | )
+	 * @return boolean (Si no hubo errores al eliminar)
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function checkTypeData($campo,$type)
+	{
+            $consulta = '';
+            switch ($type)
+            {
+                case 'int':
+                    $consulta = "SELECT * FROM tmp_catalogo WHERE not ".$campo." REGEXP '^-?[0-9]+$'";
+                case 'decimal':
+                    $consulta = "SELECT * FROM tmp_catalogo WHERE not ".$campo." REGEXP '^[0-9]+(\.[0-9])?$'";
+            }
+            if ($consulta=='')
+                echo 'true';
+            else
+            {
+                $query = $this->db->query($consulta);
+                if (!$query)
+                {
+                        $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                        $this->msg_error_usr = "Ocurrió un error al obtener tipos de datos de la colmna en tmp_catalogo";
+                        //throw new Exception(__CLASS__);
+                        echo 'false';
+                }
+                else
+                {
+                    if ($query->num_rows()>0)
+                        echo 'false';
+                    else
+                        echo 'true';
+                }
+            }
 	}
 
 	/**

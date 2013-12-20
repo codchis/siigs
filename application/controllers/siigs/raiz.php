@@ -1,7 +1,9 @@
 <?php
 /**
  * Controlador Raiz
- *
+ * 
+ * @package    SIIGS
+ * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-10-07
  */
@@ -28,7 +30,7 @@ class Raiz extends CI_Controller {
 	}
         
         public function prueba(){
-            echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel(1,1,array()));
+            echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel(1,1,array(),array(1)));
             //echo json_encode($this->ArbolSegmentacion_model->getCluesFromId(781));
         }
 //       
@@ -63,7 +65,7 @@ class Raiz extends CI_Controller {
 	}
 
 	/**
-	 *Acción para visualizar de una raiz específica, obtiene el objeto
+	 *Acción para visualizar información de una raiz específica, obtiene el objeto
 	 *raiz por medio del id proporcionado.
 	 *
 	 * @param  int $id Este parametro no puede ser nulo
@@ -100,7 +102,7 @@ class Raiz extends CI_Controller {
 	}
 
 	/**
-	 *Acci�n para preparar la insercion de nuevas acciones , realiza la validacion
+	 *Acción para preparar la insercion de nuevas acciones , realiza la validacion
 	 *del formulario del lado cliente
 	 *
 	 *@return void
@@ -305,7 +307,7 @@ class Raiz extends CI_Controller {
                                         $consulta .= "asu_arbol_segmentacion.id as padre ";
                                         $consulta .= " from ".$tabla;
 
-                                        $padre = $this->Catalogo_x_raiz_model->getByNivel($nivel-1);
+                                        $padre = $this->Catalogo_x_raiz_model->getByNivel($id,$nivel-1);
                                         $relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
 
                                         $consulta .= " join ".$padre->nombre." on 1=1";
@@ -508,7 +510,7 @@ class Raiz extends CI_Controller {
 				
 				if ($nivel > 1)
 				{
-                                    	$padre = $this->Catalogo_x_raiz_model->getByNivel($nivel-1);
+                                    	$padre = $this->Catalogo_x_raiz_model->getByNivel($id,$nivel-1);
 					$relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
                                         
 					$consulta = "select ".$tabla.".".$llave." as llave, ";
@@ -521,8 +523,8 @@ class Raiz extends CI_Controller {
 					{
 						$consulta .= " and ".$tabla.".".$relacion->columna_hijo." = ".$padre->nombre.".".$relacion->columna_padre;
 					}
-                                        //$consulta .= " where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
-					$consulta .= " join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".$nivel." and a.id_tabla_original = ".$tabla.".".$llave." and ( a.descripcion <> ".$tabla.".".$descripcion." or a.id_padre <> ".$padre->nombre.".".$padre->llave." )";
+                                        $consulta .= "join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".($nivel-1)." and a.id_tabla_original=".$padre->nombre.".".$padre->llave."  where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+					//$consulta .= " join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".$nivel." and a.id_tabla_original = ".$tabla.".".$llave." and ( a.descripcion <> ".$tabla.".".$descripcion." or a.id_padre <> ".$padre->nombre.".".$padre->llave." )";
 					
                                         echo $consulta;
                                                                                echo "<br/><br/><br/>";
@@ -679,5 +681,22 @@ class Raiz extends CI_Controller {
             {
 		echo $e->getMessage();
             }
+        }
+              
+        /**
+         * Accion para obtener los registros de un ASU determinado en cierto nivel y con un ID de filtro
+         * @param int $idarbol
+         * @param Int $nivel Nivel de desglose de información requerida
+         * @param Int $filtro (Opcional) filtrar por un valor determinado
+         * @return Object
+         * @throws Exception Si ocurre error al recuperar datos de la base de datos
+         */
+        
+        public function getDataKeyValue($idarbol,$nivel,$filtro = 0)
+        {
+            if (!$this->input->is_ajax_request())
+            show_error('', 403, 'Acceso denegado');
+            
+            echo json_encode($this->ArbolSegmentacion_model->getDataKeyValue($idarbol,$nivel,$filtro));
         }
 }

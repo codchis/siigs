@@ -2,7 +2,9 @@
 
 /**
  * Modelo ReglaVacuna
- *
+ * 
+ * @package    TES
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-!2-09
  */
@@ -153,7 +155,7 @@ class ReglaVacuna_model extends CI_Model {
 	}
 
 	/**
-	 *Devuelve todos los registros de la tabla acciones
+	 *Devuelve todos los registros de la tabla regla_vacuna
 	 *
 	 *@access  public
 	 *@return  ArrayObject
@@ -174,7 +176,7 @@ class ReglaVacuna_model extends CI_Model {
 	}
 
 	/**
-	 *Devuelve la información de una accion por su ID
+	 *Devuelve la información de una regla de vacuna por su ID
 	 *
 	 *@access  public
 	 *@return  Object
@@ -196,10 +198,10 @@ class ReglaVacuna_model extends CI_Model {
 	}
 
 	/**
-	 *Inserta en la tabla accion, la información contenida en el objeto
+	 *Inserta en la tabla regla_vacuna la información contenida en el objeto
 	 *
 	 *@access  public
-	 *@return  int (Id de la inserci�n si no hubo errores al actualizar)
+	 *@return  int (Id de la inserción si no hubo errores al actualizar)
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */
 	public function insert()

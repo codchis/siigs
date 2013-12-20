@@ -3,6 +3,8 @@
 /**
  * Modelo Controlador
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-09-26
  */
@@ -131,7 +133,7 @@ class Controlador_model extends CI_Model {
 	/*******************************/
 
 	/**
-	 * Devuelve los mensajes de error en caso de ocurrir alguna excepci�n
+	 * Devuelve los mensajes de error en caso de ocurrir alguna excepción
 	 * 'usr' devuelve el mensaje para la vista de usuario
 	 * 'log' devuelve el mensaje para el log de errores
 	 *
@@ -210,7 +212,7 @@ class Controlador_model extends CI_Model {
 	}
 
 	/**
-	 *Devuelve la informaci�n de un controlador por su ID
+	 *Devuelve la información de un controlador por su ID
 	 *
 	 *@access  public
 	 *@return  Object
@@ -282,7 +284,7 @@ class Controlador_model extends CI_Model {
 
 	/**
 	 *Devuelve los permisos asignados a un grupo sobre un entorno determinado
-	 *(Mapea la informaci�n de las acciones asignadas a un controlador y los une con
+	 *(Mapea la información de las acciones asignadas a un controlador y los une con
 	 *los permisos de un grupo sobre esas acciones)
 	 *
 	 *@access  public
@@ -306,10 +308,10 @@ class Controlador_model extends CI_Model {
 	}
 
 	/**
-	 *Inserta en la tabla controlador, la informaci�n contenida en el objeto
+	 *Inserta en la tabla controlador, la información contenida en el objeto
 	 *
 	 *@access  public
-	 *@return  int (Id de la inserci�n si no hubo errores al actualizar)
+	 *@return  int (Id de la inserción si no hubo errores al actualizar)
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */
 	public function insert()

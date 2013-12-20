@@ -73,7 +73,7 @@ $opcion_delete = Menubuilder::isGranted(DIR_TES.'::notificacion::delete');
 <br />
 <table border="1">
 	<tr>
-		<th>T�tulo</th>
+		<th>Título</th>
 		<th>Contenido</th>
 		<th>Reportar a tabletas</th>
 		<th>Desde</th>

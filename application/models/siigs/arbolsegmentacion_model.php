@@ -3,6 +3,8 @@
 /**
  * Modelo ArbolSegmentacion
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-12-02
  */
@@ -274,6 +276,8 @@ class ArbolSegmentacion_model extends CI_Model {
             {
                 $str_datos = file_get_contents($ruta);
                 $datos = json_decode($str_datos,true);
+                if (count($seleccionados)>0)
+                $datos = $this->_addSelectedItems($datos,$seleccionados);
                 return $datos;
             }
             else
@@ -347,6 +351,22 @@ class ArbolSegmentacion_model extends CI_Model {
             }
         }
         
+        public function _addSelectedItems($datos,$seleccionados)
+        {
+            foreach($datos as $clave => $dato)
+            {
+                if (array_key_exists('children', $dato) && count($dato['children'])>0)
+                {
+                    $dato['children'] = $this->_addSelectedItems($dato['children'],$seleccionados);
+                }
+                if (in_array($dato["key"],$seleccionados))
+                {
+                    $datos[$clave]["select"] = true;
+                }
+            }
+            return $datos;
+        }
+        
 //        public function getChildrenFromId($id , $json = true)
 //        {
 //            $datos = array();
@@ -413,6 +433,32 @@ class ArbolSegmentacion_model extends CI_Model {
                 {
                     return $query->result();
                 }
+            }
+        }
+            
+         /**
+         * Accion para obtener los registros de un ASU determinado en cierto nivel y con un ID de filtro
+         * @param int $idarbol
+         * @param Int $nivel Nivel de desglose de información requerida
+         * @param Int $filtro (Opcional) filtrar por un valor determinado
+         * @return Object
+         * @throws Exception Si ocurre error al recuperar datos de la base de datos
+         */
+        
+        public function getDataKeyValue($idarbol,$nivel,$filtro = 0)
+        {
+            $consulta = 'select id,descripcion from asu_arbol_segmentacion where id_raiz='.$idarbol." and grado_segmentacion=".$nivel.(($filtro != 0) ? " and id_padre=".$filtro : '').' order by descripcion';
+            $query = $this->db->query($consulta);
+
+            if (!$query)
+            {
+                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion por nivel y filtro";
+                throw new Exception(__CLASS__);
+            }
+            else
+            {
+                return $query->result();
             }
         }
 }

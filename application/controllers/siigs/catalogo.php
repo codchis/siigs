@@ -1,7 +1,9 @@
 <?php
 /**
  * Controlador Catalogo
- *
+ * 
+ * @package    SIIGS
+ * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-10-07
  */
@@ -617,6 +619,36 @@ class Catalogo extends CI_Controller {
 				echo "true";
 			else
 				echo "false";
+			
+		}
+		catch(Exception $e)
+		{
+			Errorlog_model::save($e->getMessage(), __METHOD__);	
+			echo "false";
+		}
+	}
+        
+	/**
+	 *
+	 *Acción para revisar si los tipos de datos coinciden con los datos contenidos en 
+         * la tabla temporal que fueron tomados del CSV
+	 *
+	 * @param  string $campo
+	 * @return void
+	 */
+	public function checkTypeData($campo,$type)
+	{
+		try
+		{
+			if (empty($this->Catalogo_model))
+				return false;
+                        
+                        if (!$this->input->is_ajax_request())
+                        show_error('', 403, 'Acceso denegado');
+
+			$result = $this->Catalogo_model->checkTypeData($campo,$type);
+			
+                        echo $result;
 			
 		}
 		catch(Exception $e)

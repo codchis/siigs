@@ -3,6 +3,8 @@
 /**
  * Modelo Raiz
  *
+ * @package    SIIGS
+ * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-10-07
  */
@@ -97,7 +99,7 @@ class Raiz_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->get('asu_raiz');
+		$query = $this->db->query("select a.*, sum(case when ifnull(b.id,'') = '' then 0 else 1 end) as catalogos from asu_raiz a left outer join asu_raiz_x_catalogo b on a.id = b.id_raiz_arbol group by a.id");
 
 		if (!$query)
 		{
@@ -132,7 +134,7 @@ class Raiz_model extends CI_Model {
 	}
 
 	/**
-	 *Devuelve la informaci�n de una raiz por su ID
+	 *Devuelve la información de una raiz por su ID
 	 *
 	 *@access  public
 	 *@return  Object

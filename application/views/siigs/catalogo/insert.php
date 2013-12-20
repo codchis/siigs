@@ -96,6 +96,25 @@
 									$input.append($opt);
 									});
 
+                                        //seleccionar por default el valor varchar
+                                        $input.val('varchar');
+                                        //Agregar la revisión de tipos de datos
+                                        //por columnas
+                                        $input.change(function(){
+                                            $.ajax({
+                                            context:this,
+                                            type: "GET",
+                                            url: '/<?php echo DIR_SIIGS.'/catalogo/checkTypeData/';?>'+item.columnName+'/'+$(this).val(),
+                                        })
+                                        .done(function(dato)
+                                        {
+                                                if (dato == 'false')
+                                                {
+                                                        alert('El tipo de dato no coincide con los datos del archivo CSV');
+                                                        $(this).val('varchar');
+                                                }
+                                                });
+                                        });
         			    	//Agregar el TD y el checkbox para llaves primarias
         			    	$td = $('<td></td>');
         			    	$tr.append($td);
@@ -107,8 +126,15 @@
     			}
 			};
     	    $('#loadcsv').submit(function() {
-
-    	        $(this).ajaxSubmit(options);
+                
+                var filename = $("#btncsv").val();
+                var extension = filename.replace(/^.*\./, '');
+    	        if (extension == filename || extension.toLowerCase() != 'csv')
+                {
+                    alert('Solo se aceptan archivos con extensión csv');
+                    return false;
+                }
+                $(this).ajaxSubmit(options);
 				return false;
     	    });
 
@@ -201,7 +227,7 @@ echo $msgResult.'<br /><br />';
 <form method="post" enctype="application/x-www-form-urlencoded" id="loadcsv">
 <table>
 <tr>
-<td><input type="file" name="archivocsv" id="btncsv"/></td>
+<td>[Archivo csv separado por comas]<input type="file" name="archivocsv" id="btncsv"/></td>
 <td><input type="button" name="btnload" id="btnload" value="Cargar Datos" onclick="$('#loadcsv').submit();"/></td>
 </tr>
 </table>
