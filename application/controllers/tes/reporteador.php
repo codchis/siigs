@@ -38,8 +38,10 @@ class Reporteador extends CI_Controller {
 				show_error('', 403, 'Acceso denegado');
 			$data['title'] = 'Reportes';
 			$this->load->helper('form');
+			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
 			
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['jurisdicciones'] = (array)$this->ArbolSegmentacion_model->getDataKeyValue(1, 2);
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
