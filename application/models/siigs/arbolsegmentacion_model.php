@@ -448,7 +448,6 @@ class ArbolSegmentacion_model extends CI_Model {
         public function getDataKeyValue($idarbol,$nivel,$filtro = 0)
         {
             $consulta = 'select id,descripcion from asu_arbol_segmentacion where id_raiz='.$idarbol." and grado_segmentacion=".$nivel.(($filtro != 0) ? " and id_padre=".$filtro : '');
-            var_dump($consulta);
             $query = $this->db->query($consulta);
 
             if (!$query)
