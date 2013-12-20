@@ -99,7 +99,7 @@ class Raiz_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->get('asu_raiz');
+		$query = $this->db->query("select a.*, sum(case when ifnull(b.id,'') = '' then 0 else 1 end) as catalogos from asu_raiz a left outer join asu_raiz_x_catalogo b on a.id = b.id_raiz_arbol group by a.id");
 
 		if (!$query)
 		{
