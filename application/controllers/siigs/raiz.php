@@ -692,11 +692,11 @@ class Raiz extends CI_Controller {
          * @throws Exception Si ocurre error al recuperar datos de la base de datos
          */
         
-        public function getDataKeyPar($idarbol,$nivel,$filtro = 0)
+        public function getDataKeyValue($idarbol,$nivel,$filtro = 0)
         {
             if (!$this->input->is_ajax_request())
             show_error('', 403, 'Acceso denegado');
             
-            echo json_encode($this->ArbolSegmentacion_model->getDataKeyPar($idarbol,$nivel,$filtro));
+            echo json_encode($this->ArbolSegmentacion_model->getDataKeyValue($idarbol,$nivel,$filtro));
         }
 }

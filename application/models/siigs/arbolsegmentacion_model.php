@@ -445,7 +445,7 @@ class ArbolSegmentacion_model extends CI_Model {
          * @throws Exception Si ocurre error al recuperar datos de la base de datos
          */
         
-        public function getDataKeyPar($idarbol,$nivel,$filtro = 0)
+        public function getDataKeyValue($idarbol,$nivel,$filtro = 0)
         {
             $consulta = 'select id,descripcion from asu_arbol_segmentacion where id_raiz='.$idarbol." and grado_segmentacion=".$nivel.(($filtro != 0) ? " and id_padre=".$filtro : '');
             var_dump($consulta);
