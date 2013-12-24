@@ -108,7 +108,7 @@ class Poblacion_model extends CI_Model
             $this->error = true;
             $this->msg_error_usr = 'Error al procesar la tabla población';
             $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
-            throw new Exception();
+            throw new Exception('('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message());
         }
         
         return $result;

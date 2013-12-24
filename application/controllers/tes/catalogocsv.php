@@ -422,23 +422,26 @@ class CatalogoCsv extends CI_Controller {
 	 */
 	public function createTablePob()
 	{
-		if (empty($this->Poblacion_model))
+        $this->load->model(DIR_SIIGS.'/Poblacion_model');
+        
+		if (empty($this->Poblacion_model)) {
+            echo 'No se puede cargar el modelo Poblacion';
 			return false;
+        }
 		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 			show_error('', 403, 'Acceso denegado');
 		try
 		{
-			$data['title'] = 'Lista de catálogos disponibles';
-			$data['catalogos'] = $this->CatalogoCsv_model->getAll();
-			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$this->Poblacion_model->process();
+            
+            $this->session->set_flashdata('msgResult', 'Datos procesados correctamente');
 		}
 		catch (Exception $e)
 		{
-			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
 		}
-	
-		$this->template->write_view('content',DIR_TES.'/catalogocsv/index', $data);
-	
-		$this->template->render();
+        
+        redirect(DIR_TES.'/catalogocsv/', 'refresh');
+        die();
 	}
 }
