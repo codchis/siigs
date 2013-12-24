@@ -17,7 +17,7 @@ function validar(e,op,id) // validacion de datos de entrada  e=event op=tipo cad
     patron =/[0-9-+]/; 
 
 	if(op=="L") //solo letras
-    patron =/[A-Za-z Ññ]/; 
+    patron =/[A-Za-z Ññ áÁéÉíÍóÓúÚüÜ ]/; 
 	
 	if(op=="LE") //caracteres y letras
     patron =/[A-Za-zÑñ0-9.:,;()&%$#-_@°|!?¡¿ ]/; 

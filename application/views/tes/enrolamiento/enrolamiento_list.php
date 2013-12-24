@@ -1,5 +1,13 @@
 <script type="text/javascript">
-$(document).ready(function(){
+$(document).ready(function()
+{
+	<?php if(!empty($id)){?>
+	if(confirm("Registro agregado exitosamente\n\n ¿Deseas guardarlo en la tarjeta?"))
+	{
+		$("#secretIFrame").attr("src","/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $id?>");
+	}
+	else window.location.href = "/<?php echo DIR_TES?>/enrolamiento/";
+	<?php } ?>
     $('#paginador a').click(function(e){
         e.preventDefault();
         pag = $(this).attr('href');
@@ -65,4 +73,5 @@ Buscar usuario
         </td></tr>
     </tfoot>
 </table>
+<iframe id="secretIFrame" src="" style="display:none; visibility:hidden;"></iframe>
 <?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/enrolamiento/insert">Crear nuevo</a><?php } ?>

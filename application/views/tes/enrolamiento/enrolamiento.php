@@ -9,6 +9,7 @@
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="/resources/ui/jquery-ui-1.8.17.custom.js"></script>	
+    <script type="text/javascript" src="/resources/js/validaciones.js"></script>	
 
     <script>
 	var g=new Date();
@@ -101,7 +102,7 @@
 		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>/tipo/tipo");	
 		$("#tbenef").load("/tes/Enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afiliaciones;?>");	
 		$("#sangre").load("/tes/Enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', ''); ?>");	
-		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', ''); ?>");
+		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', ''); ?>/descripcion/descripcion");
 		$("#compania").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo set_value('compania', ''); ?>");
 		$("#companiaT").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo set_value('companiaT', ''); ?>");
 		
@@ -322,7 +323,7 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombre" type="text" id="nombre" style="width:80%; margin-left:10px;" required value="<?php echo set_value('nombre', ''); ?>"></td>
+                            <td width="31%"><input name="nombre" type="text" required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('nombre', ''); ?>" maxlength="35"></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px;">
@@ -335,7 +336,7 @@
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paterno" type="text" id="paterno" style="width:80%; margin-left:10px;" required value="<?php echo set_value('paterno', ''); ?>"></td>
+                            <td><input name="paterno" type="text" required id="paterno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('paterno', ''); ?>" maxlength="20"></td>
                             <td><p align="right">Tipo de Sangre</p></td>
                             <td>
                               <select name="sangre" id="sangre" style="width:80%; margin-left:10px;" required>                           
@@ -344,7 +345,7 @@
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="materno" type="text" id="materno" style="width:80%; margin-left:10px;" required value="<?php echo set_value('materno', ''); ?>"></td>
+                            <td><input name="materno" type="text" required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('materno', ''); ?>" maxlength="20"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
                             <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d/m/Y', strtotime(set_value('fnacimiento', ''))); ?>" placeholder="dd/mm/yyyy"></td>
                           </tr>
@@ -357,8 +358,8 @@
                             </tr>
                           <tr>
                             <td><p align="right">CURP</p></td>
-                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo set_value('curp', ''); ?>">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20.5%" required value="<?php echo set_value('curp2', ''); ?>"></td>
+                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo set_value('curp', ''); ?>" onkeypress="return validar(event,'NL',this.id)">
+                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20.5%" required value="<?php echo set_value('curp2', ''); ?>" onkeypress="return validar(event,'NL',this.id)"></td>
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" required="required">
                             </select></td>
@@ -406,7 +407,7 @@
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">CURP</p></td>
-                            <td width="31%"><input name="curpT" type="text" required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo set_value('curpT', ''); ?>" maxlength="18" /></td>
+                            <td width="31%"><input name="curpT" type="text" required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo set_value('curpT', ''); ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)" /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px;">
@@ -419,19 +420,19 @@
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombreT" type="text" required="required" id="nombreT" style="width:80%; margin-left:10px;" value="<?php echo set_value('nombreT', ''); ?>" readonly="readonly" /></td>
+                            <td width="31%"><input name="nombreT" type="text" required="required" id="nombreT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('nombreT', ''); ?>" maxlength="35" readonly="readonly" /></td>
                             <td><p align="right">Telefono de Casa</p></td>
                             <td><input name="celularT" type="text" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo set_value('celularT', ''); ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paternoT" type="text" required="required" id="paternoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('paternoT', ''); ?>" readonly="readonly" /></td>
+                            <td><input name="paternoT" type="text" required="required" id="paternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('paternoT', ''); ?>" maxlength="20" readonly="readonly" /></td>
                             <td><p align="right">Celular</p></td>
                             <td><input name="telefonoT" type="text" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefonoT', ''); ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="maternoT" type="text" required="required" id="maternoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('maternoT', ''); ?>" readonly="readonly" /></td>
+                            <td><input name="maternoT" type="text" required="required" id="maternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('maternoT', ''); ?>" maxlength="20" readonly="readonly"/></td>
                             <td><p align="right">Compania Celular</p></td>
                             <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" >
                             </select></td>
@@ -457,7 +458,7 @@
                             <td><p align="right">Lugar</p></td>
                             <td colspan="3"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(null)));?>/" id="fba1" class="cat">Seleccsionar</a>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="cat">Seleccionar</a>
                           </tr>
                         </table>
                         <br />
