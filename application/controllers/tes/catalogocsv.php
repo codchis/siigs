@@ -413,4 +413,32 @@ class CatalogoCsv extends CI_Controller {
 			echo "false";
 		}
 	}
+	
+	/**
+	 *Acción para ejecutar la creación de la tabla poblacional
+	 *No recibe parámetros
+	 *
+	 *@return void
+	 */
+	public function createTablePob()
+	{
+		if (empty($this->Poblacion_model))
+			return false;
+		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+			show_error('', 403, 'Acceso denegado');
+		try
+		{
+			$data['title'] = 'Lista de catálogos disponibles';
+			$data['catalogos'] = $this->CatalogoCsv_model->getAll();
+			$data['msgResult'] = $this->session->flashdata('msgResult');
+		}
+		catch (Exception $e)
+		{
+			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+		}
+	
+		$this->template->write_view('content',DIR_TES.'/catalogocsv/index', $data);
+	
+		$this->template->render();
+	}
 }
