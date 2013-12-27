@@ -444,4 +444,34 @@ class CatalogoCsv extends CI_Controller {
         redirect(DIR_TES.'/catalogocsv/', 'refresh');
         die();
 	}
+    
+    /**
+	 *Acción para ejecutar la creación de la tabla poblacional
+	 *No recibe parámetros
+	 *
+	 *@return void
+	 */
+	public function createTableGeo()
+	{
+        $this->load->model(DIR_SIIGS.'/Georeferencia_model');
+        
+		if (empty($this->Georeferencia_model)) {
+            echo 'No se puede cargar el modelo Georeferencia';
+			return false;
+        }
+		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+			show_error('', 403, 'Acceso denegado');
+		try
+		{
+			$this->Georeferencia_model->process();
+            
+            $this->session->set_flashdata('msgResult', 'Datos procesados correctamente');
+		}
+		catch (Exception $e) {
+			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+		}
+        
+        redirect(DIR_TES.'/catalogocsv/', 'refresh');
+        die();
+	}
 }
