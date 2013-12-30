@@ -26,13 +26,14 @@ $(document).ready(function(){
 
 <?php
 if(!empty($msgResult))
-    echo '<h3>'.$msgResult.'</h3>';
+    echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 
 echo '<h2>'.$title.'</h2>';
 
 echo validation_errors();
 
 echo form_open(site_url().DIR_SIIGS.'/menu/insert/'); ?>
+<div class="table table-striped">
 <table>
     <tr><td>Raíz: </td><td><?php echo form_dropdown('raiz', $menus); ?> </td></tr>
     <tr><td>Padre: </td><td><?php echo form_dropdown('padre', $menus); ?> </td></tr>
@@ -40,8 +41,8 @@ echo form_open(site_url().DIR_SIIGS.'/menu/insert/'); ?>
     <tr><td>Nombre: </td><td><?php echo form_input( array('name'=>'nombre') ); ?> </td></tr>
     <tr><td>Entorno: </td><td><?php echo form_dropdown('entorno', $entornos); ?> </td></tr>
     <tr><td>Controlador: </td><td><?php echo form_dropdown('controlador', $controladores); ?> </td></tr>
-    <tr><td colspan="2"><input type="submit" value="Guardar" />
-        <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/'" /></td></tr>
+    <tr align="center"><td colspan="2"><input type="submit" value="Guardar" class="btn btn-primary" />
+        <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/'" class="btn btn-primary" /></td></tr>
 </table>
 </form>
-<a href="<?php echo site_url().DIR_SIIGS; ?>/menu">Regresar a listado</a>
+</div>

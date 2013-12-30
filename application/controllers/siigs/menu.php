@@ -63,12 +63,14 @@ class Menu extends CI_Controller {
 
             $data['pag'] = $pag;
             $data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['clsResult'] = $this->session->flashdata('clsResult');
             $data['title'] = 'Menu';
 
             $registroEliminar = $this->input->post('registroEliminar');
 
             if( !empty($registroEliminar) ) {
                 $this->Menu_model->delete($registroEliminar);
+                $data['clsResult'] = 'success';
                 $data['msgResult'] = 'Registros Eliminados exitosamente';
             }
 
@@ -108,6 +110,7 @@ class Menu extends CI_Controller {
 
             $data['registros'] = $this->Menu_model->getAll($configPag['per_page'], $pag);
         } catch (Exception $e) {
+            $data['clsResult'] = 'error';
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
         
@@ -163,7 +166,7 @@ class Menu extends CI_Controller {
             }
 
             $datos = $this->input->post();
-            $data['title'] = 'Crear un nuevo registro';
+            $data['title'] = 'Menu - Crear un nuevo registro';
             $data['msgResult'] = $this->session->flashdata('msgResult');
 
             if(!empty($datos)) {
@@ -188,6 +191,7 @@ class Menu extends CI_Controller {
 
                     $this->Menu_model->insert();
                     $this->session->set_flashdata('msgResult', 'Registro guardado exitosamente');
+                    $this->session->set_flashdata('clsResult', 'success');
 
                     Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Registro creado: '.$this->Menu_model->getId());
                     redirect(DIR_SIIGS.'/menu/', 'refresh');
@@ -195,6 +199,7 @@ class Menu extends CI_Controller {
                 }
             }
         } catch (Exception $e) {
+            $data['clsResult'] = 'error';
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
 
@@ -225,8 +230,11 @@ class Menu extends CI_Controller {
             $this->load->model( array(DIR_SIIGS.'/Entorno_model', DIR_SIIGS.'/Controlador_model') );
 
             $datos = $this->input->post();
-            $data['title'] = 'Actualizar datos del registro';
+            $data['title'] = 'Menu - Actualizar datos del registro';
             $data['registro'] = $this->Menu_model->getById($id);
+            
+            if(empty($data['registro']))
+                throw new Exception('Registro no encontrado');
             
             $menus = $this->Menu_model->getAll();
             $data['menus'][0] = 'Elegir';
@@ -278,11 +286,13 @@ class Menu extends CI_Controller {
 
                     Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Registro actualizado: '.$id);
                     $this->session->set_flashdata('msgResult', 'Registro guardado exitosamente');
+                    $this->session->set_flashdata('clsResult', 'success');
                     redirect(DIR_SIIGS.'/menu/', 'refresh');
                     die();
                 }
             }
         } catch (Exception $e) {
+            $data['clsResult'] = 'error';
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
 
@@ -309,12 +319,14 @@ class Menu extends CI_Controller {
 
         try {
             $data['registro'] = $this->Menu_model->getById($id);
-            $data['title'] = 'Datos del registro';
+            $data['title'] = 'Menu - Datos del registro';
 
             if( empty($data['registro']) ) {
+                $data['clsResult'] = 'error';
                 $data['msgResult'] = 'ERROR: El registro solicitado no existe';
             }
-        } catch (Exception $e) { 
+        } catch (Exception $e) {
+            $data['clsResult'] = 'error';
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
 
@@ -341,8 +353,10 @@ class Menu extends CI_Controller {
         
         try {
             $this->Menu_model->delete($id);
-            $this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');;
+            $this->session->set_flashdata('clsResult', 'success');
+            $this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
         } catch (Exception $e) {
+            $this->session->set_flashdata('clsResult', 'error');
             $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
         }
 
@@ -352,7 +366,5 @@ class Menu extends CI_Controller {
         die();
     }
 
-    
 }
-
 ?>

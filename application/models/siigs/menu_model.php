@@ -283,7 +283,7 @@ class Menu_model extends CI_Model
             }
         } else {
             // Eliminar un solo registro
-            $result = $this->db->delete('menu', array('id' => $id));
+            $result = $this->db->delete('sis_menu', array('id' => $id));
 
             if(empty($result)) {
                 $this->error = true;
@@ -292,7 +292,7 @@ class Menu_model extends CI_Model
                 throw new Exception();
             }
         }
-
+        
         return $result;
     }
 

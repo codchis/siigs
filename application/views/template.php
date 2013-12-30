@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang='es'>
 <head>
+    <link rel="icon" href="/resources/plantillaSM/img/favicon.ico" type="image/x-icon" />
+    
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <meta charset='utf-8' />
     <title>SIIGS</title>
@@ -13,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="/resources/plantillaSM/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/resources/plantillaSM/css/default.css">
     <link rel="stylesheet" type="text/css" href="/resources/plantillaSM/css/menu.css">
+    <link rel="stylesheet" type="text/css" href="/resources/css/alert.css">
     
     <script src="/resources/js/jquery.js"></script>
 	<script src="/resources/js/jquery-ui.min.js"></script>

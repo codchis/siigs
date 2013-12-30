@@ -912,7 +912,7 @@ h2 { font-size:18px; font-weight:bold; vertical-align:text-top; font-family: Ope
 }
 
 .form-signin{
-	margin-top: 12%;
+	margin-top: 9%;
     width: 250px;
 }
 
@@ -924,32 +924,9 @@ color:#59595C;
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.pagination{display:inline-block;padding-left:0;margin:20px 0;border-radius:4px}
+.pagination>li{display:inline}
+.pagination>li>a,.pagination>li>span{position:relative;float:left;padding:6px 12px;margin-left:-1px;line-height:1.428571429;text-decoration:none;background-color:#fff;border:1px solid #ddd}
+.pagination>li:first-child>a,.pagination>li:first-child>span{margin-left:0;}
+.pagination>li>a:hover,.pagination>li>span:hover,.pagination>li>a:focus,.pagination>li>span:focus{background-color:#eee}
+.pagination-sm>li>a,.pagination-sm>li>span{padding:5px 10px;font-size:12px}

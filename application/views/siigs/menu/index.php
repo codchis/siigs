@@ -40,29 +40,42 @@ $(document).ready(function(){
 });
 </script>
 
-<h2><?=$title;?></h2>
-
-<?php echo form_open(site_url().DIR_SIIGS.'/menu/index/'.$pag, array('name'=>'form_filter_menu', 'id'=>'form_filter_menu')); ?>
-    <p><input type="hidden" name="filtrar" value="true" />
-    <div class="input-append">
-        Raíz: <?php echo form_dropdown('raiz', $menus); ?>
-        <input type="button" name="btnFiltrar" id="btnFiltrar" value="Filtrar" class="btn  btn-primary" />
-    </div>
-</form>
+<style>
+    select[name=raiz] {
+        margin-bottom: auto !important;
+    }
+</style>
 
 <?php
-    if(!empty($msgResult))
-        echo '<br><strong>'.$msgResult.'</strong><br>';
-    
     $showInsert = Menubuilder::isGranted(DIR_SIIGS.'::menu::insert');
     $showUpdate = Menubuilder::isGranted(DIR_SIIGS.'::menu::update');
     $showDelete = Menubuilder::isGranted(DIR_SIIGS.'::menu::delete');
     $showView   = Menubuilder::isGranted(DIR_SIIGS.'::menu::view');
 ?>
 
-<?php echo form_open(site_url().DIR_SIIGS.'/menu/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
+<h2><?=$title;?></h2>
 
-<div class="table table-striped" >
+<?php echo form_open(site_url().DIR_SIIGS.'/menu/index/'.$pag, array('name'=>'form_filter_menu', 'id'=>'form_filter_menu')); ?>
+    <input type="hidden" name="filtrar" value="true" />
+    Raíz: <?php echo form_dropdown('raiz', $menus); ?>
+    <input type="button" name="btnFiltrar" id="btnFiltrar" value="Filtrar" class="btn btn-primary" /> 
+</form>
+
+<?php echo form_open(site_url().DIR_SIIGS.'/menu/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');"));
+
+    if($showDelete)
+        echo '<input type="submit" value="Eliminar Seleccionados" class="btn btn-primary" /> ';
+
+    if($showInsert)
+        echo '<input type="button" name="crear" value="Crear nuevo" onclick="location.href=\''.site_url().DIR_SIIGS.'/menu/insert\'" class="btn btn-primary"/>';
+?><br>
+
+<?php
+    if(!empty($msgResult))
+        echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
+?>
+
+<div class="table table-striped">
 <table>
     <thead>
         <tr>
@@ -102,19 +115,11 @@ $(document).ready(function(){
         ?>
     </tbody>
     <tfoot>
-        <tr><td colspan="7">
+        <tr><td colspan="9">
             <div id="paginador" align="center"><?php echo $this->pagination->create_links(); ?></div>
         </td></tr>
     </tfoot>
 </table>
 </div>
-<br />
-<?php
-    if($showDelete)
-        echo '<input type="submit" value="Eliminar Seleccionados" class="btn btn-small btn-primary" />';
-    
-    if($showInsert) { ?>
-    <input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/insert'" class="btn btn-small btn-primary"/>
-<?php } ?>
 
 </form>
