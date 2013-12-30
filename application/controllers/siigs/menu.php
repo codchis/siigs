@@ -110,7 +110,7 @@ class Menu extends CI_Controller {
         } catch (Exception $e) {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
-
+        
         $this->template->write_view('content',DIR_SIIGS.'/menu/index', $data);
 		$this->template->render();
     }

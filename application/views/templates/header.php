@@ -1,6 +1,4 @@
-<?php header('Content-Type: text/html; charset=UTF-8'); ?> 
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+            <div class='row-fluid visible-desktop' id='logos' >
+                <div class='span12 logo1'> <a href='http://www.salud.chiapas.gob.mx/'><img alt='Organismo' src='/resources/plantillaSM/img/logosbanner.png' /></a>
+                </div>
+            </div>

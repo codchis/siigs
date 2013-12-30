@@ -42,41 +42,39 @@ $(document).ready(function(){
 
 <h2><?=$title;?></h2>
 
-<fieldset>
-    <legend><strong>Opciones de filtrado</strong></legend>
-    <?php echo form_open(site_url().DIR_SIIGS.'/menu/index/'.$pag, array('name'=>'form_filter_menu', 'id'=>'form_filter_menu')); ?>
-        <p><input type="hidden" name="filtrar" value="true" />
+<?php echo form_open(site_url().DIR_SIIGS.'/menu/index/'.$pag, array('name'=>'form_filter_menu', 'id'=>'form_filter_menu')); ?>
+    <p><input type="hidden" name="filtrar" value="true" />
+    <div class="input-append">
         Raíz: <?php echo form_dropdown('raiz', $menus); ?>
-        <input type="button" name="btnFiltrar" id="btnFiltrar" value="Filtrar" />
-    </form>
-</fieldset>
+        <input type="button" name="btnFiltrar" id="btnFiltrar" value="Filtrar" class="btn  btn-primary" />
+    </div>
+</form>
 
-<br />
 <?php
     if(!empty($msgResult))
-        echo '<strong>'.$msgResult.'</strong>';
+        echo '<br><strong>'.$msgResult.'</strong><br>';
     
     $showInsert = Menubuilder::isGranted(DIR_SIIGS.'::menu::insert');
     $showUpdate = Menubuilder::isGranted(DIR_SIIGS.'::menu::update');
     $showDelete = Menubuilder::isGranted(DIR_SIIGS.'::menu::delete');
     $showView   = Menubuilder::isGranted(DIR_SIIGS.'::menu::view');
 ?>
-<br />
 
 <?php echo form_open(site_url().DIR_SIIGS.'/menu/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
 
-<table border="1">
+<div class="table table-striped" >
+<table>
     <thead>
         <tr>
             <?php if($showDelete) echo '<th></th>'; ?>
-            <th>Raiz</th>
-            <th>Padre</th>
-            <th>Nombre</th>
-            <th>Ruta</th>
-            <th>Controlador</th>
-            <?php if($showView) echo '<th>Ver</th>'; ?>
-            <?php if($showUpdate) echo '<th>Modificar</th>'; ?>
-            <?php if($showDelete) echo '<th>Eliminar</th>'; ?>
+            <th><h2>Raiz</h2></th>
+            <th><h2>Padre</h2></th>
+            <th><h2>Nombre</h2></th>
+            <th><h2>Ruta</h2></th>
+            <th><h2>Controlador</h2></th>
+            <?php if($showView) echo '<th><h2>Ver</h2></th>'; ?>
+            <?php if($showUpdate) echo '<th><h2>Modificar</h2></th>'; ?>
+            <?php if($showDelete) echo '<th><h2>Eliminar</h2></th>'; ?>
         </tr>
     </thead>
     <tbody>
@@ -92,10 +90,10 @@ $(document).ready(function(){
                     <td>'.htmlentities($fila->nombre).'</td>
                     <td>'.htmlentities($fila->ruta).'</td>
                     <td><a href="'.site_url().DIR_SIIGS.'/controlador/view/'.$fila->id_controlador.'">'.htmlentities($fila->nombre_controlador).'</a></td>';
-                    if($showView) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/view/'.$fila->id.'">Ver</a></td>';
-                    if($showUpdate) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/update/'.$fila->id.'">Modificar</a></td>';
+                    if($showView) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/view/'.$fila->id.'" class="btn btn-small btn-primary">Ver</a></td>';
+                    if($showUpdate) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/update/'.$fila->id.'" class="btn btn-small btn-primary">Modificar</a></td>';
                     if($showDelete) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
+                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary">Eliminar</a></td>';
                 echo '</tr>';
             }
         } else {
@@ -109,15 +107,14 @@ $(document).ready(function(){
         </td></tr>
     </tfoot>
 </table>
-
+</div>
 <br />
 <?php
     if($showDelete)
-        echo '<input type="submit" value="Eliminar Seleccionados" />';
-?>
+        echo '<input type="submit" value="Eliminar Seleccionados" class="btn btn-small btn-primary" />';
+    
+    if($showInsert) { ?>
+    <input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/insert'" class="btn btn-small btn-primary"/>
+<?php } ?>
 
 </form>
-<br />
-<?php if($showInsert) { ?>
-    <input type="button" name="crear" value="Crear nuevo" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/insert'" />
-<?php } ?>

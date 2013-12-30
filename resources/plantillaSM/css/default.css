@@ -1,0 +1,955 @@
+
+@font-face {
+  font-family: 'Open Sans Condensed';
+  font-style: normal;
+  font-size: 13px;
+  src: local('Open Sans Cond Light'), local('OpenSans-CondensedLight'), url(../fonts/gk5FxslNkTTHtojXrkp-xF1YPouZEKgzpqZW9wN-3Ek.woff) format('woff');
+}
+
+body {background-color: #E4E4E4;}
+
+ /* Media Quiery Media Maxima del Portal*/
+	@media (min-width: 1200px)
+    {
+    .enlace-portales {width: 1100px;}
+   	.cont-page {width: 1100px;}
+    #contenido { width: 1100px; }
+	}
+ 	
+.enlace-portales { margin: 20px auto 0; }
+
+.cont-page {height: auto;background: transparent; padding: 0.107142857142857em/*1.5px*/; margin: 0 auto 1.428571428571429em/*20px*/;border: 1px solid #D6D4D4;border-radius: 5px;box-shadow: 0 0 0 1px #FFFFFF inset, 0 0 0 3px #F4F4F4 inset, 0 0 5px rgba(0, 0, 0, 0.1);}
+    header { }
+    header #logos{ height: 9.285714285714286em/*130px*/; background: #E8ECED; border-bottom: /*2px*/0.142857142857143em solid #FFF; outline: 0px solid red; }
+    header #logos .logo1 img { float: left; width: 95%; margin: 26px 0 0 30px;  }
+   
+	
+    header #menu-principal{ background: #EDEDEE; height: 3.214285714285714em/*45px*/; margin: 0 0 0.142857142857143em/*2px*/ 0; }
+    header #menu-principal nav { outline: 0px dotted blue; width: 67%; }
+    header #menu-principal nav ul {padding:0; margin:0 0 0 10px/*10px*/; list-style:none; }
+    header #menu-principal nav ul li { float:left;    }
+    header #menu-principal nav ul li a { font-size:1.285714285714286em; /*font-size:18px;*/ color: #333; font-weight:bold;  font-family:Open Sans Condensed ,sans-serif; display:block; padding:0 20px 0 20px; float:left; line-height:45px; text-decoration:none; height: 100%; outline: 0px;}
+    header #menu-principal nav ul li a:hover {background: #FAFAFA;  }
+    header #menu-principal nav ul li:hover > a { background: #1FA950; color: #fff; text-decoration:none; }
+    header #menu-principal nav ul li #actual {background: #1FA950; color: #fff; text-decoration:none;}
+
+    header #menu-principal .buscador-cont { width: 28.3%; height: 3.214285714285714em/*45px*/; outline: 0px dotted green; float: right; }
+    header #menu-principal .buscador-cont  .db1{ width: 222px; height: 2.428571428571429em/*34px*/; outline: 0px dotted aqua; float: left; background: url(../img/fondo-buscar.png); margin: 7px 0 0 0;Â }
+    	header #menu-principal .buscador-cont  .db1 form #dato_buscado{width: 170px; height: 16px; float: right; border: 0px; margin: 4px 0 0 0; box-shadow: 0 0px 0px rgba(0, 0, 0, 0) inset;  }
+    header #menu-principal .buscador-cont  .db2{ width: 68px; height: 2.428571428571429em/*34px*/; outline: 0px dotted blue; float: left; background: url(../img/enviar-buscar.png); margin: 7px 0 0 0; Â }
+
+    header #menu-secundario { background: #EDEDEE; min-height: 45px; /*float: right; border-top: 5px solid #E8ECED; border-bottom: 5px solid #E8ECED;*/  }
+    header #menu-secundario #nombre-site{ height: 45px;  float: left; color: #666666; font-family:Open Sans Condensed; font-size: 1.285714285714286em/*18px*/; font-weight: bold; margin: 0 30px 0 10px; line-height: 3.214285714285714em/*45px*/;  }
+    header #menu-secundario nav ul {padding:0; margin:0; list-style:none; float: left;  }
+    header #menu-secundario nav ul li { float:left;  }
+    header #menu-secundario nav ul li a {font-family:Open Sans Condensed; display:block; padding:0 10px 0 10px; float:left; line-height:3.214285714285714em/*45px*/; text-decoration:none; font-size:1.142857142857143em/*16px*/; color:#333; font-weight:bold; height: 100%; outline: 0px; }
+    header #menu-secundario nav ul li a:hover {background: #FAFAFA;  }
+    header #menu-secundario nav ul li:hover > a { background: #1FA950; color: #fff; text-decoration:none; }
+    header #menu-secundario nav ul li #actual {background: #1FA950; color: #fff; text-decoration:none;}
+	
+	.accordion-heading a {color: #75706E; font-family:Open Sans Condensed ,sans-serif; font-size: 1.28571em; font-weight: bold; outline: 0px; }
+	.accordion-heading a:hover { background: url(../img/vinetas/vineta-menu.png) #EDEDED no-repeat 3% center ; /*background:#EDEDED;*/ }
+	.accordion-inner ul { margin: 0 0 0 6%; padding: 0px; list-style: url(../img/vinetas/01.png) ; }
+	.accordion-inner ul li { }
+	.accordion-inner ul li.actual-leftcol a { color: #1FA950; font-weight: bold; }
+	.accordion-inner ul li a{color: #666666;font-size: 1em; line-height: 30px; width: 100%; }
+    
+    header #menu-secundario .navbar
+        {
+            background: #EDEDEE; margin: 0px;
+        }
+    header #menu-secundario .navbar .btn-navbar
+        {
+            background-color: #1FA950;
+  	        background-image: -moz-linear-gradient(top, #1FA950, #1B9947);
+  	        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#1FA950), to(#1B9947));
+  	        background-image: -webkit-linear-gradient(top, #1FA950, #1B9947);
+  	        background-image: -o-linear-gradient(top, #1FA950, #1B9947);
+  	        background-image: linear-gradient(to bottom, #1FA950, #1B9947);
+        }
+    .nav-collapse, .nav-collapse.collapse
+        {
+    	    background: #3C3C3C;/*background: rgba(36, 36, 36, 0.88);*//*background: none repeat scroll 0 0 #EDEDEE;*/
+    	    height: 0;
+            overflow: hidden;
+    	    width: 100%;
+    	}
+    header #menu-secundario .navbar .navbar-inner
+    {
+        background: #3C3C3C;
+        border: 0px solid #EDEDEE;
+        border-radius: 4px 4px 4px 4px;
+        box-shadow: 1px 1px 10px rgba(36, 36, 36, 0.6);
+        min-height: 45px;
+        padding-left: 20px;
+        padding-right: 20px;
+        border-bottom: 3px solid #1FA950;
+    }
+    .nav-collapse .nav > li > a:hover,
+  	.nav-collapse .nav > li > a:focus,
+  	.nav-collapse .dropdown-menu a:hover,
+  	.nav-collapse .dropdown-menu a:focus { background-color: #4A4A4A; color: #FFF;  }
+     #actual { background-color: transparent; border-bottom: 0px solid #1FA950;  color: #1FA950; text-shadow: 0 0px 0 none;}
+
+	.nav-collapse .nav > li > a, .nav-collapse .dropdown-menu a
+    {
+        border-radius: 3px 3px 3px 3px;
+        color: #FFF;
+        font-weight: bold;
+        padding: 9px 15px;
+        text-shadow: 0 0px 0 none;
+    }
+	.nav-collapse .nav .navbar .nav > li > a
+    {
+    	color: #FFF;
+    	float: none;
+    	padding: 10px 15px;
+    	text-decoration: none;
+    	text-shadow: 0 0px 0 none;
+	}
+	
+
+    header #menu-secundario .navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus{
+    background-color: #1FA950;color: #FFF; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125) inset;text-decoration: none; }
+    header #menu-secundario navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus {
+    background-color: #1FA950; color: #FFF;  text-decoration: none; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.125) inset;	}
+	header #menu-secundario .navbar .brand { color: #FFF; font-family:Open Sans Condensed ,sans-serif; font-size: 18px; font-weight: bold; text-shadow: 0 0px 0 #FFFFFF; }
+	
+	/* Estilo del Acordeon menu secuendario en smarphone*/
+	.accordion-group
+    {
+        border: 0px solid #E5E5E5;
+        border-bottom: 1px solid #E5E5E5;
+        border-radius: 0;
+        margin-bottom: 2px;
+        width: 100% /*95%*/;
+	}
+	.accordion-heading .accordion-toggle
+    {
+        display: block;
+        padding: 8px 15px;
+        background: url(../img/vinetas/vineta-menu.png) no-repeat 3% center ;
+        text-indent: 5%;
+    }
+	collapse {
+        -moz-transition: height 0.35s ease 0s;
+        height: 0;
+        overflow: hidden;
+        position: relative;
+        background: none;
+    }
+    header #boletines { height: 22px; background: #FFF; padding: 3px 0 0 0; outline: 0px dotted #CC3333; clear: both; border-bottom: 1px solid #E8ECED;    }
+    header #boletines a { color: #666666; font-family: Helvetica, Arial, sans-serif; line-height: 20px; font-size: 0.857142857142857em/*1em;*/ /*font-size: 14px;*/; font-weight: bold; margin: 0 10px 0 10px; float: left;   }
+    header #boletines div { outline: 0px dotted #CC0000; margin: 2px 0 0 0; padding: 0 0 0 0; float: left;  }
+
+    #content { width: 92%; float: left; background: #FFF; min-height: 350px; padding: 4%; outline: 0px dotted #CC0000; clear: both; }
+    #full-content {  background: #FFF;height: auto; outline: 0px dotted #FFCC66; clear: both; }
+    #full-content > #content {  width: 97.09090909090909%; padding: 0 1.454545454545455%;  }
+
+    #left-content { width: 97.92817679558011%/*97.92817679558011%*/; padding: 0 2.07182320441989% 0 0;  float: left; background: #FFF; height: 630px; }
+    .contenido { width: 99.7%; margin: 0 auto; margin-top: 20px; margin-bottom: 20px; min-height: 100px; background: #FFF; }
+
+    @media (max-width: 767px)
+    {
+        #content { width: 96%; padding: 0 2%; float: left; background: #FFF; min-height: 400px; outline: 0px dotted #CC0000; clear: both; }
+	 }
+
+    /* Media Quiery Content para Phones  */
+    @media (max-width: 767px)
+    {
+		#left-content { width: 95.85635359116022%; padding: 0 2.07182320441989% 0 2.07182320441989%;  float: left; background: #FCF9C4; height: 630px; }
+	 }
+    
+    /* Media Quiery broadcast*/
+    @media (min-width: 1200px)
+    {
+	    .broadcast { background: #EDEDEE; height: 47px; border-top: 3px solid #E5E5E5; }
+	    .broadcast .span12 { padding: 0px; margin: 0px; }
+	    .broadcast ul {list-style: none; margin: 0; width: auto; padding: 0px; }
+	    .broadcast ul li{width: 195px; height: 47px; float: left; outline: 0px dotted blue; }
+	    .broadcast ul li a{ font-size: 1em; line-height: 47px;  color: #333; font-weight: bold; font-family: Open Sans Condensed; }
+	    .broadcast ul li img{ float: left;  margin: 5px 20px 0 58px; }
+    }
+    @media (min-width: 767px) {
+	    .broadcast { background: #EDEDEE;  height: 47px; border-top: 3px solid #E5E5E5; }
+	    .broadcast .span12 { padding: 0px; margin: 0px; }
+	    .broadcast ul {list-style: none; margin: 0; width: auto; padding: 0px; }
+	    .broadcast ul li{ width: 20%; height: 47px; float: left; outline: 0px dotted blue; }
+	    .broadcast ul li a{ font-size: 1em; line-height: 47px;  color: #333; font-weight: bold; font-family:Open Sans Condensed ,sans-serif; }
+	    .broadcast ul li img{ float: left;  margin: 5px 20px 0 38px; }
+    }
+
+    footer .footer-container { height: 10px; display: table; background: #222; border-radius:  0 0 5px 5px;  }
+    footer .footer-container .footer-extra {  /*height: 370px;*/ height: 250px; outline: 0px solid #FF0000; }
+    footer .footer-container .footer-extra h4{ font-family: Open Sans Condensed; /*font-size: 17px;*/ font-size: 1.21428em; font-weight: bold; color: #EEE; text-indent: 12px; clear: both; margin: 15px 0 10px 0; }
+    footer .footer-container .footer-extra h4 a{ font-family: Open Sans Condensed; font-size: 100%; font-weight: bold; color: #EEE; text-indent: 12px; clear: both; margin: 15px 0 10px 0; }
+    footer .footer-container .footer-extra ul{  list-style: url(../img/vinetas/footer-bullet.png); }
+    footer .footer-container .footer-extra ul li{  color: #AAAAAA; margin: 0px; line-height: 17px; }
+    footer .footer-container .footer-extra ul li a{ font-size: 0.85714em; font-family: Helvetica,Arial,sans-serif; /*font-size: 12px;*/ color: #AAAAAA; overflow: hidden;text-overflow: ellipsis; white-space: nowrap; }
+    
+    footer .footer-container .servicios { background: #1C1C1C; /*    height: 400px;*/  height: 50px; border-radius: 0 0 0 5px;}
+    footer .footer-container .servicios h4 {/*SERVICIOS EN LINEA*/ clear: both;color: #fff;font-family: Open Sans Condensed; font-size: 18px; /*font-size: 20px;*/ font-weight: bold;  text-indent: 22px;}
+    footer .footer-container .servicios h4 a {Â color: #EEEEEE;font-family: Open Sans Condensed; font-size: 1.42857em; font-weight: bold; }
+    footer .footer-container .servicios ul { list-style: none; margin: 20px auto 0px; padding: 0px; width: 90%; height: auto; outline: 0px dotted blue;    }
+    footer .footer-container .servicios ul li{ width: 100%; height: auto; display: table; margin: 0 0 15px 0; outline: 0px dotted #FFF; padding: 0 0 0 0; }
+    footer .footer-container .servicios ul li div { width: 86%; height: 1px; background: #333333; border-right: 50px solid #B11A28; padding: 0px; margin: 3px 0 20px 0; }
+    footer .footer-container .servicios ul li img{ float: left; margin: 0 10px 0 0; }
+    footer .footer-container .servicios ul li h5{  font-size: 0.85714em; /*font-size: 12px;*/ color: #FFF; font-family: Helvetica,Arial,sans-serif; margin: 0 0 5px 0; line-height: 15px;  }
+
+    footer .footer-container .servicios ul li h6{ font-size: 0.85714em;/*font-size: 12px;*/ font-family: Helvetica,Arial,sans-serif; color: #AAAAAA;  font-weight: normal; margin: 0px; line-height: 13px; }
+
+    footer .footer-container ul.redes-sociales{ list-style: none; margin: 6% 0 10% 7.407%; padding: 0px; display: table; }
+    footer .footer-container ul.redes-sociales li { float: left; margin: 0 0 0 10px; }
+    footer .footer-container ul.redes-sociales li img { margin: 0px; }
+    footer .footer-container .footer-extra img { margin: 6.666% 0 6.5% 7.407%; /*display: block; margin:  18px auto 20px;*/  }
+	footer .footer-container .footer-extra hr{ background: #181818; color: #181818; border-bottom: 1px solid #181818; width: 100%; clear: both; }
+	footer .footer-container .footer-extra p { color: #EEE; font-size: 12px; margin: 0 0 0 0; }
+	footer .footer-container .footer-extra address { margin: 5% 3% 0 11.407%; outline: 0px dotted aqua; width: 85.185%; }
+	footer .footer-container .footer-extra address p {font-family: Helvetica,Arial,sans-serif; font-size: 0.85714em;  /*font-size: 12px;*/ font-weight: normal;  margin: 0 0 5px 0; color: #AAAAAA; }
+	footer .footer-container .footer-extra address p img { float: left; margin: 4px 8px 0 0;  }
+	footer .footer-container .footer-extra address p span { color: #EEEEEE;  font-family: Open Sans Condensed; font-size: 1.21428em;   /*font-size: 16px;*/  font-weight: bold; padding: 0 0 10px 0; display: table; }
+
+    footer .footer-container .footer-extra2 h4 {margin: 0 0 0 7.407%;  }
+	
+	@media (min-width: 768px) and (max-width: 979px)
+    {
+        footer .footer-container { background: #222; border-radius:  0 0 5px 5px; border-top: 5px solid #E5E5E5;  }
+        footer .footer-container .footer-extra {
+          width: 30%; outline: 0px solid #33FF00;
+        }
+
+     }
+    @media (max-width: 767px)
+    {
+	    footer .footer-container { display: table; background: #222; border-radius:  0 0 5px 5px; border-top: 5px solid #E5E5E5; }
+        
+        footer .footer-container .footer-extra {clear:both; position: absolute; margin: 265px 0 0 0; }
+        footer .footer-container .span2 { clear: both; height: auto; margin-top: 355px; }
+        footer .footer-container .span3 { clear: both; height: auto; margin-top: 265px; }	    
+        footer .footer-container .footer-extra h4{ clear:both; margin: 0 0 10px 7%; color: #EEEEEE; font-family: Open Sans Condensed,sans-serif; font-size: 17px; font-weight: bold; }
+	    footer .footer-container .footer-extra ul { display: none; background: blue; }	    
+             
+	    footer .footer-container .footer-extra2{ clear: both;  margin: 0; position: static; height: auto;}        
+        footer .footer-container .footer-extra2 address { clear:both; margin: 0 0 0 5.407%; padding: 0 0 20px 20px; border-bottom: 1px solid #3D3D3D; }
+        footer .footer-container .footer-extra2 img { margin: 0;}
+    	footer .footer-container .footer-extra img { margin: 20px 0 20px 7.407%;  }
+	    
+    }
+    @media (max-width: 480px) { 
+
+     }
+    
+    #leftcontent .leftcol {  width: 95.689655172413793%; height: auto; margin: 0 0 10px 0; display: table; float: right; border-right: 1px solid #EDEDEE;  }
+    #leftcontent .leftcol h2{ /*font-size: 18px;*/ font-size: 1.28571em;  font-weight: bold;  color: #75706E;  font-family: Open Sans Condensed ,sans-serif;  margin: 0 0;   text-indent: 2%; }
+    #leftcontent .leftcol ul { width: 95%;  list-style: none; margin: 0px; padding: 0 0 10px 0; border-bottom: 1px solid #EDEDEE; }
+    #leftcontent .leftcol ul li{ width: 98%; padding: 0 0 0 2%; margin: 0 0 1px 0; background: transparent; min-height: 30px; height: auto; text-indent: 0px; outline: 0px dotted #669900; }
+    #leftcontent .leftcol ul li:hover { background-color: #D2EEDC;   color: #75706E; }
+    #leftcontent .leftcol ul li:hover a { text-decoration: none; }
+    #leftcontent .leftcol ul li a{ width: 100%; margin: 0; font-size: 1em; /*font-size: 14px;*/ color: #666; line-height: 30px;  }
+    #leftcontent .leftcol ul li a:hover{ }
+    #leftcontent .leftcol .actual-leftcol { background-color: #D2EEDC;   color: #75706E;}
+    
+    /*Arbol de navegaciÃ³n*/
+    .arbol{background: #EDEDED; border-bottom: 3px solid #EDEDED; clear: both;height: auto; margin: 10px 0 0; padding: 0;  }
+    .breadcrumb {background: #EDEDED; border-radius: 4px 4px 4px 4px; list-style: none outside none; margin: 0 0 0px; padding: 8px 15px;}
+    .breadcrumb > li a{ color: #75706E; font-weight: bold;  font-size: 0.857142857142857/*12px*/;}
+    .breadcrumb > li a img { margin: -3px 0 0 0; padding: 0 0 0 0; }
+    .breadcrumb > .active { color: #999999; font-size: 0.857142857142857/*12px*/;}
+    .title{ background: #EDEDED; height: auto;  margin: 0;  padding: 5px 0; width: 100%; }
+    .title h1{ margin: 0 1%;padding: 0 1%; width: 96%; background: #FFF; font-size:1.571428571428571em /*22px*/; font-style: normal; font-variant: normal; font-weight: normal; color: #75706E; font-family: "trebuchet MS",tahoma,verdana,helvetica; }
+    .breadcrumb > li::first-line .divider{ display: none; }
+
+    @media (max-width: 767px) {
+      .title h1{ margin: 0 1%;padding: 0 2%; width: 94%; background: #FFF; font-size:1.571428571428571em /*22px*/; font-style: normal; font-variant: normal; font-weight: normal; color: #75706E; font-family: "trebuchet MS",tahoma,verdana,helvetica; }
+    }
+    @media (max-width: 480px) {
+
+     .title h1{ margin: 0 1%;padding: 0 4%; width: 92%; background: #FFF; font-size:1.571428571428571em /*22px*/; font-style: normal; font-variant: normal; font-weight: normal; color: #75706E; font-family: "trebuchet MS",tahoma,verdana,helvetica; }
+    }
+
+
+    #social{ margin: 10px 0 20px 0; border-bottom: 1px solid #F2F2F2; background: #FFF;   }
+    #social ul{ list-style: none; margin: 0px; padding: 0px; float: right; width: 100%;   }
+    #social ul li{ min-width: 30px;  float: right; margin: 0 0 0 3%;  line-height: 15px;}
+    #social ul li a{color: #75706E; font-size: 12px; font-weight: bold; line-height: 15px;   }
+    #social ul li img { margin: 0px 10px 0 0; }
+
+    #social .red-en {width: 97%; float: left; margin: 0 0 0 0; border-left: 2px solid #EDEDED; padding: 0 0 0 3%; }
+    #social .red-en li { float: left; min-width: 60px; outline: 0px solid #990099; margin: 0 20px 0 0;  }
+
+    @media (min-width: 768px) and (max-width: 979px)
+    {
+      #social { background: #FFF; background: #FFF;  }
+      #social .offset2:first-child {  margin-left: 0%;    }
+      #social .span4{ width: 100%; clear: both;  }
+      #social .span6{ width: 100%;clear: both;   }
+
+      #social ul {
+        margin: 0px; padding: 0px;
+      }
+
+      #social .span4 ul { float: left; outline: 0px solid #CC0033; width: 50%; padding: 0px; margin: 0px;  }
+      #social ul li { float: left;line-height: 15px; margin: 0 10% 0 4%; min-width: 30px;   }
+      #social .red-en { border-left: 0px; margin: 0px; padding: 0px;   }
+      #social .red-en li {
+        margin: 0 10% 0 0;
+      }
+
+    }
+
+     @media (max-width: 767px)
+     {
+      #social ul{ list-style: none; margin: 0px; padding: 0px; float: left; width: 100%;   }
+      #social ul li{  float: left; margin: 0 0 0 3%;   }
+      #social .red-en {  border: 0px;   }
+      }
+
+     .fuente {
+        /*border-bottom: 1px solid #F2F2F2; margin: 20px 0 10px 0;    */
+        border-color: #EDEDED;
+        box-shadow: 0 2px 2px #EDEDED;
+        background: none repeat scroll 0 0 #FFFFFF;
+        border-radius: 1px 1px 1px 1px;
+        border: 1px solid #EDEDED;
+        margin: 30px 0 10px 0;
+        }
+        .fuente .span3{
+          background: #F8F8F8;
+        }
+        .fuente .span3 h2{ line-height: 30px;  margin: 0 3% 0 0;
+        }
+         .fuente .span9 p{
+             line-height: 30px; margin: 0px; padding: 0px; color: #75706E; font-size: 0.857142857142857em/*12px*/;
+         }
+
+     .fuente h2 { color: #75706E; font-size: 13px; font-weight: bold;  margin: 0px; padding: 0px; line-height: normal ; float: right;  }
+     .fuente ul { list-style: disc ; margin: 0px; padding: 0px;      }
+     .fuente ul li{ float: left; color: #75706E; font-size: 12px; list-style-position: inside; margin: 0 2% 0 0;     }
+     .fuente ul li a { color: #75706E; font-size: 12px;     }
+
+     @media (max-width: 767px)
+     {
+        .fuente h2 {float:left; line-height: 30px; text-indent: 2%;  }
+        .fuente ul{ margin: 0 0 0 2%;   }
+         .fuente .span9 p{ text-indent: 2%;   }
+
+      }
+
+      .actualizacion{
+        border-color: #EDEDED;
+        box-shadow: 0 2px 2px #EDEDED;
+        background: none repeat scroll 0 0 #FFFFFF;
+        border-radius: 1px 1px 1px 1px;
+        border: 1px solid #EDEDED;
+        margin: 0 0 10px 0;
+
+      }
+       .actualizacion .span3{
+          background: #F8F8F8;
+        }
+        .actualizacion .span3 h2{ line-height: 30px; margin: 0 3% 0 0;
+        }
+      .actualizacion .span9 p { line-height: 30px; margin: 0px; padding: 0px; }
+      .actualizacion h2{ color: #75706E; font-size: 0.928571428571429em/*13px*/; font-weight: bold;  margin: 0px; padding: 0px; line-height: normal ; float: right;      }
+      .actualizacion p {  color: #75706E; font-size: 0.857142857142857em/*12px*/;      }
+
+       @media (min-width: 768px) and (max-width: 979px)  {
+         .actualizacion h2 { float: left;line-height: 1em;text-align: right; text-indent: 2%; width: 100%;   }
+       }
+
+       @media (max-width: 767px)
+       {
+        .actualizacion h2 { float:left; line-height: 2.142857142857143em/*30px*/; text-indent: 2%; width: 100%;  }
+        .actualizacion p {  text-indent: 2%; }
+       }
+
+ /* busqueda */
+ .bus-text {
+   height: 30px;
+   margin: 0 0 -5px 0;
+    }
+ #cse-search-box .btn {
+   margin: -8px 0 0 0;
+ }
+ #cse-search-box {
+   margin: 10px 0 0 0;
+ }
+ #cse-search-results iframe {  height: 1200px;
+ }
+ 
+<!--Inician mis estilos-->
+a { font-size: 14px; text-decoration:none; vertical-align: text-top; color:#333;}
+a:link{ color:#333;}
+a:visited{ color:#333;}
+body { repeat scroll 0 0 transparent; margin-top:0; background-color:#E4E4E4;}
+h2 { font-size:18px; font-weight:bold; vertical-align:text-top; font-family: Open Sans Condensed;}
+
+
+/********CONOCENOS********/
+#bienvenida { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#bienvenida p { color:#999; text-align:justify; margin-right:10px;}
+#bienvenida p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#bienvenida ul { list-style:url(../img/vinetas/vineta1.png);}
+#bienvenida li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#bienvenida table { color:#999; text-align:left;}
+#bienvenida a:hover {color:#109D49; }
+
+#misionvision { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#misionvision p { color:#999; text-align:justify; margin-right:10px;}
+#misionvision p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#misionvision ul { list-style:url(../img/vinetas/vineta1.png);}
+#misionvision li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#misionvision table { color:#999; text-align:left;}
+#misionvision a:hover {color:#109D49; }
+
+#quehacemos { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#quehacemos p { color:#999; text-align:justify; margin-right:10px;}
+#quehacemos p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#quehacemos ul { list-style:url(../img/vinetas/vineta1.png);}
+#quehacemos li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#quehacemos table { color:#999; text-align:left;}
+#quehacemos a:hover {color:#109D49; }
+
+#directoriot p { color:#999; text-align:justify; margin-right:10px;}
+#directoriot ul { list-style:url(../img/vinetas/vineta1.png);}
+#directoriot li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#directoriot table { color:#999; text-align:left;}
+#directoriot a:hover {color:#109D49; }
+
+/********MARCO JURIDICO********/
+#marcojuridico { background: none repeat scroll 0 0 #FFFFFF;  float:left; height:auto; margin:0 0 0 10px; padding:5px 0 0 0; }
+#marcojuridico p { color:#999; text-align:justify; margin-right:10px; margin-left:10px;}
+#marcojuridico p a:hover{color:#109D49;}
+#marcojuridico table { width:50px; font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; font-size:14px; text-align:justify;}
+#marcojuridico table h2 { color:#109D49; text-decoration:underline; font-size:18px; font-family: "Open Sans Condensed"; margin-left:20px;}
+#marcojuridico a:hover { color:#109D49; }
+#marcojuridico ul{ list-style:url(../img/vinetas/vineta5.png);}
+
+#marcojuridico table h3 { color:#666; padding:0 0 0 0; margin:0 0 0 20px;}
+#marcojuridico table label { color:#109D49; }
+
+#marcojuridico{ width:100%; height:auto; display:table; outline:0px solid #993;}
+#marcojuridico span{ font-size:14px; color:#109D49; text-align:left; margin-left:10px;}
+#marcojuridico ul { list-style:none; color:#999; text-align:left; margin-left:10px;}
+#marcojuridico li { font-size:14px; text-align:left; margin-left:10px; }
+#marcojuridico a:hover{ color:#109D49; }
+
+/********SERVICIOS / Agricultura********/
+#maiz { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#maiz p { color:#999; text-align:justify; margin-right:10px;}
+#maiz p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#maiz ul { list-style:url(../img/vinetas/vineta1.png);}
+#maiz li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#maiz table { color:#999; text-align:left;}
+#maiz a:hover {color:#109D49; }
+
+#mazorca { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#mazorca p { color:#999; text-align:justify; margin-right:10px;}
+#mazorca p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#mazorca ul { list-style:url(../img/vinetas/vineta1.png);}
+#mazorca li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#mazorca table { color:#999; text-align:left;}
+#mazorca a:hover {color:#109D49; }
+
+#panoja { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#panoja p { color:#999; text-align:justify; margin-right:10px;}
+#panoja p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#panoja ul { list-style:url(../img/vinetas/vineta1.png);}
+#panoja li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#panoja table { color:#999; text-align:left;}
+#panoja a:hover {color:#109D49; }
+
+/********SERVICIOS / ReconversiÃ³n Productiva********/
+#pesa { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#pesa p { color:#999; text-align:justify; margin-right:10px;}
+#pesa p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#pesa ul { list-style:url(../img/vinetas/vineta1.png);}
+#pesa li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#pesa table { color:#999; text-align:left;}
+#pesa a:hover {color:#109D49; }
+
+#asistencia { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#asistencia p { color:#999; text-align:justify; margin-right:10px;}
+#asistencia p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#asistencia ul { list-style:url(../img/vinetas/vineta1.png);}
+#asistencia li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#asistencia table { color:#999; text-align:left;}
+#asistencia a:hover {color:#109D49; }
+
+#transtec { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#transtec p { color:#999; text-align:justify; margin-right:10px;}
+#transtec p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#transtec ul { list-style:url(../img/vinetas/vineta1.png);}
+#transtec li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#transtec table { color:#999; text-align:left;}
+#transtec a:hover {color:#109D49; }
+
+/********SERVICIOS / COmercializaciÃ³n********/
+#imagencomercial { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#imagencomercial p { color:#999; text-align:justify; margin-right:10px;}
+#imagencomercial p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#imagencomercial ul { list-style:url(../img/vinetas/vineta1.png);}
+#imagencomercial li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#imagencomercial table { color:#999; text-align:left;}
+#imagencomercial a:hover {color:#109D49; }
+
+#enlacescomer { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#enlacescomer p { color:#999; text-align:justify; margin-right:10px;}
+#enlacescomer p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#enlacescomer ul { list-style:url(../img/vinetas/vineta1.png);}
+#enlacescomer li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#enlacescomer table { color:#999; text-align:left;}
+#enlacescomer a:hover {color:#109D49; }
+
+#producorganicos { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#producorganicos p { color:#999; text-align:justify; margin-right:10px;}
+#producorganicos p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#producorganicos ul { list-style:url(../img/vinetas/vineta1.png);}
+#producorganicos li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#producorganicos table { color:#999; text-align:left;}
+#producorganicos a:hover {color:#109D49; }
+
+#descomercial { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#descomercial p { color:#999; text-align:justify; margin-right:10px;}
+#descomercial p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#descomercial ul { list-style:url(../img/vinetas/vineta1.png);}
+#descomercial li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#descomercial table { color:#999; text-align:left;}
+#descomercial a:hover {color:#109D49; }
+
+#desagroind { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#desagroind p { color:#999; text-align:justify; margin-right:10px;}
+#desagroind p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#desagroind ul { list-style:url(../img/vinetas/vineta1.png);}
+#desagroind li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#desagroind table { color:#999; text-align:left;}
+#desagroind a:hover {color:#109D49; }
+
+#pnt { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#pnt p { color:#999; text-align:justify; margin-right:10px;}
+#pnt p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#pnt ul { list-style:url(../img/vinetas/vineta1.png);}
+#pnt li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#pnt table { color:#999; text-align:left;}
+#pnt a:hover {color:#109D49; }
+
+#promcomer { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#promcomer p { color:#999; text-align:justify; margin-right:10px;}
+#promcomer p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#promcomer ul { list-style:url(../img/vinetas/vineta1.png);}
+#promcomer li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#promcomer table { color:#999; text-align:left;}
+#promcomer a:hover {color:#109D49; }
+
+#regmarca { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#regmarca p { color:#999; text-align:justify; margin-right:10px;}
+#regmarca p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#regmarca ul { list-style:url(../img/vinetas/vineta1.png);}
+#regmarca li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#regmarca table { color:#999; text-align:left;}
+#regmarca a:hover {color:#109D49; }
+
+#finagrop { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#finagrop p { color:#999; text-align:justify; margin-right:10px;}
+#finagrop p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#finagrop ul { list-style:url(../img/vinetas/vineta1.png);}
+#finagrop li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#finagrop table { color:#999; text-align:left;}
+#finagrop a:hover {color:#109D49; }
+
+/********SERVICIOS / Desarrollo Forestal********/
+#microcuencas { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#microcuencas p { color:#999; text-align:justify; margin-right:10px;}
+#microcuencas p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#microcuencas ul { list-style:url(../img/vinetas/vineta1.png);}
+#microcuencas li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#microcuencas table { color:#999; text-align:left;}
+#microcuencas a:hover {color:#109D49; }
+
+#producplant { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#producplant p { color:#999; text-align:justify; margin-right:10px;}
+#producplant p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#producplant ul { list-style:url(../img/vinetas/vineta1.png);}
+#producplant li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#producplant table { color:#999; text-align:left;}
+#producplant a:hover {color:#109D49; }
+
+#bangermo { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#bangermo p { color:#999; text-align:justify; margin-right:10px;}
+#bangermo p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#bangermo ul { list-style:url(../img/vinetas/vineta1.png);}
+#bangermo li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#bangermo table { color:#999; text-align:left;}
+#bangermo a:hover {color:#109D49; }
+
+#fondef { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#fondef p { color:#999; text-align:justify; margin-right:10px;}
+#fondef p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#fondef ul { list-style:url(../img/vinetas/vineta1.png);}
+#fondef li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#fondef table { color:#999; text-align:left;}
+#fondef a:hover {color:#109D49; }
+
+#capacitacion { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#capacitacion p { color:#999; text-align:justify; margin-right:10px;}
+#capacitacion p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#capacitacion ul { list-style:url(../img/vinetas/vineta1.png);}
+#capacitacion li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#capacitacion table { color:#999; text-align:left;}
+#capacitacion a:hover {color:#109D49; }
+
+#desfores { background: none repeat scroll 0 0 #FFFFFF; float:left; height:auto; margin-left:-6px; }
+#desfores p { color:#999; text-align:justify; margin-right:10px;}
+#desfores p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#desfores ul { list-style:url(../img/vinetas/vineta1.png);}
+#desfores li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#desfores table { color:#999; text-align:left;}
+#desfores a:hover {color:#109D49; }
+
+/********SERVICIOS / Ganaderia********/
+#sanidadpec { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#sanidadpec p { color:#999; text-align:justify; margin-right:10px;}
+#sanidadpec p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#sanidadpec ul { list-style:url(../img/vinetas/vineta1.png);}
+#sanidadpec li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#sanidadpec table { color:#999; text-align:left;}
+#sanidadpec a:hover {color:#109D49; }
+
+/*******SERVICIOS/Ganaderia/Sanidad Pecuaria**********/
+#centroacopio { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#centroacopio p { color:#999; text-align:justify; margin-right:10px;}
+#centroacopio p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#centroacopio ul { list-style:url(../img/vinetas/vineta1.png);}
+#centroacopio li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#centroacopio table { color:#999; text-align:left;}
+#centroacopio a:hover {color:#109D49; }
+
+#comisiones { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#comisiones p { color:#999; text-align:justify; margin-right:10px;}
+#comisiones p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#comisiones ul { list-style:url(../img/vinetas/vineta1.png);}
+#comisiones li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#comisiones table { color:#999; text-align:left;}
+#comisiones a:hover {color:#109D49; }
+
+#cuarentenas { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#cuarentenas p { color:#999; text-align:justify; margin-right:10px;}
+#cuarentenas p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#cuarentenas ul { list-style:url(../img/vinetas/vineta1.png);}
+#cuarentenas li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#cuarentenas table { color:#999; text-align:left;}
+#cuarentenas a:hover {color:#109D49; }
+
+#decretos { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#decretos p { color:#999; text-align:justify; margin-right:10px;}
+#decretos p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#decretos ul { list-style:url(../img/vinetas/vineta1.png);}
+#decretos li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#decretos table { color:#999; text-align:left;}
+#decretos a:hover {color:#109D49; }
+
+#formatos { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#formatos p { color:#999; text-align:justify; margin-right:10px;}
+#formatos p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#formatos ul { list-style:url(../img/vinetas/vineta1.png);}
+#formatos li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#formatos table { color:#999; text-align:left;}
+#formatos a:hover {color:#109D49; }
+
+#hatos { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#hatos p { color:#999; text-align:justify; margin-right:10px;}
+#hatos p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#hatos ul { list-style:url(../img/vinetas/vineta1.png);}
+#hatos li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#hatos table { color:#999; text-align:left;}
+#hatos a:hover {color:#109D49; }
+
+#leyes { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#leyes p { color:#999; text-align:justify; margin-right:10px;}
+#leyes p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#leyes ul { list-style:url(../img/vinetas/vineta1.png);}
+#leyes li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#leyes table { color:#999; text-align:left;}
+#leyes a:hover {color:#109D49; }
+
+#manuales { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#manuales p { color:#999; text-align:justify; margin-right:10px;}
+#manuales p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#manuales ul { list-style:url(../img/vinetas/vineta1.png);}
+#manuales li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#manuales table { color:#999; text-align:left;}
+#manuales a:hover {color:#109D49; }
+
+#mapas { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#mapas p { color:#999; text-align:justify; margin-right:10px;}
+#mapas p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#mapas ul { list-style:url(../img/vinetas/vineta1.png);}
+#mapas li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#mapas table { color:#999; text-align:left;}
+#mapas a:hover {color:#109D49; }
+
+#normaof { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#normaof p { color:#999; text-align:justify; margin-right:10px;}
+#normaof p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#normaof ul { list-style:url(../img/vinetas/vineta1.png);}
+#normaof li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#normaof table { color:#999; text-align:left;}
+#normaof a:hover {color:#109D49; }
+
+#rastros { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#rastros p { color:#999; text-align:justify; margin-right:10px;}
+#rastros p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#rastros ul { list-style:url(../img/vinetas/vineta1.png);}
+#rastros li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#rastros table { color:#999; text-align:left;}
+#rastros a:hover {color:#109D49; }
+
+#zoosani { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#zoosani p { color:#999; text-align:justify; margin-right:10px;}
+#zoosani p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#zoosani ul { list-style:url(../img/vinetas/vineta1.png);}
+#zoosani li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#zoosani table { color:#999; text-align:left;}
+#zoosani a:hover {color:#109D49; }
+/******Finaliza SERVICIOS/Ganaderia/Sanidad*********/
+
+#mejoramientogen { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#mejoramientogen p { color:#999; text-align:justify; margin-right:10px;}
+#mejoramientogen p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#mejoramientogen ul { list-style:url(../img/vinetas/vineta1.png);}
+#mejoramientogen li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#mejoramientogen table { color:#999; text-align:left;}
+#mejoramientogen a:hover {color:#109D49; }
+
+#apicola { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#apicola p { color:#999; text-align:justify; margin-right:10px;}
+#apicola p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#apicola ul { list-style:url(../img/vinetas/vineta1.png);}
+#apicola li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#apicola table { color:#999; text-align:left;}
+#apicola a:hover {color:#109D49; }
+
+#vacalech { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#vacalech p { color:#999; text-align:justify; margin-right:10px;}
+#vacalech p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#vacalech ul { list-style:url(../img/vinetas/vineta1.png);}
+#vacalech li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#vacalech table { color:#999; text-align:left;}
+#vacalech a:hover {color:#109D49; }
+
+#capacidades { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#capacidades p { color:#999; text-align:justify; margin-right:10px;}
+#capacidades p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#capacidades ul { list-style:url(../img/vinetas/vineta1.png);}
+#capacidades li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#capacidades table { color:#999; text-align:left;}
+#capacidades a:hover {color:#109D49; }
+
+#ovinos { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#ovinos p { color:#999; text-align:justify; margin-right:10px;}
+#ovinos p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#ovinos ul { list-style:url(../img/vinetas/vineta1.png);}
+#ovinos li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#ovinos table { color:#999; text-align:left;}
+#ovinos a:hover {color:#109D49; }
+
+#bovinos { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#bovinos p { color:#999; text-align:justify; margin-right:10px;}
+#bovinos p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#bovinos ul { list-style:url(../img/vinetas/vineta1.png);}
+#bovinos li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#bovinos table { color:#999; text-align:left;}
+#bovinos a:hover {color:#109D49; }
+
+/********TEMAS DE INTERES********/
+#federalizados { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#federalizados p { color:#999; text-align:justify; margin-right:10px;}
+#federalizados p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#federalizados ul { list-style:url(../img/vinetas/vineta1.png);}
+#federalizados li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#federalizados table { color:#999; text-align:left;}
+#federalizados a:hover {color:#109D49; }
+
+#publicaciones { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#publicaciones p { color:#999; text-align:justify; margin-right:10px;}
+#publicaciones p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#publicaciones ul { list-style:url(../img/vinetas/vineta1.png);}
+#publicaciones li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#publicaciones table { color:#999; text-align:left;}
+#publicaciones a:hover {color:#109D49; }
+
+#SAGARPA { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#SAGARPA p { color:#999; text-align:justify; margin-right:10px;}
+#SAGARPA p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#SAGARPA ul { list-style:url(../img/vinetas/vineta1.png);}
+#SAGARPA li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#SAGARPA table { color:#999; text-align:left;}
+#SAGARPA a:hover {color:#109D49; }
+
+/********Inician Estilos del Index***********/
+
+
+/*Estilo de Recursos*/
+#recursos div
+{
+	background:url(../img/box-tit-01.png) no-repeat scroll 0 0 transparent;
+}
+.TituloRecursos
+{	
+	height:60px;
+	width:100%;
+	text-align:left;
+	margin:0 20px 0 0;
+	padding:10px 0 0 20px;
+	font-family:"Open Sans Condensed";
+	font-size:18px;
+	font-weight:bold;
+}
+
+#recursos ul
+{
+	border-bottom:1px dotted #666666;
+	margin:10px;
+	padding:0 0 10px;
+	list-style:none;
+}
+
+#recursos-1
+{
+	height:355px;
+	background-color:#F4F5F7;
+	text-align:left;
+	border-right:1px solid #DADAD9;
+	border-left:1px solid #DADAD9;
+}
+#recursos-2
+{
+	height:355px;
+	background-color:#F4F5F7;
+	text-align:left;
+	border-right:1px solid #DADAD9;
+	border-left:1px solid #DADAD9;
+}
+#recursos-3
+{
+	height:355px;
+	background-color:#F4F5F7;
+	text-align:left;
+	border-right:1px solid #DADAD9;
+	border-left:1px solid #DADAD9;
+}
+
+
+
+#Agricola
+{
+	width:205px;
+	float:left;
+}
+#Comercializacion
+{
+	width:204px;
+	float:left;
+}
+#Ganaderia
+{
+	width:205px;
+	float:left;
+}
+#Forestal
+{
+	width:204px;
+	float:left;
+}
+#Reconversion
+{
+	width:200px;
+	float:left;
+}
+#Plandesarrollo
+{
+	margin-left:50px;
+}
+
+#nota { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#nota p { color:#999; text-align:justify; margin-right:10px;}
+#nota p span{ color:#109D49; text-align:justify; font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#nota ul { list-style:url(../img/vinetas/vineta1.png);}
+#nota li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; text-align:justify;}
+#nota table { color:#999; text-align:left;}
+#nota a:hover {color:#109D49; }
+#nota h2 { color:#666666; text-align: center; margin-right:10px;}
+
+#fotoenc
+{
+	text-align:center;
+}
+
+#NotasBlogger { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#NotasBlogger p { color:#999; margin-right:10px;}
+#NotasBlogger p label{ color:#000; margin-right:10px; font-size:12px}
+#NotasBlogger p span{ color:#109D49;font-size:16px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#NotasBlogger ul { list-style:url(../img/vinetas/vineta1.png);}
+#NotasBlogger li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; }
+#NotasBlogger table { color:#999; text-align:left;}
+#NotasBlogger a:hover {color:#109D49; }
+
+#NotasBloggerRight { background: none repeat scroll 0 0 #FFFFFF; height:auto; margin-left:-6px; }
+#NotasBloggerRight p { color:#999; margin-right:10px; font-size:12px}
+#NotasBloggerRight p label{ color:#000; margin-right:10px; font-size:10px}
+#NotasBloggerRight p span{ color:#FFFFFF;font-size:14px; font-family: "Open Sans Condensed";  font-weight:bold;}
+#NotasBloggerRight ul { list-style:url(../img/vinetas/vineta1.png);}
+#NotasBloggerRight li { font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; color:#999; }
+#NotasBloggerRight table { color:#999; text-align:left;}
+#NotasBloggerRight a:hover {color:#109D49; }
+
+
+
+
+#logosiigs{
+    text-align:center;
+    margin:50% auto;
+}
+
+.form-signin{
+	margin-top: 12%;
+    width: 250px;
+}
+
+
+
+table thead tr th h2{
+line-height:20px !important;
+color:#59595C;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

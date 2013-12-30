@@ -58,9 +58,9 @@ $template['active_template'] = 'default';
 
 $template['default']['template'] = 'template.php';
 $template['default']['regions'] = array(
-   'header',
+   'header' => array('content' => array(file_get_contents('application/views/templates/header.php'))),
    'content',
-   'footer',
+   'footer' => array('content' => array(file_get_contents('application/views/templates/footer.php'))),
    'menu'=> array('content' => array( Menubuilder::build() ) )
 );
 $template['default']['parser'] = 'parser';

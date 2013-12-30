@@ -33,8 +33,9 @@ class Menubuilder
             self::$CI->load->model(DIR_SIIGS.'/Bitacora_model');
             self::$CI->load->model(DIR_SIIGS.'/Usuario_model');
 
-            $strMenu = '<ul class="menu">';
+            $strMenu = '<ul class="nav">';
             self::crearMenu($strMenu);
+            $strMenu .= '<li><a href="/siigs/usuario/logout">Cerrar sesión</a></li>';
             $strMenu .= '</ul>';
         }
         //echo $strMenu;
@@ -52,7 +53,7 @@ class Menubuilder
      */
     public static function crearMenu(&$strMenu, $id_padre = 'NULL')
     {
-        $items = self::$CI->Menu_model->getByPadre($id_padre);//$this->Menu_model->getByPadre($id_padre);
+        $items = self::$CI->Menu_model->getByPadre($id_padre);
         $controlador = '';
         $entorno = '';
 
@@ -77,16 +78,19 @@ class Menubuilder
                     continue; // Ignorar la secuencia normal y Seguir con la iteraccion del foreach
                 }
             }
+            
+            $hijos = self::$CI->Menu_model->hasChild($item->id);
 
-            $strMenu .= '<li class="menu-item"><a href="'.$ruta.'">'.$item->nombre.'</a>';
+            $strMenu .= '<li><a href="'.$ruta.'">'.$item->nombre.($hijos ? ' >>' : '').'</a>';
 
-            if (self::$CI->Menu_model->hasChild($item->id)) {
-                $strMenu .= '<ul class="menu-item">';
+            if ($hijos) {
+                $strMenu .= '<ul>';
                 self::crearMenu($strMenu, $item->id);
                 $strMenu .= '</ul>';
             }
             $strMenu .= '</li>';
         }
+        
     }
     
     /**
