@@ -37,6 +37,7 @@ class Enrolamiento_model extends CI_Model
 	// civil
    	private $fechacivil;
    	private $lugarcivil;
+	private $umt;
 	
 	// direccion
 	private $calle;
@@ -314,6 +315,16 @@ class Enrolamiento_model extends CI_Model
 		$this->lugarcivil = $value;
 	}
 	
+	public function getumt()
+	{
+	    return $this->umt;
+	}
+
+	public function setumt($value) 
+	{
+		$this->umt = $value;
+	}
+	
 	public function getreferencia()
 	{
 	    return $this->referencia;
@@ -582,7 +593,7 @@ class Enrolamiento_model extends CI_Model
 	public function cns_insert($tabla,$array)
 	{
 		$result = $this->db->insert($tabla, $array); 
-		$fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a"); fputs($fp, $this->db->last_query()."\r\n"); 
+		
 		if (!$result)
 		{
 			$this->msg_error_usr = "Error $tabla.";
@@ -632,7 +643,7 @@ class Enrolamiento_model extends CI_Model
 			
 			// civil
 			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
-			'id_asu_um_tratante' => $this->lugarcivil,
+			'id_asu_um_tratante' => $this->umt,
 			
 			// direccion
 			'calle_domicilio' => $this->calle,
@@ -645,6 +656,7 @@ class Enrolamiento_model extends CI_Model
 			'telefono_domicilio' => $this->telefono,
 			'id_operadora_celular' => $compania,
 			'celular' => $this->celular,
+			'ultima_actualizacion' => date("Y-m-d H:i:s")
 			);
 		$result = $this->db->insert('cns_persona', $data);
 		if (!$result)
@@ -655,6 +667,13 @@ class Enrolamiento_model extends CI_Model
 		}
 		else
 		{
+			$dat = array(
+				'id_persona' => $this->id,
+				'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
+				'id_localidad_registro_civil' => $this->lugarcivil,
+			);
+			$res = $this->db->insert('cns_registro_civil', $dat);
+			
 			$this->setid($unico_id);
 			$unico_idtutor=md5(uniqid());
 			if($this->idtutor=="")
@@ -875,6 +894,33 @@ class Enrolamiento_model extends CI_Model
 		}
 		return $this->id;
 	}
+	public function entorno_x_persona($entorno,$persona,$fecha,$archivo,$impreso)
+	{
+		$data = array(
+			'id_entorno' => $entorno,
+			'id_persona' => $persona,
+			'fecha_entrega' =>  $fecha,
+			'nombre_archivo' => $archivo,
+			'impreso_tes' => $impreso,
+		);
+		$query = $this->db->get_where('tes_entorno_x_persona', array('id_persona' => $persona));
+		if ($query->num_rows() <=0)
+			$result = $this->db->insert('tes_entorno_x_persona', $data);
+		else
+		{
+			$this->db->where('id_persona' , $persona);
+			$result = $this->db->update('tes_entorno_x_persona', $data); 
+		}//echo $this->db->last_query();
+		if (!$result)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+		}	
+	}
+	public function valid_card($persona,$archivo)
+	{
+		$query = $this->db->get_where('tes_entorno_x_persona', array('id_persona' => $persona,"nombre_archivo"=>$archivo));
+		return ($query->num_rows() >0);		
+	}
 	
 	/**
 	 *Actualiza la informacion del paciente enrolado
@@ -898,7 +944,7 @@ class Enrolamiento_model extends CI_Model
 			
 			// civil
 			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
-			'id_asu_um_tratante' => $this->lugarcivil,
+			'id_asu_um_tratante' => $this->umt,
 			
 			// direccion 
 			'calle_domicilio' => $this->calle,
@@ -911,6 +957,7 @@ class Enrolamiento_model extends CI_Model
 			'telefono_domicilio' => $this->telefono,
 			'id_operadora_celular' => $compania,
 			'celular' => $this->celular,
+			'ultima_actualizacion' => date("Y-m-d H:i:s")
 			);
 		$this->db->where('id' , $this->id);
 		$result = $this->db->update('cns_persona', $data); 
@@ -922,6 +969,19 @@ class Enrolamiento_model extends CI_Model
 		}
 		else
 		{
+			$dat = array(
+				'id_persona' => $this->id,
+				'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
+				'id_localidad_registro_civil' => $this->lugarcivil,
+			);
+			$query = $this->db->get_where('cns_registro_civil', array('id_persona' => $this->id));
+			if($query->num_rows() >0)
+			{
+				$this->db->where('id_persona' , $this->id);
+				$result = $this->db->update('cns_registro_civil', $data);
+			}
+			else
+			$res = $this->db->insert('cns_registro_civil', $dat);
 			$companiaT=$this->companiaT;
 			if($companiaT=="")$companiaT=NULL;
 			$data0 = array(
@@ -1168,7 +1228,7 @@ class Enrolamiento_model extends CI_Model
 		$data = array
 		(
 			'id_tes_estado_tableta' => $status,
-			'version'               => $version,
+			'id_version'               => $version,
 			'ultima_actualizacion'  => $fecha,
 		);
 		$this->db->where('mac' , $mac);
@@ -1253,7 +1313,7 @@ class Enrolamiento_model extends CI_Model
 	public function getById($id)
 	{
 		
-		$this->db->select('p.*,s.id as sangre, s.descripcion as tsangre, n.id as nacionalidadid, n.descripcion as nacionalidad, o.id as operadoraid,o.descripcion as operadora, t.id as idT, t.curp as curpT, t.nombre as nombreT, t.apellido_paterno as paternoT, t.apellido_materno as maternoT, t.sexo as sexoT, t.telefono as telefonoT, t.celular as celularT,o1.id as operadoraTid, o1.descripcion as operadoraT');
+		$this->db->select('p.*,s.id as sangre, s.descripcion as tsangre, n.id as nacionalidadid, n.descripcion as nacionalidad, o.id as operadoraid,o.descripcion as operadora, t.id as idT, t.curp as curpT, t.nombre as nombreT, t.apellido_paterno as paternoT, t.apellido_materno as maternoT, t.sexo as sexoT, t.telefono as telefonoT, t.celular as celularT,o1.id as operadoraTid, o1.descripcion as operadoraT, rc.id_localidad_registro_civil');
 		$this->db->from('cns_persona p');
 		$this->db->join('cns_nacionalidad n', 'n.id = p.id_nacionalidad','left');
 		$this->db->join('cns_tipo_sanguineo s', 's.id = p.id_tipo_sanguineo','left');
@@ -1261,6 +1321,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->join('cns_persona_x_tutor pt', 'pt.id_persona = p.id','left');
 		$this->db->join('cns_tutor t', 't.id = pt.id_tutor','left');
 		$this->db->join('cns_operadora_celular o1', 'o1.id = t.id_operadora_celular','left');
+		$this->db->join('cns_registro_civil rc', 'rc.id_persona = p.id','left');
 		$this->db->where('p.id', $id);
 		$query = $this->db->get();
 		if (!$query){
@@ -1272,6 +1333,24 @@ class Enrolamiento_model extends CI_Model
 			return $query->row();
 		return;
 	}
+	
+	public function getRegistro_civil($id)
+	{
+		
+		$this->db->select('*');
+		$this->db->from('cns_registro_civil');
+		$this->db->where('id_persona', $id);
+		$query = $this->db->get();
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->row();
+		return;
+	}
+	
 	/**
 	 *Hace select de las alergias asociadas a una perssona
 	 *se recibe el parametro $id de tipo int que representa el id de la persona
@@ -1416,6 +1495,8 @@ class Enrolamiento_model extends CI_Model
 	{
 		if($catalog=="tes_notificacion")
 		$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
+		else if($catalog=="asu_arbol_segmentacion")
+		$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');
 		else
 		$this->db->select('*');
 		$this->db->from($catalog);
@@ -1425,7 +1506,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->where($campo2, $id2);
 		if($l2!="")
 		$this->db->limit($l2, $l1);
-		$query = $this->db->get(); $fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a"); fputs($fp, $this->db->last_query()."\r\n"); 
+		$query = $this->db->get(); 
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";

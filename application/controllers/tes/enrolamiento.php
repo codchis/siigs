@@ -351,53 +351,65 @@ class Enrolamiento extends CI_Controller
 	}
 	public function file_to_card($id)
 	{
+		$archivo=date("YmdHis").".tes";
 		header("Pragma: public");
 		header("Expires: 0");
 		header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
 		header("Content-Type: application/force-download");
 		header("Content-Type: application/octet-stream");
 		header("Content-Type: application/download");
-		header("Content-Disposition: attachment;filename=enrolamiento.tes ");
+		header("Content-Disposition: attachment;filename=".$archivo);
 		header("Content-Transfer-Encoding: binary ");
 		
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
 		$data="";
+		
+		$version =$this->Enrolamiento_model->get_version();
+		$data.=$version[0]->version."~";
+		
 		$enrolado =(array)$this->Enrolamiento_model->getById($id);
-		$data.=$enrolado["id"]."$";
-		$data.=$enrolado["curp"]."$";	
-		$data.=$enrolado["nombre"]."$";
-		$data.=$enrolado["apellido_paterno"]."$";
-		$data.=$enrolado["apellido_materno"]."$";
-		$data.=$enrolado["sexo"]."$";
-		$data.=$enrolado["id_tipo_sanguineo"]."$";
-		$data.=$enrolado["fecha_nacimiento"]."$";
-		$data.=$enrolado["id_asu_localidad_nacimiento"]."$";
-		$data.=$enrolado["calle_domicilio"]."$";
-		$data.=$enrolado["numero_domicilio"]."$";
-		$data.=$enrolado["colonia_domicilio"]."$";
-		$data.=$enrolado["id_asu_localidad_domicilio"]."$";
-		$data.=$enrolado["cp_domicilio"]."$";
-		$data.=$enrolado["telefono_domicilio"]."$";
-		$data.=$enrolado["fecha_registro"]."$";
-		$data.=$enrolado["id_asu_um_tratante"]."$";
-		$data.=$enrolado["celular"]."$";
-		$data.=$enrolado["ultima_actualizacion"]."$";
-		$data.=$enrolado["id_nacionalidad"]."$";
-		$data.=$enrolado["id_operadora_celular"]."~";
+		$data.=$enrolado["id"]."=";
+		$data.=$enrolado["curp"]."=";	
+		$data.=$enrolado["nombre"]."=";
+		$data.=$enrolado["apellido_paterno"]."=";
+		$data.=$enrolado["apellido_materno"]."=";
+		$data.=$enrolado["sexo"]."=";
+		$data.=$enrolado["id_tipo_sanguineo"]."=";            if($enrolado["id_tipo_sanguineo"]=="")$data.="¬";
+		$data.=$enrolado["fecha_nacimiento"]."=";
+		$data.=$enrolado["id_asu_localidad_nacimiento"]."=";  if($enrolado["id_asu_localidad_nacimiento"]=="")$data.="¬";
+		$data.=$enrolado["calle_domicilio"]."=";              if($enrolado["calle_domicilio"]=="")$data.="¬";
+		$data.=$enrolado["numero_domicilio"]."=";             if($enrolado["numero_domicilio"]=="")$data.="¬";
+		$data.=$enrolado["colonia_domicilio"]."=";            if($enrolado["colonia_domicilio"]=="")$data.="¬";
+		$data.=$enrolado["referencia_domicilio"]."=";         if($enrolado["referencia_domicilio"]=="")$data.="¬";
+		$data.=$enrolado["id_asu_localidad_domicilio"]."=";   if($enrolado["id_asu_localidad_domicilio"]=="")$data.="¬";
+		$data.=$enrolado["cp_domicilio"]."=";                 if($enrolado["cp_domicilio"]=="")$data.="¬";
+		$data.=$enrolado["telefono_domicilio"]."=";           if($enrolado["telefono_domicilio"]=="")$data.="¬";
+		$data.=$enrolado["fecha_registro"]."=";               if($enrolado["fecha_registro"]=="")$data.="¬";
+		$data.=$enrolado["id_asu_um_tratante"]."=";           if($enrolado["id_asu_um_tratante"]=="")$data.="¬";
+		$data.=$enrolado["celular"]."=";                      if($enrolado["celular"]=="")$data.="¬";
+		$data.=$enrolado["ultima_actualizacion"]."=";         if($enrolado["ultima_actualizacion"]=="")$data.="¬";
+		$data.=$enrolado["id_nacionalidad"]."=";              if($enrolado["id_nacionalidad"]=="")$data.="¬";
+		$data.=$enrolado["id_operadora_celular"];             if($enrolado["id_operadora_celular"]=="")$data.="¬";
+		$data.="~";
 		
-		$data.=$enrolado["idT"]."$";
-		$data.=$enrolado["curpT"]."$";
-		$data.=$enrolado["nombreT"]."$";
-		$data.=$enrolado["paternoT"]."$";
-		$data.=$enrolado["maternoT"]."$";
-		$data.=$enrolado["sexoT"]."$";
-		$data.=$enrolado["telefonoT"]."$";
-		$data.=$enrolado["celularT"]."$";
-		$data.=$enrolado["operadoraTid"]."~";
-		/*
-		$data.=$enrolado["celularT"]."$";
-		$data.=$enrolado["operadoraTid"]."~";*/
+		$data.=$enrolado["idT"]."=";
+		$data.=$enrolado["curpT"]."=";
+		$data.=$enrolado["nombreT"]."=";
+		$data.=$enrolado["paternoT"]."=";
+		$data.=$enrolado["maternoT"]."=";
+		$data.=$enrolado["sexoT"]."=";                       if($enrolado["sexoT"]=="")$data.="¬";
+		$data.=$enrolado["telefonoT"]."=";                   if($enrolado["telefonoT"]=="")$data.="¬";
+		$data.=$enrolado["celularT"]."=";                    if($enrolado["celularT"]=="")$data.="¬";
+		$data.=$enrolado["operadoraTid"];                    if($enrolado["operadoraTid"]=="")$data.="¬";
+		$data.="~";
 		
+		$registro = (array)$this->Enrolamiento_model->getRegistro_civil($id);
+		if(count($registro)>0)
+		{
+			$data.=$registro["id_localidad_registro_civil"]."=";     
+			$data.=$registro["fecha_registro"];					
+		}
+		$data.="~";
 		$alergias = $this->Enrolamiento_model->getAlergia($id);
 		foreach($alergias as $x)
 		{
@@ -413,48 +425,61 @@ class Enrolamiento extends CI_Controller
 		$vacunas=$this->Enrolamiento_model->get_catalog_view("vacuna",$id);
 		foreach($vacunas as $x)
 		{
-			$data.=$x->id."$";
+			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
 		$data=substr($data,0,strlen($data)-2)."~";
 		$iras=$this->Enrolamiento_model->get_catalog_view("ira",$id);
 		foreach($iras as $x)
 		{
-			$data.=$x->id."$";
+			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
 		$data=substr($data,0,strlen($data)-2)."~";
 		$edas=$this->Enrolamiento_model->get_catalog_view("eda",$id);
 		foreach($edas as $x)
 		{
-			$data.=$x->id."$";
+			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
 		$data=substr($data,0,strlen($data)-2)."~";
 		$consultas=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
 		foreach($consultas as $x)
 		{
-			$data.=$x->id."$";
+			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
 		$data=substr($data,0,strlen($data)-2)."~";
 		$anutricional=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 		foreach($anutricional as $x)
 		{
-			$data.=$x->id."$";
+			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
 		$data=substr($data,0,strlen($data)-2)."~";
 		$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 		foreach($nutricion as $x)
 		{
-			$data.=$x->peso."$";
-			$data.=$x->altura."$";
-			$data.=$x->talla."$";
+			$data.=$x->peso."=";
+			$data.=$x->altura."=";
+			$data.=$x->talla."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
 		$data=substr($data,0,strlen($data)-2);
+		$this->Enrolamiento_model->entorno_x_persona($id,0,'',$archivo,4);
 		echo $data;
+	}
+	
+	public function update_card($persona,$impreso,$fecha="",$archivo="",$entorno='4')
+	{
+		$this->load->model(DIR_TES.'/Enrolamiento_model');
+		if($impreso==1)$fecha=date("Y-m-d H:i:s");
+		$this->Enrolamiento_model->entorno_x_persona($entorno,$persona,$fecha,$archivo,$impreso);
+	}
+	public function validate_card($persona,$archivo)
+	{
+		$this->load->model(DIR_TES.'/Enrolamiento_model');
+		echo $this->Enrolamiento_model->valid_card($persona,$archivo);
 	}
 	/**
 	 *prepara los datos para insertarlos
@@ -481,7 +506,7 @@ class Enrolamiento extends CI_Controller
 					$this->session->set_flashdata('infoclass','success');
 					$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
 					//Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario Enrolado: '.strtoupper($this->input->post('nombre')));
-					
+					$this->session->set_userdata( 'umt', $this->Enrolamiento_model->getumt() );
  					$this->index(0,$id);					
 				}
 				catch (Exception $e)
@@ -490,6 +515,7 @@ class Enrolamiento extends CI_Controller
 					$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 					$data["title"]="TES";
 					$data["titulo"]="Enrolamiento";
+					$data["session"]=$this->session->userdata('umt');
 					
 					//$this->template->write_view('header',DIR_TES.'/header.php');
 					//$this->template->write_view('menu',DIR_TES.'/menu.php');
@@ -502,7 +528,7 @@ class Enrolamiento extends CI_Controller
 			{
 				$data["title"]="TES";
 				$data["titulo"]="Enrolamiento";
-				
+				$data["session"]=$this->session->userdata('umt');
 				//$this->template->write_view('header',DIR_TES.'/header.php');
 				//$this->template->write_view('menu',DIR_TES.'/menu.php');
 				$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento',$data);
@@ -554,6 +580,9 @@ class Enrolamiento extends CI_Controller
 		$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
 		$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|required');
 		$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', '');
+		
+		$this->form_validation->set_rules('um', 'Unidad medica tratante', 'trim|required');
+		$this->form_validation->set_rules('umt', 'Unidad medica tratante', '');
 		
 		$this->form_validation->set_rules('calle', 'Calle', 'trim|required');
 		$this->form_validation->set_rules('referencia', 'referencia', '');
@@ -613,6 +642,7 @@ class Enrolamiento extends CI_Controller
 		
 		$this->Enrolamiento_model->setfechacivil($this->input->post('fechacivil'));				
 		$this->Enrolamiento_model->setlugarcivil($this->input->post('lugarcivil'));
+		$this->Enrolamiento_model->setumt($this->input->post('um'));
 		
 		$this->Enrolamiento_model->setcalle($this->input->post('calle'));
 		$this->Enrolamiento_model->setreferencia($this->input->post('referencia'));				
