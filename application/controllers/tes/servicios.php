@@ -7,7 +7,7 @@
  * @author     Eliecer
  * @created    2013-11-27
  */
-class Servicios2 extends CI_Controller {
+class Servicios extends CI_Controller {
     
     public function __construct()
     {
@@ -26,6 +26,7 @@ class Servicios2 extends CI_Controller {
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
 		$this->load->model(DIR_SIIGS.'/Usuario_model');
 		$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+		$this->load->model(DIR_TES.'/ReglaVacuna_model');
     }
 
     /**
@@ -48,7 +49,7 @@ class Servicios2 extends CI_Controller {
 //             echo false;
 //         }
         if(!isset($this->Tableta_model))
-            echo 'No hay conexión';
+            echo json_encode(array("id_resultado" => 'No hay conexión')); 
         try 
 		{
 			$this->load->library('session');
@@ -59,22 +60,22 @@ class Servicios2 extends CI_Controller {
 			switch($id_accion->id_accion)
 			{
 				case 1: // debe existir la MAC
-					echo $this->is_step_1($id_tab->id_tab, $id_version);
+					$this->is_step_1($id_tab->id_tab, $id_version);
 					break;
 				case 2: // debe existir el token y se regresa la info del dispositivo
-					echo $this->is_step_2($id_sesion->id_sesion);
+					$this->is_step_2($id_sesion->id_sesion);
 					break;
 				case 3: // debe existir el token y el dato de la descripcion del proceso
-					echo $this->is_step_3($id_sesion->id_sesion, $datos);
+					$this->is_step_3($id_sesion->id_sesion, $datos);
 					break;
 				case 4: // debe existir el token
-					echo $this->is_step_4($id_sesion->id_sesion);
+					$this->is_step_4($id_sesion->id_sesion);
 					break;
 				case 5: // debe existir el token y el dato de la descripcion del proceso
-					echo $this->ss_step_5($id_sesion->id_sesion, $datos);
+					$this->ss_step_5($id_sesion->id_sesion, $datos);
 					break;
 				case 6: // debe existir el token
-					echo $this->ss_step_6($id_sesion->id_sesion);
+					$this->ss_step_6($id_sesion->id_sesion);
 					break;
 				default:
 					$this->session->sess_destroy();
@@ -155,9 +156,9 @@ class Servicios2 extends CI_Controller {
 	}
 	
 	// generacion de informacion de catalogos
-	public function is_step_2($id_sesion, $si="")
+	public function is_step_2($id_sesion, $si="", $sf="")
 	{
-		ini_set("max_execution_time", 10000000);
+		ini_set("max_execution_time", 36000);
 		
 		$micadena="";
 		$misesion=$this->session->userdata('session');
@@ -241,6 +242,7 @@ class Servicios2 extends CI_Controller {
 				//	$cadena["sis_grupo"]= 'Error recuperando sis_grupo';
 					
 				// obtiene usuarios que pertenescan al entorno
+				if(sizeof($inusuario)==0)array_push($inusuario,0);
 				$usuarios = $this->Usuario_model->get_usuario_entorno("TES Movil",$inusuario);
 				if($usuarios)
 				{
@@ -261,8 +263,25 @@ class Servicios2 extends CI_Controller {
 				$catalog_relevante = $this->Enrolamiento_model->get_catalog_relevante();
 				foreach($catalog_relevante as $catalog)
 				{
-					$array=$this->Enrolamiento_model->get_catalog($catalog->descripcion);
-					if($array)
+					$xy=0;
+					if($sf=="")
+					{
+						$array=$this->Enrolamiento_model->get_catalog($catalog->descripcion);
+						if($array)
+						$xy=1;
+					}
+					else
+					{
+						$fecha=$this->session->userdata('fecha'); 
+						$fecha2=$catalog->fecha_actualizacion;
+						if(strtotime($fecha2)>strtotime($fecha))
+						{
+							$array=$this->Enrolamiento_model->get_catalog($catalog->descripcion);
+							if($array)
+							$xy=1;
+						}
+					}
+					if($xy==1)
 					{
 						$cadena[$catalog->descripcion]= $array;
 						$micadena=json_encode($cadena);
@@ -294,7 +313,10 @@ class Servicios2 extends CI_Controller {
 					$cadena=array();
 					for($i=0;$i<$contador;$i++)
 					{
-						$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","","","","",($i*1000),(($i*1000)+1000));
+						if($sf=="")
+							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","","","","",($i*1000),1000);
+						else
+							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","fecha_update >=",$fecha,"","",($i*1000),1000);
 						if($asu)
 						{
 							$micadena=json_encode($asu);
@@ -364,6 +386,7 @@ class Servicios2 extends CI_Controller {
 				
 				// regresa el json con los datos necesarios	
 				$this->session->set_userdata( 'paso', "2" );
+				if($sf=="")
 				echo "}";
 			}
 			else
@@ -394,7 +417,7 @@ class Servicios2 extends CI_Controller {
 			.$this->session->userdata('mac')." => VERSION:"
 			.$this->session->userdata('id_version')." => PASO:"
 			.$this->session->userdata('paso')." => DESCRIPCION:"
-			.$datos."\r\n");
+			.$datos["descripcion"]."\r\n");
 			ob_flush();
 		}
 		if($datos["id_resultado"]=="ok"&&$this->session->userdata('paso')=="4")
@@ -422,16 +445,19 @@ class Servicios2 extends CI_Controller {
 			{
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
-				$i=0;
+				$i=0; $cadena="";
 				foreach($asu_um as $id)
 				{
 					$personas=$this->Enrolamiento_model->get_catalog2("cns_persona", "id_asu_um_tratante", $id);
+					
 					if($personas)
 					{
 						$cadena["cns_persona"]= $personas;						
 						//************ inicio control catalogos X persona ************
+						$regla_vacuna=array();
 						foreach($personas as $persona)
 						{
+							$vacunas="";
 							$catalog_relevante = $this->Enrolamiento_model->get_transaction_relevante();
 							foreach($catalog_relevante as $catalog)
 							{
@@ -443,6 +469,7 @@ class Servicios2 extends CI_Controller {
 										if($array)
 										{
 											$cadena[$catalog->descripcion]= $array;
+											if($catalog->descripcion=="cns_control_vacuna")$vacunas=$array;
 											if($catalog->descripcion=="cns_persona_x_tutor")
 											{
 												foreach($array as $dato)
@@ -458,14 +485,18 @@ class Servicios2 extends CI_Controller {
 									catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
 								}
 							}
+							array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$vacunas));
 						}
+						$cadena["esquema_incompleto"]=$regla_vacuna[0];
 						//************ fin control catalogos X persona ************
 					}
 					
 					$i++;
 				}
+				
 				// regresa el json con los datos necesarios	
 				$this->session->set_userdata( 'paso', "4" );
+				if($cadena!="")
 				echo json_encode($cadena);	
 				ob_flush();
 				//************ fin persona ************
@@ -487,12 +518,9 @@ class Servicios2 extends CI_Controller {
 	public function ss_step_5($id_sesion, $datos)
 	{
 		$bien=0;
-		$fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a");
-		fputs($fp, "JSON recibido: ".($datos)."\r\n");
 		$datos=(array)json_decode($datos);
 		try
 		{
-			fputs($fp, "Recibiendo pesonas\r\n");
 			if(array_key_exists("cns_persona",$datos))
 			foreach($datos["cns_persona"] as  $midato)
 			{
@@ -502,7 +530,6 @@ class Servicios2 extends CI_Controller {
 					$this->Enrolamiento_model->cns_insert("cns_persona",$midato);
 			}	
 			
-			fputs($fp, "Recibiendo tutor\r\n");
 			if(array_key_exists("cns_tutor",$datos))
 			foreach($datos["cns_tutor"] as  $midato)
 			{
@@ -521,7 +548,6 @@ class Servicios2 extends CI_Controller {
 			{
 				try
 				{
-					fputs($fp, "Recibiendo $catalog->descripcion\r\n");
 					if(array_key_exists($catalog->descripcion,$datos))
 					foreach($datos[$catalog->descripcion] as  $midato)
 					{
@@ -548,7 +574,6 @@ class Servicios2 extends CI_Controller {
 				catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);$bien++;}
 			}
 		}
-		fclose($fp);
 		if($bien==0)
 		{
 			$this->session->set_userdata( 'paso', "5" );
@@ -593,49 +618,63 @@ class Servicios2 extends CI_Controller {
 			// se obtienen los usuarios asignados, el tipo de censo y la unidad médica
 			if ($tableta->usuarios_asignados == 1 && $tableta->id_tipo_censo != null && $tableta->id_asu_um != null)
 			{
-				
-				$cadena=(array)json_decode($this->is_step_2($id_sesion,"no"));
-				
-				//************ inicio asu ************
-				$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","fecha_update >=",$fecha);
-				if($asu)
-					$cadena["asu_arbol_segmentacion"]= $asu;
-				//else 
-				//	$cadena["asu_arbol_segmentacion"]= 'Error recuperando asu_arbol_segmentacion';
-				//************ fin asu ************
-		
+				$this->is_step_2($id_sesion,"","si");
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
-				$i=0;
+				$i=0; $xy=0;
 				foreach($asu_um as $id)
 				{//checar fecha en tipo de dato time stamp
 					$personas=$this->Enrolamiento_model->get_catalog2("cns_persona", "id_asu_um_tratante", $id,"ultima_sincronizacion >=", $fecha);
 					if($personas)
 					{
-						$cadena["cns_persona"]= $personas;						
+						$cadena["cns_persona"]= $personas;	
+						$regla_vacuna=array();
+						$micadena=json_encode($cadena);
+						echo ",".substr($micadena,1,strlen($micadena)-2);
+						$micadena="";
+						ob_flush();
+						unset($cadena);
+						$cadena=array();
 						//************ inicio control catalogos X persona ************
 						foreach($personas as $persona)
 						{
+							$yx=0;
 							$catalog_relevante = $this->Enrolamiento_model->get_transaction_relevante();
+							
 							foreach($catalog_relevante as $catalog)
 							{
 								if($catalog->descripcion!="cns_persona"&&$catalog->descripcion!="cns_tutor")
 								{
 									try
 									{
+										$campo=$catalog->columna_validar;
 										$array=$this->Enrolamiento_model->get_catalog2($catalog->descripcion, "id_persona", $persona->id, 
-										$catalog->columna_validar.">="	,$fecha);
+										"$campo >="	,$fecha);
+										if($catalog->descripcion=="cns_control_vacuna")$vacunas=$array;
 										if($array)
 										{
 											$cadena[$catalog->descripcion]= $array;
+											$micadena=json_encode($cadena);
+											echo ",".substr($micadena,1,strlen($micadena)-2);
+											$micadena="";
+											ob_flush();
+											unset($cadena);
+											$cadena=array();
 											if($catalog->descripcion=="cns_persona_x_tutor")
 											{
 												foreach($array as $dato)
 												{
 													$array2=$this->Enrolamiento_model->get_catalog2("cns_tutor", "id", $dato->id_tutor);
-													$cadena["cns_tutor"]= $array2;
+													$cadena["cns_tutor"]= $array2;	
+													$micadena=json_encode($cadena);
+													echo ",".substr($micadena,1,strlen($micadena)-2);
+													$micadena="";
+													ob_flush();
+													unset($cadena);
+													$cadena=array();												
 												}
-											}
+											}									
+											
 										}
 										//else 
 										//	$cadena[$catalog->descripcion]= 'Error recuperando '.$catalog->descripcion;
@@ -643,7 +682,16 @@ class Servicios2 extends CI_Controller {
 									catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
 								}
 							}
+							array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$vacunas));
+							$xy++;
 						}
+						$cadena["esquema_incompleto"]=$regla_vacuna[0];
+						$micadena=json_encode($cadena);
+						echo ",".(substr($micadena,1,strlen($micadena)-2));
+						$micadena="";
+						ob_flush();
+						unset($cadena);
+						$cadena=array();
 						//************ fin control catalogos X persona ************
 					}
 					
@@ -651,7 +699,8 @@ class Servicios2 extends CI_Controller {
 				}
 				// regresa el json con los datos necesarios	
 				$this->session->set_userdata( 'paso', "6" );
-				echo json_encode($cadena);	
+				
+				echo "}";
 				ob_flush();
 				//************ fin persona ************
 			}
@@ -687,6 +736,60 @@ class Servicios2 extends CI_Controller {
 			}
 		}
     }
+	
+	public function esquema_incompleto($id_persona,$fecha,$vacunas)
+	{
+		$cadena=array();
+		$regla=$this->ReglaVacuna_model->getAll(); 
+		
+		$fecha     = date("Y-m-d",strtotime($fecha));
+		$datetime1 = date_create($fecha);
+		$datetime2 = date_create(date("Y-m-d"));
+		$interval  = date_diff($datetime1, $datetime2);
+		$dias      = $interval->format('%R%a dias');
+		foreach($regla as $r)
+		{
+			$x=0;
+			foreach($vacunas as $v)
+			{
+				if($r->id==$v->id_vacuna)
+				{
+					$x++;
+				}
+			}
+			
+			if(trim($r->id_vacuna_secuencial)!=""&&!empty($r->id_vacuna_secuencial))
+			{
+				$reglase=$this->ReglaVacuna_model->getById($r->id);
+				
+				$x1=0;
+				foreach($vacunas as $v1)
+				{
+					if($reglase->id_vacuna_secuencial==$v1->id_vacuna)
+					{
+						$x1++;
+					}
+				}
+				
+				if($x1==0)
+				{
+					if($dias>=$reglase->desdese&&$dias<=$reglase->hastase)
+						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial));
+					if($dias>$reglase->hastase)
+						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial));	
+				}
+			}
+			
+			if($x==0)
+			{
+				if($dias>=$r->desde&&$dias<=$r->hasta)
+					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id));
+				if($dias>$r->hasta)
+					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id));
+			}
+		}
+		return $cadena;
+	}
 		
 	//// prueba tableta
 	public function prueba()
@@ -706,28 +809,16 @@ class Servicios2 extends CI_Controller {
 		$version_apk,$datos );
 	}	
 	
-	/*
 	
+	//// prueba web
 	public function prueba2($id_accion,$id_tab=null,$id_sesion=null, $version=null)
 	{
 		 $this->Synchronization(
 		 json_encode(array("id_accion"=>$id_accion)), 
 		 json_encode(array("id_tab"=>$id_tab)) , 
 		 json_encode(array("id_sesion"=>$id_sesion)), 
-		 json_encode(array("version"=>$version)) );
-	}
-	
-	public function pruebass2($id_accion, $id_tab = null, $id_sesion = null)
-	{
-		$json='{"cns_persona":[{"id":"59a6cddb690074c1f8a5019ecaeb25e8","curp":"RAEE850605HCSMSL02","nombre":"ELIECER","apellido_paterno":"RAMIREZ","apellido_materno":"ESQUINCA","sexo":"M","id_tipo_sanguineo":"1","fecha_nacimiento":"1985-06-05","id_asu_localidad_nacimiento":"810","calle_domicilio":"1 OTE SUR","numero_domicilio":"1968","colonia_domicilio":"SAN FRANCISCO","referencia_domicilio":"a lado de la precidencia","id_asu_localidad_domicilio":"810","cp_domicilio":"29000","telefono_domicilio":"9616916297","fecha_registro":"2013-12-01 00:00:00","id_asu_um_tratante":"809","celuar":"9616403231","ultima_actualizacion":"0000-00-00 00:00:00","id_nacionalidad":"1","id_operadora_celular":"1"}],"cns_persona_x_tutor":[{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","id_tutor":"43ad90cadc565fc2a030596090a654c1"}],"cns_tutor":[{"id":"43ad90cadc565fc2a030596090a654c1","curp":"raee850605hcmsl02","nombre":"ELIECER","apellido_paterno":"RAMIREZ","apellido_materno":"ESQUINCA","sexo":"M","telefono":"9616916208","celular":"9616403233","id_operadora_celular":"1"}],"cns_persona_x_alergia":[{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","id_alergia":"1"}],"cns_persona_x_afiliacion":[{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","id_afiliacion":"1"}],"cns_control_vacuna":[{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","id_vacuna":"1","fecha":"2013-12-04 00:00:00","id_asu_um":"1","codigo_barras":null},{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","id_vacuna":"1","fecha":"2013-12-05 00:00:00","id_asu_um":"1","codigo_barras":null}],"cns_control_ira":[{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","id_ira":"1","fecha":"2013-12-05 00:00:00","id_asu_um":"1"}],"cns_control_eda":[{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","id_eda":"1","fecha":"2013-12-05 00:00:00","id_asu_um":"1"}],"cns_control_consulta":[{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","id_consulta":"2","fecha":"2013-12-05 00:00:00","id_asu_um":"1"}],"cns_control_accion_nutricional":[{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","id_accion_nutricional":"1","fecha":"2013-12-05 00:00:00","id_asu_um":"1"}],"cns_control_nutricional":[{"id_persona":"59a6cddb690074c1f8a5019ecaeb25e8","peso":"5.00","altura":"1","talla":"1","fecha":"2013-12-05 00:00:00","id_asu_um":"1"}]}';
-		
-		$this->synchronization_sequence(
-		json_encode(array("id_accion"=>$id_accion)), 
-		json_encode(array("id_tab"=>$id_tab)) , 
-		json_encode(array("id_sesion"=>$id_sesion)), 
-		1, 
-		$json);
-	}*/
-    
+		 $version,
+		 json_encode(array("id_resultado"=>"ok","descripcion"=>"Error de no se que en no se cual")) );
+	}    
 }
 ?>
