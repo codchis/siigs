@@ -23,19 +23,22 @@ $(document).ready(function()
     });
 });
 </script>
-<h2>Listado - <?php echo urldecode($title) ?></h2>
+
+
 <div align="right">
-<a id="csv" href=""><img src="/resources/images/csv.png" style="border:none; "  title="Exportar a CSV"/></a>
-<a id="pdf" href=""><img src="/resources/images/pdf.png" style="border:none; "  title="Exportar a PDF"/></a>
-<a id="exc" href=""><img src="/resources/images/excel.png" style="border:none;" title="Exportar a EXCEL"/></a>
+<a id="csv" href=""><img src="/resources/images/csv.png" style="border:none; "  title="Exportar a CSV" class="btn btn-primary"/></a>
+<a id="pdf" href=""><img src="/resources/images/pdf.png" style="border:none; "  title="Exportar a PDF" class="btn btn-primary"/></a>
+<a id="exc" href=""><img src="/resources/images/excel.png" style="border:none;" title="Exportar a EXCEL" class="btn btn-primary"/></a>
+<input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:58px; width::50px;" class="btn btn-primary">
 </div>
-<div id='popimpr'>
-<table border="1" width="100%" id="tabla">
+<div id='popimpr' class="table table-striped  ">
+<h2>Listado - <?php echo urldecode($title) ?></h2>
+<table border="0" width="100%" id="tabla">
 	<tr>
     <?php
-		foreach ($datos as $item => $value)
+		foreach ($datos[0] as $item => $value)
 		{
-    		 echo "<td>".$item."</td>";
+    		 echo "<th><h5>".$item."</h5></td>";
 		}
 	?>	
 	</tr>
@@ -43,7 +46,7 @@ $(document).ready(function()
 	for($i=0;$i<count($datos);$i++)
 	{
 		echo "<tr>";
-		foreach ($datos as $item => $value)
+		foreach ($datos[$i] as $item => $value)
 		{
     		 echo "<td>".$value."</td>";
 		}
@@ -52,4 +55,4 @@ $(document).ready(function()
 	?>
 </table>
 </div>
-<div align="right"><input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:50px; width::50px;"></div>
+<div align="right"><input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:50px; width::50px;" class="btn btn-primary"></div>

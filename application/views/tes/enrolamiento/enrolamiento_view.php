@@ -7,9 +7,9 @@
 		$.ajax({
 		type: "POST",
 		data: {
-			'claves':[<?php echo $enrolado->id_asu_localidad_nacimiento;?>] ,
+			'claves':[<?php  echo $enrolado->id_asu_localidad_nacimiento;?>] ,
 			'desglose':1 },
-		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		url: '/<?php  echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
 		{
@@ -23,9 +23,25 @@
 		$.ajax({
 		type: "POST",
 		data: {
-			'claves':[<?php echo $enrolado->id_asu_um_tratante;?>] ,
+			'claves':[<?php  echo $enrolado->id_asu_um_tratante;?>] ,
 			'desglose':1 },
-		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		url: '/<?php  echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		})
+		.done(function(dato)
+		{
+			if(dato)
+			{
+				var obj = jQuery.parseJSON( dato );
+				document.getElementById("umt").innerHTML=obj[0]["descripcion"];
+			}
+		});
+		
+		$.ajax({
+		type: "POST",
+		data: {
+			'claves':[<?php  echo $enrolado->id_localidad_registro_civil;?>] ,
+			'desglose':1 },
+		url: '/<?php  echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
 		{
@@ -39,9 +55,9 @@
 		$.ajax({
 		type: "POST",
 		data: {
-			'claves':[<?php echo $enrolado->id_asu_localidad_domicilio;?>] ,
+			'claves':[<?php  echo $enrolado->id_asu_localidad_domicilio;?>] ,
 			'desglose':1 },
-		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		url: '/<?php  echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
 		{
@@ -54,7 +70,7 @@
 	});
 	</script>
 	<table align="center" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
-    <h2><?php echo $title ?></h2>
+    <h2><?php  echo $title ?></h2>
         	<table width="100%">
             <tr>
                 <td>
@@ -68,31 +84,31 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><?php echo $enrolado->nombre;?></td>
+                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->nombre;?></div></td>
                             <td width="25%"><p align="right">Sexo</p></td>
-                            <td width="25%"><?php echo $enrolado->sexo;?></td>
+                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->sexo;?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><?php echo $enrolado->apellido_paterno;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->apellido_paterno;?></div></td>
                             <td><p align="right">Tipo de Sangre</p></td>
-                            <td><?php echo $enrolado->tsangre;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->tsangre;?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><?php echo $enrolado->apellido_materno;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->apellido_materno;?></div></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><?php echo $enrolado->fecha_nacimiento;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->fecha_nacimiento;?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
-                            <td colspan="3"><div id="lnacimientoT"></div></td>
+                            <td colspan="3"><div id="lnacimientoT" style="width:100%; margin-left:20px;"></div></td>
                             </tr>
                           <tr>
                             <td><p align="right">CURP</p></td>
-                            <td ><?php echo $enrolado->curp;?></td>
+                            <td ><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->curp;?></div></td>
                             <td><p align="right">Nacionalidad</p></td>
-                            <td><?php echo $enrolado->nacionalidad;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->nacionalidad;?></div></td>
                           </tr>
                         </table>
                         <br />
@@ -106,7 +122,7 @@
                       <div class="AccordionPanelTab">Tipo de Beneficiario</div>
                       <div class="AccordionPanelContent"><br />
                       	<code style="margin-left:20px; width:60%">
-                        	<?php 
+                        	<div style="width:100%; margin-left:20px; margin-top:-3px"><?php  
 							$i=0;$a=0;
 							$opcion='<table width="85%"><tr>';
 							foreach ($afiliaciones as $afiliacion):
@@ -118,7 +134,7 @@
 							endforeach; 
 							$opcion.='</tr></table>';
 							echo $opcion;
-							?>
+							?></div>
                         </code>
                       </div>
                     </div>
@@ -131,27 +147,43 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><?php echo $enrolado->nombreT;?></td>
+                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->nombreT;?></div></td>
                             <td width="25%"><p align="right">Sexo</p></td>
-                            <td width="25%"><?php echo $enrolado->sexoT;?></td>
+                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->sexoT;?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><?php echo $enrolado->paternoT;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->paternoT;?></div></td>
                             <td><p align="right">CURP</p></td>
-                            <td><?php echo $enrolado->curpT;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->curpT;?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><?php echo $enrolado->maternoT;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->maternoT;?></div></td>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><?php echo $enrolado->telefonoT;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->telefonoT;?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Celular</p></td>
-                            <td><?php echo $enrolado->celularT;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->celularT;?></div></td>
                             <td><p align="right">Compania Celular</p></td>
-                            <td><?php echo $enrolado->operadoraT;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->operadoraT;?></div></td>
+                          </tr>
+                        </table>
+                        <br />
+                      
+                      </div>
+                    </div>
+                    
+                    <!--  Unidad Medica Tratante -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Unidad Medica Tratante</div>
+                      <div class="AccordionPanelContent" >
+                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
+                      
+                          <tr>
+                            <td width="19%"><p align="right">Lugar</p></td>
+                            <td width="81%" colspan="3"><div id="umt" style="width:100%; margin-left:20px;"></div>
                           </tr>
                         </table>
                         <br />
@@ -166,13 +198,13 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Fecha</p></td>
-                            <td width="31%"><?php echo $enrolado->fecha_registro;?></td>
+                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->fecha_registro;?></div></td>
                             <td width="25%"><p align="right">&nbsp;</p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar</p></td>
-                            <td colspan="3"><div id="lugarcivilT"></div></tr>
+                            <td colspan="3"><div id="lugarcivilT" style="width:100%; margin-left:20px;"></div></tr>
                         </table>
                         <br />
                       
@@ -186,32 +218,32 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Calle</p></td>
-                            <td width="31%"><?php echo $enrolado->calle_domicilio;?></td>
+                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->calle_domicilio;?></div></td>
                             <td width="25%"><p align="right">Número</p></td>
-                            <td width="25%"><?php echo $enrolado->numero_domicilio;?></td>
+                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->numero_domicilio;?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Referencia</p></td>
-                            <td colspan="3"><?php echo $enrolado->referencia_domicilio;?></td>
+                            <td colspan="3"><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->referencia_domicilio;?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Colonia</p></td>
-                            <td><?php echo $enrolado->colonia_domicilio;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->colonia_domicilio;?></div></td>
                             <td><p align="right">CP</p></td>
-                            <td><?php echo $enrolado->cp_domicilio;?></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->cp_domicilio;?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Localidad</p></td>
-                            <td colspan="3"><div id="localidadT"></div></tr>
+                            <td colspan="3"><div id="localidadT" style="width:100%; margin-left:20px;"></div></tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><?php echo $enrolado->telefono_domicilio;?></td> 
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->telefono_domicilio;?></div></td> 
                             <td><p align="right">Celular</p></td> 
-                            <td><?php echo $enrolado->celular;?></td>                          
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->celular;?></div></td>                          
                           </tr>
                           <tr>
                             <td><p align="right">Compania Celular</p></td>
-                            <td><?php echo $enrolado->operadora;?></td> 
+                            <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->operadora;?></div></td> 
                             <td></td> 
                             <td></td>                          
                           </tr>
@@ -225,7 +257,7 @@
                       <div class="AccordionPanelTab">Historial de Alergias y Reacciones Febriles</div>
                       <div class="AccordionPanelContent"><br />
                       	<code style="margin-left:20px; width:60%">
-                        	<?php 
+                        	<div style="width:100%; margin-left:20px; margin-top:-3px"><?php  
 							$i=0;$a=0;
 							$opcion='<table width="85%"><tr>';
 							foreach ($alergias as $alergia):
@@ -237,7 +269,7 @@
 							endforeach; 
 							$opcion.='</tr></table>';
 							echo $opcion;
-							?>
+							?></div>
                             
                         </code>
                       </div>
@@ -269,7 +301,7 @@
                                   </table> 
                                   </div>
                                   
-                                  	<?php echo getArray($iras);?>
+                                  	<div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo getArray($iras);?></div>
                                        
                               </td>
                                  <td valign="top">&nbsp;</td>
@@ -296,7 +328,7 @@
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php echo getArray($edas);?>                           
+                                  <div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo getArray($edas);?></div>                           
                               </td>
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
@@ -322,7 +354,7 @@
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php echo getArray($consultas);?>                           
+                                  <div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo getArray($consultas);?></div>                           
                               </td>
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
@@ -348,7 +380,7 @@
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php echo getArray($nutricionales);?>                          
+                                  <div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo getArray($nutricionales);?></div>                          
                               </td>
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
@@ -360,16 +392,16 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control Nutricional</div>
                       <div class="AccordionPanelContent"><br />
-                      <iframe width='100%' style='margin-left:5px;' border=0 height='500' src='/<?php echo DIR_TES?>/Graph/graph/grafica/Nutricion/<?php echo urlencode(($control_nutricional));?>/<?php echo urlencode(($label));?>'></iframe>
+                      <iframe width='100%' style='margin-left:5px;' border=0 height='500' src='/<?php  echo DIR_TES?>/Graph/graph/grafica/Nutricion/<?php  echo urlencode(($control_nutricional));?>/<?php  echo urlencode(($label));?>'></iframe>
                       </div>
                     </div>                                        
                     
                     </td>
             </tr>
             <tr>
-                <td>
+                <td><br />
                 <span id="enviandoof" style="margin-left:-20px;">
-                <input type="button" value="Cancelar" onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" />
+                <input class="btn btn-primary" type="button" value="Cancelar" onclick="window.location.href='/<?php  echo DIR_TES?>/enrolamiento/'" />
                 </span>
     			
                 </td>
@@ -379,8 +411,7 @@
 	<script type="text/javascript">
 var Accordion1 = new Spry.Widget.Accordion("Accordion1", { useFixedPanelHeights: false, defaultPanel: 0 });
 </script>
-
-<?php
+<?php 
 function getArray($array)
 {
 	$id=0; $grid="";
