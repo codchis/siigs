@@ -70,7 +70,22 @@
 				}
 			}						
 		}); 
-		
+		$.ajax({
+		type: "POST",
+		data: {
+			'claves':[<?php echo $session;?>] ,
+			'desglose':1 },
+		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+		})
+		.done(function(dato)
+		{
+			if(dato)
+			{
+				var obj = jQuery.parseJSON( dato );
+				document.getElementById("um").value=obj[0]["id"];
+				document.getElementById("umt").value=obj[0]["descripcion"];
+			}
+		});
 		<?php
 		$alergias="";
 		$afiliaciones="";
@@ -286,6 +301,9 @@
 		
 		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" required="required" style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" required="required" style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" required="required" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 		$("#cNu").append(campo);
+		$("#fCNu"+num).val($.datepicker.formatDate('dd/mm/yy', new Date()));
+		$("#fCNu"+num).datepicker(option);
+		
 	}
 	function remNutricional()
 	{
@@ -299,17 +317,16 @@
 			document.getElementById("nNu").value = num;
 		}
 	}
-	</script>
-	<table align="center" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
-    	<!-- mensaje-->
+	</script><!-- mensaje-->
         <?php 	
 			if(!empty($msgResult))
 			echo "<div class='$infoclass'>".$msgResult."</div>";
-			if(validation_errors())
-			echo "<div class='error'>".validation_errors()."</div>"; 
+			echo validation_errors(); 
 			echo form_open(DIR_TES.'/enrolamiento/insert'); 
 		?>
         <!-- mensaje -->
+	<table align="center" width="97.5%" border="0" cellpadding="0" cellspacing="0" style="margin-left:20px"><tr><td>
+    	
         	<table width="100%">
             <tr>
                 <td>
@@ -322,14 +339,14 @@
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
-                            <td width="19%"><p align="right">Nombre</p></td>
+                            <td width="19%" height="50"><p align="right">Nombre</p></td>
                             <td width="31%"><input name="nombre" type="text" required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('nombre', ''); ?>" maxlength="35"></td>
                             <td width="25%"><p align="right">Sexo</p></td>
-                            <td width="25%">
-                              <label style=" margin-left:10px;">
+                            <td width="25%" align="right">
+                              <label style=" margin-left:10px; float:left">
                                 <input type="radio" name="sexo" value="M" <?php echo set_radio('sexo', 'M'); ?> id="sexo_1" onclick="getcurp();" required >
                                 Masculino</label>
-                              <label>
+                              <label style=" float:left">
                                 <input type="radio" name="sexo" value="F" <?php echo set_radio('sexo', 'F'); ?> id="sexo_2" onclick="getcurp();">
                                 Femenino</label>
                              </td>
@@ -351,9 +368,9 @@
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
-                            <td colspan="3"><input name="lnacimientoT" type="text" required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo set_value('lnacimientoT', ''); ?>" readonly="readonly">
+                            <td colspan="3"><div class="input-append" style="width:100%"><input name="lnacimientoT" type="text" required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo set_value('lnacimientoT', ''); ?>" readonly="readonly">
                             	<input name="lnacimiento" type="hidden" id="lnacimiento" value="<?php echo set_value('lnacimiento', ''); ?>">                              
-                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>' id="fba1" class="cat">Seleccionar</a><div id="aqui"></div>
+                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>' id="fba1" class="btn btn-primary">Seleccionar</a><div id="aqui"></div></div>
                               </td>
                             </tr>
                           <tr>
@@ -375,11 +392,11 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Tipo de Beneficiario</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
-                       	<div id="tbenef">
+                      	<div style="margin-left:20px; width:90%">
+                       	<div id="tbenef" style="margin-left:10px;">
                             
                             </div>
-                      	</code>
+                      	</div>
                       </div>
                     </div>
                     <!-- Tutor -->
@@ -390,11 +407,10 @@
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
-                            <td colspan="2"><p align="right">Madres o Tutores ya Capturados</p></td>
-                            <td>
+                            <td height="50" colspan="2"><p align="right">Madres o Tutores ya Capturados</p></td>
+                            <td colspan="2"><div class="input-append" >
                               <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" value="<?php echo set_value('buscar', ''); ?>" />
-                            </td>
-                            <td><a href="#" id="buscarCurp" class="cat">Buscar</a></td>
+                           <a href="#" id="buscarCurp" class="btn btn-primary">Buscar</a></div></td>
                           </tr>
                           <tr>
                             <td colspan="2"><p align="right">Capturar Nueva Madre o Tutor</p>                              <label for="captura"></label></td>
@@ -410,10 +426,10 @@
                             <td width="31%"><input name="curpT" type="text" required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo set_value('curpT', ''); ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)" /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
-                              <label style=" margin-left:10px;">
+                              <label style=" margin-left:10px; float:left">
                                 <input type="radio" name="sexoT" value="M" <?php echo set_radio('sexoT', 'M'); ?> id="sexoT_1" >
                                 Masculino</label>
-                              <label>
+                              <label style=" float:left">
                                 <input type="radio" name="sexoT" value="F" <?php echo set_radio('sexoT', 'F'); ?> id="sexoT_2" >
                                 Femenino</label>
                              </td>
@@ -443,22 +459,44 @@
                       </div>
                     </div>
                     
+                    <!--  Unidad Medica Tratante -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Unidad Medica Tratante</div>
+                      <div class="AccordionPanelContent" >
+                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
+                      
+                          <tr>
+                            <td width="19%" height="50"><p align="right">Lugar</p></td>
+                            <td width="81%" colspan="3">
+                            <div class="input-append" style="width:100%">
+                            <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
+                              <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
+                            <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
+                          </tr>
+                        </table>
+                        <br />
+                      
+                      </div>
+                    </div>
+                    
                     <!--  Registro civil -->
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Registro Civil</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
-                            <td width="19%"><p align="right">Fecha</p></td>
+                            <td width="19%" height="50"><p align="right">Fecha</p></td>
                             <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date('d/m/Y', strtotime(set_value('fechacivil', ''))); ?>" placeholder="dd/mm/yyyy"></td>
                             <td width="25%"><p align="right">&nbsp;</p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar</p></td>
-                            <td colspan="3"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
+                            <td colspan="3">
+                            <div class="input-append" style="width:100%">
+                            <input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="cat">Seleccionar</a>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
                           </tr>
                         </table>
                         <br />
@@ -472,7 +510,7 @@
                       <div class="AccordionPanelContent">
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
-                            <td width="19%"><p align="right">Calle</p></td>
+                            <td width="19%" height="50"><p align="right">Calle</p></td>
                             <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;" required value="<?php echo set_value('calle', ''); ?>"></td>
                             <td width="25%"><p align="right">Número</p></td>
                             <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo set_value('numero', ''); ?>"></td>
@@ -489,9 +527,12 @@
                           </tr>
                           <tr>
                             <td><p align="right">Localidad</p></td>
-                            <td colspan="3"><input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
+                            <td colspan="3">
+                            <div class="input-append" style="width:100%">
+                            <input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="cat">Seleccionar</a>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
+                            </td>
                           </tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
@@ -515,11 +556,11 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Historial de Alergias y Reacciones Febriles</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
-                        	<div id="alergias">
+                      	<div style="margin-left:20px; width:90%">
+                        	<div id="alergias" style="margin-left:10px;">
                             
                             </div>
-                        </code>
+                        </div>
                       </div>
                     </div>
                     
@@ -528,7 +569,7 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Vacunación</div>
                       <div class="AccordionPanelContent"><br />                      
-                      	<code style="margin-left:20px; width:60%">
+                      	<div style="margin-left:20px; width:90%">
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -551,13 +592,13 @@
 </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" value="Agregar" onclick="add('vacuna','vn','vc');" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="rem('vacuna','vn');" style="height:40px; width:80px;"/>  
+                                   <input type="button" class="btn btn-primary" value="Agregar"  onclick="add('vacuna','vn','vc');" style="height:40px; width:80px;"/> 
+                                   <input type="button" class="btn btn-primary" value="Quitar"   onclick="rem('vacuna','vn');" style="height:40px; width:80px;"/>  
                                    
                                   </td>
                               </tr>                     
                           </table>
-                        </code>
+                        </div>
                       </div>
                     </div>
                     
@@ -565,7 +606,7 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de IRA</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	<div style="margin-left:20px; width:90%">
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -588,13 +629,13 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" value="Agregar" onclick="add('ira','in','ic');" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="rem('ira','in');" style="height:40px; width:80px;"/>  
+                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('ira','in','ic');" style="height:40px; width:80px;"/> 
+                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('ira','in');" style="height:40px; width:80px;"/>  
                                   
                                   </td>
                               </tr>                     
                           </table>
-                        </code>
+                        </div>
                       </div>
                     </div>
                     
@@ -602,7 +643,7 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de EDA</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	<div style="margin-left:20px; width:90%">
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -625,13 +666,13 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" value="Agregar" onclick="add('eda','en','ec');" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="rem('eda','en');" style="height:40px; width:80px;"/>  
+                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('eda','en','ec');" style="height:40px; width:80px;"/> 
+                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('eda','en');" style="height:40px; width:80px;"/>  
                                    
                                   </td>
                               </tr>                     
                           </table>
-                        </code>
+                        </div>
                       </div>
                     </div>
                     
@@ -639,7 +680,7 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Consulta</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	<div style="margin-left:20px; width:90%">
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -662,13 +703,13 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" value="Agregar" onclick="add('consulta','ncc','ccc');" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="rem('consulta','ncc');" style="height:40px; width:80px;"/>  
+                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('consulta','ncc','ccc');" style="height:40px; width:80px;"/> 
+                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('consulta','ncc');" style="height:40px; width:80px;"/>  
                                                                       
                                   </td>
                               </tr>                     
                           </table>
-                        </code>
+                        </div>
                       </div>
                     </div>
                     
@@ -676,7 +717,7 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Acción Nutricional</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	<div style="margin-left:20px; width:90%">
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -699,20 +740,20 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" value="Agregar" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="rem('accion_nutricional','nac');" style="height:40px; width:80px;"/>  
+                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:80px;"/> 
+                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('accion_nutricional','nac');" style="height:40px; width:80px;"/>  
                                    
                                   </td>
                               </tr>                     
                           </table>
-                        </code>
+                        </div>
                       </div>
                     </div>
                     <!-- nutricion  -->
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control Nutricional</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	<div style="margin-left:20px; width:90%">
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -765,13 +806,13 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" value="Agregar" onclick="addNutricional();" style="height:40px; width:80px;"/> 
-                                   <input type="button" value="Quitar"  onclick="remNutricional();" style="height:40px; width:80px;"/>  
+                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="addNutricional();" style="height:40px; width:80px;"/> 
+                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="remNutricional();" style="height:40px; width:80px;"/>  
                                    
                                   </td>
                               </tr>                     
                           </table>
-                        </code>
+                        </div>
                       </div>
                     </div>                                        
                     
@@ -779,9 +820,10 @@
             </tr>
             <tr>
                 <td>
+                <br />
                 <span id="enviandoof" style="margin-left:-20px;">
-                <input type="submit" name="guardar" id="guardar" value="Guardar" />
-                <input type="button" value="Cancelar" onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" />
+                <input type="submit" name="guardar" id="guardar" value="Guardar" class="btn btn-primary" />
+                <input type="button" class="btn btn-primary" value="Cancelar" onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary" />
                 </span>
     			
                 </td>

@@ -1,3 +1,4 @@
+<link href="/resources/css/alert.css" rel="stylesheet" type="text/css" /> 
 <script type="text/javascript">
 $(document).ready(function()
 {
@@ -32,29 +33,28 @@ $opcion_view = Menubuilder::isGranted(DIR_TES.'::enrolamiento::view');
 $opcion_update = Menubuilder::isGranted(DIR_TES.'::enrolamiento::update');
 $opcion_delete = Menubuilder::isGranted(DIR_TES.'::enrolamiento::delete');
 ?>
-<h2><?php echo $title ?></h2>
 <?php 
 if(!empty($msgResult))
 	echo "<div class='".$this->session->flashdata('infoclass')."'>".$msgResult."</div>";
 ?>
-<fieldset style="width: 50%">
-    <legend>Opciones de búsqueda</legend>
+<div class="input-append"><h2><?php echo $title ?></h2>
+
 <?php echo form_open(DIR_TES.'/enrolamiento/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
 Buscar usuario
-<input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" /> 
-<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" />
+<input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" class="spa10" placeholder="Buscar Paciente" /> 
+<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" class="btn btn-primary"/>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/enrolamiento/insert" class="btn btn-primary" style="margin-left:5px">Crear nuevo</a><?php } ?>
 </form>
-</fieldset>
-<br />
-<table border="1">
+</div>
+<div class="table table-striped  " >
+<table width="100%">
 	<tr>
-		<th>CURP</th>
-		<th>Nombre</th>
-		<th>Ap. Paterno</th>
-		<th>Ap. Materno</th>
+		<th><h2>CURP</h2></th>
+		<th><h2>Nombre</h2></th>
+		<th><h2>Ap. Paterno</h2></th>
+		<th><h2>Ap. Materno</h2></th>
 		<?php if($opcion_view) { ?><td></td><?php } ?>
 		<?php if($opcion_update) { ?><td></td><?php } ?>
-		<?php if($opcion_delete) { ?><td></td><?php } ?>
 	</tr>
 	<?php if (isset($users)) foreach ($users as $user_item): ?>
 	<tr>
@@ -62,9 +62,8 @@ Buscar usuario
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
 		<td><?php echo $user_item->apellido_materno ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>">Ver detalles</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/delete/<?php echo $user_item->id ?>" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
 	</tr>
 	<?php endforeach ?>
     <tfoot>
@@ -73,5 +72,6 @@ Buscar usuario
         </td></tr>
     </tfoot>
 </table>
+</div>
 <iframe id="secretIFrame" src="" style="display:none; visibility:hidden;"></iframe>
-<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/enrolamiento/insert">Crear nuevo</a><?php } ?>
+
