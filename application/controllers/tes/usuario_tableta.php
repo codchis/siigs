@@ -53,6 +53,7 @@ class Usuario_tableta extends CI_Controller {
             $data = array();
 
             $data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['clsResult'] = $this->session->flashdata('clsResult');
             $data['title'] = 'Usuarios asignados a la tableta';
             $data['tableta'] = $this->Tableta_model->getById($idTableta);
             $data['grupos'] = $this->Grupo_model->getAll();
@@ -63,6 +64,7 @@ class Usuario_tableta extends CI_Controller {
             if( !empty($registroEliminar) ) {
                 $this->Usuario_tableta_model->delete($registroEliminar, $idTableta);
                 $data['msgResult'] = 'Registros Eliminados exitosamente';
+                $data['clsResult'] = 'success';
             }
             
             $usuariosTableta = $this->Usuario_tableta_model->getUsuariosByTableta($idTableta);
@@ -83,6 +85,7 @@ class Usuario_tableta extends CI_Controller {
             
         } catch (Exception $e) {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+            $data['clsResult'] = 'success';
         }
 
         $this->template->write_view('content',DIR_TES.'/usuario_tableta/index', $data);
@@ -113,14 +116,17 @@ class Usuario_tableta extends CI_Controller {
                 $this->Usuario_tableta_model->insert($id_usuario, $id_tableta);
 
                 $this->session->set_flashdata('msgResult', 'Registro guardado exitosamente');
+                $this->session->set_flashdata('clsResult', 'success');
 
                 Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro creado: Tableta = '.$id_tableta.' - Usuario = '.$id_usuario);
                 
             } else {
                 $this->session->set_flashdata('msgResult', 'Error: debe proporcionar un usuario');
+                $this->session->set_flashdata('clsResult', 'error');
             }
         } catch (Exception $e) {
             $this->session->set_flashdata('msgResult', 'Error: Debe proporcionar un usuario valido');
+            $this->session->set_flashdata('clsResult', 'error');
         }
         
         redirect(DIR_TES.'/usuario_tableta/index/'.$id_tableta, 'refresh');
@@ -150,8 +156,10 @@ class Usuario_tableta extends CI_Controller {
         try {
             $this->Usuario_tableta_model->delete($id_usuario, $id_tableta);
             $this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+            $this->session->set_flashdata('clsResult', 'success');
         } catch (Exception $e) {
             $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+            $this->session->set_flashdata('clsResult', 'error');
         }
 
         Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro eliminado: '.$id_usuario);

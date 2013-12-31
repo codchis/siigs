@@ -51,6 +51,7 @@ class Tableta extends CI_Controller {
 
             $data['pag'] = $pag;
             $data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['clsResult'] = $this->session->flashdata('clsResult');
             $data['title'] = 'Tableta';
             $data['tipos_censo'] = $this->Tipo_censo_model->getAll();
             $data['unidades_medicas'] = array();
@@ -60,6 +61,7 @@ class Tableta extends CI_Controller {
             if( !empty($registroEliminar) ) {
                 $this->Tableta_model->delete($registroEliminar);
                 $data['msgResult'] = 'Registros Eliminados exitosamente';
+                $data['clsResult'] = 'success';
             }
             
             // Configuración para el Paginador
@@ -83,6 +85,7 @@ class Tableta extends CI_Controller {
             }
         } catch (Exception $e) {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+            $data['clsResult'] = 'error';
         }
         
         $this->template->write_view('content',DIR_TES.'/tableta/index', $data);
@@ -112,6 +115,7 @@ class Tableta extends CI_Controller {
             $datos = $this->input->post();
             $data['title'] = 'Crear un nuevo registro';
             $data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['clsResult'] = $this->session->flashdata('clsResult');
 
             if(!empty($datos)) {
                 $this->load->library('form_validation');
@@ -124,16 +128,19 @@ class Tableta extends CI_Controller {
                     $this->Tableta_model->insert();
                     
                     $this->session->set_flashdata('msgResult', 'Registro guardado exitosamente');
+                    $this->session->set_flashdata('clsResult', 'success');
 
                     Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro creado: '.$this->Tableta_model->getId());
                     //redirect(DIR_TES.'/tableta/', 'refresh');
                     //die();
                 } else {
                     $this->session->set_flashdata('msgResult', validation_errors());
+                    $this->session->set_flashdata('clsResult', 'error');
                 }
             }
         } catch (Exception $e) {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+            $data['clsResult'] = 'error';
         }
 
         //$this->template->write_view('content',DIR_TES.'/tableta/insert', $data);
@@ -190,12 +197,14 @@ class Tableta extends CI_Controller {
 
                     Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro actualizado: '.$id);
                     $this->session->set_flashdata('msgResult', 'Registro guardado exitosamente');
+                    $this->session->set_flashdata('clsResult', 'success');
                     redirect(DIR_TES.'/tableta/', 'refresh');
                     die();
                 }
             }
         } catch (Exception $e) {
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+            $data['clsResult'] = 'error';
         }
 
         $this->template->write_view('content',DIR_TES.'/tableta/update', $data);
@@ -227,9 +236,11 @@ class Tableta extends CI_Controller {
 
             if( empty($data['registro']) ) {
                 $data['msgResult'] = 'ERROR: El registro solicitado no existe';
+                $data['clsResult'] = 'error';
             }
         } catch (Exception $e) { 
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+            $data['clsResult'] = 'error';
         }
 
         $this->template->write_view('content',DIR_TES.'/tableta/view', $data);
@@ -256,8 +267,10 @@ class Tableta extends CI_Controller {
         try {
             $this->Tableta_model->delete($id);
             $this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+            $this->session->set_flashdata('clsResult', 'success');
         } catch (Exception $e) {
             $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+            $this->session->set_flashdata('clsResult', 'error');
         }
 
         Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro eliminado: '.$id);
@@ -311,6 +324,7 @@ class Tableta extends CI_Controller {
         try {
             if ( !$this->upload->do_upload('archivo') ) {
                 $this->session->set_flashdata('msgResult', $this->upload->display_errors());
+                $this->session->set_flashdata('clsResult', 'error');
             } else {
                 $archivo = $this->upload->data();
                 $fichero = @fopen($archivo['full_path'], "r");
@@ -330,20 +344,24 @@ class Tableta extends CI_Controller {
 
                     if(!feof($fichero)) {
                         $this->session->set_flashdata('msgResult', 'Error al leer el archivo '.$archivo['file_name']);
+                        $this->session->set_flashdata('clsResult', 'error');
                     } else {
                         if(!empty($errores)) {
                             $msjErrores = 'Las siguientes direccciones MAC ya estan registradas en el sistema: '.implode(', ', $errores).'.';
                         }
                         
                         $this->session->set_flashdata('msgResult', 'Datos registrados correctamente. '.$msjErrores);
+                        $this->session->set_flashdata('clsResult', 'success');
                     }
                     fclose($fichero);
                 } else {
                     $this->session->set_flashdata('msgResult', 'Error al leer el archivo '.$archivo['file_name']);
+                    $this->session->set_flashdata('clsResult', 'error');
                 }
             }
         } catch (Exception $e) {
             $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+            $this->session->set_flashdata('clsResult', 'error');
         }
         
         redirect(DIR_TES.'/tableta/', 'refresh');
@@ -351,8 +369,10 @@ class Tableta extends CI_Controller {
     
     /**
      * Asignar unidad medica y tipo de censo
+     * 
+     * @param int $id
+     * @return redirect
      */
-     
     public function setUM($id)
     {
         if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
@@ -375,9 +395,11 @@ class Tableta extends CI_Controller {
 
                 Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro actualizado: '.$id);
                 $this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
+                $this->session->set_flashdata('clsResult', 'success');
             }
         } catch (Exception $e) {
-            $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+            $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+            $this->session->set_flashdata('clsResult', 'error');
         }
         
         redirect(DIR_TES.'/tableta/', 'refresh');

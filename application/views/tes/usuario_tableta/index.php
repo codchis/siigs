@@ -11,19 +11,19 @@
     .validateTips { border: 1px solid transparent; padding: 0.3em; }
 </style>
 
-<h2><?=$title;?></h2>
 <?php
 $showInsert = Menubuilder::isGranted(DIR_TES.'::usuario_tableta::insert');
 $showDelete = Menubuilder::isGranted(DIR_TES.'::usuario_tableta::delete');
     
 if(!empty($msgResult))
-    echo '<strong>'.$msgResult.'</strong><br />';
+    echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 
 echo form_open(site_url().DIR_TES.'/usuario_tableta/index/'.$tableta->id, array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); 
 
-echo 'Datos generales de la tableta: 
+echo '<center><strong>Datos generales de la tableta</strong></center>
 
-<table>
+<div class="table table-striped" align="center">
+<table align="center">
     <tr>
         <td>Direcci&oacute;n MAC</td>
         <td>Versi&oacute;n</td>
@@ -38,10 +38,14 @@ echo 'Datos generales de la tableta:
         <td>'.$tableta->status.'</td>
         <td>'.$tableta->tipo_censo.'</td>
     </tr>
-</table>';
+</table>
+</div>';
 ?>
 
-<table border="1">
+<h2><?=$title;?></h2>
+
+<div class="table table-striped">
+<table>
     <thead>
         <tr>
             <?php if($showDelete) echo '<th></th>'; ?>
@@ -73,10 +77,14 @@ echo 'Datos generales de la tableta:
         ?>
     </tbody>
 </table>
+</div>
 
 <?php 
     if($showDelete)
-        echo '<input type="submit" value="Eliminar Seleccionados" />';
+        echo '<input type="submit" value="Eliminar Seleccionados" class="btn btn-primary" /> &nbsp; ';
+    
+    if($showInsert)
+        echo '<button id="agregarUsuario" class="btn btn-primary">Asignar nuevo usuario a la Tableta</button>';
 ?>
 
 </form>
@@ -135,7 +143,10 @@ $(function() {
         }
     });
 
-    $("#agregarUsuario").button().click(function() {
+    $("#agregarUsuario").click(function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        
         $("#dialog-form").dialog("open");
     });
     
@@ -181,9 +192,5 @@ $(function() {
     </form>
 </div>
 
-<?php 
-if($showInsert)
-    echo '<button id="agregarUsuario">Asignar nuevo usuario a la Tableta</button>';
-?>
-<br /><br />
-<input type="button" name="registrarTableta" id="registrarTableta" value="Regresar al listado de tabletas" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta'" />
+<br />
+<input type="button" name="registrarTableta" id="registrarTableta" class="btn btn-primary" value="Regresar al listado de tabletas" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta'" />

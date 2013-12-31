@@ -43,7 +43,7 @@ class Errorlog extends CI_Controller {
 
         try {
             $this->load->library('pagination');
-            $this->load->helper('form');
+            $this->load->helper(array('form','formatFecha'));
             $this->load->model( array(DIR_SIIGS.'/usuario_model', DIR_SIIGS.'/entorno_model', DIR_SIIGS.'/controlador_model', DIR_SIIGS.'/Accion_model') );
 
             $filtros = array();
@@ -92,10 +92,10 @@ class Errorlog extends CI_Controller {
                                 $this->Errorlog_model->addFilter('id_usuario', '=', $valor);
                                 break;
                             case 'fechaIni':
-                                $this->Errorlog_model->addFilter('fecha_hora', '>=', $valor);
+                                $this->Errorlog_model->addFilter('fecha_hora', '>=', formatFecha($valor, "Y-m-d"));
                                 break;
                             case 'fechaFin':
-                                $this->Errorlog_model->addFilter('fecha_hora', '<=', $valor.' 23:59:59');
+                                $this->Errorlog_model->addFilter('fecha_hora', '<=', formatFecha($valor, "Y-m-d").' 23:59:59');
                                 break;
                             case 'entorno':
                                 $this->Errorlog_model->addFilter('id_entorno', '=', $valor);
@@ -154,6 +154,7 @@ class Errorlog extends CI_Controller {
 
             if( empty($data['registro']) ) {
                 $data['msgResult'] = 'ERROR: El registro de error solicitado no existe';
+                $data['clsResult'] = 'error';
             }
         } catch (Exception $e) { }
 

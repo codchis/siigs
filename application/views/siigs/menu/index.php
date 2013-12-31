@@ -85,9 +85,9 @@ $(document).ready(function(){
             <th><h2>Nombre</h2></th>
             <th><h2>Ruta</h2></th>
             <th><h2>Controlador</h2></th>
-            <?php if($showView) echo '<th><h2>Ver</h2></th>'; ?>
-            <?php if($showUpdate) echo '<th><h2>Modificar</h2></th>'; ?>
-            <?php if($showDelete) echo '<th><h2>Eliminar</h2></th>'; ?>
+            <?php if($showView) echo '<th><h2></h2></th>'; ?>
+            <?php if($showUpdate) echo '<th><h2></h2></th>'; ?>
+            <?php if($showDelete) echo '<th><h2></h2></th>'; ?>
         </tr>
     </thead>
     <tbody>

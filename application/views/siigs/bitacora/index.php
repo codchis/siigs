@@ -71,41 +71,37 @@ $(document).ready(function(){
 <h2><?=$title;?></h2>
 
 <?php 
-$showDelete = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::delete');
+$showDelete = false;//Menubuilder::isGranted(DIR_SIIGS.'::bitacora::delete');
 $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
 ?>
 
-<fieldset>
-    <legend><strong>Opciones de filtrado</strong></legend>
     <?php echo form_open(site_url().DIR_SIIGS.'/bitacora/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
         <p><input type="hidden" name="filtrar" value="true" />
-
         Usuario:
         <?php  if(isset($usuarios)) echo form_dropdown('usuario', $usuarios); ?>
-        Fecha: <input type="text" name="fechaIni" id="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" size="10" placeholder="desde" />
-               <input type="text" name="fechaFin" id="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" size="10" placeholder="hasta" /> 
-               <input type="button" value="Limpiar Fechas" id="limpiaFecha" />
+        Fecha: <input type="text" name="fechaIni" id="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" size="8" placeholder="desde" />
+               <input type="text" name="fechaFin" id="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" size="8" placeholder="hasta" /> 
+               <input type="button" value="Limpiar Fechas" id="limpiaFecha" class="btn btn-mini btn-primary" />
         </p>
         <p>Entorno:
             <?php  if(isset($entornos)) echo form_dropdown('entorno', $entornos); ?>
         Controlador:
             <?php  if(isset($controladores)) echo  form_dropdown('controlador', $controladores);?>
         Acción:
-            <?php  if(isset($acciones)) echo  form_dropdown('accion', $acciones);?> <br /><br /></p>
-        <input type="button" name="btnFiltrar" id="btnFiltrar" value="Filtrar" />
+            <?php  if(isset($acciones)) echo  form_dropdown('accion', $acciones);?></p>
+        <input type="button" name="btnFiltrar" id="btnFiltrar" value="Filtrar" class="btn btn-primary" />
     </form>
-</fieldset>
 
-<br />
 <?php
     if(!empty($msgResult))
-        echo '<strong>'.$msgResult.'</strong>';
+        echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 ?>
 <br />
 
 <?php echo form_open(site_url().DIR_SIIGS.'/bitacora/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
 
-<table border="1">
+<div class="table table-striped">
+<table>
     <thead>
         <tr>
             <?php if($showDelete) echo '<th></th>'; ?>
@@ -116,7 +112,7 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
             <th>Entorno</th>
             <th>Controlador</th>
             <th>Acción</th>
-            <?php if($showView) echo '<th>Ver detalles</th>'; ?>
+            <?php if($showView) echo '<th></th>'; ?>
         </tr>
     </thead>
     <tbody>
@@ -134,7 +130,7 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
                     <td>'.htmlentities($fila->entorno).'</td>
                     <td>'.htmlentities($fila->controlador).'</td>
                     <td>'.htmlentities($fila->accion).'</td>';
-                    if($showView) echo '<td><a href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'">Ver</a></td>';
+                    if($showView) echo '<td><a href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'" class="btn btn-small btn-primary">Ver</a></td>';
                 echo '</tr>';
             }
         } else {
@@ -148,5 +144,6 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
         </td></tr>
     </tfoot>
 </table>
+</div>
 
 </form>

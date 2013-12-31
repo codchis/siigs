@@ -52,6 +52,7 @@ class Bitacora extends CI_Controller {
 
             $data['pag'] = $pag;
             $data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['clsResult'] = $this->session->flashdata('clsResult');
             $data['title'] = 'Bitacora';
             
             /*** Inicia Campos para Filtros ***/
@@ -87,6 +88,7 @@ class Bitacora extends CI_Controller {
 
             if( !empty($registroEliminar) ) {
                 $this->Bitacora_model->delete($registroEliminar);
+                $data['clsResult'] = 'success';
                 $data['msgResult'] = 'Registros Eliminados exitosamente';
             }
 
@@ -134,6 +136,7 @@ class Bitacora extends CI_Controller {
 
             $data['registros'] = $this->Bitacora_model->getAll($configPag['per_page'], $pag);
         } catch (Exception $e) {
+            $data['clsResult'] = 'error';
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
 
@@ -148,7 +151,7 @@ class Bitacora extends CI_Controller {
      * @access public
      * @return void
      */
-    public function insert()
+    /*public function insert()
     {
         if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
@@ -191,6 +194,7 @@ class Bitacora extends CI_Controller {
 
             $datos = $this->input->post();
             $data['title'] = 'Crear un nuevo registro';
+            $data['clsResult'] = $this->session->flashdata('clsResult');
             $data['msgResult'] = $this->session->flashdata('msgResult');
 
             if(!empty($datos)) {
@@ -207,17 +211,19 @@ class Bitacora extends CI_Controller {
                         redirect(DIR_SIIGS.'/bitacora/', 'refresh');
                         die();
                     } else {
+                        $data['clsResult'] = 'error';
                         $data['msgResult'] = 'Ocurrió un error al intentar guardar el registro';
                     }
                 }
             }
         } catch (Exception $e) {
+            $data['clsResult'] = 'error';
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
 
         $this->template->write_view('content',DIR_SIIGS.'/bitacora/insert', $data);
 		$this->template->render();
-    }
+    }*/
 
     /**
      * Muestra el formulario con los datos del registro especificado por el id,
@@ -227,7 +233,7 @@ class Bitacora extends CI_Controller {
      * @param  int    $id ID del elemento a actualizar
      * @return void
      */
-    public function update($id)
+    /*public function update($id)
     {
         if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
@@ -252,6 +258,7 @@ class Bitacora extends CI_Controller {
             $data['registro'] = $this->Bitacora_model->getById($id);
 
             if( empty($data['registro']) )
+                $data['clsResult'] = 'error';
                 $data['msgResult'] = 'El registro solicitado no existe';
 
             if(!empty($datos)) {
@@ -276,12 +283,13 @@ class Bitacora extends CI_Controller {
                 }
             }
         } catch (Exception $e) { 
+            $data['clsResult'] = 'error';
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
         }
 
         $this->template->write_view('content',DIR_SIIGS.'/bitacora/update', $data);
 		$this->template->render();
-    }
+    }*/
 
     /**
      * Muestra los datos del registro especificado por el id
@@ -306,16 +314,25 @@ class Bitacora extends CI_Controller {
 
             if( empty($data['registro']) ) {
                 $data['msgResult'] = 'ERROR: El registro solicitado no existe';
+                $data['clsResult'] = 'error';
             }
         } catch (Exception $e) { 
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+            $data['clsResult'] = 'error';
         }
 
         $this->template->write_view('content',DIR_SIIGS.'/bitacora/view', $data);
 		$this->template->render();
     }
 
-    public function delete($id)
+    /**
+     * Elimina el registro especificado por el id
+     *
+     * @access public
+     * @param  int    $id ID del elemento a eliminar
+     * @return void
+     */
+    /*public function delete($id)
     {
         if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
@@ -328,13 +345,15 @@ class Bitacora extends CI_Controller {
         try {
             $this->Bitacora_model->delete($id);
             $this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');;
+            $this->session->set_flashdata('clsResult', 'success');
         } catch (Exception $e) {
             $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+            $this->session->set_flashdata('clsResult', 'error');
         }
 
         redirect(DIR_SIIGS.'/bitacora/', 'refresh');
         die();
-    }
+    }*/
 
     /**
      * callback utilizado por las acciones create y update para validar la existencia de un usuario
@@ -357,5 +376,4 @@ class Bitacora extends CI_Controller {
     }
 
 }
-
 ?>

@@ -17,10 +17,10 @@
 </style>
 
 <h2><?=$title;?></h2>
-<br />
+
 <?php
     if(!empty($msgResult))
-        echo '<strong>'.$msgResult.'</strong>';
+        echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
     
     echo validation_errors();
     
@@ -29,11 +29,28 @@
     $showDelete = Menubuilder::isGranted(DIR_TES.'::tableta::delete');
     $showView   = Menubuilder::isGranted(DIR_TES.'::tableta::view');
 ?>
-<br />
 
-<?php echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
+<?php 
+if($showInsert) {
+    ?>
+    <label>Registrar direcciones MAC desde un archivo de texto</label>
+    <?php echo form_open_multipart(site_url().DIR_TES.'/tableta/uploadFile');?>
+        <input type="file" name="archivo" size="60" class="btn btn-primary" />
+        <input type="submit" value="Subir Archivo" class="btn btn-primary" />
+    </form>
+    <?php 
+}
 
-<table border="1">
+echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
+
+<?php 
+    if($showInsert) echo '<input type="button" name="registrarTableta" id="registrarTableta" value="Registrar nuevo" class="btn btn-primary" /> &nbsp; ';
+
+    if($showDelete) echo '<input type="submit" value="Eliminar Seleccionados" class="btn btn-primary" />'; 
+?>
+
+<div class="table table-striped">
+<table>
     <thead>
         <tr>
             <?php if($showDelete) echo '<th></th>'; ?>
@@ -44,9 +61,9 @@
             <th>Tipo Censo</th>
             <th>Unidad Médica</th>
             <th>Usuarios</th>
-            <?php if($showView) echo '<th>Ver</th>'; ?>
-            <?php if($showUpdate) echo '<th>Modificar</th>'; ?>
-            <?php if($showDelete) echo '<th>Eliminar</th>'; ?>
+            <?php if($showView) echo '<th></th>'; ?>
+            <?php if($showUpdate) echo '<th></th>'; ?>
+            <?php if($showDelete) echo '<th></th>'; ?>
         </tr>
     </thead>
     <tbody>
@@ -64,47 +81,32 @@
                     <td>'.htmlentities($fila->tipo_censo).'</td>
                     <td><a href="/'.DIR_TES.'/tree/create/TES/Unidad Médica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/'.
                         urlencode(json_encode(array(null))).'/'.urlencode(json_encode(array(($fila->id_asu_um==0 ? null : $fila->id_asu_um)))).'" '.
-                        'class="agregarUM" data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'">'.
-                        ($fila->id_asu_um==0 ? 'No asignado' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'">'.($fila->usuarios_asignados==0 ? 'No asignados' : 'Ver').'</a></td>';
+                        'class="agregarUM '.($fila->id_asu_um==0 ? 'btn btn-small btn-primary' : '').'" '
+                        . 'data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'">'.
+                        ($fila->id_asu_um==0 ? 'Asignar' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
+                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'" class="btn btn-small btn-primary">'.($fila->usuarios_asignados==0 ? 'Asignar' : 'Ver').'</a></td>';
                     
-                    if($showView) echo '<td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'">Ver</a></td>';
+                    if($showView) echo '<td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary">Ver</a></td>';
                     
-                    if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'">Modificar</a></td>';
+                    if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'" class="btn btn-small btn-primary">Modificar</a></td>';
                     
                     if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
+                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary">Eliminar</a></td>';
                 echo '</tr>';
             }
         } else {
-            echo '<tr><td colspan="7"><div align="center">No se encontraron registros en la busqueda</div></td></tr>';
+            echo '<tr><td colspan="11"><div align="center">No se encontraron registros en la busqueda</div></td></tr>';
         }
         ?>
     </tbody>
     <tfoot>
-        <tr><td colspan="7">
+        <tr><td colspan="11">
             <div id="paginador" align="center"><?php echo $this->pagination->create_links(); ?></div>
         </td></tr>
     </tfoot>
 </table>
-
-<?php if($showDelete) echo '<input type="submit" value="Eliminar Seleccionados" />'; ?>
-
+</div>
 </form>
-<br />
-
-<?php 
-if($showInsert) {
-    echo '<input type="button" name="registrarTableta" id="registrarTableta" value="Registrar nuevo" /><br /><br />';
-    ?>
-    <label>Subir un archivo con la lista de direcciones MAC</label>
-    <?php echo form_open_multipart(site_url().DIR_TES.'/tableta/uploadFile');?>
-        <input type="file" name="archivo" size="60" />
-        <input type="submit" value="Subir Archivo" />
-    </form>
-    <?php 
-}
-?>
 
 <script type="text/javascript">
 actionSetUM = '<?php echo site_url().DIR_TES.'/tableta/setUM/'; ?>';
