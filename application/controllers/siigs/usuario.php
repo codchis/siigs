@@ -40,7 +40,9 @@ class Usuario extends CI_Controller {
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nombre_usuario', 'Nombre de Usuario', 'trim|required');
 			$this->form_validation->set_rules('clave', 'Clave', 'trim|required|md5');
-				
+			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['clsResult'] = $this->session->flashdata('clsResult');
+			
 			if ($this->form_validation->run() === FALSE)
 			{
 				$this->template->write_view('content',DIR_SIIGS.'/usuario/login', $data);
@@ -53,7 +55,10 @@ class Usuario extends CI_Controller {
 				if ($rowUser)
 				{
 					if (!$rowUser->activo)
+					{
 						$data['msgResult'] = 'La cuenta de usuario proporcionada se encuentra inactiva.';
+						$data['clsResult'] = 'warning';
+					}
 					else
 					{
 						// almacena en session las variables necesarias
@@ -69,6 +74,7 @@ class Usuario extends CI_Controller {
 						if (!$this->session->userdata(REDIRECT_TO))
 						{
 							$this->session->set_flashdata('msgResult', 'Inicio de sesión exitoso');
+							$this->session->set_flashdata('clsResult', 'success');
 							redirect(DIR_SIIGS.'/usuario','refresh'); // aca se debe poner la pagina HOME
 						}
 						else
@@ -76,11 +82,15 @@ class Usuario extends CI_Controller {
 					}
 				}
 				else
+				{
 					$data['msgResult'] = 'Nombre de usuario o clave incorrecta.';
+					$data['clsResult'] = 'warning';
+				}
 			}
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 		$this->template->write_view('content',DIR_SIIGS.'/usuario/login', $data);
 		$this->template->render();
@@ -123,7 +133,8 @@ class Usuario extends CI_Controller {
 			$this->load->library('pagination');
 			
 			$data['pag'] = $pag;
-			$data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['clsResult'] = $this->session->flashdata('clsResult');
 			
 			// Configuración para el Paginador
 			$configPag['base_url']   = '/'.DIR_SIIGS.'/usuario/index/';
@@ -131,7 +142,7 @@ class Usuario extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['uri_segment'] = '4';
 			$configPag['total_rows'] = $this->Usuario_model->getNumRows($this->input->post('busqueda'));
-			$configPag['per_page']   = 20;
+			$configPag['per_page']   = REGISTROS_PAGINADOR;
 			$this->pagination->initialize($configPag);
 			if ($this->input->post('busqueda'))
 				$data['users'] = $this->Usuario_model->getOnlyActives($this->input->post('busqueda'), FALSE, $configPag['per_page'], $pag);
@@ -140,6 +151,7 @@ class Usuario extends CI_Controller {
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 		//$this->load->view('usuario/index', $data);
  		$this->template->write_view('content',DIR_SIIGS.'/usuario/index', $data);
@@ -166,6 +178,7 @@ class Usuario extends CI_Controller {
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
  		$this->template->write_view('content',DIR_SIIGS.'/usuario/view', $data);
  		$this->template->render();
@@ -222,10 +235,12 @@ class Usuario extends CI_Controller {
 				$this->Usuario_model->setIdGrupo($this->input->post('id_grupo'));
 				$this->Usuario_model->insert();
 				$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario agregado: '.strtoupper($this->input->post('nombre_usuario')));
 				redirect(DIR_SIIGS.'/usuario','refresh');
 			}
 			catch (Exception $e){
+				$data['clsResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				$this->template->write_view('content',DIR_SIIGS.'/usuario/insert', $data);
 				$this->template->render();
@@ -278,14 +293,18 @@ class Usuario extends CI_Controller {
 				$this->Usuario_model->setApellidoPaterno($this->input->post('apellido_paterno'));
 				$this->Usuario_model->setApellidoMaterno($this->input->post('apellido_materno'));
 				$this->Usuario_model->setCorreo($this->input->post('correo'));
-				$this->Usuario_model->setActivo($this->input->post('activo'));
+				$this->Usuario_model->setActivo(0);
+				if ($this->input->post('activo') == 'on')
+					$this->Usuario_model->setActivo(1);
 				$this->Usuario_model->setIdGrupo($this->input->post('id_grupo'));
 				$this->Usuario_model->update();
 				$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario actualizado: '.$id);
 				redirect(DIR_SIIGS.'/usuario','refresh');
 			}
 			catch (Exception $e){
+				$data['clsResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				$this->template->write_view('content',DIR_SIIGS.'/usuario/update', $data);
 				$this->template->render();
@@ -310,9 +329,11 @@ class Usuario extends CI_Controller {
 			$this->Usuario_model->setId($id);
 			$this->Usuario_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+			$this->session->set_flashdata('clsResult', 'success');
 			Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario eliminado: '.$id);
 		}
 		catch (Exception $e){
+			$this->session->set_flashdata('clsResult', 'error');
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
 		}
 	    redirect(DIR_SIIGS.'/usuario','refresh');

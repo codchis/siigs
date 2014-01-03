@@ -17,10 +17,10 @@
 		              if (acciones.length > 0)
 		              {
 		                  var numControladores = acciones.length/numAcciones;
-		            	  var vHtml = '<table><thead><tr><td>CONTROLADOR</td>';
+		            	  var vHtml = '<div class=\'table table-striped\'><table><thead><tr><th><h2>CONTROLADOR</h2></th>';
 		            	  var ctrAnterior = '';
 		            	  for (i = 0; i < numAcciones; ++i) {
-		            	      vHtml += '<td>'+acciones[i].accion+'</td>';
+		            	      vHtml += '<th><h2>'+acciones[i].accion+'</h2></th>';
 		            	  }
 		            	  vHtml += '</tr></thead>';
 		                  $.each(acciones,function(obj)
@@ -35,6 +35,7 @@
 							  vHtml += '></td>';
 		                      ctrAnterior = acciones[obj].controlador;
 		                  });
+		                  vHtml += '</tr></table></div>';
 		            	  $('#acciones').html(vHtml);
 		              }
 		              else $('#acciones').html('');
@@ -50,7 +51,7 @@
 </script>
 <h2><?php echo $title; ?></h2>
 <?php if(!empty($msgResult))
-        echo $msgResult.'<br /><br />';
+        echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	if (isset($actions)) { 
 	echo validation_errors(); 
 	echo form_open(DIR_SIIGS.'/grupo/'.$id_grupo.'/permiso') ?>
@@ -60,7 +61,8 @@
 <div id="acciones" style="overflow: auto"></div>
 <input type="hidden" name="id_grupo" id="id_grupo" value="<?php echo $id_grupo;?>" />
 <input type="hidden" name="numAcciones" id="numAcciones" value="<?php echo count($actions);?>" />
-<input type="submit" name="btnGuardar" id="btnGuardar" value="Guardar" />
+<input type="submit" name="btnGuardar" id="btnGuardar" value="Guardar" class="btn btn-primary"  />
+<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/grupo/'" class="btn btn-primary" />
 </form>
 <?php } else {?>
 <table>
@@ -71,4 +73,3 @@
 </thead>
 </table>
 <?php } ?>
-	

@@ -4,7 +4,8 @@
         echo $msgResult.'<br /><br />';
 	echo validation_errors(); 
 	echo form_open(DIR_SIIGS.'/usuario/insert') ?>
-<table border="1">
+<div class="table table-striped">
+	<table>
 	<tr>
 		<td><label for="id_grupo">Grupo</label></td>
 		<td><?php echo form_dropdown('id_grupo', $grupos, ($this->input->post('id_grupo')) ? $this->input->post('id_grupo') : '-1'); ?></td>
@@ -38,7 +39,9 @@
 		<td><input type="text" name="correo" value="<?php echo set_value('correo', ''); ?>" /></td>
 	</tr>
 	<tr>
-		<td colspan=2><input type="submit" name="submit" value="Guardar" /><td>
+		<td colspan=2><input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
+		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/usuario/'" class="btn btn-primary" /><td>
 	</tr>
 </table>
+</div>
 </form>

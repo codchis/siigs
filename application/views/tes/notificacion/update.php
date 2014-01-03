@@ -18,10 +18,11 @@ $(document).ready(function(){
 </script>
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
-        echo $msgResult.'<br /><br />';
+        echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	echo validation_errors(); 
 	echo form_open(DIR_TES.'/notificacion/update/'.$notificacion_item->id) ?>
-<table border="1">
+<div class="table table-striped">
+	<table>
 	<tr>
 		<td><label for="titulo">Titulo</label></td>
 		<td><input type="text" name="titulo" value="<?php echo $notificacion_item->titulo ?>" /></td>
@@ -42,13 +43,15 @@ $(document).ready(function(){
 		<td><label for="id_arr_asu">Reportar a tabletas</label></td>
 		<td><input type="text" name="id_arr_asuT" id="id_arr_asuT" readonly="true" value="<?php echo implode(', ', $notificacion_item->tabletas) ?>" />
 		<input type="hidden" name="id_arr_asu" id="id_arr_asu" readonly="true" value="<?php echo $notificacion_item->id_arr_asu ?>" />
-		<a href='/<?php echo DIR_TES?>/tree/create/TES/Tabletas a notificar/2/check/0/id_arr_asu/id_arr_asuT/1/1/<?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(explode(', ', $notificacion_item->id_arr_asu)));?>' id="tabletas" class="cat">Seleccionar</a>
+		<a href='/<?php echo DIR_TES?>/tree/create/TES/Tabletas a notificar/2/check/0/id_arr_asu/id_arr_asuT/1/1/<?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(explode(', ', $notificacion_item->id_arr_asu)));?>' id="tabletas"  class="btn btn-primary">Seleccionar</a>
 	</tr>
 	<tr>
 		<td colspan="2">
 		<input type="hidden" name="id" value="<?php echo $notificacion_item->id; ?>"/>
-		<input type="submit" name="submit" value="Guardar" />
+		<input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
+		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_TES; ?>/notificacion/'" class="btn btn-primary" />
 		<td>
 	</tr>
 </table>
+</div>
 </form>

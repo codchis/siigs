@@ -47,7 +47,8 @@ class Grupo extends CI_Controller {
 			$this->load->library('pagination');
 				
 			$data['pag'] = $pag;				
-			$data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['clsResult'] = $this->session->flashdata('clsResult');
 
 			// Configuración para el Paginador
 			$configPag['base_url']   = '/'.DIR_SIIGS.'/grupo/index/';
@@ -55,7 +56,7 @@ class Grupo extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['uri_segment'] = '4';
 			$configPag['total_rows'] = $this->Grupo_model->getNumRows($this->input->post('busqueda'));
-			$configPag['per_page']   = 20;
+			$configPag['per_page']   = REGISTROS_PAGINADOR;
 			$this->pagination->initialize($configPag);
 			if ($this->input->post('busqueda'))
 				$data['groups'] = $this->Grupo_model->getAll($this->input->post('busqueda'), $configPag['per_page'], $pag);
@@ -64,6 +65,7 @@ class Grupo extends CI_Controller {
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
  		$this->template->write_view('content',DIR_SIIGS.'/grupo/index', $data);
  		$this->template->render();
@@ -87,7 +89,8 @@ class Grupo extends CI_Controller {
 			$data['group_item'] = $this->Grupo_model->getById($id);
 		}
 		catch(Exception $e){
-			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);		
+			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);	
+			$data['clsResult'] = 'error';
 		}
  		$this->template->write_view('content',DIR_SIIGS.'/grupo/view', $data);
  		$this->template->render();
@@ -108,7 +111,7 @@ class Grupo extends CI_Controller {
 		$data['title'] = 'Crear un nuevo grupo';
 		$this->load->helper('form');
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|alpha_numeric|required|callback__ifGroupExists|max_length[20]');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|callback__ifGroupExists|max_length[20]');
 		$this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|xss_clean|max_length[100]');
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -122,11 +125,13 @@ class Grupo extends CI_Controller {
 				$this->Grupo_model->setDescripcion($this->input->post('descripcion'));
 				$this->Grupo_model->insert();
 				$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Grupo agregado: '.strtoupper($this->input->post('nombre')));
 				redirect(DIR_SIIGS.'/grupo','refresh');
 			}
 			catch(Exception $e){
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_SIIGS.'/grupo/insert', $data);
 				$this->template->render();
 			}
@@ -164,11 +169,13 @@ class Grupo extends CI_Controller {
 				$this->Grupo_model->setDescripcion($this->input->post('descripcion'));
 				$this->Grupo_model->update();
 				$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Grupo actualizado: '.$id);
 				redirect(DIR_SIIGS.'/grupo','refresh');			
 			}
 			catch(Exception $e){
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_SIIGS.'/grupo/update', $data);
 				$this->template->render();
 			}
@@ -192,9 +199,11 @@ class Grupo extends CI_Controller {
 			$this->Grupo_model->setId($id);
 			$this->Grupo_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+			$this->session->set_flashdata('clsResult', 'success');
 			Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Grupo eliminado: '.$id);
 		}
 		catch(Exception $e){
+			$this->session->set_flashdata('clsResult', 'error');
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
 		}
 		redirect(DIR_SIIGS.'/grupo','refresh');
