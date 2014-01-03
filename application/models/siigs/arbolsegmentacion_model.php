@@ -288,6 +288,8 @@ class ArbolSegmentacion_model extends CI_Model {
             }
             else
             {  
+                ini_set('max_execution_time',1000);
+                
                 $arbol = $this->getTree($idarbol, $nivel, $omitidos);
                 if (count($arbol) == 0)
                 {
@@ -306,9 +308,9 @@ class ArbolSegmentacion_model extends CI_Model {
                             if ($fila['id_'.$i] != null)
                             {
                                 if ($i == $arbol['niveles'])
-                                    $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> $fila['descripcion_'.$i]);
+                                    $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> utf8_encode($fila['descripcion_'.$i]));
                                 else
-                                    $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> $fila['descripcion_'.$i] , 'children'=>array());    
+                                    $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> utf8_encode($fila['descripcion_'.$i]) , 'children'=>array());    
 
                                 if (in_array($fila['id_'.$i],$seleccionados))
                                         $arraytemp["select"] = true;
@@ -363,7 +365,7 @@ class ArbolSegmentacion_model extends CI_Model {
             {
                 if (array_key_exists('children', $dato) && count($dato['children'])>0)
                 {
-                    $dato['children'] = $this->_addSelectedItems($dato['children'],$seleccionados);
+                    $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados);
                 }
                 if (in_array($dato["key"],$seleccionados))
                 {
