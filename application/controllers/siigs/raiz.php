@@ -508,8 +508,38 @@ class Raiz extends CI_Controller {
 				$llave = $item->nombre_columna_llave;
 				$descripcion = $item->nombre_columna_descripcion;
 				
+                                 $consulta = "select  a.".$llave." as llave, ";
+					$consulta .=  "a.".$descripcion." as descripcion ";
+					$consulta .= " from ".$tabla." a";
+                                        //$consulta .= " left outer join asu_arbol_segmentacion b on a.".$llave." = b.id_tabla_original and b.id_raiz=".$id." and b.grado_segmentacion = ".$nivel." where b.id = null";
+					$consulta .= " where a.".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+                                        
+                                        echo $consulta;
+                                        
+					//$filas = $this->db->query($consulta);
+                                        //print_r($filas->num_rows());
+//                                        
+                                        echo "<br/><br/><br/>";
+                                        continue;
+                                
 				if ($nivel > 1)
 				{
+                                    
+                                    $consulta = "select  ".$tabla.".".$llave." as llave, ";
+					$consulta .=  $tabla.".".$descripcion." as descripcion ";
+					$consulta .= " from ".$tabla;
+					$consulta .= " where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+                                        
+                                        echo $consulta;
+                                        //                                       echo "<br/><br/><br/>";
+                                        //continue;
+                                        
+					$filas = $this->db->query($consulta);
+                                        print_r($filas->num_rows());
+//                                        
+                                        echo "<br/><br/><br/>";
+                                        continue;
+                                        
                                     	$padre = $this->Catalogo_x_raiz_model->getByNivel($id,$nivel-1);
 					$relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
                                         
@@ -523,17 +553,18 @@ class Raiz extends CI_Controller {
 					{
 						$consulta .= " and ".$tabla.".".$relacion->columna_hijo." = ".$padre->nombre.".".$relacion->columna_padre;
 					}
-                                        $consulta .= "join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".($nivel-1)." and a.id_tabla_original=".$padre->nombre.".".$padre->llave."  where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+                                        $consulta .= " join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".($nivel-1)." and a.id_tabla_original=".$padre->nombre.".".$padre->llave."  where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
 					//$consulta .= " join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".$nivel." and a.id_tabla_original = ".$tabla.".".$llave." and ( a.descripcion <> ".$tabla.".".$descripcion." or a.id_padre <> ".$padre->nombre.".".$padre->llave." )";
 					
                                         echo $consulta;
-                                                                               echo "<br/><br/><br/>";
-                                        continue;
-//					$filas = $this->db->query($consulta);
+                                        //                                       echo "<br/><br/><br/>";
+                                        //continue;
+                                        
+					$filas = $this->db->query($consulta);
+                                        print_r($filas->num_rows());
 //                                        
-//                                        print_r($filas->result());
-                                       echo "<br/><br/><br/>";
-//                                        continue;
+                                        echo "<br/><br/><br/>";
+                                        continue;
                                         
 					$datosdump = array();
 					foreach ($filas->result() as $value) {
@@ -552,24 +583,30 @@ class Raiz extends CI_Controller {
 						));
 					}
                                     if (count($datosdump)>0)
-                                    if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
                                     {
-                                        echo 'false';
+                                        print_r($datosdump);
+                                        echo "<br/><br/><br/>";
+                                        continue;
+                                        if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
+                                        {
+                                            echo 'false';
+                                        }
                                     }
 				}
 				else 
 				{
-					$consulta = "select ".$llave." as llave, ";
-					$consulta .= $descripcion." as descripcion ";
+					$consulta = "select  ".$tabla.".".$llave." as llave, ";
+					$consulta .=  $tabla.".".$descripcion." as descripcion ";
 					$consulta .= " from ".$tabla;
-					
-					$filas = $this->db->query($consulta);
-
-                                                                                
-                                        print_r($filas->result());
+					$consulta .= " where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+                                        //$consulta .= " join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".($nivel)." and a.id_tabla_original=".$tabla.".".$llave."  where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+                                                                           
+                                        
+                                        //echo $consulta;
+                                        $filas = $this->db->query($consulta); 
+                                        var_dump($filas->result());
                                         echo "<br/><br/><br/>";
                                         continue;
-                                        
                                         
                                         $datosdump = array();
 					foreach ($filas->result() as $key => $value) {
@@ -589,10 +626,15 @@ class Raiz extends CI_Controller {
 						));
 					}
                                         if (count($datosdump)>0)
-                                        if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
-					{
-					echo 'false';
-					}
+                                        {
+                                       print_r($datosdump);
+                                        echo "<br/><br/><br/>";
+                                        continue;
+                                            if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
+                                            {
+                                            echo 'false';
+                                            }
+                                        }
 				}
 				echo "true";
 			}
