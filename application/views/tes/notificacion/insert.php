@@ -64,7 +64,7 @@ $(document).ready(function(){
 	</tr>
 		<tr>
 		<td><label for="id_arr_asu">Reportar a tabletas</label></td>
-		<td><input type="text" name="id_arr_asuT" id="id_arr_asuT" readonly="true" value="<?php echo set_value('id_arr_asuT', ''); ?>" />
+		<td><input type="text" name="id_arr_asuT" id="id_arr_asuT" readonly="true" value="<?php if(isset($_POST['id_arr_asuT'])) echo $_POST['id_arr_asuT']; ?>" />
 		<input type="hidden" name="id_arr_asu" id="id_arr_asu" readonly="true" value="<?php echo set_value('id_arr_asu', ''); ?>" />
 		<a href='/<?php echo DIR_TES?>/tree/create/TES/Tabletas a notificar/2/check/0/id_arr_asu/id_arr_asuT/1/1/<?php echo urlencode(json_encode(array(null)));?>' id="tabletas" class="btn btn-primary">Seleccionar</a>
 		</td>
