@@ -2,15 +2,19 @@
 <?php echo $error;?>
 <?php 	
 	if(!empty($msgResult))
-    echo $msgResult.'<br /><br />';
+	echo "<div class='".$infoclass."'>".$msgResult."</div>";
+
 	echo validation_errors(); 
 	echo form_open(DIR_SIIGS.'/usuario/update_info'); ?>
 <br />
-<h6><?php echo $info;?></h6>
-<table border="1">	
+<?php if($info!="") echo '<div class="info">'.$info.'</div>';?>
+<div class="span6 login">
+    <div class="row-fluid contenido" id="content">
+
+<table width="430" border="0">	
 	<tr>
-		<td><label for="correo">Grupo</label></td>
-		<td><?php echo $grupo; ?></td>
+		<td width="153"><label for="correo">Grupo</label></td>
+		<td width="189"><?php echo $grupo; ?></td>
 	</tr>
     <tr>
 		<td><label for="correo">Nombre</label></td>
@@ -33,6 +37,8 @@
 		<td><input type="password" name="repiteclave" value="<?php echo set_value('repiteclave', ''); ?>" /></td>
 	</tr>
 	<tr>
-		<td colspan=2><input type="submit" name="submit" value="Enviar" /><td>
+		<td colspan=2><input type="submit" name="submit" value="Enviar" class="btn btn-primary" /><td width="10">
 	</tr>    
 </table>
+ </div>
+</div>

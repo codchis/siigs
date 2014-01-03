@@ -2,8 +2,6 @@
 /**
  * Controlador Usuario
  *
- * @package		SIIGS
- * @subpackage	Controlador
  * @author     	Rogelio
  * @created		2013-09-25
  */
@@ -387,7 +385,9 @@ class Usuario extends CI_Controller {
 
 			if(sizeof($datos)==0)
 			{
-				$data["info"]="No se pudo comprobar sus datos";
+				$data['infoclass']= 'error';
+				$data['msgResult']= 'No se pudo comprobar sus datos';
+				
 				$this->template->write_view('content',DIR_SIIGS.'/usuario/recordar_datos',$data);
 	 			$this->template->render();
 			}
@@ -473,9 +473,15 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 				fclose($fp); 
 				$envio=$this->send_mail($subject,$body,$from,$rto,$correo,$CC,$CCO,$adj);
 				if($envio)
-					$data["info"]="Se ha enviado un correo con la informacion necesaria para restablecer sus datos";
+				{
+					$data['infoclass']= 'success';
+					$data['msgResult']= 'Se ha enviado un correo con la informacion necesaria para restablecer sus datos';
+				}
 				else
-					$data["info"]="No se pudo enviar el correo con la informacion necesaria para restablecer sus datos";
+				{
+					$data['infoclass']= 'error';
+					$data['msgResult']= 'No se pudo enviar el correo con la informacion necesaria para restablecer sus datos';
+				}
 				$this->template->write_view('content',DIR_SIIGS.'/usuario/enviar_correo',$data);
 				$this->template->render();
 			}
@@ -589,21 +595,26 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		
 				if(sizeof($datos)==0)
 				{
-					$data["error"]="No se pudo comprobar sus datos";
+					$data["error"]="";
+					$data['infoclass']= 'error';
+					$data['msgResult']= 'No se pudo comprobar sus datos';
 					$this->template->write_view('content',DIR_SIIGS.'/usuario/reset_pass',$data);
 					$this->template->render();
 				}
 				else
 				{
 					$this->usuario_model->update_pass($this->input->post('pass'),$datos->id);															
-				}
-				$pt=stripos($variable,$str);
-				$cad=substr($variable,0,$pt);
-				$cad.=substr($variable,($pt+64),strlen($variable)-($pt+64));
-				$fp = fopen(APPPATH."logs/recuperalog.siigs", "w");
-				fwrite($fp, $cad);
-				fclose($fp); 
-				$data["info"]="Se ha restablecido la contraseña";
+				
+					$pt=stripos($variable,$str);
+					$cad=substr($variable,0,$pt);
+					$cad.=substr($variable,($pt+64),strlen($variable)-($pt+64));
+					$fp = fopen(APPPATH."logs/recuperalog.siigs", "w");
+					fwrite($fp, $cad);
+					fclose($fp);
+				} 
+				$data["info"]="";
+				$data['infoclass']= 'success';
+				$data['msgResult']= 'Se ha restablecido la contraseña';
 				$this->template->write_view('content',DIR_SIIGS.'/usuario/enviar_correo',$data);
 				$this->template->render();
 			}
@@ -681,13 +692,23 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 			{
 				$update=$this->usuario_model->update_user($id,$this->input->post('newpass'),$this->input->post('correo'));				
 				if($update)
-				$data['error'] = 'Actualización correcta';
+				{
+					$data['error'] = '';
+					$data['infoclass']= 'success';
+					$data['msgResult']= 'Actualización correcta';
+				}
 				else
-				$data['error']='Ocurrio un erro al actualizar';
+				{
+					$data['error']='';
+					$data['infoclass']= 'error';
+					$data['msgResult']= 'Ocurrio un error al actualizar';
+				}
 			}
 			else
 			{
-				$data['error'] = 'No coincide la contraseña actual';	
+				$data['error'] = '';	
+				$data['infoclass']= 'warning';
+				$data['msgResult']= 'No coincide la contraseña actual';
 			}
 			$this->template->write_view('content',DIR_SIIGS.'/usuario/cuenta_usuario',$data);	
 			$this->template->render();
