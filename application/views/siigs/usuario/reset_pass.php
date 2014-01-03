@@ -2,15 +2,19 @@
 <?php echo $error;?>
 <?php 	
 	if(!empty($msgResult))
-    echo $msgResult.'<br /><br />';
+	echo "<div class='".$infoclass."'>".$msgResult."</div>";
 	echo validation_errors(); 
 	echo form_open(DIR_SIIGS.'/usuario/reset'); ?>
 <br />
-<h6><?php echo $info;?></h6>
-<table border="1">
+
+
+<div class="span6 login">
+    <div class="row-fluid contenido" id="content">
+<?php if($info!="") echo '<div class="info">'.$info.'</div>';?>
+<table width="100%" border="0">
 	<tr>
-		<td><label for="nombre_usuario">Nombre de usuario</label></td>
-		<td><input type="text" name="nombre_usuario" value="<?php echo set_value('nombre_usuario', ''); ?>" /></td>
+		<td width="208"><label for="nombre_usuario">Nombre de usuario</label></td>
+		<td width="212"><input type="text" name="nombre_usuario" value="<?php echo set_value('nombre_usuario', ''); ?>" /></td>
 	</tr>
 	<tr>
 		<td><label for="correo">Correo</label></td>
@@ -18,11 +22,11 @@
 	</tr>
     </table>
     <hr>
-<h6><?php echo $info2;?></h6>    
-    <table>
+<?php if($info2!="") echo '<div class="info">'.$info2.'</div>';?>
+    <table width="100%">
     <tr>
-		<td><label for="pass">Nueva Contraseña</label></td>
-		<td><input type="password" name="pass" value="<?php echo set_value('pass', ''); ?>"/></td>
+		<td width="205"><label for="pass">Nueva Contraseña</label></td>
+		<td width="200"><input type="password" name="pass" value="<?php echo set_value('pass', ''); ?>"/></td>
 	</tr>
     <tr>
 		<td><label for="repiteclave">Repetir Contraseña</label></td>
@@ -30,6 +34,8 @@
         <input type="hidden" name="c" value="<?php echo set_value('c', $c); ?>" /></td>
 	</tr>
 	<tr>
-		<td colspan=2><input type="submit" name="submit" value="Enviar" /><td>
+		<td colspan=2><input type="submit" name="submit" value="Enviar" class="btn btn-primary" /><td width="9">
 	</tr>    
 </table>
+  </div>
+</div>

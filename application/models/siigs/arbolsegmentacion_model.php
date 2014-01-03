@@ -270,7 +270,13 @@ class ArbolSegmentacion_model extends CI_Model {
             }
 
             $fecha_update_asu = $fecha_update_asu->result()[0]->fecha;
-            $ruta = __DIR__.'/../../json/asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($fecha_update_asu).'.json';
+            $ruta = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'json'.DIRECTORY_SEPARATOR;
+            $archivo = 'asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($fecha_update_asu).'.json';
+            
+            if (!is_dir($ruta))
+               mkdir($ruta, 0777, true);
+            
+            $ruta.= $archivo;
             
             if (file_exists($ruta))
             {
@@ -282,6 +288,8 @@ class ArbolSegmentacion_model extends CI_Model {
             }
             else
             {  
+                ini_set('max_execution_time',1000);
+                
                 $arbol = $this->getTree($idarbol, $nivel, $omitidos);
                 if (count($arbol) == 0)
                 {
@@ -300,9 +308,9 @@ class ArbolSegmentacion_model extends CI_Model {
                             if ($fila['id_'.$i] != null)
                             {
                                 if ($i == $arbol['niveles'])
-                                    $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> $fila['descripcion_'.$i]);
+                                    $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> utf8_encode($fila['descripcion_'.$i]));
                                 else
-                                    $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> $fila['descripcion_'.$i] , 'children'=>array());    
+                                    $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> utf8_encode($fila['descripcion_'.$i]) , 'children'=>array());    
 
                                 if (in_array($fila['id_'.$i],$seleccionados))
                                         $arraytemp["select"] = true;
@@ -336,7 +344,7 @@ class ArbolSegmentacion_model extends CI_Model {
                     
                     try
                     {
-                    $fh = fopen($ruta, 'w')
+                    $fh = fopen($ruta, 'c')
                     or die("Error al abrir fichero para el asu");
                     
                     fwrite($fh, json_encode($resultado[1],JSON_UNESCAPED_UNICODE));
@@ -357,7 +365,7 @@ class ArbolSegmentacion_model extends CI_Model {
             {
                 if (array_key_exists('children', $dato) && count($dato['children'])>0)
                 {
-                    $dato['children'] = $this->_addSelectedItems($dato['children'],$seleccionados);
+                    $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados);
                 }
                 if (in_array($dato["key"],$seleccionados))
                 {

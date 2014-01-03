@@ -30,7 +30,7 @@ class Raiz extends CI_Controller {
 	}
         
         public function prueba(){
-            echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel(1,1,array(),array(1)));
+            echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel(1,1,array(),array(1,2,36,3913)));
             //echo json_encode($this->ArbolSegmentacion_model->getCluesFromId(781));
         }
 //       
@@ -508,94 +508,137 @@ class Raiz extends CI_Controller {
 				$llave = $item->nombre_columna_llave;
 				$descripcion = $item->nombre_columna_descripcion;
 				
-				if ($nivel > 1)
-				{
-                                    	$padre = $this->Catalogo_x_raiz_model->getByNivel($id,$nivel-1);
-					$relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
+                                 $consulta = "select  a.".$llave." as llave, ";
+					$consulta .=  "a.".$descripcion." as descripcion ";
+					$consulta .= " from ".$tabla." a";
+                                        //$consulta .= " left outer join asu_arbol_segmentacion b on a.".$llave." = b.id_tabla_original and b.id_raiz=".$id." and b.grado_segmentacion = ".$nivel." where b.id = null";
+					$consulta .= " where a.".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
                                         
-					$consulta = "select ".$tabla.".".$llave." as llave, ";
-					$consulta .= $tabla.".".$descripcion." as descripcion, ";
-					$consulta .= $padre->nombre.".".$padre->llave." as padre ";
-					$consulta .= " from ".$tabla;
-					
-					$consulta .= " join ".$padre->nombre." on 1=1";
-					foreach ($relaciones as $relacion)
-					{
-						$consulta .= " and ".$tabla.".".$relacion->columna_hijo." = ".$padre->nombre.".".$relacion->columna_padre;
-					}
-                                        $consulta .= "join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".($nivel-1)." and a.id_tabla_original=".$padre->nombre.".".$padre->llave."  where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
-					//$consulta .= " join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".$nivel." and a.id_tabla_original = ".$tabla.".".$llave." and ( a.descripcion <> ".$tabla.".".$descripcion." or a.id_padre <> ".$padre->nombre.".".$padre->llave." )";
-					
                                         echo $consulta;
-                                                                               echo "<br/><br/><br/>";
-                                        continue;
-//					$filas = $this->db->query($consulta);
+                                        
+					//$filas = $this->db->query($consulta);
+                                        //print_r($filas->num_rows());
 //                                        
-//                                        print_r($filas->result());
-                                       echo "<br/><br/><br/>";
-//                                        continue;
-                                        
-					$datosdump = array();
-					foreach ($filas->result() as $value) {
-					
-                                            //echo 'select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = '.$value->llave;
-                                            if ($this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave.'"')->num_rows()==0 ||
-                                                    $this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave . '" and (id_padre <> '.$value->padre.' or descripcion <> "'.$value->descripcion.'" )')->num_rows()>0)
-						array_push($datosdump, array(
-						'grado_segmentacion' => $nivel,
-						'id_raiz'=> $id,
-						'id_padre' => $value->padre,
-						'id_tabla_original' => $value->llave,
-						'orden' => '0',
-						'visible' => 'true',
-						'descripcion' => $value->descripcion
-						));
-					}
-                                    if (count($datosdump)>0)
-                                    if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
-                                    {
-                                        echo 'false';
-                                    }
-				}
-				else 
-				{
-					$consulta = "select ".$llave." as llave, ";
-					$consulta .= $descripcion." as descripcion ";
-					$consulta .= " from ".$tabla;
-					
-					$filas = $this->db->query($consulta);
-
-                                                                                
-                                        print_r($filas->result());
                                         echo "<br/><br/><br/>";
-                                        continue;
-                                        
-                                        
-                                        $datosdump = array();
-					foreach ($filas->result() as $key => $value) {
-					
-                                           // echo 'select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = '.$value->llave;
-                                           // echo 'select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = '.$value->llave . ' and (id_padre <> 0 or descripcion <> '.$value->descripcion.' )';
-                                            if ($this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave.'"')->num_rows()==0 ||
-                                                    $this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave . '" and (id_padre <> 0 or descripcion <> "'.$value->descripcion.'" )')->num_rows()>0)
-						array_push($datosdump, array(
-						'grado_segmentacion' => $nivel,
-						'id_raiz'=> $id,
-						'id_padre' => '0',
-						'id_tabla_original' => $value->llave,
-						'orden' => '0',
-						'visible' => 'true',
-						'descripcion' => $value->descripcion
-						));
-					}
-                                        if (count($datosdump)>0)
-                                        if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
-					{
-					echo 'false';
-					}
-				}
-				echo "true";
-			}
+                                        return;
+                        }
+//                                
+//				if ($nivel > 1)
+//				{
+//                                    
+//                                    $consulta = "select  ".$tabla.".".$llave." as llave, ";
+//					$consulta .=  $tabla.".".$descripcion." as descripcion ";
+//					$consulta .= " from ".$tabla;
+//					$consulta .= " where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+//                                        
+//                                        echo $consulta;
+//                                        //                                       echo "<br/><br/><br/>";
+//                                        //continue;
+//                                        
+//					$filas = $this->db->query($consulta);
+//                                        print_r($filas->num_rows());
+////                                        
+//                                        echo "<br/><br/><br/>";
+//                                        continue;
+//                                        
+//                                    	$padre = $this->Catalogo_x_raiz_model->getByNivel($id,$nivel-1);
+//					$relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
+//                                        
+//					$consulta = "select ".$tabla.".".$llave." as llave, ";
+//					$consulta .= $tabla.".".$descripcion." as descripcion, ";
+//					$consulta .= $padre->nombre.".".$padre->llave." as padre ";
+//					$consulta .= " from ".$tabla;
+//					
+//					$consulta .= " join ".$padre->nombre." on 1=1";
+//					foreach ($relaciones as $relacion)
+//					{
+//						$consulta .= " and ".$tabla.".".$relacion->columna_hijo." = ".$padre->nombre.".".$relacion->columna_padre;
+//					}
+//                                        $consulta .= " join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".($nivel-1)." and a.id_tabla_original=".$padre->nombre.".".$padre->llave."  where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+//					//$consulta .= " join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".$nivel." and a.id_tabla_original = ".$tabla.".".$llave." and ( a.descripcion <> ".$tabla.".".$descripcion." or a.id_padre <> ".$padre->nombre.".".$padre->llave." )";
+//					
+//                                        echo $consulta;
+//                                        //                                       echo "<br/><br/><br/>";
+//                                        //continue;
+//                                        
+//					$filas = $this->db->query($consulta);
+//                                        print_r($filas->num_rows());
+////                                        
+//                                        echo "<br/><br/><br/>";
+//                                        continue;
+//                                        
+//					$datosdump = array();
+//					foreach ($filas->result() as $value) {
+//					
+//                                            //echo 'select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = '.$value->llave;
+//                                            if ($this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave.'"')->num_rows()==0 ||
+//                                                    $this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave . '" and (id_padre <> '.$value->padre.' or descripcion <> "'.$value->descripcion.'" )')->num_rows()>0)
+//						array_push($datosdump, array(
+//						'grado_segmentacion' => $nivel,
+//						'id_raiz'=> $id,
+//						'id_padre' => $value->padre,
+//						'id_tabla_original' => $value->llave,
+//						'orden' => '0',
+//						'visible' => 'true',
+//						'descripcion' => $value->descripcion
+//						));
+//					}
+//                                    if (count($datosdump)>0)
+//                                    {
+//                                        print_r($datosdump);
+//                                        echo "<br/><br/><br/>";
+//                                        continue;
+//                                        if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
+//                                        {
+//                                            echo 'false';
+//                                        }
+//                                    }
+//				}
+//				else 
+//				{
+//					$consulta = "select  ".$tabla.".".$llave." as llave, ";
+//					$consulta .=  $tabla.".".$descripcion." as descripcion ";
+//					$consulta .= " from ".$tabla;
+//					$consulta .= " where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+//                                        //$consulta .= " join asu_arbol_segmentacion a on a.id_raiz=".$id." and a.grado_segmentacion=".($nivel)." and a.id_tabla_original=".$tabla.".".$llave."  where ".$tabla.".".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+//                                                                           
+//                                        
+//                                        //echo $consulta;
+//                                        $filas = $this->db->query($consulta); 
+//                                        var_dump($filas->result());
+//                                        echo "<br/><br/><br/>";
+//                                        continue;
+//                                        
+//                                        $datosdump = array();
+//					foreach ($filas->result() as $key => $value) {
+//					
+//                                           // echo 'select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = '.$value->llave;
+//                                           // echo 'select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = '.$value->llave . ' and (id_padre <> 0 or descripcion <> '.$value->descripcion.' )';
+//                                            if ($this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave.'"')->num_rows()==0 ||
+//                                                    $this->db->query('select * from asu_arbol_segmentacion where grado_segmentacion = '.$nivel.' and id_raiz = '.$id.' and id_tabla_original = "'.$value->llave . '" and (id_padre <> 0 or descripcion <> "'.$value->descripcion.'" )')->num_rows()>0)
+//						array_push($datosdump, array(
+//						'grado_segmentacion' => $nivel,
+//						'id_raiz'=> $id,
+//						'id_padre' => '0',
+//						'id_tabla_original' => $value->llave,
+//						'orden' => '0',
+//						'visible' => 'true',
+//						'descripcion' => $value->descripcion
+//						));
+//					}
+//                                        if (count($datosdump)>0)
+//                                        {
+//                                       print_r($datosdump);
+//                                        echo "<br/><br/><br/>";
+//                                        continue;
+//                                            if ($this->db->insert_on_duplicate_update_batch('asu_arbol_segmentacion',$datosdump) != 1)
+//                                            {
+//                                            echo 'false';
+//                                            }
+//                                        }
+//				}
+//				echo "true";
+//			}
 			
 		}
 		catch(Exception $e)
