@@ -44,9 +44,11 @@ class Accion extends CI_Controller {
 			$data['title'] = 'Lista de acciones disponibles';
 			$data['acciones'] = $this->Accion_model->getAll();
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+                        $data['clsResult'] = $this->session->flashdata('clsResult');
 		}
 		catch (Exception $e)
 		{
+                        $data['clsResult'] = "error";
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
@@ -74,6 +76,7 @@ class Accion extends CI_Controller {
 		}
 		catch (Exception $e)
 		{
+                        $data['clsResult'] = 'error';
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
@@ -120,6 +123,7 @@ class Accion extends CI_Controller {
 			}
 			catch (Exception $e)
 			{
+                                $data['clsResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				$this->template->write_view('content',DIR_SIIGS.'/accion/insert', $data);
 				$this->template->render();
@@ -129,6 +133,7 @@ class Accion extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro insertado correctamente');
+                                $this->session->set_flashdata('clsResult', 'success');
 				redirect(DIR_SIIGS.'/accion/index','refresh');
 			}
 		}
@@ -166,6 +171,7 @@ class Accion extends CI_Controller {
 			}
 			catch (Exception $e)
 			{
+                            	$data['clsResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 			}
 
@@ -191,9 +197,10 @@ class Accion extends CI_Controller {
 				}
 				catch (Exception $e)
 				{
+                                        $data['clsResult'] = 'error';
 					$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				}
-
+                                $data['clsResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				$this->template->write_view('content',DIR_SIIGS.'/accion/update', $data);
 				$this->template->render();
@@ -203,8 +210,9 @@ class Accion extends CI_Controller {
 
 			if ($error == false)
 			{
-				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
-				redirect(DIR_SIIGS.'/accion','refresh');
+                            $this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
+                            $this->session->set_flashdata('clsResult', 'success');
+                            redirect(DIR_SIIGS.'/accion','refresh');
 			}
 		}
 	}
@@ -229,9 +237,11 @@ class Accion extends CI_Controller {
 			$this->Accion_model->setId($id);
 			$this->Accion_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+                        $this->session->set_flashdata('clsResult', 'success');
 		}
 		catch(Exception $e)
 		{
+                        $this->session->set_flashdata('clsResult', 'error');
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
 		}
 		redirect(DIR_SIIGS.'/accion','refresh');

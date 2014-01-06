@@ -67,7 +67,7 @@
 		 	                	return;
 	 	                	$('#relaciones_tablas').html('<thead><tr><th>Relaciones padre-hijo</th></tr></thead>');
 	 	                	$td = $('<td colspan="2"></td>');
-	 	                	$boton = $('<input type="button" value="Agregar"/>');
+	 	                	$boton = $('<input type="button" value="Agregar" class="btn btn-small btn-primary"/>');
 	 	                	$td.append($boton);
 
 	 	                	$boton.click(function(){
@@ -98,7 +98,7 @@
              	$td.append($selectpadre);
              	$tr.append($td);
 				
-				$boton = $('<input type="button" value="Quitar">');
+				$boton = $('<input type="button" value="Quitar" class="btn btn-small btn-primary">');
              	$td = $('<td></td>');
              	$td.append($boton);
              	$tr.append($td);
@@ -178,9 +178,10 @@
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <?php echo validation_errors(); ?>
+<div class="table table-striped">
 <?php 
 $atributos = array('id' => 'frm_catalogo');
 echo form_open(DIR_SIIGS.'/catalogo_x_raiz/insert/'.$id_raiz , $atributos) 
@@ -219,7 +220,8 @@ echo form_open(DIR_SIIGS.'/catalogo_x_raiz/insert/'.$id_raiz , $atributos)
 		</td>
 	</tr>
 	<tr>
-		<td colspan=2><input type="submit" name="submit" value="Guardar" /><td>
+		<td colspan=2><input type="submit" name="submit" value="Guardar" class="btn btn-primary" /><td>
 	</tr>
 </table>
 </form>
+</div>

@@ -1,14 +1,18 @@
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <h2><?php echo $title; ?></h2>
 <?php
 if (!empty($controlador_item))
 {
-echo '<h2>[ '.$controlador_item->nombre.' ]</h2>';
-echo '<h5>Descripcion: '.$controlador_item->descripcion.'</h5><br/>';
-echo '<h5>Clase: '.$controlador_item->clase.'</h5><br/>';
+        echo '<div class="table table-striped">
+        <table>
+        <tr><td><strong>Nombre</strong></td><td>'.$controlador_item->nombre.'</td></tr>
+        <tr><td><strong>Descripci&oacute;n</strong></td><td>'.$controlador_item->descripcion.'</td></tr>
+        <tr><td><strong>Clase</strong></td><td>'.$controlador_item->clase.'</td></tr>
+    </table></div>';
 }
 else
-	echo "No se ha encontrado el elemento";
+	echo '<div class="error">Registro no encontrado</div>';
+?>

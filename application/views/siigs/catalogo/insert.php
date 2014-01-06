@@ -220,15 +220,15 @@
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <?php echo validation_errors(); ?>
-
+<div class="table table-striped">
 <form method="post" enctype="application/x-www-form-urlencoded" id="loadcsv">
 <table>
 <tr>
 <td>[Archivo csv separado por comas]<input type="file" name="archivocsv" id="btncsv"/></td>
-<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" onclick="$('#loadcsv').submit();"/></td>
+<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" onclick="$('#loadcsv').submit();" class="btn btn-primary"/></td>
 </tr>
 </table>
 </form>
@@ -256,8 +256,9 @@ echo $msgResult.'<br /><br />';
 	<tr>
 		<td colspan=2>
 			<input type="hidden" name="llaves" id="llaves" value="1" />
-			<input type="submit" name="submit" id="submit" value="Guardar" />
+			<input type="submit" name="submit" id="submit" value="Guardar"  class="btn btn-primary"/>
 		<td>
 	</tr>
 </table>
 </form>
+</div>

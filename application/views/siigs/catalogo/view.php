@@ -1,11 +1,12 @@
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <h2><?php echo $title; ?></h2>
 <?php
 if (!empty($catalogo_item))
 {
+echo '<div class="table table-striped">';
 echo '<h2>[ '.$catalogo_item->nombre.' ]</h2>';
 $campos = explode('||', $catalogo_item->campos);
 $llaves = explode('||', $catalogo_item->llave);
@@ -24,8 +25,9 @@ foreach ($campos as $campo)
 	echo '<tr><td>'.$datos[0]. '</td><td>' . $datos[1]. '</td><td>' . $datos[2]. '</td><td>' . $datos[3].'</tr>';
 }
 echo '</table>';
+echo '</div>';
 }
 else
 {
-	echo "No se ha encontrado el elemento";
+	echo '<div class="error">Registro no encontrado</div>';
 }

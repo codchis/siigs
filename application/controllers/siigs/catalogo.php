@@ -44,9 +44,11 @@ class Catalogo extends CI_Controller {
 			$data['title'] = 'Lista de catálogos disponibles';
 			$data['catalogos'] = $this->Catalogo_model->getAll();
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+                        $data['clsResult'] = $this->session->flashdata('clsResult');
 		}
 		catch (Exception $e)
 		{
+                        $data['clsResult'] = "error";
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
@@ -90,6 +92,7 @@ class Catalogo extends CI_Controller {
 		}
 		catch (Exception $e)
 		{
+                        $data['clsResult'] = "error";
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
@@ -554,6 +557,7 @@ class Catalogo extends CI_Controller {
 			}
 			catch (Exception $e)
 			{
+                                $data['clsResult'] = "error";
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				$this->template->write_view('content',DIR_SIIGS.'/catalogo/insert', $data);
 				$this->template->render();
@@ -562,6 +566,7 @@ class Catalogo extends CI_Controller {
 
 			if ($error == false)
 			{
+                            	$this->session->set_flashdata('clsResult', 'success');
 				$this->session->set_flashdata('msgResult', 'Registro insertado correctamente');
 				redirect(DIR_SIIGS.'/catalogo/index','refresh');
 			}
@@ -591,6 +596,7 @@ class Catalogo extends CI_Controller {
 		}
 		catch (Exception $e)
 		{
+                        $data['clsResult'] = 'error';
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
@@ -683,16 +689,19 @@ class Catalogo extends CI_Controller {
 			if ($existe->num_rows() > 0)
 			{
 			$this->session->set_flashdata('msgResult', 'No se puede eliminar el catálogo porque forma parte de un Arbol');
-			redirect(DIR_SIIGS.'/catalogo','refresh');
+			$this->session->set_flashdata('clsResult', 'warning');
+                        redirect(DIR_SIIGS.'/catalogo','refresh');
 			die();
 			}
 		
 			$this->Catalogo_model->setNombre($nombre);
 			$this->Catalogo_model->delete();
 			$this->session->set_flashdata('msgResult', 'Catálogo eliminado exitosamente');
+                        $this->session->set_flashdata('clsResult', 'success');
 		}
 		catch(Exception $e)
 		{
+                        $this->session->set_flashdata('clsResult', 'error');
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
 		}
 		redirect(DIR_SIIGS.'/catalogo','refresh');

@@ -62,6 +62,7 @@ class Controlador extends CI_Controller {
 			$data['title'] = 'Lista de Controladores disponibles' .
 					(($id) ? ' ('.$this->Entorno_model->getById($id)->nombre.')' : '' );
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+                        $data['clsResult'] = $this->session->flashdata('clsResult');
 			$data['id_entorno'] = ($id) ? $id : 0 ;
 			$data['pag'] = $pag;
 
@@ -86,6 +87,7 @@ class Controlador extends CI_Controller {
 		}
 		catch (Exception $e)
 		{
+                        $data['clsResult'] = 'error';
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
@@ -114,6 +116,7 @@ class Controlador extends CI_Controller {
 		}
 		catch(Exception $e)
 		{
+                        $data['clsResult'] = 'error';
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
@@ -169,6 +172,7 @@ class Controlador extends CI_Controller {
 			}
 			catch (Exception $e)
 			{
+                                $data['clsResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				$this->template->write_view('content',DIR_SIIGS.'/controlador/insert', $data);
 				$this->template->render();
@@ -178,6 +182,7 @@ class Controlador extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro insertado correctamente');
+                                $this->session->set_flashdata('clsResult', 'success');
 				redirect(DIR_SIIGS.'/controlador/index','refresh');
 			}
 		}
@@ -215,6 +220,7 @@ class Controlador extends CI_Controller {
 			}
 			catch (Exception $e)
 			{
+                                $data['clsResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 			}
 
@@ -243,9 +249,11 @@ class Controlador extends CI_Controller {
 				}
 				catch (Exception $e)
 				{
+                                        $data['clsResult'] = 'error';
 					$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				}
 
+                                $data['clsResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				$this->template->write_view('content',DIR_SIIGS.'/controlador/update', $data);
 				$this->template->render();
@@ -255,6 +263,7 @@ class Controlador extends CI_Controller {
 
 			if ($error == false)
 			{
+                                $this->session->set_flashdata('clsResult', 'success');
 				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
 				redirect(DIR_SIIGS.'/controlador','refresh');
 			}
@@ -289,6 +298,7 @@ class Controlador extends CI_Controller {
 			}
 			catch (Exception $e)
 			{
+                                $data['clsResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __CLASS__.'::update');
 			}
 
@@ -302,6 +312,7 @@ class Controlador extends CI_Controller {
 				$this->load->helper('url');
 				$error = false;
 
+                                $this->session->set_flashdata('clsResult', 'success');
 				$this->session->set_flashdata('msgResult', 'Se modificaron correctamente las acciones permitidas al controlador');
 
 				$this->Controlador_model->setAccion($this->input->post('acciones'));
@@ -310,6 +321,7 @@ class Controlador extends CI_Controller {
 			}
 			catch (Exception $e)
 			{
+                            	$data['msgResult'] = 'error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __CLASS__.'::update');
 				$error = true;
 			}
@@ -345,9 +357,11 @@ class Controlador extends CI_Controller {
 			$this->Controlador_model->setId($id);
 			$this->Controlador_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+                        $this->session->set_flashdata('clsResult', 'success');
 		}
 		catch(Exception $e)
 		{
+                        $this->session->set_flashdata('clsResult', 'error');
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
 		}
 		redirect(DIR_SIIGS.'/controlador','refresh');

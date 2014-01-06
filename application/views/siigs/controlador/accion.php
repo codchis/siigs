@@ -1,10 +1,11 @@
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <?php if (!empty($controlador_acciones) && !count($controlador_acciones) == 0) { ?>
 <?php echo validation_errors(); ?>
+<div class="table table-striped">
 <?php echo form_open(DIR_SIIGS.'/controlador/accion/'. $id_controlador) ?>
 <table>
 <thead>
@@ -20,7 +21,7 @@ echo $msgResult.'<br /><br />';
 <tr>
 		<td colspan=2>
 		<input type="hidden" name="id" value="<?php echo $id_controlador;?>" />
-		<input type="submit" name="submit" onclick="if (confirm('Esta acci&oacute;n podr&iacute;a afectar los permisos a los grupos, desea continuar?')) {return true ;} else {return false;}" value="Guardar" />
+		<input type="submit" name="submit" onclick="if (confirm('Esta acci&oacute;n podr&iacute;a afectar los permisos a los grupos, desea continuar?')) {return true ;} else {return false;}" value="Guardar" class="btn btn-primary"/>
 		<td>
 	</tr>
 </table>
@@ -34,3 +35,4 @@ echo $msgResult.'<br /><br />';
 </thead>
 </table>
 <?php } ?>
+</div>

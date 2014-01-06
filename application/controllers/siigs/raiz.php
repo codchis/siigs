@@ -511,8 +511,8 @@ class Raiz extends CI_Controller {
                                  $consulta = "select  a.".$llave." as llave, ";
 					$consulta .=  "a.".$descripcion." as descripcion ";
 					$consulta .= " from ".$tabla." a";
-                                        //$consulta .= " left outer join asu_arbol_segmentacion b on a.".$llave." = b.id_tabla_original and b.id_raiz=".$id." and b.grado_segmentacion = ".$nivel." where b.id = null";
-					$consulta .= " where a.".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+                                        //$consulta .= " left outer join asu_arbol_segmentacion b on a.".$llave." = b.id_tabla_original and b.id_raiz=".$id." and b.grado_segmentacion = ".$nivel." where b.id is null";
+					//$consulta .= " where a.".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
                                         
                                         echo $consulta;
                                         
@@ -520,7 +520,7 @@ class Raiz extends CI_Controller {
                                         //print_r($filas->num_rows());
 //                                        
                                         echo "<br/><br/><br/>";
-                                        return;
+                                       // return;
                         }
 //                                
 //				if ($nivel > 1)

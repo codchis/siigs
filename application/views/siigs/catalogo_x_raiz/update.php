@@ -1,9 +1,9 @@
-
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
+<div class="table table-striped">
  <?php
 if (!empty($raiz_item))
 {
@@ -20,7 +20,7 @@ if (!empty($raiz_item))
 			<table id="raizcatalogo">
 				<thead>
 					<tr>
-						<th><input type="button" id="btnagregar" value="Agregar"></th>
+                                            <th><input type="button" id="btnagregar" value="Agregar" class="btn btn-primary"></th>
 						<th colspan=4>Catálogos de la raiz</th>
 					</tr>
 					<tr>
@@ -36,7 +36,7 @@ if (!empty($raiz_item))
 	<tr>
 		<td colspan=2>
 		<input type="hidden" name="id" value="<?php echo $raiz_item->id; ?>"/>
-		<input type="submit" name="submit" value="Guardar" />
+                <input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
 		<td>
 	</tr>
 </table>
@@ -45,6 +45,7 @@ if (!empty($raiz_item))
 }
 else
 {
-echo "No se ha encontrado el elemento";
+echo '<div class="error">Registro no encontrado</div>';
 }
 ?>
+</div>

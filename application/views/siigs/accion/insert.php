@@ -1,9 +1,10 @@
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <?php echo validation_errors(); ?>
+<div class="table table-striped">
 <?php echo form_open(DIR_SIIGS.'/accion/insert') ?>
 <table>
 	<tr>
@@ -19,7 +20,8 @@ echo $msgResult.'<br /><br />';
 		<td><textarea name="metodo"><?php echo set_value('metodo', ''); ?></textarea></td>
 	</tr>
 	<tr>
-		<td colspan=2><input type="submit" name="submit" value="Guardar" /><td>
+		<td colspan=2><input type="submit" name="submit" value="Guardar" class="btn btn-primary"/><td>
 	</tr>
 </table>
 </form>
+</div>

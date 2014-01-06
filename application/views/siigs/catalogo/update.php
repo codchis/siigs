@@ -34,7 +34,7 @@ $(document).ready(function(){
 			    	tfoot = $('<tfoot></tfoot>');
 			    	tr = $('<tr></tr>');
 			    	td = $('<td colspan=2></td>');
-			    	input = $('<input type="button" value="Confirmar cambios"/>');
+			    	input = $('<input type="button" value="Confirmar cambios"  class="btn btn-primary"/>');
 			    	$(input).click(function(){
 				    	subirupdate(true);
 					});
@@ -72,26 +72,28 @@ $(document).ready(function(){
 
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <h2><?php echo $title; ?></h2>
 <?php
 if (!empty($catalogo_item))
 {
 ?>
+<div class="table table-striped">
 <form method="post" enctype="application/x-www-form-urlencoded" id="loadcsv">
 <table>
 <tr>
 <td><input type="file" name="archivocsv" id="btncsv"/></td>
-<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" /></td>
+<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" class="btn btn-primary"/></td>
 </tr>
 </table>
 </form>
 <table id="optcampos">
 </table>
+</div>
 <?php 
 }
 else
 {
-	echo "No se ha encontrado el elemento";
+	echo '<div class="error">Registro no encontrado</div>';
 }

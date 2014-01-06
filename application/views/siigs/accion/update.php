@@ -1,13 +1,14 @@
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
  <?php
 if (!empty($accion_item))
 {
 ?>
 <?php echo validation_errors(); ?>
+<div class="table table-striped">
 <?php echo form_open(DIR_SIIGS.'/accion/update/'.$accion_item->id) ?>
 <table>
 	<tr>
@@ -25,15 +26,16 @@ if (!empty($accion_item))
 	<tr>
 		<td colspan=2>
 		<input type="hidden" name="id" value="<?php echo $accion_item->id; ?>"/>
-		<input type="submit" name="submit" value="Guardar" />
+                <input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
 		<td>
 	</tr>
 </table>
 </form>
+</div>
 <?php
 }
 else
 {
-echo "No se ha encontrado el elemento";
+echo '<div class="error">Registro no encontrado</div>';
 }
 ?>

@@ -46,6 +46,7 @@ class Catalogo_x_raiz extends CI_Controller {
 		}
 		catch (Exception $e)
 		{
+                        $data['clsResult']='error';
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
@@ -98,6 +99,7 @@ class Catalogo_x_raiz extends CI_Controller {
 			}
 			catch (Exception $e)
 			{
+                                $data['clsResult']='error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 			}
 
@@ -138,18 +140,21 @@ class Catalogo_x_raiz extends CI_Controller {
 			}
 			catch (Exception $e)
 			{
+                                $data['clsResult']='error';
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				//$this->template->write_view('content',DIR_SIIGS.'/catalogo_x_raiz/insert', $data);
 				//$this->template->render();
 				$error = true;
-				var_dump(Errorlog_model::save($e->getMessage(), __METHOD__));
-				die();
-				$this->session->set_flashdata(Errorlog_model::save($e->getMessage(), __METHOD__));
+				//var_dump(Errorlog_model::save($e->getMessage(), __METHOD__));
+				//die();
+                                $this->session->set_flashdata('clsResult','error');
+				$this->session->set_flashdata('msgResult',Errorlog_model::save($e->getMessage(), __METHOD__));
 				redirect(DIR_SIIGS.'/raiz/update/'.$this->input->post('id_raiz'),'refresh');
 			}
 
 			if ($error == false)
 			{
+                                $this->session->set_flashdata('clsResult','success');
 				$this->session->set_flashdata('msgResult', 'Registro insertado correctamente');
 				redirect(DIR_SIIGS.'/raiz/update/'.$this->input->post('id_raiz'),'refresh');
 			}
@@ -206,7 +211,7 @@ class Catalogo_x_raiz extends CI_Controller {
 		}
 		catch (Exception $e)
 		{
-			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			//$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 			echo 'false'.$data['msgResult'];
 		}
 	}
@@ -234,11 +239,13 @@ class Catalogo_x_raiz extends CI_Controller {
 			$this->load->helper('url');
 			$this->Catalogo_x_raiz_model->setId($id);
 			$this->Catalogo_x_raiz_model->delete();
+                        $this->session->set_flashdata('clsResult','success');
 			$this->session->set_flashdata('msgResult', 'Catálogo eliminado exitosamente');
 		}
 		catch(Exception $e)
 		{
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+                        $this->session->set_flashdata('clsResult','error');
 		}
 		redirect(DIR_SIIGS.'/raiz/update/'.$id_raiz,'refresh');
 	}
