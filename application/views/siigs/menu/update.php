@@ -1,3 +1,33 @@
+<script type="text/javascript">
+DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
+
+$(document).ready(function(){
+    $('select[name="entorno"]').change(function(e){
+        $('select[name="controlador"] > option[value=0]').text('Cargando datos...');
+        
+        $.ajax({
+            type: 'POST',
+            url:  '/'+DIR_SIIGS+'/controlador/',
+            data: 'id_entorno='+$(this).val(),
+            dataType: 'json'
+        }).done(function(controladores){
+            $('select[name="controlador"] > :not(option[value=0])').remove();
+
+            $.each(controladores, function(index) {
+                option = $('<option />');
+                option.val(controladores[index].id);
+                option.text(controladores[index].nombre);
+
+                $('select[name="controlador"]').append(option);
+            });
+            
+            $('select[name="controlador"] > option[value=0]').text('Elegir');
+        });
+    });
+
+});
+</script>
+
 <?php
 if(!empty($msgResult)) {
     echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';

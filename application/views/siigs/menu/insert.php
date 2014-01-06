@@ -3,6 +3,8 @@ DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
 
 $(document).ready(function(){
     $('select[name="entorno"]').change(function(e){
+        $('select[name="controlador"] > option[value=0]').text('Cargando datos...');
+        
         $.ajax({
             type: 'POST',
             url:  '/'+DIR_SIIGS+'/controlador/',
@@ -18,6 +20,8 @@ $(document).ready(function(){
 
                 $('select[name="controlador"]').append(option);
             });
+            
+            $('select[name="controlador"] > option[value=0]').text('Elegir');
         });
     });
 
