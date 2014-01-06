@@ -208,6 +208,7 @@ class Controlador extends CI_Controller {
 		$error = false;
 
 		$data['title'] = 'Modificar controlador';
+                $this->form_validation->set_rules('id_entorno', 'Entorno', 'required|is_natural_no_zero');
 		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
 		$this->form_validation->set_rules('descripcion', 'Descripción', 'trim|xss_clean|required|max_length[100]');
 		$this->form_validation->set_rules('clase', 'Clase', 'trim|xss_clean|required|alpha|max_length[30]');
@@ -217,12 +218,18 @@ class Controlador extends CI_Controller {
 			try
 			{
 				$data["controlador_item"] = $this->Controlador_model->getById($id);
-			}
-			catch (Exception $e)
-			{
+                                
+                                $entornos = $this->Entorno_model->getAll();
+                                $data['entornos'][0] = 'Elige un entorno';
+                                foreach ($entornos as $item) {
+                                        $data['entornos'][$item->id] = $item->nombre;
+                                        }
+                        }
+                        catch (Exception $e)
+                        {
                                 $data['clsResult'] = 'error';
-				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-			}
+                                $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+                        }
 
 			$this->template->write_view('content',DIR_SIIGS.'/controlador/update', $data);
 			$this->template->render();
@@ -236,6 +243,7 @@ class Controlador extends CI_Controller {
 				$this->Controlador_model->setNombre($this->input->post('nombre'));
 				$this->Controlador_model->setDescripcion($this->input->post('descripcion'));
 				$this->Controlador_model->setClase($this->input->post('clase'));
+                                $this->Controlador_model->setIdEntorno($this->input->post('id_entorno'));
 				$this->Controlador_model->setId($this->input->post('id'));
 
 				$this->Controlador_model->update();
@@ -245,7 +253,13 @@ class Controlador extends CI_Controller {
 				$data['title'] = 'Modificar controlador';
 				try
 				{
-					$data['entorno_item'] = $this->Controlador_model->getById($id);
+					$data['controlador_item'] = $this->Controlador_model->getById($id);
+                                        
+                                        $entornos = $this->Entorno_model->getAll();
+                                        $data['entornos'][0] = 'Elige un entorno';
+                                        foreach ($entornos as $item) {
+                                                $data['entornos'][$item->id] = $item->nombre;
+                                                }
 				}
 				catch (Exception $e)
 				{

@@ -8,7 +8,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <?php echo form_open(DIR_SIIGS.'/controlador/insert') ?>
 <table>
 	<tr>
-		<td><label for="nombre">Nombre</label></td>
+		<td><label for="nombre">Entorno</label></td>
 		<td>  <?php  echo  form_dropdown('id_entorno', $entornos); ?></td>
 	</tr>
 	<tr>
