@@ -13,10 +13,9 @@ class Entorno extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
 		try
 		{
-                        $this->load->helper('url');
+            $this->load->helper('url');
 			$this->load->model(DIR_SIIGS.'/Entorno_model');
 		}
 		catch (Exception $e)
@@ -41,14 +40,15 @@ class Entorno extends CI_Controller {
 		show_error('', 403, 'Acceso denegado');
 		try
 		{
-
 			$data['title'] = 'Lista de Entornos disponibles';
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['clsResult'] = $this->session->flashdata('clsResult');
 			$data['entornos'] = $this->Entorno_model->getAll();
 		}
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_SIIGS.'/entorno/index', $data);
@@ -76,6 +76,7 @@ class Entorno extends CI_Controller {
 		catch(Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_SIIGS.'/entorno/view', $data);
@@ -126,14 +127,15 @@ class Entorno extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_SIIGS.'/entorno/insert', $data);
 				$this->template->render();
 				$error = true;
 			}
-
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro insertado correctamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				redirect(DIR_SIIGS.'/entorno/index','refresh');
 			}
 		}
@@ -227,6 +229,7 @@ class Entorno extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 			}
 
 			$this->template->write_view('content',DIR_SIIGS.'/entorno/update', $data);
@@ -255,9 +258,11 @@ class Entorno extends CI_Controller {
 				catch (Exception $e)
 				{
 					$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+					$data['clsResult'] = 'error';
 				}
 
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_SIIGS.'/entorno/update', $data);
 				$this->template->render();
 
@@ -267,6 +272,7 @@ class Entorno extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				redirect(DIR_SIIGS.'/entorno','refresh');
 			}
 		}
@@ -292,10 +298,12 @@ class Entorno extends CI_Controller {
 			$this->Entorno_model->setId($id);
 			$this->Entorno_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+			$this->session->set_flashdata('clsResult', 'success');
 		}
 		catch(Exception $e)
 		{
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+			$this->session->set_flashdata('clsResult', 'error');
 		}
 		redirect(DIR_SIIGS.'/entorno','refresh');
 	}

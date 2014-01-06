@@ -1,14 +1,15 @@
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
  <?php
 if (!empty($catalogo_item))
 {
 ?>
 <?php echo validation_errors(); ?>
-<?php echo form_open(DIR_TES.'/cie10/update/'.$catalogo_item->id) ?>
+<?php echo form_open(DIR_SIIGS.'/cie10/update/'.$catalogo_item->id) ?>
+<div class="table table-striped">
 <table>
 	<tr>
 		<td><label for="nombre">Código</label></td>
@@ -21,10 +22,12 @@ if (!empty($catalogo_item))
 	<tr>
 		<td colspan=2>
 		<input type="hidden" name="id" value="<?php echo $catalogo_item->id; ?>"/>
-		<input type="submit" name="submit" value="Guardar" />
+		<input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
+		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/cie10/'" class="btn btn-primary" />
 		<td>
 	</tr>
 </table>
+</div>
 </form>
 <?php
 }

@@ -347,7 +347,8 @@ class Controlador_model extends CI_Model {
 		$data = array(
 				'nombre' => $this->nombre,
 				'descripcion' => $this->descripcion,
-				'clase' => $this->clase
+				'clase' => $this->clase,
+                                'id_entorno' => $this->id_entorno
 		);
 
 		$this->db->where('id' , $this->getId());

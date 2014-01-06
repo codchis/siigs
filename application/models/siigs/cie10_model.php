@@ -3,7 +3,7 @@
 /**
  * Modelo Cie10
  *
- * @package    TES
+ * @package    SIIGS
  * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-12-02

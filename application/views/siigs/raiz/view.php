@@ -1,6 +1,6 @@
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <h2><?php echo $title; ?></h2>
 <?php
@@ -9,16 +9,17 @@ if (!empty($raiz_item))
 echo '<h5>Descripci&oacute;n: '.$raiz_item->descripcion.'</h5><br/>';
 
 ?>
+<div class="table table-striped">
 <table id="raizcatalogo">
 	<thead>
 		<tr>
-			<th colspan=5>Catálogos de la raiz</th>
+			<th colspan=5><h2>Catálogos de la raiz</h2></th>
 		</tr>
 		<tr>
-			<td>Nivel</td>
-			<td>Catálogo</td>
-			<td>Llave</td>
-			<td>Descripción</td>
+			<td><h2>Nivel</h2></td>
+			<td><h2>Catálogo</h2></td>
+			<td><h2>Llave</h2></td>
+			<td><h2>Descripción</h2></td>
 		</tr>
 		<?php foreach ($catalogos as $item):?>
 			<tr>
@@ -30,7 +31,7 @@ echo '<h5>Descripci&oacute;n: '.$raiz_item->descripcion.'</h5><br/>';
 		<?php endforeach ?>
 	</thead>
 </table>
-
+</div>
 <?php
 }
 else

@@ -11,6 +11,10 @@ if (!empty($controlador_item))
 <div class="table table-striped">
 <?php echo form_open(DIR_SIIGS.'/controlador/update/'.$controlador_item->id) ?>
 <table>
+    	<tr>
+		<td><label for="id_entorno">Entorno</label></td>
+		<td>  <?php  echo  form_dropdown('id_entorno', $entornos, $controlador_item->id_entorno); ?></td>
+	</tr>
 	<tr>
 		<td><label for="nombre">Nombre</label></td>
 		<td><input type="text" name="nombre" value="<?php echo $controlador_item->nombre; ?>" /></td>
