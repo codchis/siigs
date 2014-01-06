@@ -1,7 +1,7 @@
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
         echo $msgResult.'<br /><br />';
-	if (isset($user_item)) {
+	if (count($user_item) == 0) echo 'Registro no encontrado.<br><br>'; else {
 ?>
 <div class="table table-striped">
 <table>

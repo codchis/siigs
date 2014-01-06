@@ -1,7 +1,7 @@
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
         echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
-	if (isset($notificacion_item)) {
+	if (count($notificacion_item) == 0) echo 'Registro no encontrado.<br><br>'; else {
 ?>
 <div class="table table-striped">
 <table>

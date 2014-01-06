@@ -108,11 +108,15 @@ class Notificacion extends CI_Controller {
 			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
 			$data['title'] = 'Ver detalles de la notificación';
-			$notification = $this->Notificacion_model->getById($id, true)[0];			
-			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
-			$descripciones = $this->ArbolSegmentacion_model->getDescripcionById(explode(',',$notification->id_arr_asu), 0);
-			for($i = 0; $i < count($descripciones); $i++)
-				$notification->tabletas[$i] = $descripciones[$i]->descripcion;
+			$notification = $this->Notificacion_model->getById($id, true);
+			if (count($notification) > 0)
+			{			
+				$notification = $notification[0];
+				$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+				$descripciones = $this->ArbolSegmentacion_model->getDescripcionById(explode(',',$notification->id_arr_asu), 0);
+				for($i = 0; $i < count($descripciones); $i++)
+					$notification->tabletas[$i] = $descripciones[$i]->descripcion;
+			}
 			$data['notificacion_item'] = $notification;
 		}
 		catch(Exception $e){
