@@ -3,7 +3,8 @@
         echo $msgResult.'<br /><br />';
 	echo validation_errors(); 
 	echo form_open(DIR_SIIGS.'/usuario/update/'.$user_item->id) ?>
-<table border="1">
+<div class="table table-striped">
+	<table>
 	<tr>
 		<td><label for="id_grupo">Grupo</label></td>
 		<td><?php echo form_dropdown('id_grupo', $grupos, $user_item->id_grupo) ?></td>
@@ -35,8 +36,10 @@
 	<tr>
 		<td colspan="2">
 		<input type="hidden" name="id" value="<?php echo $user_item->id; ?>"/>
-		<input type="submit" name="submit" value="Guardar" />
+		<input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
+		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/usuario/'" class="btn btn-primary" />
 		<td>
 	</tr>
 </table>
+</div>
 </form>

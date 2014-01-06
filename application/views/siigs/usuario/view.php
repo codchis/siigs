@@ -1,9 +1,10 @@
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
         echo $msgResult.'<br /><br />';
-	if (isset($user_item)) {
+	if (count($user_item) == 0) echo 'Registro no encontrado.<br><br>'; else {
 ?>
-<table border="1">
+<div class="table table-striped">
+<table>
 	<tr>
 		<td><label for="id">Id</label></td>
 		<td><?php echo $user_item->id ?></td>
@@ -37,4 +38,6 @@
 		<td><input type="checkbox" disabled="true" name="activo" <?php if ($user_item->activo == 1) echo 'checked' ?> /></td>
 	</tr>
 </table>
+</div>
 <?php } ?>
+<a href="<?php echo site_url().DIR_SIIGS; ?>/usuario/" class="btn btn-primary">Regresar al listado</a>

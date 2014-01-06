@@ -26,36 +26,40 @@ $opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::usuario::delete');
 ?>
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
-        echo $msgResult.'<br /><br />'; ?>
+        echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>'; ?>
 <fieldset style="width: 50%">
-    <legend>Opciones de búsqueda</legend>
 <?php echo form_open(DIR_SIIGS.'/usuario/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
 Buscar usuario
 <input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" /> 
-<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" />
+<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" class="btn btn-primary"/>
 </form>
 </fieldset>
-<br />
-<table border="1">
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS?>/usuario/insert" class="btn btn-primary">Crear nuevo</a><?php } ?>
+<div class="table table-striped">
+<table>
+<thead>
 	<tr>
-		<th>Nombre de usuario</th>
-		<th>Nombre</th>
-		<th>Apellido Paterno</th>
-		<th>Apellido Materno</th>
-		<?php if($opcion_view) { ?><td></td> <?php } ?>
-		<?php if($opcion_update) { ?><td></td> <?php } ?>
-		<?php if($opcion_delete) { ?><td></td> <?php } ?>
+		<th><h2>Nombre de usuario</h2></th>
+		<th><h2>Nombre</h2></th>
+		<th><h2>Apellido Paterno</h2></th>
+		<th><h2>Apellido Materno</h2></th>
+		<?php if($opcion_view) { ?><th><h2></h2></th> <?php } ?>
+		<?php if($opcion_update) { ?><th><h2></h2></th> <?php } ?>
+		<?php if($opcion_delete) { ?><th><h2></h2></th> <?php } ?>
 	</tr>
+</thead>
+<tbody>
 	<?php if (isset($users)) foreach ($users as $user_item): ?>
 	<tr>
 		<td><?php echo $user_item->nombre_usuario ?></td>
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
 		<td><?php echo $user_item->apellido_materno ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/view/<?php echo $user_item->id ?>">Ver detalles</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/update/<?php echo $user_item->id ?>">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/delete/<?php echo $user_item->id ?>" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/view/<?php echo $user_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/update/<?php echo $user_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/delete/<?php echo $user_item->id ?>"  class="btn btn-primary" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>
+</tbody>
 	<?php endforeach ?>
     <tfoot>
         <tr><td colspan="7">
@@ -63,4 +67,4 @@ Buscar usuario
         </td></tr>
     </tfoot>
 </table>
-<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS?>/usuario/insert">Crear nuevo</a><?php } ?>
+</div>

@@ -45,7 +45,8 @@ class Permiso extends CI_Controller {
 			$this->load->model(DIR_SIIGS.'/accion_model');
 			$this->load->model(DIR_SIIGS.'/entorno_model');
 			
-			$data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['msgResult'] = $this->session->flashdata('msgResult');
+            $data['clsResult'] = $this->session->flashdata('clsResult');
 			$data['title'] = 'Lista de Permisos disponibles';
 			$data['actions'] = $this->accion_model->getAll();
 			$arrEntornos = $this->entorno_model->getAll();
@@ -84,12 +85,14 @@ class Permiso extends CI_Controller {
 						$this->Permiso_model->insertBatch($data);
 					}
 					$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
+					$this->session->set_flashdata('clsResult', 'success');
 					redirect(DIR_SIIGS.'/grupo','refresh');
 				}
 			}
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 			$this->template->write_view('content',DIR_SIIGS.'/permiso/index', $data);
 			$this->template->render();
 		}

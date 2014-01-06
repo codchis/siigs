@@ -44,6 +44,7 @@ class Notificacion extends CI_Controller {
 			
 			$data['pag'] = $pag;
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['clsResult'] = $this->session->flashdata('clsResult');
 			
 			if($this->input->post('filtrar')) {
 				// Eliminar el campo hidden y el boton
@@ -72,7 +73,7 @@ class Notificacion extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['uri_segment'] = '4';
 			$configPag['total_rows'] = $this->Notificacion_model->getNumRows($this->input->post('busqueda'));
-			$configPag['per_page']   = 20;
+			$configPag['per_page']   = REGISTROS_PAGINADOR;
 			$this->pagination->initialize($configPag);
 			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
 			$notifications = $this->Notificacion_model->getAll($this->input->post('busqueda'), $configPag['per_page'], $pag);
@@ -85,6 +86,7 @@ class Notificacion extends CI_Controller {
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
  		$this->template->write_view('content',DIR_TES.'/notificacion/index', $data);
  		$this->template->render();
@@ -105,16 +107,21 @@ class Notificacion extends CI_Controller {
 				return false;
 			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
-			$data['title'] = 'Ver detalles de la notificaci�n';
-			$notification = $this->Notificacion_model->getById($id, true)[0];			
-			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
-			$descripciones = $this->ArbolSegmentacion_model->getDescripcionById(explode(',',$notification->id_arr_asu), 0);
-			for($i = 0; $i < count($descripciones); $i++)
-				$notification->tabletas[$i] = $descripciones[$i]->descripcion;
+			$data['title'] = 'Ver detalles de la notificación';
+			$notification = $this->Notificacion_model->getById($id, true);
+			if (count($notification) > 0)
+			{			
+				$notification = $notification[0];
+				$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+				$descripciones = $this->ArbolSegmentacion_model->getDescripcionById(explode(',',$notification->id_arr_asu), 0);
+				for($i = 0; $i < count($descripciones); $i++)
+					$notification->tabletas[$i] = $descripciones[$i]->descripcion;
+			}
 			$data['notificacion_item'] = $notification;
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
  		$this->template->write_view('content',DIR_TES.'/notificacion/view', $data);
  		$this->template->render();
@@ -133,7 +140,7 @@ class Notificacion extends CI_Controller {
 			return false;
 		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 			show_error('', 403, 'Acceso denegado');
-		$data['title'] = 'Crear una nueva notificaci�n';
+		$data['title'] = 'Crear una nueva notificación';
 		$this->load->model(DIR_TES.'/notificacion_model');
 		$this->load->helper('form');
 		$this->load->library('form_validation');
@@ -164,11 +171,13 @@ class Notificacion extends CI_Controller {
 				$this->Notificacion_model->setIdsTabletas($this->input->post('id_arr_asu'));
 				$this->Notificacion_model->insert();
 				$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificaci�n agregada: '.strtoupper($this->input->post('titulo')));
 				redirect(DIR_TES.'/notificacion','refresh');
 			}
 			catch (Exception $e){
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_TES.'/notificacion/insert', $data);
 				$this->template->render();
 			}
@@ -189,7 +198,7 @@ class Notificacion extends CI_Controller {
 			return false;
 		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 			show_error('', 403, 'Acceso denegado');
-		$data['title'] = 'Modificar notificaci�n';
+		$data['title'] = 'Modificar notificación';
  		$this->load->helper('form');
  		$this->load->library('form_validation');
 		$this->form_validation->set_rules('titulo', 'Titulo', 'trim|xss_clean|required|max_length[60]');
@@ -221,11 +230,13 @@ class Notificacion extends CI_Controller {
 				$this->Notificacion_model->setIdsTabletas($this->input->post('id_arr_asu'));
 				$this->Notificacion_model->update();
 				$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificaci�n actualizada: '.$id);
 				redirect(DIR_TES.'/notificacion','refresh');
 			}
 			catch (Exception $e){
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_TES.'/notificacion/update', $data);
 				$this->template->render();
 			}
@@ -249,10 +260,12 @@ class Notificacion extends CI_Controller {
 			$this->Notificacion_model->setId($id);
 			$this->Notificacion_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+			$this->session->set_flashdata('clsResult', 'success');
 			Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificaci�n eliminada: '.$id);
 		}
 		catch (Exception $e){
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+			$this->session->set_flashdata('clsResult', 'error');
 		}
 	    redirect(DIR_TES.'/notificacion','refresh');
 	}

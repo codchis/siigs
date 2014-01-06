@@ -116,9 +116,10 @@ if (!$opcion_rpt3) unset($reports[3]);
 ?>
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
-        echo $msgResult.'<br /><br />'; ?>
+        echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>'; ?>
 <fieldset style="width: 50%">
 <?php echo form_open(DIR_TES.'/reporteador/index/'); ?>
+<div class="table table-striped">
 <table>
 <tr>
 <td>Reporte a generar:</td>
@@ -138,8 +139,9 @@ if (!$opcion_rpt3) unset($reports[3]);
 </tr>
 <tr>
 <td colspan='4'>
-<input type="submit" name="btnProcesar" id="btnProcesar" value="Procesar" /></td>
+<input type="submit" name="btnProcesar" id="btnProcesar" value="Procesar" class="btn btn-primary" /></td>
 </tr>
 </table>
+</div>
 </form>
 </fieldset>

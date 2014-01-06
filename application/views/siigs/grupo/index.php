@@ -27,37 +27,41 @@ $opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::grupo::delete');
 ?>
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
-        echo $msgResult.'<br /><br />'; ?>
+        echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>'; ?>
 <fieldset style="width: 50%">
-    <legend>Opciones de búsqueda</legend>
 <?php echo form_open(DIR_SIIGS.'/grupo/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
 Buscar grupo
 <input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" /> 
-<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" />
+<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" class="btn btn-primary" />
 </form>
 </fieldset>
-<br />
-<table border="1">
-		<?php if($permiso_index) { ?><th>&nbsp;</th><?php } ?>
-		<th>Nombre</th>
-		<th>Descripción</th>
-		<?php if($opcion_view) { ?><th></th> <?php } ?>
-		<?php if($opcion_update) { ?><th></th> <?php } ?>
-		<?php if($opcion_delete) { ?><th></th> <?php } ?>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS?>/grupo/insert" class="btn btn-primary">Crear nuevo</a><?php } ?>
+<div class="table table-striped">
+<table>
+<thead>
+		<?php if($permiso_index) { ?><th><h2></h2>&nbsp;</th><?php } ?>
+		<th><h2>Nombre</h2></th>
+		<th><h2>Descripción</h2></th>
+		<?php if($opcion_view) { ?><th><h2></h2></th> <?php } ?>
+		<?php if($opcion_update) { ?><th><h2></h2></th> <?php } ?>
+		<?php if($opcion_delete) { ?><th><h2></h2></th> <?php } ?>
+</thead>
+<tbody>
 	<?php if (isset($groups)) foreach ($groups as $group_item): ?>
 	<tr>
-		<?php if($permiso_index) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/<?php echo $group_item->id ?>/permiso">Permisos</a></td><?php } ?>
+		<?php if($permiso_index) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/<?php echo $group_item->id ?>/permiso" class="btn btn-primary">Permisos</a></td><?php } ?>
 		<td><?php echo $group_item->nombre ?></td>
 		<td><?php echo $group_item->descripcion ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/view/<?php echo $group_item->id ?>">Ver detalles</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/update/<?php echo $group_item->id ?>">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/delete/<?php echo $group_item->id ?>" onclick="if (confirm('Realmente desea eliminar este grupo?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/view/<?php echo $group_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/update/<?php echo $group_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/delete/<?php echo $group_item->id ?>" class="btn btn-primary" onclick="if (confirm('Realmente desea eliminar este grupo?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 			</tr>
 	<?php endforeach ?>
+</tbody>
     <tfoot>
         <tr><td colspan="7">
             <div id="paginador" align="center"><?php echo $this->pagination->create_links(); ?></div>
         </td></tr>
     </tfoot>
 </table>
-<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS?>/grupo/insert">Crear nuevo</a><?php } ?>
+</div>
