@@ -147,7 +147,7 @@ body {background-color: #E4E4E4;}
     #full-content > #content {  width: 97.09090909090909%; padding: 0 1.454545454545455%;  }
 
     #left-content { width: 97.92817679558011%/*97.92817679558011%*/; padding: 0 2.07182320441989% 0 0;  float: left; background: #FFF; height: 630px; }
-    .contenido { width: 99.7%; margin: 0 auto; margin-top: 20px; margin-bottom: 20px; min-height: 100px; background: #FFF; }
+    .contenido { width: 99.7%; margin: 0 auto; margin-top: 20px; margin-bottom: 20px; min-height: 350px !important; background: #FFF; }
 
     @media (max-width: 767px)
     {
