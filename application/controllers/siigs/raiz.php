@@ -14,11 +14,11 @@ class Raiz extends CI_Controller {
 	{
 		parent::__construct();
 
-			try
+		try
 		{
-                        $this->load->helper('url');
+            $this->load->helper('url');
 			$this->load->model(DIR_SIIGS.'/Raiz_model');
-                        $this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+            $this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
 			$this->load->model(DIR_SIIGS.'/Catalogo_model');
 			$this->load->model(DIR_SIIGS.'/Catalogo_x_raiz_model');
 		}
@@ -54,10 +54,12 @@ class Raiz extends CI_Controller {
 			$data['title'] = 'Lista de raices disponibles';
 			$data['raices'] = $this->Raiz_model->getAll();
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['clsResult'] = $this->session->flashdata('clsResult');
 		}
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_SIIGS.'/raiz/index', $data);
@@ -86,6 +88,7 @@ class Raiz extends CI_Controller {
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		try
@@ -95,6 +98,7 @@ class Raiz extends CI_Controller {
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_SIIGS.'/raiz/view', $data);
@@ -137,6 +141,7 @@ class Raiz extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_SIIGS.'/raiz/insert', $data);
 				$this->template->render();
 				$error = true;
@@ -145,6 +150,7 @@ class Raiz extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro insertado correctamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				redirect(DIR_SIIGS.'/raiz/index','refresh');
 			}
 		}
@@ -183,6 +189,7 @@ class Raiz extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 			}
 			//obtiene los catalogos relacionados a la raiz
 			try
@@ -192,6 +199,7 @@ class Raiz extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 			}
 			//revisa si ya existen los registros de esta raiz en el arbol de segmentacion unica
 			try
@@ -201,6 +209,7 @@ class Raiz extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 			}
 
 
@@ -225,9 +234,11 @@ class Raiz extends CI_Controller {
 				catch (Exception $e)
 				{
 					$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+					$data['clsResult'] = 'error';
 				}
 
-				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);	
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_SIIGS.'/raiz/update', $data);
 				$this->template->render();
 
@@ -237,6 +248,7 @@ class Raiz extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				redirect(DIR_SIIGS.'/raiz','refresh');
 			}
 		}
@@ -263,10 +275,12 @@ class Raiz extends CI_Controller {
 			$this->Raiz_model->setId($id);
 			$this->Raiz_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+			$this->session->set_flashdata('clsResult', 'success');
 		}
 		catch(Exception $e)
 		{
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+			$this->session->set_flashdata('clsResult', 'error');
 		}
 		redirect(DIR_SIIGS.'/raiz','refresh');
 	}

@@ -7,22 +7,25 @@ $opcion_delete = Menubuilder::isGranted(DIR_TES.'::reglavacuna::delete');
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
-<?php if ( !empty($reglas) && !count($reglas) == 0) { ?>
+ <?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES; ?>/reglavacuna/insert" class="btn btn-primary">Crear Nuevo</a><?php } ?>
+
+<div class="table table-striped">
 <table>
 <thead>
 	<tr>
-	<th>Vacuna</th>
-	<th>Tipo Aplicación</th>
-	<th>Desde</th>
-        <th>Hasta</th>
-        <th>Vacuna Previa</th>
-	<?php if($opcion_view) { ?><th>Detalles</th><?php } ?>
-	<?php if($opcion_update) { ?><th>Modificar</th><?php } ?>
-	<?php if($opcion_delete) { ?><th>Eliminar</th><?php } ?>
+	<th><h2>Vacuna</h2></th>
+	<th><h2>Tipo Aplicación</h2></th>
+	<th><h2>Desde</h2></th>
+        <th><h2>Hasta</h2></th>
+        <th><h2>Vacuna Previa</h2></th>
+	<?php if($opcion_view) { ?><th></th><?php } ?>
+	<?php if($opcion_update) { ?><th></th><?php } ?>
+	<?php if($opcion_delete) { ?><th></th><?php } ?>
 	</tr>
 </thead>
+<?php if ( !empty($reglas) && !count($reglas) == 0) { ?>
 <?php foreach ($reglas as $regla_item): ?>
 	<tr>
 		<td><?php echo $regla_item->vacuna ?></td>
@@ -30,28 +33,17 @@ echo $msgResult.'<br /><br />';
 		<td><?php echo $regla_item->desde ?></td>
                 <td><?php echo $regla_item->hasta ?></td>
                 <td><?php echo $regla_item->previa ?></td>
-                    <?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES; ?>/reglavacuna/view/<?php echo $regla_item->id ?>">Ver detalles</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES; ?>/reglavacuna/update/<?php echo $regla_item->id ?>">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_TES; ?>/reglavacuna/delete/<?php echo $regla_item->id ?>" onclick="if (confirm('Realmente desea eliminar esta regla?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
+                    <?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES; ?>/reglavacuna/view/<?php echo $regla_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES; ?>/reglavacuna/update/<?php echo $regla_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_TES; ?>/reglavacuna/delete/<?php echo $regla_item->id ?>" class="btn btn-primary" onclick="if (confirm('Realmente desea eliminar esta regla?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>
 <?php endforeach ?>
-<tr>
-	<td colspan=6 >
-	<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES; ?>/reglavacuna/insert">Crear Nuevo</a><?php } ?>
-	</td>
-</tr>
-</table>
 <?php } else {?>
-<table>
 <thead>
 <tr>
 	<th>No se encontraron registros</th>
 </tr>
 </thead>
-<tr>
-	<td>
-	<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES; ?>/reglavacuna/insert">Crear Nuevo</a><?php } ?>
-	</td>
-</tr>
-</table>
 <?php } ?>
+</table>
+</div>

@@ -44,10 +44,12 @@ class ReglaVacuna extends CI_Controller {
 			$data['title'] = 'Lista de reglas para vacunas';
 			$data['reglas'] = $this->ReglaVacuna_model->getAll();
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['clsResult'] = $this->session->flashdata('clsResult');
 		}
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_TES.'/reglavacuna/index', $data);
@@ -75,6 +77,7 @@ class ReglaVacuna extends CI_Controller {
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_TES.'/reglavacuna/view', $data);
@@ -135,6 +138,7 @@ class ReglaVacuna extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_TES.'/reglavacuna/insert', $data);
 				$this->template->render();
 				$error = true;
@@ -143,6 +147,7 @@ class ReglaVacuna extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro insertado correctamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				redirect(DIR_TES.'/reglavacuna/index','refresh');
 			}
 		}
@@ -187,6 +192,7 @@ class ReglaVacuna extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 			}
 
 			$this->template->write_view('content',DIR_TES.'/reglavacuna/update', $data);
@@ -221,9 +227,11 @@ class ReglaVacuna extends CI_Controller {
 				catch (Exception $e)
 				{
 					$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+					$data['clsResult'] = 'error';
 				}
 
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_TES.'/reglavacuna/update', $data);
 				$this->template->render();
 
@@ -233,6 +241,7 @@ class ReglaVacuna extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				redirect(DIR_TES.'/reglavacuna','refresh');
 			}
 		}
@@ -258,10 +267,12 @@ class ReglaVacuna extends CI_Controller {
 			$this->ReglaVacuna_model->setId($id);
 			$this->ReglaVacuna_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
+			$this->session->set_flashdata('clsResult', 'success');
 		}
 		catch(Exception $e)
 		{
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+			$this->session->set_flashdata('clsResult', 'error');
 		}
 		redirect(DIR_TES.'/reglavacuna','refresh');
 	}

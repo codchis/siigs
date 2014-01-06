@@ -50,7 +50,7 @@ class Cie10 extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['total_rows'] = $this->Cie10_model->getNumRows();
 			$configPag['uri_segment'] = '4';
-			$configPag['per_page']   = 20;
+			$configPag['per_page']   = REGISTROS_PAGINADOR;
 
 			$this->pagination->initialize($configPag);
 
@@ -60,10 +60,12 @@ class Cie10 extends CI_Controller {
 			$data['title'] = 'Lista de datos en el catálogo CIE10';
 			$data['datos'] = $this->Cie10_model->getAll();
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['clsResult'] = $this->session->flashdata('clsResult');
 		}
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_TES.'/cie10/index', $data);
@@ -93,10 +95,12 @@ class Cie10 extends CI_Controller {
 			$data['datos'] = $this->Cie10_model->getCatalogoByName($cat);
                         $data['catalogo'] = $cat;
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['clsResult'] = 'success';
 		}
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_TES.'/cie10/view', $data);
@@ -272,6 +276,7 @@ class Cie10 extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 			}
 
 			$this->template->write_view('content',DIR_TES.'/cie10/update', $data);
@@ -294,9 +299,11 @@ class Cie10 extends CI_Controller {
 				catch (Exception $e)
 				{
 					$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+					$data['clsResult'] = 'error';
 				}
 
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+				$data['clsResult'] = 'error';
 				$this->template->write_view('content',DIR_TES.'/cie10/update', $data);
 				$this->template->render();
 
@@ -306,6 +313,7 @@ class Cie10 extends CI_Controller {
 			if ($error == false)
 			{
 				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
+				$this->session->set_flashdata('clsResult', 'success');
 				redirect(DIR_TES.'/cie10','refresh');
 			}
 		}		

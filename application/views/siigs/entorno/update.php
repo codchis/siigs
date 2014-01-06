@@ -1,7 +1,7 @@
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <?php
 if (!empty($entorno_item))
@@ -9,6 +9,7 @@ if (!empty($entorno_item))
 ?>
 <?php echo validation_errors(); ?>
 <?php echo form_open(DIR_SIIGS.'/entorno/update/'.$entorno_item->id) ?>
+<div class="table table-striped">
 <table>
 	<tr>
 		<td><label for="nombre">Nombre</label></td>
@@ -33,10 +34,12 @@ if (!empty($entorno_item))
 	<tr>
 		<td colspan=2>
 		<input type="hidden" name="id" value="<?php echo $entorno_item->id; ?>"/>
-		<input type="submit" name="submit" value="Guardar" />
+		<input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
+		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/entorno/'" class="btn btn-primary" />
 		<td>
 	</tr>
 </table>
+</div>
 </form>
 <?php
 }

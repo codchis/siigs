@@ -7,43 +7,34 @@ $opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::raiz::delete');
 <h2><?php echo $title; ?></h2>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
-<?php if ( !empty($raices) && !count($raices) == 0) { ?>
+ <?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS; ?>/raiz/insert" class="btn btn-primary">Crear Nuevo</a><?php } ?>
+<div class="table table-striped">
 <table>
 <thead>
 	<tr>
-	<th>Descripci&oacute;n</th>
-	<?php if($opcion_view) { ?><th>Detalles</th><?php } ?>
-	<?php if($opcion_update) { ?><th>Modificar</th><?php } ?>
-	<?php if($opcion_delete) { ?><th>Eliminar</th><?php } ?>
+	<th><h2>Descripci&oacute;n</h2></th>
+	<?php if($opcion_view) { ?><th></th><?php } ?>
+	<?php if($opcion_update) { ?><th></th><?php } ?>
+	<?php if($opcion_delete) { ?><th></th><?php } ?>
 	</tr>
 </thead>
+<?php if ( !empty($raices) && !count($raices) == 0) { ?>
 <?php foreach ($raices as $raiz_item): ?>
 	<tr>
 		<td><?php echo $raiz_item->descripcion ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/view/<?php echo $raiz_item->id ?>">Ver detalles</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/update/<?php echo $raiz_item->id ?>">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/delete/<?php echo $raiz_item->id ?>" onclick="if (<?php echo $raiz_item->catalogos?>=='0'){if (confirm('Realmente desea eliminar esta raiz?')) { return true; } else {return false;}} else {alert('No se puede eliminar la raiz porque ya contiene catalogos asociados.') ; return false;}">Eliminar</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/view/<?php echo $raiz_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/update/<?php echo $raiz_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/delete/<?php echo $raiz_item->id ?>"  class="btn btn-primary"onclick="if (<?php echo $raiz_item->catalogos?>=='0'){if (confirm('Realmente desea eliminar esta raiz?')) { return true; } else {return false;}} else {alert('No se puede eliminar la raiz porque ya contiene catalogos asociados.') ; return false;}">Eliminar</a></td><?php } ?>
 	</tr>
 <?php endforeach ?>
-<tr>
-	<td colspan=6 >
-	<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS; ?>/raiz/insert">Crear Nuevo</a><?php } ?>
-	</td>
-</tr>
-</table>
 <?php } else {?>
-<table>
 <thead>
 <tr>
-	<th>No se encontraron registros</th>
+	<th colspan=4>No se encontraron registros</th>
 </tr>
 </thead>
-<tr>
-	<td>
-	<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS; ?>/raiz/insert">Crear Nuevo</a><?php } ?>
-	</td>
-</tr>
-</table>
 <?php } ?>
+</table>
+</div>

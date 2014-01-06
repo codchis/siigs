@@ -1,18 +1,23 @@
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <h2><?php echo $title; ?></h2>
 <?php
 if (!empty($entorno_item))
 {
-echo '<h2>[ '.$entorno_item->nombre.' ]</h2>';
-echo '<h5>Descripci&oacute;n: '.$entorno_item->descripcion.'</h5><br/>';
-echo '<h5>IP: '.$entorno_item->ip.'</h5><br/>';
-echo '<h5>Hostname: '.$entorno_item->hostname.'</h5><br/>';
-echo '<h5>Directorio: '.$entorno_item->directorio.'</h5><br/>';
+	echo '<div class="table table-striped">
+	<table>
+        <tr><td colspan=2><strong>[ '.$entorno_item->nombre.' ]</strong></td></tr>
+        <tr><td><strong>Descripci&oacute;n</strong></td><td>'.$entorno_item->descripcion.'</td></tr>
+        <tr><td><strong>IP</strong></td><td>'.$entorno_item->ip.'</td></tr>
+        <tr><td><strong>Hostname</strong></td><td>'.$entorno_item->hostname.'</td></tr>
+        <tr><td><strong>Directorio</strong></td><td>'.$entorno_item->directorio.'</td></tr>
+        </table></div>';
 }
 else
 {
 echo "No se ha encontrado el elemento";
 }
+?>
+<a href="<?php echo site_url().DIR_SIIGS; ?>/entorno/" class="btn btn-primary">Regresar al listado</a>

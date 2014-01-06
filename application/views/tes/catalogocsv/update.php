@@ -67,7 +67,7 @@ $(document).ready(function(){
 			    	tfoot = $('<tfoot></tfoot>');
 			    	tr = $('<tr></tr>');
 			    	td = $('<td colspan=2></td>');
-			    	input = $('<input type="button" value="Confirmar cambios"/>');
+			    	input = $('<input type="button" class="btn btn-primary" value="Confirmar cambios"/>');
 			    	$(input).click(function(){
 				    	subirupdate(true);
 					});
@@ -112,7 +112,7 @@ $(document).ready(function(){
 
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <h2><?php echo $title; ?></h2>
 <?php
@@ -120,10 +120,11 @@ if (!empty($catalogo_item))
 {
 ?>
 <form method="post" enctype="application/x-www-form-urlencoded" id="loadcsv">
+<div class="table table-striped">
 <table>
 <tr>
-<td>[Archivo csv separado por comas]<input type="file" name="archivocsv" id="btncsv"/></td>
-<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" /></td>
+<td>[Archivo csv separado por comas]<input type="file" name="archivocsv" class="btn btn-primary" id="btncsv"/></td>
+<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" class="btn btn-primary" /></td>
 </tr>
 </table>
 </form>
@@ -138,9 +139,9 @@ if (!empty($datos))
         <tr>
         <?php foreach(array_keys((array)$datos[0]) as $claves) {
             if ($claves != 'activo') {?>
-            <td><?php echo $claves;?></td>
+            <td><h2><?php echo $claves;?></h2></td>
             <?php } } ?>
-            <td>Activar</td>
+            <td></td>
         </tr>
     </thead>
     <?php foreach($datos as $dato) { ?>
@@ -160,6 +161,7 @@ if (!empty($datos))
     </tr>
     <?php } ?>
 </table>
+</div>
 <?php
 }
 }

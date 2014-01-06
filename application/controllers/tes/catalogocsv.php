@@ -13,9 +13,9 @@ class CatalogoCsv extends CI_Controller {
 	{
 		parent::__construct();
 
-			try
+		try
 		{
-                        $this->load->helper('url');
+            $this->load->helper('url');
 			$this->load->model(DIR_TES.'/CatalogoCsv_model');
 		}
 		catch (Exception $e)
@@ -44,10 +44,12 @@ class CatalogoCsv extends CI_Controller {
 			$data['title'] = 'Lista de catálogos disponibles';
 			$data['catalogos'] = $this->CatalogoCsv_model->getAll();
 			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['clsResult'] = $this->session->flashdata('clsResult');
 		}
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_TES.'/catalogocsv/index', $data);
@@ -78,6 +80,7 @@ class CatalogoCsv extends CI_Controller {
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_TES.'/catalogocsv/view', $data);
@@ -373,11 +376,12 @@ class CatalogoCsv extends CI_Controller {
 		{
 			$data['title'] = "Modificar datos del catálogo";
 			$data['catalogo_item'] = $this->CatalogoCsv_model->getByName($nombre);
-                        $data['datos'] = $this->CatalogoCsv_model->getAllData($nombre);
+            $data['datos'] = $this->CatalogoCsv_model->getAllData($nombre);
 		}
 		catch (Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
 
 		$this->template->write_view('content',DIR_TES.'/catalogocsv/update', $data);
@@ -435,10 +439,12 @@ class CatalogoCsv extends CI_Controller {
 			$this->Poblacion_model->process();
             
             $this->session->set_flashdata('msgResult', 'Datos procesados correctamente');
+            $this->session->set_flashdata('clsResult', 'success');
 		}
 		catch (Exception $e)
 		{
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+			$this->session->set_flashdata('clsResult', 'error');
 		}
         
         redirect(DIR_TES.'/catalogocsv/', 'refresh');
@@ -466,9 +472,11 @@ class CatalogoCsv extends CI_Controller {
 			$this->Georeferencia_model->process();
             
             $this->session->set_flashdata('msgResult', 'Datos procesados correctamente');
+            $this->session->set_flashdata('clsResult', 'success');
 		}
 		catch (Exception $e) {
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+			$this->session->set_flashdata('clsResult', 'error');
 		}
         
         redirect(DIR_TES.'/catalogocsv/', 'refresh');

@@ -37,19 +37,20 @@ $(document).ready(function(){
 </script>
 <?php
 if(!empty($msgResult))
-echo $msgResult.'<br /><br />';
+echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <h2><?php echo $title; ?></h2>
 <?php
 if (!empty($datos))
 {
 ?>
+<div class="table table-striped">
 <table>
 <thead>
 	<tr>
-	<th>CIE10</th>
-	<th>Descripción</th>
-        <th>Activo</th>
+	<th><h2>CIE10</h2></th>
+	<th><h2>Descripción</h2></th>
+        <th><h2>Activo</h2></th>
 	</tr>
 </thead>
 <?php foreach ($datos as $item): ?>
@@ -63,6 +64,7 @@ if (!empty($datos))
 	</tr>
 <?php endforeach ?>
 </table>
+</div>
 <?php
 }
 else
