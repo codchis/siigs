@@ -35,7 +35,7 @@ if (!empty($regla_item))
 {
 ?>
 <?php echo validation_errors(); ?>
-<?php echo form_open(DIR_TES.'/reglavacuna/update/'.$regla_item->id , array('id'=>'frm_update')) ?>
+<?php echo form_open(DIR_SIIGS.'/reglavacuna/update/'.$regla_item->id , array('id'=>'frm_update')) ?>
 <div class="table table-striped">
 <table>
 	<tr>
@@ -60,7 +60,7 @@ if (!empty($regla_item))
 		<td colspan=2>
 		<input type="hidden" name="id" value="<?php echo $regla_item->id; ?>"/>
 		<input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
-		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_TES; ?>/reglavacuna/'" class="btn btn-primary" />
+		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/reglavacuna/'" class="btn btn-primary" />
 		<td>
 	</tr>
 </table>

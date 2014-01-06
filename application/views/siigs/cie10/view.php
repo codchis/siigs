@@ -6,7 +6,7 @@ $(document).ready(function(){
                context : this,
                type: "POST",
                data: {'id':$(this).attr("id"),'catalogo':$(this).attr("catalogo"),'activo':((this.checked) ? 1 : 0)},
-               url: '/<?php echo DIR_TES.'/cie10/ActivaEnCatalogo';?>'
+               url: '/<?php echo DIR_SIIGS.'/cie10/ActivaEnCatalogo';?>'
            })
              .done(function(result)
                {

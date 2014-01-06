@@ -2,7 +2,7 @@
 /**
  * Controlador CatalogoCsv
  *
- * @package    TES
+ * @package    SIIGS
  * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-12-06
@@ -16,7 +16,7 @@ class CatalogoCsv extends CI_Controller {
 		try
 		{
             $this->load->helper('url');
-			$this->load->model(DIR_TES.'/CatalogoCsv_model');
+			$this->load->model(DIR_SIIGS.'/CatalogoCsv_model');
 		}
 		catch (Exception $e)
 		{
@@ -36,7 +36,7 @@ class CatalogoCsv extends CI_Controller {
 	{
 		if (empty($this->CatalogoCsv_model))
 			return false;
-                if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
 		try
 		{
@@ -52,7 +52,7 @@ class CatalogoCsv extends CI_Controller {
 			$data['clsResult'] = 'error';
 		}
 
-		$this->template->write_view('content',DIR_TES.'/catalogocsv/index', $data);
+		$this->template->write_view('content',DIR_SIIGS.'/catalogocsv/index', $data);
                 
 		$this->template->render();
 	}
@@ -69,7 +69,7 @@ class CatalogoCsv extends CI_Controller {
 		if (empty($this->CatalogoCsv_model))
 			return false;
                 
-                if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
                 
 		try
@@ -83,7 +83,7 @@ class CatalogoCsv extends CI_Controller {
 			$data['clsResult'] = 'error';
 		}
 
-		$this->template->write_view('content',DIR_TES.'/catalogocsv/view', $data);
+		$this->template->write_view('content',DIR_SIIGS.'/catalogocsv/view', $data);
 		$this->template->render();
 	}
 	
@@ -369,7 +369,7 @@ class CatalogoCsv extends CI_Controller {
 	{
 		if (empty($this->CatalogoCsv_model))
 			return false;
-                if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');		
                 
 		try
@@ -384,7 +384,7 @@ class CatalogoCsv extends CI_Controller {
 			$data['clsResult'] = 'error';
 		}
 
-		$this->template->write_view('content',DIR_TES.'/catalogocsv/update', $data);
+		$this->template->write_view('content',DIR_SIIGS.'/catalogocsv/update', $data);
 		$this->template->render();
 		
 	}
@@ -432,7 +432,7 @@ class CatalogoCsv extends CI_Controller {
             echo 'No se puede cargar el modelo Poblacion';
 			return false;
         }
-		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+		if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 			show_error('', 403, 'Acceso denegado');
 		try
 		{
@@ -447,7 +447,7 @@ class CatalogoCsv extends CI_Controller {
 			$this->session->set_flashdata('clsResult', 'error');
 		}
         
-        redirect(DIR_TES.'/catalogocsv/', 'refresh');
+        redirect(DIR_SIIGS.'/catalogocsv/', 'refresh');
         die();
 	}
     
@@ -465,7 +465,7 @@ class CatalogoCsv extends CI_Controller {
             echo 'No se puede cargar el modelo Georeferencia';
 			return false;
         }
-		if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+		if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 			show_error('', 403, 'Acceso denegado');
 		try
 		{
@@ -479,7 +479,7 @@ class CatalogoCsv extends CI_Controller {
 			$this->session->set_flashdata('clsResult', 'error');
 		}
         
-        redirect(DIR_TES.'/catalogocsv/', 'refresh');
+        redirect(DIR_SIIGS.'/catalogocsv/', 'refresh');
         die();
 	}
 }

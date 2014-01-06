@@ -7,7 +7,7 @@ $(document).ready(function(){
                context : this,
                type: "POST",
                data: {'id':$(this).attr("id"),'catalogo':$(this).attr("catalogo"),'activo':((this.checked) ? 1 : 0)},
-               url: '/<?php echo DIR_TES.'/catalogocsv/ActivaEnCatalogo';?>'
+               url: '/<?php echo DIR_SIIGS.'/catalogocsv/ActivaEnCatalogo';?>'
            })
              .done(function(result)
                {
@@ -94,9 +94,9 @@ $(document).ready(function(){
 	function subirupdate(upd)
 	{
 		if (upd == false)
-			options.url = '/<?php echo DIR_TES.'/catalogocsv/loadupdate/'.$catalogo_item->nombre;?>';
+			options.url = '/<?php echo DIR_SIIGS.'/catalogocsv/loadupdate/'.$catalogo_item->nombre;?>';
 		else
-			options.url = '/<?php echo DIR_TES.'/catalogocsv/loadupdate/'.$catalogo_item->nombre.'/true';?>';
+			options.url = '/<?php echo DIR_SIIGS.'/catalogocsv/loadupdate/'.$catalogo_item->nombre.'/true';?>';
 		
     	$('#loadcsv').submit();
 	}

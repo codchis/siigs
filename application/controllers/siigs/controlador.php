@@ -142,7 +142,7 @@ class Controlador extends CI_Controller {
 		$this->form_validation->set_rules('id_entorno', 'Entorno', 'required|is_natural_no_zero');
 		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
 		$this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|xss_clean|required|max_length[100]');
-		$this->form_validation->set_rules('clase', 'Clase', 'trim|xss_clean|required|alpha|max_length[30]');
+		$this->form_validation->set_rules('clase', 'Clase', 'trim|xss_clean|required|max_length[30]');
 
 		$data['id_entorno'] = ($id != FALSE) ? $id : $this->input->post('id_entorno');
 		$entornos = $this->Entorno_model->getAll();
@@ -211,7 +211,7 @@ class Controlador extends CI_Controller {
                 $this->form_validation->set_rules('id_entorno', 'Entorno', 'required|is_natural_no_zero');
 		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
 		$this->form_validation->set_rules('descripcion', 'Descripción', 'trim|xss_clean|required|max_length[100]');
-		$this->form_validation->set_rules('clase', 'Clase', 'trim|xss_clean|required|alpha|max_length[30]');
+		$this->form_validation->set_rules('clase', 'Clase', 'trim|xss_clean|required|max_length[30]');
 
 		if ($this->form_validation->run() === FALSE)
 		{

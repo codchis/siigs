@@ -31,7 +31,7 @@ if(!empty($msgResult))
 echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <?php echo validation_errors(); ?>
-<?php echo form_open(DIR_TES.'/reglavacuna/insert' , array('id'=>'frm_insert')) ?>
+<?php echo form_open(DIR_SIIGS.'/reglavacuna/insert' , array('id'=>'frm_insert')) ?>
 <div class="table table-striped">
 <table>
 	<tr>
@@ -54,7 +54,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	</tr>
 	<tr>
 		<td colspan=2><input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
-		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_TES; ?>/reglavacuna/'" class="btn btn-primary" /><td>
+		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/reglavacuna/'" class="btn btn-primary" /><td>
 	</tr>
 </table>
 </div>

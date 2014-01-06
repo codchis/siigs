@@ -7,7 +7,7 @@ $(document).ready(function(){
                context : this,
                type: "POST",
                data: {'id':$(this).attr("valor"),'catalogo':$(this).attr("catalogo"),'activo':((this.checked) ? 1 : 0)},
-               url: '/<?php echo DIR_TES.'/cie10/AgregaEnCatalogo';?>'
+               url: '/<?php echo DIR_SIIGS.'/cie10/AgregaEnCatalogo';?>'
            })
              .done(function(result)
                {
@@ -95,9 +95,9 @@ $(document).ready(function(){
 	function subirupdate(upd)
 	{
 		if (upd == false)
-			options.url = '/<?php echo DIR_TES.'/cie10/insert/';?>';
+			options.url = '/<?php echo DIR_SIIGS.'/cie10/insert/';?>';
 		else
-			options.url = '/<?php echo DIR_TES.'/cie10/insert/true';?>';
+			options.url = '/<?php echo DIR_SIIGS.'/cie10/insert/true';?>';
 		
     	$('#loadcsv').submit();
 	}
@@ -124,17 +124,17 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<th><h2>Descripción</h2></th>
         <th></th>
 	<th>
-            <a href="/<?php echo DIR_TES; ?>/cie10/view/eda" class="btn btn-primary">
+            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/eda" class="btn btn-primary">
             Catálogo EDA
             </a>
         </th>
 	<th>
-            <a href="/<?php echo DIR_TES; ?>/cie10/view/ira" class="btn btn-primary">
+            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/ira" class="btn btn-primary">
             Catálogo IRA
             </a>
         </th>
         <th>
-            <a href="/<?php echo DIR_TES; ?>/cie10/view/consulta" class="btn btn-primary">
+            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/consulta" class="btn btn-primary">
             Consultas
             </a>
         </th>
@@ -144,7 +144,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<tr>
 		<td><?php echo $item->cie10 ?></td>
 		<td><?php echo $item->descripcion ?></td>
-                <td><a href="/<?php echo DIR_TES; ?>/cie10/update/<?php echo $item->id ?>" class="btn btn-primary">Modificar</a></td>
+                <td><a href="/<?php echo DIR_SIIGS; ?>/cie10/update/<?php echo $item->id ?>" class="btn btn-primary">Modificar</a></td>
                 <td>
                     <input class="check_catalogo" type="checkbox" id="eda<?php echo $item->id;?>" valor="<?php echo $item->id;?>" catalogo="eda" <?php echo ($item->eda == false) ? "" : "checked" ; ?> >
                     <label for="eda<?php echo $item->id;?>"><?php echo ($item->eda == false) ? "Agregar" : "Quitar" ; ?></label>
@@ -157,7 +157,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
                     <input class="check_catalogo" type="checkbox" id="consulta<?php echo $item->id;?>" valor="<?php echo $item->id;?>" catalogo="consulta" <?php echo ($item->consulta == false) ? "" : "checked" ; ?> >
                     <label for="consulta<?php echo $item->id;?>"><?php echo ($item->consulta == false) ? "Agregar" : "Quitar" ; ?></label>
                 </td>
-		<!--td><a href="/<?php //echo DIR_TES; ?>/cie10/delete/<?php echo $item->cie10 ?>" onclick="if (confirm('Realmente desea eliminar este registro?')) { return true; } else {return false;}">Eliminar</a></td-->
+		<!--td><a href="/<?php //echo DIR_SIIGS; ?>/cie10/delete/<?php echo $item->cie10 ?>" onclick="if (confirm('Realmente desea eliminar este registro?')) { return true; } else {return false;}">Eliminar</a></td-->
 	</tr>
 <?php endforeach ?>
 <tr>

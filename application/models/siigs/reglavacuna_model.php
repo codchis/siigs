@@ -3,7 +3,7 @@
 /**
  * Modelo ReglaVacuna
  * 
- * @package    TES
+ * @package    SIIGS
  * @subpackage Modelo
  * @author     Geovanni
  * @created    2013-!2-09

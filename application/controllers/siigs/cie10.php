@@ -2,7 +2,7 @@
 /**
  * Controlador Cie10
  *
- * @package    TES
+ * @package    SIIGS
  * @subpackage Controlador
  * @author     Geovanni
  * @created    2013-12-02
@@ -16,7 +16,7 @@ class Cie10 extends CI_Controller {
 			try
 		{
                         $this->load->helper('url');
-			$this->load->model(DIR_TES.'/Cie10_model');
+			$this->load->model(DIR_SIIGS.'/Cie10_model');
 		}
 		catch (Exception $e)
 		{
@@ -37,7 +37,7 @@ class Cie10 extends CI_Controller {
 		if (empty($this->Cie10_model))
 			return false;
                 
-                if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
 	
                 try
@@ -45,7 +45,7 @@ class Cie10 extends CI_Controller {
                     $this->load->library('pagination');
                     
                         //Configuracion para la paginacion
-			$configPag['base_url']   ='/'. DIR_TES.'/cie10/index/';
+			$configPag['base_url']   ='/'. DIR_SIIGS.'/cie10/index/';
 			$configPag['first_link'] = 'Primero';
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['total_rows'] = $this->Cie10_model->getNumRows();
@@ -68,7 +68,7 @@ class Cie10 extends CI_Controller {
 			$data['clsResult'] = 'error';
 		}
 
-		$this->template->write_view('content',DIR_TES.'/cie10/index', $data);
+		$this->template->write_view('content',DIR_SIIGS.'/cie10/index', $data);
                 
 		$this->template->render();
 	}
@@ -86,7 +86,7 @@ class Cie10 extends CI_Controller {
 		if (empty($this->Cie10_model))
 			return false;
                 
-                if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+                if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
 	
                 try
@@ -103,7 +103,7 @@ class Cie10 extends CI_Controller {
 			$data['clsResult'] = 'error';
 		}
 
-		$this->template->write_view('content',DIR_TES.'/cie10/view', $data);
+		$this->template->write_view('content',DIR_SIIGS.'/cie10/view', $data);
                 
 		$this->template->render();
         }
@@ -255,7 +255,7 @@ class Cie10 extends CI_Controller {
             if (empty($this->Cie10_model))
                 return false;
               
-            if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
             
 		$this->load->helper('form');
@@ -279,7 +279,7 @@ class Cie10 extends CI_Controller {
 				$data['clsResult'] = 'error';
 			}
 
-			$this->template->write_view('content',DIR_TES.'/cie10/update', $data);
+			$this->template->write_view('content',DIR_SIIGS.'/cie10/update', $data);
 			$this->template->render();
 		}
 		else
@@ -304,7 +304,7 @@ class Cie10 extends CI_Controller {
 
 				$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 				$data['clsResult'] = 'error';
-				$this->template->write_view('content',DIR_TES.'/cie10/update', $data);
+				$this->template->write_view('content',DIR_SIIGS.'/cie10/update', $data);
 				$this->template->render();
 
 				$error = true;
@@ -314,7 +314,7 @@ class Cie10 extends CI_Controller {
 			{
 				$this->session->set_flashdata('msgResult', 'Registro actualizado correctamente');
 				$this->session->set_flashdata('clsResult', 'success');
-				redirect(DIR_TES.'/cie10','refresh');
+				redirect(DIR_SIIGS.'/cie10','refresh');
 			}
 		}		
 	}
@@ -328,7 +328,7 @@ class Cie10 extends CI_Controller {
 	 */
 	public function insert($update = false)
 	{
-            if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
             show_error('', 403, 'Acceso denegado');
             
 		//if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
