@@ -53,7 +53,7 @@ class Enrolamiento extends CI_Controller
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['uri_segment'] = '4';
 			$configPag['total_rows'] = $this->Enrolamiento_model->getNumRows($this->input->post('busqueda'));
-			$configPag['per_page']   = 20;
+			$configPag['per_page']   = REGISTROS_PAGINADOR;
 			$this->pagination->initialize($configPag);
 			if ($this->input->post('busqueda'))
 				$data['users'] = $this->Enrolamiento_model->getListEnrolamiento($this->input->post('busqueda'), $configPag['per_page'], $pag);
