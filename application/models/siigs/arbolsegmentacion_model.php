@@ -261,101 +261,109 @@ class ArbolSegmentacion_model extends CI_Model {
                
         public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array())
         {
-            $fecha_update_asu = $this->db->query("select max(fecha_update) as fecha from asu_arbol_segmentacion where id_raiz=".$idarbol);
-            if (!$fecha_update_asu)
+            try
             {
-                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-                $this->msg_error_usr = "Ocurrió un error al obtener la ultima actualizacion del asu";
-                throw new Exception(__CLASS__);
-            }
-
-            $fecha_update_asu = $fecha_update_asu->result()[0]->fecha;
-            $ruta = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'json'.DIRECTORY_SEPARATOR;
-            $archivo = 'asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($fecha_update_asu).'.json';
-            
-            if (!is_dir($ruta))
-               mkdir($ruta, 0777, true);
-            
-            $ruta.= $archivo;
-            
-            if (file_exists($ruta))
-            {
-                $str_datos = file_get_contents($ruta);
-                $datos = json_decode($str_datos,true);
-                if (count($seleccionados)>0)
-                $datos = $this->_addSelectedItems($datos,$seleccionados);
-                return $datos;
-            }
-            else
-            {  
-                ini_set('max_execution_time',1000);
-                
-                $arbol = $this->getTree($idarbol, $nivel, $omitidos);
-                if (count($arbol) == 0)
+                $fecha_update_asu = $this->db->query("select max(fecha_update) as fecha from asu_arbol_segmentacion where id_raiz=".$idarbol);
+                if (!$fecha_update_asu)
                 {
-                    return array();
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al obtener la ultima actualizacion del asu";
+                    return "false";
                 }
-                if ($nivel<=$arbol['niveles'])
+
+                $fecha_update_asu = $fecha_update_asu->result()[0]->fecha;
+                $ruta = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'json'.DIRECTORY_SEPARATOR;
+                $archivo = 'asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($fecha_update_asu).'.json';
+
+                if (!is_dir($ruta))
+                   mkdir($ruta, 0777, true);
+
+                $ruta.= $archivo;
+
+                if (file_exists($ruta))
                 {
-                    $resultado = array();
-                    $niveltemp = array();
+                    $str_datos = file_get_contents($ruta);
+                    $datos = json_decode($str_datos,true);
+                    if (count($seleccionados)>0)
+                    $datos = $this->_addSelectedItems($datos,$seleccionados);
+                    return $datos;
+                }
+                else
+                {  
+                    ini_set('max_execution_time',1000);
 
-                    for($i = 1 ; $i<=$arbol['niveles'];$i++)
+                    $arbol = $this->getTree($idarbol, $nivel, $omitidos);
+                    if (count($arbol) == 0)
                     {
-                        foreach($arbol['resultado'] as $fila)
+                        return array();
+                    }
+                    if ($nivel<=$arbol['niveles'])
+                    {
+                        $resultado = array();
+                        $niveltemp = array();
+
+                        for($i = 1 ; $i<=$arbol['niveles'];$i++)
                         {
-                            $fila = (array) $fila;
-                            if ($fila['id_'.$i] != null)
+                            foreach($arbol['resultado'] as $fila)
                             {
-                                if ($i == $arbol['niveles'])
-                                    $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> utf8_decode($fila['descripcion_'.$i]));
-                                else
-                                    $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> utf8_decode($fila['descripcion_'.$i]) , 'children'=>array());    
-
-                                if (in_array($fila['id_'.$i],$seleccionados))
-                                        $arraytemp["select"] = true;
-
-                                if (!isset($resultado[$i]))
-                                    $resultado[$i] = array();
-
-                                if ( !in_array($arraytemp,$resultado[$i]))
+                                $fila = (array) $fila;
+                                if ($fila['id_'.$i] != null)
                                 {
-                                    array_push($resultado[$i], $arraytemp);
+                                    if ($i == $arbol['niveles'])
+                                        $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> utf8_decode($fila['descripcion_'.$i]));
+                                    else
+                                        $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> utf8_decode($fila['descripcion_'.$i]) , 'children'=>array());    
+
+                                    if (in_array($fila['id_'.$i],$seleccionados))
+                                            $arraytemp["select"] = true;
+
+                                    if (!isset($resultado[$i]))
+                                        $resultado[$i] = array();
+
+                                    if ( !in_array($arraytemp,$resultado[$i]))
+                                    {
+                                        array_push($resultado[$i], $arraytemp);
+                                    }
                                 }
                             }
                         }
-                    }
-                    for($i = count($resultado) ; $i > 1;$i--)
-                    {
-                        $arreglohijo = $resultado[$i];
-                        $arreglopadre = $resultado[$i-1];
-                        foreach ($arreglohijo as $clave1 => $hijo)
+                        for($i = count($resultado) ; $i > 1;$i--)
                         {
-                            foreach ($arreglopadre as $clave2 => $padre)
+                            $arreglohijo = $resultado[$i];
+                            $arreglopadre = $resultado[$i-1];
+                            foreach ($arreglohijo as $clave1 => $hijo)
                             {
-                                if ($hijo['parent'] == $padre['key'])
+                                foreach ($arreglopadre as $clave2 => $padre)
                                 {
-                                    array_push($arreglopadre[$clave2]['children'], $resultado[$i][$clave1]);
+                                    if ($hijo['parent'] == $padre['key'])
+                                    {
+                                        array_push($arreglopadre[$clave2]['children'], $resultado[$i][$clave1]);
+                                    }
                                 }
                             }
+                            $resultado[$i-1] = $arreglopadre;
                         }
-                        $resultado[$i-1] = $arreglopadre;
+
+                        try
+                        {
+                        $fh = fopen($ruta, 'c')
+                        or die("Error al abrir fichero para el asu");
+
+                        fwrite($fh, json_encode($resultado[1],JSON_UNESCAPED_UNICODE));
+                        fclose($fh);
+                        }
+                        catch(Exception $e)
+                        {
+                            $this->msg_error_log = "(". __METHOD__.") => " .'ASU'.': '."No se pudo crear el archivo JSON para el asu (".$ruta.") ::".$e->getMessage();        
+                            return "false";
+                        }
+                        return $resultado[1];
                     }
-                    
-                    try
-                    {
-                    $fh = fopen($ruta, 'c')
-                    or die("Error al abrir fichero para el asu");
-                    
-                    fwrite($fh, json_encode($resultado[1],JSON_UNESCAPED_UNICODE));
-                    fclose($fh);
-                    }
-                    catch(Exception $e)
-                    {
-                        $this->msg_error_log = "(". __METHOD__.") => " .'ASU'.': '."No se pudo crear el archivo JSON para el asu (".$ruta.") ::".$e->getMessage();        
-                    }
-                    return $resultado[1];
                 }
+            }
+            catch(Exception $e)
+            {
+                return "false";
             }
         }
         
