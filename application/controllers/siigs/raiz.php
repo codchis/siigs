@@ -513,7 +513,8 @@ class Raiz extends CI_Controller {
 		try
 		{
 			$catalogos = $this->Catalogo_x_raiz_model->getByArbol($id);		
-                        
+                        $nuevos_registros = array();
+                        $cambios_registros = array();
 			foreach ($catalogos as $item) {
 				
 				$iditem = $item->id;
@@ -521,21 +522,101 @@ class Raiz extends CI_Controller {
 				$nivel = $item->grado_segmentacion;
 				$llave = $item->nombre_columna_llave;
 				$descripcion = $item->nombre_columna_descripcion;
-				
-                                 $consulta = "select  a.".$llave." as llave, ";
-					$consulta .=  "a.".$descripcion." as descripcion ";
-					$consulta .= " from ".$tabla." a";
-                                        //$consulta .= " left outer join asu_arbol_segmentacion b on a.".$llave." = b.id_tabla_original and b.id_raiz=".$id." and b.grado_segmentacion = ".$nivel." where b.id is null";
-					//$consulta .= " where a.".$llave." not in (select id_tabla_original from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel.")";
+//                                $total = $this->db->query("select count(*) as total from ".$tabla);
+//                                
+//                                for($i=0;$i<=$total->result_array()[0]["total"];$i=$i+1000)
+//                                {
+//                                    echo $i."<br/>";
+//                                }
+                                                                                                               
+                                $filas = $this->db->query("select id_tabla_original as llave from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel);
+                                $get_array = function($val)
+                                {
+                                    return $val['llave'];
+                                };
+                                $datos  = array_map($get_array,$filas->result_array());
                                         
-                                        echo $consulta;
+                                        if ($nivel>1)
+                                        {
+                                            //obtener las relaciones para el arbol
+                                            $padre = $this->Catalogo_x_raiz_model->getByNivel($id,$nivel-1);
+                                            $relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
+                                            //crear la consulta basica
+                                            $consulta_base = "select a.".$llave." as llave, a.".$descripcion." as descripcion, ";
+                                            $consulta_base .= $padre->nombre.".".$padre->llave." as padre  from ".$tabla." a";
+                                            //crear las relaciones
+                                            $consulta_base .= " join ".$padre->nombre." on 1=1";
+                                            foreach ($relaciones as $relacion)
+                                            {
+                                                    $consulta_base .= " and a.".$relacion->columna_hijo." = ".$padre->nombre.".".$relacion->columna_padre;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            $consulta_base = "select  a.".$llave." as llave, a.".$descripcion." as descripcion , 0 as padre";
+                                            $consulta_base .= " from ".$tabla." a";
+                                        }
                                         
-					//$filas = $this->db->query($consulta);
-                                        //print_r($filas->num_rows());
-//                                        
-                                        echo "<br/><br/><br/>";
-                                       // return;
+                                        $consulta_nuevos = $consulta_base." where a.".$llave." not in (".  implode(',', $datos).")";
+                                        
+                                        //Nuevos registros en los catalogos para agregar al ASU
+                                        $resultado = $this->db->query($consulta_nuevos);
+                                        if ($resultado && $resultado->num_rows()>0)
+                                        {
+                                            foreach($resultado->result_array() as $fila)
+                                            array_push($nuevos_registros, array(
+                                                'id_raiz' => $id,'grado_segmentacion' => $nivel,
+                                                'id_padre' => $fila["padre"],'id_tabla_original' => $fila["llave"],
+                                                'orden' => 0,'visible' => '1','descripcion' => $fila["descripcion"]
+                                            ));
+                                        }
+                                        
+                                        if ($nivel>1)
+                                        {
+                                            //obtener las relaciones para el arbol
+                                            $padre = $this->Catalogo_x_raiz_model->getByNivel($id,$nivel-1);
+                                            $relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
+                                            //crear la consulta basica
+                                            $consulta_base = "select a.".$llave." as llave, a.".$descripcion." as descripcion, ";
+                                            $consulta_base .= "(select id from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion = ".($nivel-1)." and id_tabla_original = ".$padre->nombre.".".$padre->llave.") as padre  from ".$tabla." a";
+                                            //crear las relaciones
+                                            $consulta_base .= " join ".$padre->nombre." on 1=1";
+                                            foreach ($relaciones as $relacion)
+                                            {
+                                                    $consulta_base .= " and a.".$relacion->columna_hijo." = ".$padre->nombre.".".$relacion->columna_padre;
+                                            }
+                                            
+                                            $consulta_modificaciones = $consulta_base." join asu_arbol_segmentacion b on b.id_raiz=".$id." and b.grado_segmentacion=".$nivel." and b.id_tabla_original = a.".$llave." where ( b.descripcion <> a.".$descripcion." or b.id_padre <> (select id from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion = ".($nivel-1)." and id_tabla_original = ".$padre->nombre.".".$padre->llave.") )";
+                                        }
+                                        else
+                                        {
+                                            $consulta_modificaciones = $consulta_base." join asu_arbol_segmentacion b on b.id_raiz=".$id." and b.grado_segmentacion=".$nivel." and b.id_tabla_original = a.".$llave." and ( b.descripcion <> a.".$descripcion.")";
+                                        }
+                                        
+                                        //Nuevos registros en los catalogos para agregar al ASU
+//                                        $resultado = $this->db->query($consulta_modificaciones);
+//                                        if ($resultado && $resultado->num_rows()>0)
+//                                        {
+//                                            foreach($resultado->result_array() as $fila)
+//                                            array_push($cambios_registros, array(
+//                                                'id_raiz' => $id,
+//                                                'grado_segmentacion' => $nivel,
+//                                                'id_padre' => $fila["padre"],
+//                                                'id_tabla_original' => $fila["llave"],
+//                                                'orden' => 0,
+//                                                'visible' => '1',
+//                                                'descripcion' => $fila["descripcion"]
+//                                            ));
+//                                        }
+                                        echo $consulta_nuevos."<br/><br/>";
+                                        
+                                        echo $consulta_modificaciones."<br/><br/>";
+                                        
                         }
+                        var_dump($nuevos_registros);
+                        echo "<br/><br/>";
+                        var_dump($cambios_registros);
+                        echo "<br/><br/>";
 //                                
 //				if ($nivel > 1)
 //				{

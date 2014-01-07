@@ -143,9 +143,9 @@ if (!empty($raiz_item))
 					<?php endforeach ?>
 				<tr>
 					<td>
-					<?php if ($existe != true) {?>
+					<?php if ($existe != true && false) {?>
 						<input type="button" value="Crear ASU"  class="btn btn-primary" onclick="generarAsu('<?php echo $raiz_item->id;?>');" />
-					<?php } else {?>
+					<?php } else if (false) {?>
 					<input type="button" value="Actualizar ASU"  class="btn btn-primary" onclick="modificarAsu('<?php echo $raiz_item->id;?>');" />
 					<?php }?>
 					</td>
