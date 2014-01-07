@@ -43,13 +43,56 @@ class Reporteador extends CI_Controller {
 			$data['msgResult'] = $this->session->flashdata('msgResult');
 			$data['clsResult'] = $this->session->flashdata('clsResult');
 			$data['jurisdicciones'] = (array)$this->ArbolSegmentacion_model->getDataKeyValue(1, 2);
+
+			$array[0] = (array("atributo"=>"Cobertura por Tipo de Biológico","valor"=>"","lista"=>"0"));
+			$array[1] = (array("atributo"=>"Concentrado de Actividades","valor"=>"","lista"=>"1"));
+			$array[2] = (array("atributo"=>"Seguimiento RV-1 y RV-5 a menores de 1 año","valor"=>"","lista"=>"2"));
+			$array[3] = (array("atributo"=>"Censo Nominal","valor"=>"","lista"=>"3"));
+			$array[4] = (array("atributo"=>"Esquemas Incompletos","valor"=>"","lista"=>"4"));
+			$data['datos']=$array;
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
 		}
  		$this->template->write_view('content',DIR_TES.'/reporteador/index', $data);
  		$this->template->render();
 
 	}
 	
+	public function view($op,$title,$nivel,$id)
+	{
+		try{
+			if (empty($this->Reporteador_model))
+				return false;
+			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+				show_error('', 403, 'Acceso denegado');
+			$data['title'] = $title;
+			$array=array();
+
+			if($op==0)
+				$array=$this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id);
+			if($op==1)
+				$array=$this->Reporteador_model->getConcentradoActividades($nivel, $id);
+			if($op==2)
+				$array=$this->Reporteador_model->getSeguimientoRV1RV5($nivel, $id);
+			if($op==3)
+				$array=$this->Reporteador_model->getCensoNominal($nivel, $id);
+			if($op==4)
+				$array=$this->Reporteador_model->getEsquemasIncompletos($nivel, $id);
+				
+			$data['datos']=$array;
+		}
+		catch(Exception $e)
+		{
+			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['clsResult'] = 'error';
+		}
+		//$this->load->view('usuario/index', $data);
+		$this->template->write('header','',true);
+		$this->template->write('footer','',true);
+		$this->template->write('menu','',true);
+		$this->template->write_view('content',DIR_TES.'/reporteador/reporte_view', $data);
+		$this->template->render();
+	}
 }

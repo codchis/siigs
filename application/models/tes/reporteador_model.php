@@ -47,5 +47,79 @@ class Reporteador_model extends CI_Model {
 		return $this->msg_error_usr;
 	}
 	
+	public function getCoberturaBiologicoListado($nivel, $id)
+	{
+		$sql = "";
+		$query = $this->db->query($sql); //echo $this->db->last_query();
+	
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return;
+	}
+	
+	public function getConcentradoActividades($nivel, $id)
+	{
+		$sql = "";
+		$query = $this->db->query($sql); //echo $this->db->last_query();
+	
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return;
+	}
+	
+	public function getSeguimientoRV1RV5($nivel, $id)
+	{
+		$sql = "";
+		$query = $this->db->query($sql); //echo $this->db->last_query();
+	
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return;
+	}
+	
+	public function getCensoNominal($nivel, $id)
+	{
+		$sql = "";
+		$query = $this->db->query($sql); //echo $this->db->last_query();
+	
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return;
+	}
+	
+	public function getEsquemasIncompletos($nivel, $id)
+	{
+		$sql = "";
+		$query = $this->db->query($sql); //echo $this->db->last_query();
+	
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return;
+	}
 }
 ?>
