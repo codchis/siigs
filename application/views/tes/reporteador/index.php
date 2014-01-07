@@ -1,3 +1,7 @@
+	<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
+	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 <script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
 <script type="text/javascript">
@@ -42,38 +46,50 @@ var optionsFecha = {
 };
 
 $(document).ready(function(){
+
 	$("#fecha_corte").datepicker(optionsFecha);
 	
     $("a").click(function(event){
-        // fecha obligatoria en 3 primeros reportes
-        if (($(this).attr("id") == 'rpt0' || $(this).attr("id") == 'rpt1' || $(this).attr("id") == 'rpt2') && $('#fecha_corte').val() == '')
-        {
-			alert('Capture la fecha de corte.');
-			event.preventDefault();
-        }
-        else // al menos un filtro de búsqueda debe estar seleccionado
-        {
-	        $pathBase = $(this).attr("href");
-	        $path = generaUrl("ums", $pathBase);
-	        if ($path == ''){
-	            $path = generaUrl("localidades", $pathBase);
-	            if ($path == ''){
-	                $path = generaUrl("municipios", $pathBase);
-	                if ($path == ''){
-	                    $path = generaUrl("juris", $pathBase);
-	                    if ($path == ''){
-	        				alert('No hay parámetros para realizar la búsqueda');
-	        				event.preventDefault();
-	        				return;
-	    				}
-	    			}
-	    		}
-	    	}
-	    	$(this).attr("href", $path);
-	    	// se agrega el parámetro fecha cuando aplique
-	    	if ($(this).attr("id") == 'rpt0' || $(this).attr("id") == 'rpt1' || $(this).attr("id") == 'rpt2')
-	    		$(this).attr("href", $path + '/'+ $('#fecha_corte').val());
-        }
+    	if ($(this).attr("id").indexOf("rpt") != -1) { // solo valida clicks de anchors de reportes
+	        // fecha obligatoria en 3 primeros reportes
+	        if (($(this).attr("id") == 'rpt0' || $(this).attr("id") == 'rpt1' || $(this).attr("id") == 'rpt2') && $('#fecha_corte').val() == '')
+	        {
+				alert('Capture la fecha de corte.');
+				event.preventDefault();
+	        }
+	        else // al menos un filtro de búsqueda debe estar seleccionado
+	        {
+		        pathBase = $(this).attr("href");
+		        path = generaUrl("ums", pathBase);
+		        if (path == ''){
+		            path = generaUrl("localidades", pathBase);
+		            if (path == ''){
+		                path = generaUrl("municipios", pathBase);
+		                if (path == ''){
+		                    path = generaUrl("juris", pathBase);
+		                    if (path == ''){
+		        				alert('No hay parámetros para realizar la búsqueda');
+		        				event.preventDefault();
+		        				return;
+		    				}
+		    			}
+		    		}
+		    	}
+		    	$(this).attr("href", path);
+		    	// se agrega el parámetro fecha cuando aplique
+		    	if ($(this).attr("id") == 'rpt0' || $(this).attr("id") == 'rpt1' || $(this).attr("id") == 'rpt2')
+		    		$(this).attr("href", path + '/'+ $('#fecha_corte').val());
+		        $.fancybox({
+		    		'width'             : '90%',
+		    		'height'            : '90%',				
+		    		'transitionIn'	: 'elastic',
+		    		'transitionOut'	: 'elastic',
+		    		'type'			: 'iframe',	
+		    		'href'			: this.href,							
+		    	});
+		        event.preventDefault();
+	        }
+    	}
     });
 	
     $('select[name="juris"]').change(function(e){
