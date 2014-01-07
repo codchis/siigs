@@ -16,27 +16,45 @@ $(document).ready(function(){
 
 function generarAsu(raiz)
 {
+    $('#resultados_asu').html("Creando estructura del ASU");
 	$.ajax({
         type: "GET",
         url: '/<?php echo DIR_SIIGS.'/raiz/createasu/';?>'+raiz,
     })
       .done(function(dato)
         {
-          mensaje = (dato.indexOf('false') > -1) ? "Ocurrió un error al crear el Arbol de segmentación": "El arbol se ha construido correctamente";
+          mensaje = (dato.indexOf('false') > -1) ? "Ocurrió un error al crear el Arbol de segmentación": (dato.indexOf('creado') > -1) ? "El arbol ya ha sido creado anteriormente" : "El arbol se ha construido correctamente";
           $('#resultados_asu').html(mensaje);
+          $('#tr_json').css({'visibility':'visible'});
     });
 }
 
 function modificarAsu(raiz)
 {
+    $('#resultados_asu').html("Modificando estructura del ASU");
 	$.ajax({
         type: "GET",
         url: '/<?php echo DIR_SIIGS.'/raiz/updateasu/';?>'+raiz,
     })
       .done(function(dato)
         {
-          mensaje = (dato.indexOf('false') > -1) ? "Ocurrió un error al crear el Arbol de segmentación": "El arbol se ha construido correctamente";
+          mensaje = (dato.indexOf('false') > -1) ? "Ocurrió un error al actualizar el Arbol de segmentación": "El arbol se ha actualizado correctamente";
           $('#resultados_asu').html(mensaje);
+          $('#tr_json').css({'visibility':'visible'});
+    });
+}
+
+function CrearPrimerAsu(raiz)
+{
+    $('#resultados_json').html("Creando JSON del ASU, esto puede tardar unos minutos");
+	$.ajax({
+        type: "GET",
+        url: '/<?php echo DIR_SIIGS.'/raiz/iniciarasu/';?>'+raiz,
+    })
+      .done(function(dato)
+        {
+          mensaje = (dato.indexOf('false') > -1) ? "Ocurrió un error al crear el archivo JSON": "El archivo JSON se ha creado correctamente";
+          $('#resultados_json').html(mensaje);
     });
 }
 
@@ -145,7 +163,7 @@ if (!empty($raiz_item))
 					<td>
 					<?php if ($existe != true) {?>
 						<input type="button" value="Crear ASU"  class="btn btn-primary" onclick="generarAsu('<?php echo $raiz_item->id;?>');" />
-					<?php } else {?>
+					<?php } else{?>
 					<input type="button" value="Actualizar ASU"  class="btn btn-primary" onclick="modificarAsu('<?php echo $raiz_item->id;?>');" />
 					<?php }?>
 					</td>
@@ -153,6 +171,14 @@ if (!empty($raiz_item))
 					<div id="resultados_asu"></div>
 					</td>
 				</tr>				
+				<tr id="tr_json" style="visibility:hidden">
+					<td>
+					<input type="button" value="Crear JSON"  class="btn btn-primary" onclick="CrearPrimerAsu('<?php echo $raiz_item->id;?>');" />
+					</td>
+					<td colspan=6>
+					<div id="resultados_json"></div>
+					</td>
+				</tr>
 				</thead>
 			</table>
 		</td>
