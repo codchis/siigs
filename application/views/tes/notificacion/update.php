@@ -5,7 +5,28 @@
 	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
     <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
+    <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
+<script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
+
 <script type="text/javascript">
+var objFecha = new Date();
+
+var optionsFecha = {
+    changeMonth: true,
+    changeYear: true,
+    duration: "fast",
+    dateFormat: 'dd-mm-yy',
+    constrainInput: true,
+    firstDay: 1,
+    closeText: 'X',
+    showOn: 'both',
+    buttonImage: '/resources/images/calendar.gif',
+    buttonImageOnly: true,
+    buttonText: 'Clic para seleccionar una fecha',
+    yearRange: '2005:'+objFecha.getFullYear(),
+    showButtonPanel: false
+};
+    
 $(document).ready(function(){ 
 	$("a#tabletas").fancybox({
 		'width'             : '50%',
@@ -14,6 +35,8 @@ $(document).ready(function(){
 		'transitionOut'	: 'elastic',
 		'type'			: 'iframe',									
 	}); 
+    $("#fecha_inicio").datepicker(optionsFecha);
+    $("#fecha_fin").datepicker(optionsFecha);
 });
 </script>
 <h2><?php echo $title ?></h2>
@@ -33,11 +56,13 @@ $(document).ready(function(){
 	</tr>
 	<tr>
 		<td><label for="fecha_inicio">Fecha Inicio</label></td>
-		<td><input type="date" name="fecha_inicio" value="<?php echo explode(' ', $notificacion_item->fecha_inicio)[0] ?>" /></td>
+		<td><input type="text" id="fecha_inicio" name="fecha_inicio" value="<?php $time = strtotime(explode(' ', $notificacion_item->fecha_inicio)[0]);
+			echo str_replace('/', '-', date('d/m/Y', $time)); ?>" /></td>
 	</tr>
 		<tr>
 		<td><label for="fecha_fin">Fecha Fin</label></td>
-		<td><input type="date" name="fecha_fin" value="<?php echo explode(' ', $notificacion_item->fecha_fin)[0] ?>" /></td>
+		<td><input type="text" id="fecha_fin" name="fecha_fin" value="<?php $time = strtotime(explode(' ', $notificacion_item->fecha_fin)[0]);
+			echo str_replace('/', '-', date('d/m/Y', $time)); ?>" /></td>
 	</tr>
 	<tr>
 		<td><label for="id_arr_asu">Reportar a tabletas</label></td>
