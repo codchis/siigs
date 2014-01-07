@@ -21,6 +21,9 @@ function generaUrl(param, path){
 			case 'juris':
 				path = path+"/2/"+$('select[name="'+param+'"]').val();
 				break;
+			case 'estados':
+				path = path+"/1/"+$('select[name="'+param+'"]').val();
+				break;
 		}
 		return path;
     }
@@ -68,9 +71,12 @@ $(document).ready(function(){
 		                if (path == ''){
 		                    path = generaUrl("juris", pathBase);
 		                    if (path == ''){
-		        				alert('No hay parámetros para realizar la búsqueda');
-		        				event.preventDefault();
-		        				return;
+		                    	path = generaUrl("estados", pathBase);
+		                    	if (path == ''){
+			        				alert('No hay parámetros para realizar la búsqueda');
+			        				event.preventDefault();
+			        				return;
+		                    	}
 		    				}
 		    			}
 		    		}
@@ -92,6 +98,50 @@ $(document).ready(function(){
     	}
     });
 	
+    $('select[name="estados"]').change(function(e){
+    	$('select[name="juris"]')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="">Seleccione una opcion</option>')
+        .val('')
+	;
+       	$('select[name="municipios"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+    	;
+    	$('select[name="localidades"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+		;
+    	$('select[name="ums"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+		;
+        $.ajax({
+            type: 'POST',
+            url:  '/'+DIR_SIIGS+'/raiz/getDataKeyValue/1/2/'+$('select[name="estados"]').val(),
+            dataType: 'json'
+        }).done(function(juris){
+            $.each(juris, function(index) {
+                option = $('<option />');
+                option.val(juris[index].id);
+                option.text(juris[index].descripcion);
+
+                $('select[name="juris"]').append(option);
+            });
+        });
+    });
+    
     $('select[name="juris"]').change(function(e){
     	$('select[name="municipios"]')
 	        .find('option')
@@ -190,11 +240,12 @@ $opcion_rpt2 = Menubuilder::isGranted(DIR_TES.'::reporteador::concAct');
 $opcion_rpt3 = Menubuilder::isGranted(DIR_TES.'::reporteador::segRv');
 $opcion_rpt4 = Menubuilder::isGranted(DIR_TES.'::reporteador::censoNom');
 $opcion_rpt5 = Menubuilder::isGranted(DIR_TES.'::reporteador::esqIncomp');
-$juris[''] = 'Seleccione una opción';
-foreach($jurisdicciones as $row)
+$estad[''] = 'Seleccione una opción';
+foreach($estados as $row)
 {
-    $juris[$row->id] = $row->descripcion;
+    $estad[$row->id] = $row->descripcion;
 }
+$juris[''] = 'Seleccione una opción';
 $municipios[''] = 'Seleccione una opción';
 $localidades[''] = 'Seleccione una opción';
 $ums[''] = 'Seleccione una opción';
@@ -213,7 +264,9 @@ if (!$opcion_rpt5) unset($datos[4]);
 <table>
 <tr>
 <td>Fecha corte:</td>
-<td colspan=3><input type="text" id="fecha_corte" name="fecha_corte" value="<?php echo set_value('fecha_corte', ''); ?>" /></td>
+<td><input type="text" id="fecha_corte" name="fecha_corte" value="<?php echo set_value('fecha_corte', ''); ?>" /></td>
+<td>Estado:</td>
+<td> <?php  echo form_dropdown('estados', $estad); ?></td>
 </tr>
 <tr>
 <td>Jurisdicción:</td>

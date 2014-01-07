@@ -42,7 +42,7 @@ class Reporteador extends CI_Controller {
 			
 			$data['msgResult'] = $this->session->flashdata('msgResult');
 			$data['clsResult'] = $this->session->flashdata('clsResult');
-			$data['jurisdicciones'] = (array)$this->ArbolSegmentacion_model->getDataKeyValue(1, 2);
+			$data['estados'] = (array)$this->ArbolSegmentacion_model->getDataKeyValue(1, 1);
 
 			$array[0] = (array("atributo"=>"Cobertura por Tipo de Biológico","valor"=>"","lista"=>"0"));
 			$array[1] = (array("atributo"=>"Concentrado de Actividades","valor"=>"","lista"=>"1"));
