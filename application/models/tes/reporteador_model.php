@@ -47,7 +47,7 @@ class Reporteador_model extends CI_Model {
 		return $this->msg_error_usr;
 	}
 	
-	public function getCoberturaBiologicoListado($nivel, $id)
+	public function getCoberturaBiologicoListado($nivel, $id, $fecha);
 	{
 		$sql = "";
 		$query = $this->db->query($sql); //echo $this->db->last_query();
@@ -62,7 +62,7 @@ class Reporteador_model extends CI_Model {
 		return;
 	}
 	
-	public function getConcentradoActividades($nivel, $id)
+	public function getConcentradoActividades($nivel, $id, $fecha);
 	{
 		$sql = "";
 		$query = $this->db->query($sql); //echo $this->db->last_query();
@@ -77,7 +77,7 @@ class Reporteador_model extends CI_Model {
 		return;
 	}
 	
-	public function getSeguimientoRV1RV5($nivel, $id)
+	public function getSeguimientoRV1RV5($nivel, $id, $fecha);
 	{
 		$sql = "";
 		$query = $this->db->query($sql); //echo $this->db->last_query();

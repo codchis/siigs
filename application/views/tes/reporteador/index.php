@@ -226,7 +226,7 @@ if (!$opcion_rpt5) unset($datos[4]);
 	if (isset($datos)) foreach ($datos as $dato): ?>
 	<tr>
 		<td><?php echo $dato["atributo"] ?></td>
-		<td><a href="/<?php echo DIR_TES?>/reporte_sincronizacion/view/<?php echo $dato["lista"] ?>/<?php echo $dato["atributo"] ?>" id="rpt<?php echo $cont ?>"><img src="/resources/images/listar.png" style="border:none; width:30px; height:30px;" title="ver detalle" /></a></td>
+		<td><a href="/<?php echo DIR_TES?>/reporteador/view/<?php echo $dato["lista"] ?>/<?php echo $dato["atributo"] ?>" id="rpt<?php echo $cont ?>"><img src="/resources/images/listar.png" style="border:none; width:30px; height:30px;" title="ver detalle" /></a></td>
 		
 	</tr>
 	<?php $cont++; endforeach ?>

@@ -60,7 +60,7 @@ class Reporteador extends CI_Controller {
 
 	}
 	
-	public function view($op,$title,$nivel,$id)
+	public function view($op,$title,$nivel,$id,$fecha = '')
 	{
 		try{
 			if (empty($this->Reporteador_model))
@@ -71,11 +71,11 @@ class Reporteador extends CI_Controller {
 			$array=array();
 
 			if($op==0)
-				$array=$this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id);
+				$array=$this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
 			if($op==1)
-				$array=$this->Reporteador_model->getConcentradoActividades($nivel, $id);
+				$array=$this->Reporteador_model->getConcentradoActividades($nivel, $id, $fecha);
 			if($op==2)
-				$array=$this->Reporteador_model->getSeguimientoRV1RV5($nivel, $id);
+				$array=$this->Reporteador_model->getSeguimientoRV1RV5($nivel, $id, $fecha);
 			if($op==3)
 				$array=$this->Reporteador_model->getCensoNominal($nivel, $id);
 			if($op==4)
