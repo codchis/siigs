@@ -56,8 +56,11 @@ class Controlador extends CI_Controller {
 
 			$this->pagination->initialize($configPag);
 
-			$this->Controlador_model->setOffset($pag);
-			$this->Controlador_model->setRows($configPag['per_page']);
+            if (!$this->input->is_ajax_request())
+			{
+                $this->Controlador_model->setOffset($pag);
+                $this->Controlador_model->setRows($configPag['per_page']);
+			}
 
 			$data['title'] = 'Lista de Controladores disponibles' .
 					(($id) ? ' ('.$this->Entorno_model->getById($id)->nombre.')' : '' );
