@@ -29,15 +29,15 @@ $(document).ready(function()
 <a id="csv" href=""><img src="/resources/images/csv.png" style="border:none; "  title="Exportar a CSV" class="btn btn-primary"/></a>
 <a id="pdf" href=""><img src="/resources/images/pdf.png" style="border:none; "  title="Exportar a PDF" class="btn btn-primary"/></a>
 <a id="exc" href=""><img src="/resources/images/excel.png" style="border:none;" title="Exportar a EXCEL" class="btn btn-primary"/></a>
-<input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:58px; width::50px;" class="btn btn-primary">
+<input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:58px; " class="btn btn-primary">
 </div>
-<div id='popimpr' class="table table-striped  ">
+<div id='popimpr' >
 <h2>Listado - <?php echo urldecode($title) ?></h2>
 <?php 	
 	if(isset($msgResult))
 	echo "<div class='$infoclass'>".$msgResult."</div>";
 ?>
-<table border="0" width="100%" id="tabla">
+<table border="0" width="100%" id="tabla" class="table table-striped  ">
     <?php
 	if(isset($datos))
 	{
@@ -74,4 +74,4 @@ $(document).ready(function()
 	?>
 </table>
 </div>
-<div align="right"><input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:58px; width::50px;" class="btn btn-primary"></div>
+<div align="right"><input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:58px; " class="btn btn-primary"></div>
