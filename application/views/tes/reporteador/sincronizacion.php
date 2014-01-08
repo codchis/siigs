@@ -33,8 +33,8 @@ $(document).ready(function()
 });
 </script>
 <h2><?php echo $title ?></h2>
-<div id='popimpr' class="table table-striped  " >
-<table border="0" width="100%" id="tabla">
+<div id='popimpr'  >
+<table border="0" width="100%" id="tabla" class="table table-striped  ">
 	<tr>
 		<th><h2>Atributo</h2></th>
 		<th><h2>Valor</h2></th>

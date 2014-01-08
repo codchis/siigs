@@ -76,7 +76,44 @@ class Reporteador extends CI_Controller {
 			if($op==0) {
                 $this->load->model(DIR_TES.'/Reporte_cobertura_biologico');
 				$array = $this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
-                $data['headTable'] = '';
+                $data['headTable'] = '
+        <tr>
+            <th rowspan="3">Grupo de edad</th>
+            <th colspan="3">Poblaci&oacute;n</th>
+            <th colspan="14">Total de esquemas completos por biologico</th>
+            <th rowspan="2" colspan="3">Esquemas completos</th>
+        </tr>
+        <tr>
+            <th rowspan="2">Oficial</th>
+            <th rowspan="2">Nominal</th>
+            <th rowspan="2">% Conc.</th>
+            <th colspan="2">BCG</th>
+            <th colspan="2">Antihepatitis B</th>
+            <th colspan="2">DPaT + VIP + Hib</th>
+            <th colspan="2">Antineumococica</th>
+            <th colspan="2">Antirotavirus</th>
+            <th colspan="2">Tripe viral SRP</th>
+            <th colspan="2">DPT</th>
+        </tr>
+        <tr>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Of.</th>
+            <th>% Nom.</th>
+        </tr>';
             }
 			if($op==1)
 				$array=$this->Reporteador_model->getConcentradoActividades($nivel, $id, $fecha);
@@ -107,6 +144,7 @@ class Reporteador extends CI_Controller {
 		$this->template->write('header','',true);
 		$this->template->write('footer','',true);
 		$this->template->write('menu','',true);
+        $this->template->write('ajustaAncho',1,true);
 		$this->template->write_view('content',DIR_TES.'/reporteador/reporte_view', $data);
 		$this->template->render();
 	}
