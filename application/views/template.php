@@ -26,6 +26,20 @@
 
 <body><!-- ENLACE A PORTALES-->
 
+    <?php if ($ajustaAncho) {
+        echo '<script type="text/javascript">
+            $(document).ready(function(){
+                // Para ajustar el ancho de la tabla
+                tabla = $("#tabla");
+
+                if(tabla) {
+                    ancho = $("#tabla").width() + $(".span1").width()*4;
+                    $("#bodyPagina").width(ancho+"px");
+                }
+            });
+        </script>';
+    }
+    ?>
     <div class="container enlace-portales">
 
         <div class="row-fluid hidden-phone" style="background:#E4E4E4;" >
@@ -35,7 +49,7 @@
     </div>
 
 
-    <div class='container cont-page'>
+    <div class='container cont-page' id="bodyPagina">
         <header>
             
             <?= $header ?>

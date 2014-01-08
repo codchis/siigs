@@ -60,18 +60,61 @@ class Reporteador extends CI_Controller {
 
 	}
 	
-	public function view($op,$title,$nivel,$id,$fecha = '')
+	public function view($op, $title, $nivel, $id, $fecha = '')
 	{
 		try{
 			if (empty($this->Reporteador_model))
 				return false;
+            
 			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
+            
+            $array=array();
 			$data['title'] = $title;
-			$array=array();
+            $data['datos'] = $array;
 
-			if($op==0)
-				$array=$this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
+			if($op==0) {
+                $this->load->model(DIR_TES.'/Reporte_cobertura_biologico');
+				$array = $this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
+                $data['headTable'] = '
+        <tr>
+            <th rowspan="3">Grupo de edad</th>
+            <th colspan="3">Poblaci&oacute;n</th>
+            <th colspan="14">Total de esquemas completos por biologico</th>
+            <th rowspan="2" colspan="3">Esquemas completos</th>
+        </tr>
+        <tr>
+            <th rowspan="2">Oficial</th>
+            <th rowspan="2">Nominal</th>
+            <th rowspan="2">% Conc.</th>
+            <th colspan="2">BCG</th>
+            <th colspan="2">Antihepatitis B</th>
+            <th colspan="2">DPaT + VIP + Hib</th>
+            <th colspan="2">Antineumococica</th>
+            <th colspan="2">Antirotavirus</th>
+            <th colspan="2">Tripe viral SRP</th>
+            <th colspan="2">DPT</th>
+        </tr>
+        <tr>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Cob.</th>
+            <th>Total</th>
+            <th>% Of.</th>
+            <th>% Nom.</th>
+        </tr>';
+            }
 			if($op==1)
 				$array=$this->Reporteador_model->getConcentradoActividades($nivel, $id, $fecha);
 			if($op==2)
@@ -81,17 +124,18 @@ class Reporteador extends CI_Controller {
 			if($op==4)
 				$array=$this->Reporteador_model->getEsquemasIncompletos($nivel, $id);
 				
-			$data['datos']=$array;
+			$data['datos'] = $array;
 		}
 		catch(Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-			$data['clsResult'] = 'error';
+			$data['infoclass'] = 'error';
 		}
-		//$this->load->view('usuario/index', $data);
+		
 		$this->template->write('header','',true);
 		$this->template->write('footer','',true);
 		$this->template->write('menu','',true);
+        $this->template->write('ajustaAncho',1,true);
 		$this->template->write_view('content',DIR_TES.'/reporteador/reporte_view', $data);
 		$this->template->render();
 	}
