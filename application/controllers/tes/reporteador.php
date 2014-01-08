@@ -60,18 +60,24 @@ class Reporteador extends CI_Controller {
 
 	}
 	
-	public function view($op,$title,$nivel,$id,$fecha = '')
+	public function view($op, $title, $nivel, $id, $fecha = '')
 	{
 		try{
 			if (empty($this->Reporteador_model))
 				return false;
+            
 			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
+            
+            $array=array();
 			$data['title'] = $title;
-			$array=array();
+            $data['datos'] = $array;
 
-			if($op==0)
-				$array=$this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
+			if($op==0) {
+                $this->load->model(DIR_TES.'/Reporte_cobertura_biologico');
+				$array = $this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
+                $data['headTable'] = '';
+            }
 			if($op==1)
 				$array=$this->Reporteador_model->getConcentradoActividades($nivel, $id, $fecha);
 			if($op==2)
@@ -81,14 +87,14 @@ class Reporteador extends CI_Controller {
 			if($op==4)
 				$array=$this->Reporteador_model->getEsquemasIncompletos($nivel, $id);
 				
-			$data['datos']=$array;
+			$data['datos'] = $array;
 		}
 		catch(Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
-			$data['clsResult'] = 'error';
+			$data['infoclass'] = 'error';
 		}
-		//$this->load->view('usuario/index', $data);
+		
 		$this->template->write('header','',true);
 		$this->template->write('footer','',true);
 		$this->template->write('menu','',true);
