@@ -82,8 +82,17 @@ class Reporteador extends CI_Controller {
 				$array=$this->Reporteador_model->getConcentradoActividades($nivel, $id, $fecha);
 			if($op==2)
 				$array=$this->Reporteador_model->getSeguimientoRV1RV5($nivel, $id, $fecha);
-			if($op==3)
-				$array=$this->Reporteador_model->getCensoNominal($nivel, $id);
+			if($op==3){
+				$this->load->model(DIR_TES.'/Reporte_censo_nominal');
+				$array = $this->Reporteador_model->getCensoNominal($nivel, $id, $fecha);
+				$data['headTable'] = '<tr><th>Apellido Paterno</th><th>Apellido Materno</th><th>Nombre</th>
+						<th>Domicilio</th><th>CURP</th><th>Fecha Nac</th><th>Sexo</th><th>Edad</th><th>Esquema</th>
+						<th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th>
+						<th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th>
+						<th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th>
+						<th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th>
+						<th>BGC</th><th>BGC</th><th>BGC</th><th>BGC</th></tr>';
+			}
 			if($op==4)
 				$array=$this->Reporteador_model->getEsquemasIncompletos($nivel, $id);
 				
