@@ -33,16 +33,35 @@ $(document).ready(function()
 </div>
 <div id='popimpr' class="table table-striped  ">
 <h2>Listado - <?php echo urldecode($title) ?></h2>
+<?php 	
+	if(isset($msgResult))
+	echo "<div class='$infoclass'>".$msgResult."</div>";
+?>
 <table border="0" width="100%" id="tabla">
-	<tr>
     <?php
-		foreach ($datos[0] as $item => $value)
+	if(isset($datos))
+	{
+		if(count($datos)>0)
 		{
-    		 echo "<th><h5>".$item."</h5></td>";
+			if(isset($headTable))
+				echo $headTable;
+			else
+			{
+				echo "<tr>";
+				foreach ($datos[0] as $item => $value)
+				{
+					 echo "<th><h5>".$item."</h5></td>";
+				}
+				echo "</tr>";
+			}
 		}
+		else echo "<tr><th><h4>No se encontro resultados</h4></td></tr>";
+	}
+	else echo "<tr><th><h4>No se encontro resultados</h4></td></tr>";
 	?>	
-	</tr>
+	
 	<?php
+	if(isset($datos))
 	for($i=0;$i<count($datos);$i++)
 	{
 		echo "<tr>";
@@ -55,4 +74,4 @@ $(document).ready(function()
 	?>
 </table>
 </div>
-<div align="right"><input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:50px; width::50px;" class="btn btn-primary"></div>
+<div align="right"><input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:58px; width::50px;" class="btn btn-primary"></div>
