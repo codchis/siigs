@@ -31,7 +31,7 @@ $(document).ready(function()
 <a id="exc" href=""><img src="/resources/images/excel.png" style="border:none;" title="Exportar a EXCEL" class="btn btn-primary"/></a>
 <input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:58px; " class="btn btn-primary">
 </div>
-<div id='popimpr' >
+<div id='popimpr'>
 <h2>Listado - <?php echo urldecode($title) ?></h2>
 <?php 	
 	if(isset($msgResult))
