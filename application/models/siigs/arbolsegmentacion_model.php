@@ -194,6 +194,11 @@ class ArbolSegmentacion_model extends CI_Model {
                     }
                 }
         }
+
+        /*
+         * Obtiene las unidades medicas correspondientes a un ID
+         * independientemente su nivel en el ASU
+         */
         
         public function getCluesFromId($id)
         {

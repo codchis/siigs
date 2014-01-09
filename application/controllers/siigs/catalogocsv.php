@@ -104,7 +104,7 @@ class CatalogoCsv extends CI_Controller {
 		//if (TRUE)
 		{
                         $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
-			//$fp = fopen('catalogos/metadatos/ACCIONES_NUTRICIONALES.csv', "r");
+			//$fp = fopen('localidades_lat_lon_alt.csv', "r");
 			 $cont = 0;
 			 $columnas = array();
 			 $resultado = array();
@@ -255,6 +255,7 @@ class CatalogoCsv extends CI_Controller {
 			  		}
 			  	}
 			 }
+                         //var_dump($datallaves);
 			 if (count($datallaves) != count($this->_array_unique_recursive($datallaves)))
 			 {
 			 	echo json_encode(array("Error","El archivo contiene llaves primarias duplicadas"));
@@ -309,7 +310,19 @@ class CatalogoCsv extends CI_Controller {
 	{
 		foreach($arr as $key=>$value)
 			if(gettype($value)=='array')
-			    $arr[$key]=$this->_array_unique_recursive($value);
+                        {
+                            //var_dump($arr[$key]);
+                            //$temp = $arr[$key];
+			    //$arr[$key]=$this->_array_unique_recursive($value);
+                            $arr[$key]=implode(",",$value);
+                            
+//                            if ($temp != $arr[$key])
+//                            {
+//                                var_dump($temp);
+//                                var_dump($arr[$key]);
+//                                echo "<br/><br/><br/>";
+//                            }
+                        }
 			return array_unique($arr,SORT_REGULAR);
 	}
 	
