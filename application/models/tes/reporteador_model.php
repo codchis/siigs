@@ -132,11 +132,10 @@ class Reporteador_model extends CI_Model {
         $result = array();
 		$sqlIdsConTutor = "SELECT p.id,p.apellido_paterno,p.apellido_materno,p.nombre,p.calle_domicilio as domicilio,p.curp,p.fecha_nacimiento,p.sexo,'' AS edadEmb,
 			'' AS esquema,t.apellido_paterno AS apellido_paterno_tutor,t.apellido_materno AS apellido_materno_tutor,
-			t.nombre AS nombre_tutor,t.curp AS curp_tutor,t.sexo AS sexo_tutor
+			t.nombre AS nombre_tutor,t.curp AS curp_tutor,t.sexo AS sexo_tutor,TIMESTAMPDIFF(DAY, fecha_nacimiento, CURDATE()) AS edad_dias
 			FROM cns_persona p 
 			INNER JOIN cns_persona_x_tutor pt ON p.id=pt.id_persona
 			INNER JOIN cns_tutor t ON t.id=pt.id_tutor";
-        
         $queryIdsConTutor = $this->db->query($sqlIdsConTutor);
         $resultIdsConTutor = $queryIdsConTutor->result();
         
@@ -149,6 +148,17 @@ class Reporteador_model extends CI_Model {
         foreach ($resultIdsConTutor as $IdConTutor) {
             //$IdConTutor->id;
             
+        	$sqlVacunasAplicadas = "SELECT id_vacuna FROM cns_control_vacuna WHERE id_persona='".$IdConTutor->id."'";
+        	$queryVacunasAplicadas = $this->db->query($sqlVacunasAplicadas);
+        	$resultVacunasAplicadas = $queryVacunasAplicadas->result();
+
+        	$sqlVacunasDebeTener = "SELECT id_vacuna FROM cns_regla_vacuna WHERE
+			    (".$IdConTutor->edad_dias." >= dia_inicio_aplicacion_nacido AND
+				".$IdConTutor->edad_dias." <= dia_fin_aplicacion_nacido) OR
+				(dia_fin_aplicacion_nacido<=".$IdConTutor->edad_dias.")";
+        	$queryVacunasDebeTener = $this->db->query($sqlVacunasDebeTener);
+        	$resultVacunasDebeTener = $queryVacunasDebeTener->result();
+        	
             // se inserta el registro del infante
         	$objReporte = new Reporte_censo_nominal();
             $objReporte->apellido_paterno = $IdConTutor->apellido_paterno;
@@ -158,22 +168,14 @@ class Reporteador_model extends CI_Model {
             $objReporte->curp = $IdConTutor->curp;
             $objReporte->fecha_nacimiento = $IdConTutor->fecha_nacimiento;
             $objReporte->sexo = $IdConTutor->sexo;
-            $objReporte->edadEmb = $IdConTutor->edadEmb;
-            $objReporte->esquema = $IdConTutor->esquema;
             $objReporte->bcg = 'x';
-            $objReporte->sabin1 = '';
-            $objReporte->sabin2 = '';
-            $objReporte->sabin3 = '';
-            $objReporte->penta1 = '';
-            $objReporte->penta2 = '';
-            $objReporte->penta3 = '';
             $objReporte->hepaB1 = 'x';
             $objReporte->hepaB2 = 'x';
             $objReporte->hepaB3 = 'x';
-            $objReporte->pentaAcelular1 = 'x';
-            $objReporte->pentaAcelular2 = 'x';
-            $objReporte->pentaAcelular3 = 'x';
-            $objReporte->pentaAcelular4 = '-';
+            $objReporte->penta1 = 'x';
+            $objReporte->penta2 = 'x';
+            $objReporte->penta3 = 'x';
+            $objReporte->penta4 = '-';
             $objReporte->dpt1 = '';
             $objReporte->dpt2 = '';
             $objReporte->dpt3 = '-';
@@ -198,22 +200,14 @@ class Reporteador_model extends CI_Model {
             $objReporte->curp = $IdConTutor->curp_tutor;
             $objReporte->fecha_nacimiento = '';
             $objReporte->sexo = $IdConTutor->sexo_tutor;
-            $objReporte->edadEmb = '';
-            $objReporte->esquema = '';
             $objReporte->bcg = '';
-            $objReporte->sabin1 = '';
-            $objReporte->sabin2 = '';
-            $objReporte->sabin3 = '';
-            $objReporte->penta1 = '';
-            $objReporte->penta2 = '';
-            $objReporte->penta3 = '';
             $objReporte->hepaB1 = '';
             $objReporte->hepaB2 = '';
             $objReporte->hepaB3 = '';
-            $objReporte->pentaAcelular1 = '';
-            $objReporte->pentaAcelular2 = '';
-            $objReporte->pentaAcelular3 = '';
-            $objReporte->pentaAcelular4 = '';
+            $objReporte->penta1 = '';
+            $objReporte->penta2 = '';
+            $objReporte->penta3 = '';
+            $objReporte->penta4 = '';
             $objReporte->dpt1 = '';
             $objReporte->dpt2 = '';
             $objReporte->dpt3 = '';

@@ -62,7 +62,13 @@ $(document).ready(function(){
 	        }
 	        else // al menos un filtro de búsqueda debe estar seleccionado
 	        {
-		        pathBase = $(this).attr("href");
+	        	pathBase = $(this).attr("href");
+		        var arrPath = $(this).attr("href").split('/');
+		        if(arrPath.length != 6){
+			        arrPath.splice(6);
+			        arrPath.splice(7);
+					pathBase = arrPath.join('/');
+		        }
 		        path = generaUrl("ums", pathBase);
 		        if (path == ''){
 		            path = generaUrl("localidades", pathBase);

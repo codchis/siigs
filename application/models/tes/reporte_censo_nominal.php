@@ -54,52 +54,10 @@ class Reporte_censo_nominal extends CI_Model
     
     /**
      * @access public
-     * @var    float
-     */
-    public $edadEmb;
-    
-    /**
-     * @access public
-     * @var    int
-     */
-    public $esquema;
-    
-    /**
-     * @access public
      * @var    varchar
      */
     public $bcg;
     
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $sabin1;
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $sabin2;
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $sabin3;
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $penta1;
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $penta2;
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $penta3;
     /**
      * @access public
      * @var    varchar
@@ -119,22 +77,22 @@ class Reporte_censo_nominal extends CI_Model
      * @access public
      * @var    varchar
      */
-    public $pentaAcelular1;
+    public $penta1;
     /**
      * @access public
      * @var    varchar
      */
-    public $pentaAcelular2;
+    public $penta2;
     /**
      * @access public
      * @var    varchar
      */
-    public $pentaAcelular3;
+    public $penta3;
     /**
      * @access public
      * @var    varchar
      */
-    public $pentaAcelular4;
+    public $penta4;
     /**
      * @access public
      * @var    varchar
@@ -205,35 +163,7 @@ class Reporte_censo_nominal extends CI_Model
      * @var    varchar
      */
     public $influenzaR;
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $apellido_paterno_tutor;
-    
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $apellido_materno_tutor;
-    
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $nombre_tutor;
-    
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $curp_tutor;
-    
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $sexo_tutor;
+
     
     public function __construct()
 	{

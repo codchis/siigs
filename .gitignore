@@ -20,3 +20,5 @@ nbproject/
 .project
 
 netbeans_ci_code_completion.php
+
+application/json/*
