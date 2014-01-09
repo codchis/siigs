@@ -8,7 +8,7 @@
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="/resources/ui/jquery-ui-1.8.17.custom.js"></script>	
+	
     <script type="text/javascript" src="/resources/js/validaciones.js"></script>	
 
     <script>
