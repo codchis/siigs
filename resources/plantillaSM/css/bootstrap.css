@@ -6309,4 +6309,11 @@ button.close {
 
 .btn-nuevo {
 	background-color: #ffffff;
-	}
+}
+    
+/*************** Modificaciones para tablas *******************/
+.table thead th{
+    border-right: 1px solid #DDDDDD;
+    text-align: center;
+    vertical-align: middle;
+}
