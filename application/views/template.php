@@ -21,6 +21,8 @@
 	<script src="/resources/js/jquery-ui.min.js"></script>
 	<script src="/resources/js/modernizr.js"></script>
 	<script src="/resources/js/customscript.js" type="text/javascript"></script>
+    
+    <?= $js ?>
 </head>
 
 
