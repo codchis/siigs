@@ -1,7 +1,10 @@
     <link href="/resources/css/grid.css" rel="stylesheet" type="text/css" /> 
     <link href="/resources/SpryAssets/SpryAccordion.css" rel="stylesheet" type="text/css" /> 
 	<script src="/resources/SpryAssets/SpryAccordion.js" type="text/javascript"></script>
-    
+<?php 
+if($enrolado)
+{
+?>    
     <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
 	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
     <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
@@ -17,7 +20,7 @@
 			changeMonth: true,
 			changeYear: true,
 			duration:"fast",
-			dateFormat: 'dd/mm/yy',
+			dateFormat: 'dd-mm-yy',
 			constrainInput: true,
 			firstDay: 1,
 			closeText: 'X',
@@ -294,7 +297,7 @@
 					}
 				});
 			}
-			else {$("#fnacimiento").val("");$("#fnacimiento").attr("placeholder","dd/mm/yyyy"); $("#fnacimiento").focus();};
+			else {$("#fnacimiento").val("");$("#fnacimiento").attr("placeholder","dd-mm-yyyy"); $("#fnacimiento").focus();};
 		}
 	 	return false;
 	}
@@ -310,7 +313,7 @@
 		
 		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="90%"><table width="96%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" required="required" style="width:98%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
-		$("#f"+id+num).val($.datepicker.formatDate('dd/mm/yy', new Date()));
+		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#f"+id+num).datepicker(option);
 		$("#"+id+num).load("/tes/Enrolamiento/catalog_select/"+id);
 	}
@@ -338,7 +341,7 @@
 		
 		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" required="required" style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" required="required" style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" required="required" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 		$("#cNu").append(campo);
-		$("#fCNu"+num).val($.datepicker.formatDate('dd/mm/yy', new Date()));
+		$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#fCNu"+num).datepicker(option);
 	}
 	function remNutricional()
@@ -402,7 +405,7 @@
                             <td><p align="right">Apellido Materno</p></td>
                             <td><input name="materno" type="text" required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->apellido_materno; ?>" maxlength="20"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d/m/Y', strtotime($enrolado->fecha_nacimiento)); ?>" placeholder="dd/mm/yyyy"></td>
+                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d-m-Y', strtotime($enrolado->fecha_nacimiento)); ?>" placeholder="dd-mm-yyyy"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
@@ -415,8 +418,8 @@
                             </tr>
                           <tr>
                             <td><p align="right">CURP</p></td>
-                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo substr($enrolado->curp,0,12); ?>" onkeypress="return validar(event,'NL',this.id)">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20.5%" required value="<?php echo substr($enrolado->curp,12,15); ?>" onkeypress="return validar(event,'NL',this.id)"></td>
+                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,0,12); ?>" maxlength="12">
+                            <input name="curp2" type="text" required id="curp2"  style="letter-spacing:1px; width:22.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,12,15); ?>" maxlength="6"></td>
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" required="required">
                             </select></td>
@@ -527,7 +530,7 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Fecha</p></td>
-                            <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date("d/m/Y",strtotime($enrolado->fecha_registro)); ?>" placeholder="dd/mm/yyyy"></td>
+                            <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date("d-m-Y",strtotime($enrolado->fecha_registro)); ?>" placeholder="dd-mm-yyyy"></td>
                             <td width="25%"><p align="right">&nbsp;</p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
@@ -792,7 +795,7 @@
 					<th width="18%" align="left"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'.$num.'" required="required" style="width:85%;" value="'.$peso.'"></th> 
 					<th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'.$num.'" required="required" style="width:85%;" value="'.$altura.'"></th>  
 					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'" required="required" style="width:85%;" value="'.$talla.'"></th>  
-					<th width="36%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("d/m/Y",strtotime($fecha)).'"></th>
+					<th width="36%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'"></th>
 				</tr>
 				</table> 
 			  </div></span>
@@ -840,7 +843,14 @@
 <script type="text/javascript">
 var Accordion1 = new Spry.Widget.Accordion("Accordion1", { useFixedPanelHeights: false, defaultPanel: 0 });
 </script>
-<?php
+<?php 
+}
+else
+{
+ echo "<div class='$infoclass'>".$msgResult."</div><div><br>";
+ echo '<a href="" class="btn btn-primary" onclick="window.location.href=\'/'.DIR_TES.'/enrolamiento/\';return false;">Regresar</a></div>';
+}
+
 function getArray($array,$id,$nu)
 {
 	$i=0; $grid="";
@@ -862,7 +872,7 @@ function getArray($array,$id,$nu)
 					<th width="50%" align="left"><select name="'.$id.'[]" id="'.$id.$num.'" required="required" style="width:95%;"></select>
 					<script>$("#'.$id.$num.'").load("/tes/Enrolamiento/catalog_select/'.$id.'/'.$x.'");</script>
 					</th>
-					<th width="40%" align="left"><input name="f'.$id.'[]" type="text" id="f'.$id.$num.'" value="'.date("d/m/Y",strtotime($fecha)).'"></th>
+					<th width="40%" align="left"><input name="f'.$id.'[]" type="text" id="f'.$id.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'"></th>
 				</tr>
 				</table> 
 			  </div></span>

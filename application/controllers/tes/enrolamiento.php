@@ -53,7 +53,7 @@ class Enrolamiento extends CI_Controller
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['uri_segment'] = '4';
 			$configPag['total_rows'] = $this->Enrolamiento_model->getNumRows($this->input->post('busqueda'));
-			$configPag['per_page']   = REGISTROS_PAGINADOR;
+			$configPag['per_page']   = 20;
 			$this->pagination->initialize($configPag);
 			if ($this->input->post('busqueda'))
 				$data['users'] = $this->Enrolamiento_model->getListEnrolamiento($this->input->post('busqueda'), $configPag['per_page'], $pag);
@@ -67,7 +67,38 @@ class Enrolamiento extends CI_Controller
  		$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_list', $data);
  		$this->template->render();
 	}
-	
+	public function print_card($id)
+	{
+		$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+		$this->load->model(DIR_TES.'/Enrolamiento_model');
+		$persona=$this->Enrolamiento_model->getById($id);
+		$alergia=$this->Enrolamiento_model->getAlergia($id);
+		//$persona = (array) $persona;
+		//var_dump($persona);
+		$datos=array("nombre"=>$persona->nombre." ".$persona->apellido_paterno." ".$persona->apellido_materno,
+					 "sexo"=>$persona->sexo,
+					 "nombre_madre"=>$persona->nombreT." ".$persona->paternoT." ".$persona->maternoT,
+					 "domicilio"=>$persona->calle_domicilio." ".$persona->numero_domicilio.", ".$persona->colonia_domicilio
+		);
+		$dom=$this->ArbolSegmentacion_model->getDescripcionById(array($persona->id_asu_localidad_domicilio),3);// loca edo
+		$asu=$this->ArbolSegmentacion_model->getDescripcionById(array($persona->id_localidad_registro_civil),3);// um juridiccion
+		$dom=explode(",",$dom[0]->descripcion);
+		$asu=explode(",",$asu[0]->descripcion);
+		$datos["localidad"]=$dom[0];
+		$datos["municipio"]=$dom[1];
+		
+		$datos["um"]=$asu[0];
+		$datos["juridiccion"]=$asu[3];
+		$valor=array();
+		foreach($alergia as $x)
+		{
+			$valor[]=$x->descripcion;
+		}
+		$datos["alergias"]=implode(", ",$valor);
+		
+		
+		echo implode("|",$datos);
+	}
 	/**
 	 *Crea la pagina para ver la infromacion de la persona
 	 *se recibe el parametro $id de tipo int que representa el identificador de la persona
@@ -84,6 +115,15 @@ class Enrolamiento extends CI_Controller
 			$this->load->model(DIR_TES.'/Enrolamiento_model');
 			$data['title'] = 'Ver Paciente';
 			$data['enrolado'] = $this->Enrolamiento_model->getById($id);
+			if(empty($data['enrolado']))
+			{
+				$data['infoclass'] = 'error';
+				$data['msgResult'] = "Registro no encontrado";
+				
+				$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_view', $data);
+ 				$this->template->render();
+				return true;
+			}
 			$data['alergias'] = $this->Enrolamiento_model->getAlergia($id);
 			$data['afiliaciones'] = $this->Enrolamiento_model->getAfiliaciones($id);
 			
@@ -93,17 +133,57 @@ class Enrolamiento extends CI_Controller
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
+			$peso_x_edad   = $this->Enrolamiento_model->get_catalog2("cns_peso_x_edad","sexo"  ,$data['enrolado']->sexo);
+			$altura_x_edad = $this->Enrolamiento_model->get_catalog2("cns_altura_x_edad","sexo",$data['enrolado']->sexo);
 			
-			$array=array();$i=0;
-			foreach($nutricion as $x)
+			$array=array(); $array2=array(); $i=0;$meses=0;$peso=0;
+			foreach($peso_x_edad as $x)
 			{
-				$fecha=strtotime($x->fecha);
-				$dato = array("d1"=>"[".$fecha.",".$x->talla."]", "d2"=>"[".$fecha.",".$x->peso."]", "d3"=>"[".$fecha.",".$x->altura."]");
+				if(count($nutricion)>$i)
+				{
+					$fecha     = date("Y-m-d",strtotime($nutricion[$i]->fecha));
+					$datetime1 = date_create($fecha);
+					$datetime2 = date_create(date("Y-m-d"));
+					$interval  = date_diff($datetime1, $datetime2);
+					$dias      = $interval->format('%R%a dias');
+					$meses=(int)($dias/30);
+					$peso=$nutricion[$i]->peso;
+				}
+				else {$meses=""; $peso="";}
+				$dato = array(
+					"d1"=>"[".$x->meses.",".$x->peso_bajo."]", 
+					"d2"=>"[".$x->meses.",".$x->sobrepeso."]", 
+					"d3"=>"[".$x->meses.",".$x->obesidad."]",
+					"d4"=>"[".$meses.",".$peso."]");
 				$array[$i] = $dato;
 				$i++;
 			}
-			$data['label']=json_encode(array("d1"=>"Talla","d2"=>"Peso","d3"=>"Altura"));
+			$i=0;
+			foreach($altura_x_edad as $x)
+			{
+				if(count($nutricion)>$i)
+				{
+					$fecha     = date("Y-m-d",strtotime($nutricion[$i]->fecha));
+					$datetime1 = date_create($fecha);
+					$datetime2 = date_create(date("Y-m-d"));
+					$interval  = date_diff($datetime1, $datetime2);
+					$dias      = $interval->format('%R%a dias');
+					$meses=(int)($dias/30);
+					$peso=$nutricion[$i]->altura;
+				}
+				else {$meses=""; $peso="";}
+				$dato = array(
+					"d1"=>"[".$x->meses.",".$x->minima."]", 
+					"d2"=>"[".$x->meses.",".$x->ideal."]", 
+					"d3"=>"[".$meses.",".$peso."]");
+				$array2[$i] = $dato;
+				$i++;
+			}
+			$data['label']=json_encode(array("d1"=>"Peso_Bajo","d2"=>"Sobrepeso","d3"=>"Obesidad","d4"=>"Peso"));
 			$data['control_nutricional']=json_encode($array);
+			
+			$data['label_altura']=json_encode(array("d1"=>"Minima","d2"=>"Ideal","d3"=>"Altura"));
+			$data['control_nutricional_altura']=json_encode($array);
 			
 		}
 		catch(Exception $e)
@@ -132,6 +212,15 @@ class Enrolamiento extends CI_Controller
 			$data['id'] = $id;
 			$data['title'] = 'Ver Paciente';
 			$data['enrolado'] = $this->Enrolamiento_model->getById($id);
+			if(empty($data['enrolado']))
+			{
+				$data['infoclass'] = 'error';
+				$data['msgResult'] = "Registro no encontrado";
+				
+				$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_update', $data);
+ 				$this->template->render();
+				return true;
+			}
 			$data['alergias'] = $this->Enrolamiento_model->getAlergia($id);
 			$data['afiliaciones'] = $this->Enrolamiento_model->getAfiliaciones($id);
 			
@@ -253,7 +342,7 @@ class Enrolamiento extends CI_Controller
 		if(sizeof($datos)!=0)
 		{
 			$i=0;$a=0;$y=0;$temp="";$x=0;
-			$opcion='<table width="85%" ><tr>';
+			$opcion='<table width="100%" ><tr>';
 			foreach($datos as $dato)
 			{
 				$id=$dato->id;
@@ -269,7 +358,7 @@ class Enrolamiento extends CI_Controller
 							$opcion.="</tr></table>";
 							if($x==$col){$opcion.="<tr>"; $x=0;}
 						}
-						$opcion.="<td width='33%' valign='top'><table border=2><tr><th bgcolor='#CCC'> ".$dato->tipo." </th></tr><tr>";		
+						$opcion.="<td width='33%' valign='top'><table width='98%' cellpadding=1 cellspacing=1 border=0><tr><th bgcolor='#CCC'> ".$dato->tipo." </th></tr><tr>";		
 						$y++;				
 					}
 					else $opcion.="</tr><tr>";
@@ -351,7 +440,7 @@ class Enrolamiento extends CI_Controller
 	}
 	public function file_to_card($id)
 	{
-		$archivo=date("YmdHis").".tes";
+		$archivo=date("YmdHis").".tesf";
 		header("Pragma: public");
 		header("Expires: 0");
 		header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
@@ -374,33 +463,33 @@ class Enrolamiento extends CI_Controller
 		$data.=$enrolado["apellido_paterno"]."=";
 		$data.=$enrolado["apellido_materno"]."=";
 		$data.=$enrolado["sexo"]."=";
-		$data.=$enrolado["id_tipo_sanguineo"]."=";            if($enrolado["id_tipo_sanguineo"]=="")$data.="¬";
+		$data.=$enrolado["id_tipo_sanguineo"];                if($enrolado["id_tipo_sanguineo"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["fecha_nacimiento"]."=";
-		$data.=$enrolado["id_asu_localidad_nacimiento"]."=";  if($enrolado["id_asu_localidad_nacimiento"]=="")$data.="¬";
-		$data.=$enrolado["calle_domicilio"]."=";              if($enrolado["calle_domicilio"]=="")$data.="¬";
-		$data.=$enrolado["numero_domicilio"]."=";             if($enrolado["numero_domicilio"]=="")$data.="¬";
-		$data.=$enrolado["colonia_domicilio"]."=";            if($enrolado["colonia_domicilio"]=="")$data.="¬";
-		$data.=$enrolado["referencia_domicilio"]."=";         if($enrolado["referencia_domicilio"]=="")$data.="¬";
-		$data.=$enrolado["id_asu_localidad_domicilio"]."=";   if($enrolado["id_asu_localidad_domicilio"]=="")$data.="¬";
-		$data.=$enrolado["cp_domicilio"]."=";                 if($enrolado["cp_domicilio"]=="")$data.="¬";
-		$data.=$enrolado["telefono_domicilio"]."=";           if($enrolado["telefono_domicilio"]=="")$data.="¬";
-		$data.=$enrolado["fecha_registro"]."=";               if($enrolado["fecha_registro"]=="")$data.="¬";
-		$data.=$enrolado["id_asu_um_tratante"]."=";           if($enrolado["id_asu_um_tratante"]=="")$data.="¬";
-		$data.=$enrolado["celular"]."=";                      if($enrolado["celular"]=="")$data.="¬";
-		$data.=$enrolado["ultima_actualizacion"]."=";         if($enrolado["ultima_actualizacion"]=="")$data.="¬";
-		$data.=$enrolado["id_nacionalidad"]."=";              if($enrolado["id_nacionalidad"]=="")$data.="¬";
+		$data.=$enrolado["id_asu_localidad_nacimiento"];      if($enrolado["id_asu_localidad_nacimiento"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["calle_domicilio"] ;                 if($enrolado["calle_domicilio"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["numero_domicilio"] ;                if($enrolado["numero_domicilio"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["colonia_domicilio"] ;               if($enrolado["colonia_domicilio"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["referencia_domicilio"] ;            if($enrolado["referencia_domicilio"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["id_asu_localidad_domicilio"] ;      if($enrolado["id_asu_localidad_domicilio"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["cp_domicilio"] ;                    if($enrolado["cp_domicilio"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["telefono_domicilio"] ;              if($enrolado["telefono_domicilio"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["fecha_registro"] ;                  if($enrolado["fecha_registro"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["id_asu_um_tratante"] ;              if($enrolado["id_asu_um_tratante"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["celular"] ;                         if($enrolado["celular"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["ultima_actualizacion"] ;            if($enrolado["ultima_actualizacion"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["id_nacionalidad"] ;                 if($enrolado["id_nacionalidad"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["id_operadora_celular"];             if($enrolado["id_operadora_celular"]=="")$data.="¬";
 		$data.="~";
 		
 		$data.=$enrolado["idT"]."=";
-		$data.=$enrolado["curpT"]."=";
-		$data.=$enrolado["nombreT"]."=";
-		$data.=$enrolado["paternoT"]."=";
-		$data.=$enrolado["maternoT"]."=";
-		$data.=$enrolado["sexoT"]."=";                       if($enrolado["sexoT"]=="")$data.="¬";
-		$data.=$enrolado["telefonoT"]."=";                   if($enrolado["telefonoT"]=="")$data.="¬";
-		$data.=$enrolado["celularT"]."=";                    if($enrolado["celularT"]=="")$data.="¬";
-		$data.=$enrolado["operadoraTid"];                    if($enrolado["operadoraTid"]=="")$data.="¬";
+		$data.=$enrolado["curpT"];						 if($enrolado["curpT"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["nombreT"];					 if($enrolado["nombreT"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["paternoT"];					 if($enrolado["paternoT"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["maternoT"];					 if($enrolado["maternoT"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["sexoT"];                       if($enrolado["sexoT"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["telefonoT"];                   if($enrolado["telefonoT"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["celularT"];                    if($enrolado["celularT"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["operadoraTid"];                if($enrolado["operadoraTid"]=="")$data.="¬";
 		$data.="~";
 		
 		$registro = (array)$this->Enrolamiento_model->getRegistro_civil($id);
@@ -415,12 +504,18 @@ class Enrolamiento extends CI_Controller
 		{
 			$data.=$x->id."°";
 		}
+		if(empty($alergias))
+			$data.="~";
+		else
 		$data=substr($data,0,strlen($data)-2)."~";
 		$afiliaciones = $this->Enrolamiento_model->getAfiliaciones($id);
 		foreach($afiliaciones as $x)
 		{
 			$data.=$x->id."°";
 		}
+		if(empty($afiliaciones))
+			$data.="~";
+		else
 		$data=substr($data,0,strlen($data)-2)."~";
 		$vacunas=$this->Enrolamiento_model->get_catalog_view("vacuna",$id);
 		foreach($vacunas as $x)
@@ -428,6 +523,9 @@ class Enrolamiento extends CI_Controller
 			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
+		if(empty($vacunas))
+			$data.="~";
+		else
 		$data=substr($data,0,strlen($data)-2)."~";
 		$iras=$this->Enrolamiento_model->get_catalog_view("ira",$id);
 		foreach($iras as $x)
@@ -435,6 +533,9 @@ class Enrolamiento extends CI_Controller
 			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
+		if(empty($iras))
+			$data.="~";
+		else
 		$data=substr($data,0,strlen($data)-2)."~";
 		$edas=$this->Enrolamiento_model->get_catalog_view("eda",$id);
 		foreach($edas as $x)
@@ -442,6 +543,9 @@ class Enrolamiento extends CI_Controller
 			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
+		if(empty($edas))
+			$data.="~";
+		else
 		$data=substr($data,0,strlen($data)-2)."~";
 		$consultas=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
 		foreach($consultas as $x)
@@ -449,6 +553,9 @@ class Enrolamiento extends CI_Controller
 			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
+		if(empty($consultas))
+			$data.="~";
+		else
 		$data=substr($data,0,strlen($data)-2)."~";
 		$anutricional=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 		foreach($anutricional as $x)
@@ -456,6 +563,9 @@ class Enrolamiento extends CI_Controller
 			$data.=$x->id."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
+		if(empty($anutricional))
+			$data.="~";
+		else
 		$data=substr($data,0,strlen($data)-2)."~";
 		$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 		foreach($nutricion as $x)
@@ -465,8 +575,11 @@ class Enrolamiento extends CI_Controller
 			$data.=$x->talla."=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
+		if(empty($nutricion))
+			$data.="~";
+		else
 		$data=substr($data,0,strlen($data)-2);
-		$this->Enrolamiento_model->entorno_x_persona($id,0,'',$archivo,4);
+		$this->update_card($id,0,'',$archivo,4);
 		echo $data;
 	}
 	

@@ -18,7 +18,7 @@
 			changeMonth: true,
 			changeYear: true,
 			duration:"fast",
-			dateFormat: 'dd/mm/yy',
+			dateFormat: 'dd-mm-yy',
 			constrainInput: true,
 			firstDay: 1,
 			closeText: 'X',
@@ -70,6 +70,7 @@
 				}
 			}						
 		}); 
+		<?php if($session!=""){?>
 		$.ajax({
 		type: "POST",
 		data: {
@@ -86,6 +87,7 @@
 				document.getElementById("umt").value=obj[0]["descripcion"];
 			}
 		});
+		<?php }?>
 		<?php
 		$alergias="";
 		$afiliaciones="";
@@ -257,7 +259,7 @@
 					}
 				});
 			}
-			else {$("#fnacimiento").val("");$("#fnacimiento").attr("placeholder","dd/mm/yyyy"); $("#fnacimiento").focus();};
+			else {$("#fnacimiento").val("");$("#fnacimiento").attr("placeholder","dd-mm-yyyy"); $("#fnacimiento").focus();};
 		}
 	 	return false;
 	}
@@ -273,7 +275,7 @@
 		
 		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" required="required" style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
-		$("#f"+id+num).val($.datepicker.formatDate('dd/mm/yy', new Date()));
+		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#f"+id+num).datepicker(option);
 		$("#"+id+num).load("/tes/Enrolamiento/catalog_select/"+id);
 	}
@@ -301,7 +303,7 @@
 		
 		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" required="required" style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" required="required" style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" required="required" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 		$("#cNu").append(campo);
-		$("#fCNu"+num).val($.datepicker.formatDate('dd/mm/yy', new Date()));
+		$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#fCNu"+num).datepicker(option);
 		
 	}
@@ -364,7 +366,7 @@
                             <td><p align="right">Apellido Materno</p></td>
                             <td><input name="materno" type="text" required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('materno', ''); ?>" maxlength="20"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d/m/Y', strtotime(set_value('fnacimiento', ''))); ?>" placeholder="dd/mm/yyyy"></td>
+                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d-m-Y', strtotime(set_value('fnacimiento', ''))); ?>" placeholder="dd-mm-yyyy"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
@@ -375,8 +377,8 @@
                             </tr>
                           <tr>
                             <td><p align="right">CURP</p></td>
-                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo set_value('curp', ''); ?>" onkeypress="return validar(event,'NL',this.id)">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20.5%" required value="<?php echo set_value('curp2', ''); ?>" onkeypress="return validar(event,'NL',this.id)"></td>
+                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp', ''); ?>" maxlength="12">
+                            <input name="curp2" type="text" required id="curp2"  style="letter-spacing:1px; width:24.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp2', ''); ?>" maxlength="6"></td>
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" required="required">
                             </select></td>
@@ -486,7 +488,7 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Fecha</p></td>
-                            <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date('d/m/Y', strtotime(set_value('fechacivil', ''))); ?>" placeholder="dd/mm/yyyy"></td>
+                            <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date('d-m-Y', strtotime(set_value('fechacivil', ''))); ?>" placeholder="dd-mm-yyyy"></td>
                             <td width="25%"><p align="right">&nbsp;</p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
