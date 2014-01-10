@@ -34,9 +34,9 @@ body {background-color: #E4E4E4;}
     header #menu-principal nav ul li #actual {background: #1FA950; color: #fff; text-decoration:none;}
 
     header #menu-principal .buscador-cont { width: 28.3%; height: 3.214285714285714em/*45px*/; outline: 0px dotted green; float: right; }
-    header #menu-principal .buscador-cont  .db1{ width: 222px; height: 2.428571428571429em/*34px*/; outline: 0px dotted aqua; float: left; background: url(../img/fondo-buscar.png); margin: 7px 0 0 0; }
+    header #menu-principal .buscador-cont  .db1{ width: 222px; height: 2.428571428571429em/*34px*/; outline: 0px dotted aqua; float: left; background: url(../img/fondo-buscar.png); margin: 7px 0 0 0;Â }
     	header #menu-principal .buscador-cont  .db1 form #dato_buscado{width: 170px; height: 16px; float: right; border: 0px; margin: 4px 0 0 0; box-shadow: 0 0px 0px rgba(0, 0, 0, 0) inset;  }
-    header #menu-principal .buscador-cont  .db2{ width: 68px; height: 2.428571428571429em/*34px*/; outline: 0px dotted blue; float: left; background: url(../img/enviar-buscar.png); margin: 7px 0 0 0; }
+    header #menu-principal .buscador-cont  .db2{ width: 68px; height: 2.428571428571429em/*34px*/; outline: 0px dotted blue; float: left; background: url(../img/enviar-buscar.png); margin: 7px 0 0 0; Â }
 
     header #menu-secundario { background: #EDEDEE; min-height: 45px; /*float: right; border-top: 5px solid #E8ECED; border-bottom: 5px solid #E8ECED;*/  }
     header #menu-secundario #nombre-site{ height: 45px;  float: left; color: #666666; font-family:Open Sans Condensed; font-size: 1.285714285714286em/*18px*/; font-weight: bold; margin: 0 30px 0 10px; line-height: 3.214285714285714em/*45px*/;  }
@@ -147,7 +147,7 @@ body {background-color: #E4E4E4;}
     #full-content > #content {  width: 97.09090909090909%; padding: 0 1.454545454545455%;  }
 
     #left-content { width: 97.92817679558011%/*97.92817679558011%*/; padding: 0 2.07182320441989% 0 0;  float: left; background: #FFF; height: 630px; }
-    .contenido { width: 99.7%; margin: 0 auto; margin-top: 20px; margin-bottom: 20px; min-height: 350px !important; background: #FFF; }
+    .contenido { width: 99.7%; margin: 0 auto; margin-top: 20px; margin-bottom: 20px; min-height: 100px; background: #FFF; }
 
     @media (max-width: 767px)
     {
@@ -189,7 +189,7 @@ body {background-color: #E4E4E4;}
     
     footer .footer-container .servicios { background: #1C1C1C; /*    height: 400px;*/  height: 50px; border-radius: 0 0 0 5px;}
     footer .footer-container .servicios h4 {/*SERVICIOS EN LINEA*/ clear: both;color: #fff;font-family: Open Sans Condensed; font-size: 18px; /*font-size: 20px;*/ font-weight: bold;  text-indent: 22px;}
-    footer .footer-container .servicios h4 a { color: #EEEEEE;font-family: Open Sans Condensed; font-size: 1.42857em; font-weight: bold; }
+    footer .footer-container .servicios h4 a {Â color: #EEEEEE;font-family: Open Sans Condensed; font-size: 1.42857em; font-weight: bold; }
     footer .footer-container .servicios ul { list-style: none; margin: 20px auto 0px; padding: 0px; width: 90%; height: auto; outline: 0px dotted blue;    }
     footer .footer-container .servicios ul li{ width: 100%; height: auto; display: table; margin: 0 0 15px 0; outline: 0px dotted #FFF; padding: 0 0 0 0; }
     footer .footer-container .servicios ul li div { width: 86%; height: 1px; background: #333333; border-right: 50px solid #B11A28; padding: 0px; margin: 3px 0 20px 0; }
@@ -381,7 +381,7 @@ body {background-color: #E4E4E4;}
 a { font-size: 14px; text-decoration:none; vertical-align: text-top; color:#333;}
 a:link{ color:#333;}
 a:visited{ color:#333;}
-body { background: repeat scroll 0 0 transparent; margin-top:0; background-color:#E4E4E4; }
+body { repeat scroll 0 0 transparent; margin-top:0; background-color:#E4E4E4;}
 h2 { font-size:18px; font-weight:bold; vertical-align:text-top; font-family: Open Sans Condensed;}
 
 
@@ -930,3 +930,20 @@ color:#59595C;
 .pagination>li:first-child>a,.pagination>li:first-child>span{margin-left:0;}
 .pagination>li>a:hover,.pagination>li>span:hover,.pagination>li>a:focus,.pagination>li>span:focus{background-color:#eee}
 .pagination-sm>li>a,.pagination-sm>li>span{padding:5px 10px;font-size:12px}
+
+
+
+.requiere
+{ 
+	background-position:left center;
+	padding-left: 15px; width:183px; 
+	background-image: url(/resources/images/asterisco.png); 
+	background-repeat: no-repeat; 
+} 
+.requiere:focus ,.norequiere
+{ 
+	background-color: #FFF; 
+	background-position: left center; 
+	background-image: url(/resources/images/asteriscof.png); 
+	background-repeat: no-repeat; 
+}

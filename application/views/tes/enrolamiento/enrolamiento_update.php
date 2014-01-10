@@ -31,6 +31,7 @@ if($enrolado)
 			yearRange: '1900:'+g.getFullYear(),
 			showButtonPanel: false
 		}
+
 	$(document).ready(function()
 	{
 		$("#buscar").autocomplete({
@@ -187,6 +188,7 @@ if($enrolado)
             buscarTutor(this.value);
         });
 		habilitarTutor();
+		
 	});
 	function habilitarTutor()
 	{
@@ -325,7 +327,7 @@ if($enrolado)
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
 		
-		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="90%"><table width="96%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" required="required" style="width:98%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
+		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="90%"><table width="96%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" class="requiere" title="requiere" required style="width:98%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
 		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#f"+id+num).datepicker(option);
@@ -353,7 +355,7 @@ if($enrolado)
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
 		
-		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" required="required" style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" required="required" style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" required="required" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
+		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" class="requiere" title="requiere" required style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 		$("#cNu").append(campo);
 		$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#fCNu"+num).datepicker(option);
@@ -375,9 +377,11 @@ if($enrolado)
 			if(!empty($msgResult))
 			echo "<div class='$infoclass'>".$msgResult."</div>";
 			echo validation_errors(); 
-			echo form_open(DIR_TES.'/enrolamiento/update/'.$enrolado->id); 
+			echo form_open(DIR_TES.'/enrolamiento/update/'.$enrolado->id,array('onkeyup' => 'limpiaformulario("enrolar")', 'id' => 'enrolar')); 
 		?>
       <!-- mensaje -->
+      <div class="info requiere" style="width:93%"><img src="/resources/images/asterisco.png" />Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
+    <div id="alert"></div>
 	<table align="center" width="97.5%" border="0" cellpadding="0" cellspacing="0" style="margin-left:20px"><tr><td>
     	
         	<table width="100%">
@@ -393,13 +397,13 @@ if($enrolado)
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombre" type="text" required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->nombre; ?>" maxlength="35">
+                            <td width="31%"><input name="nombre" type="text" title='requiere' required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->nombre; ?>" maxlength="35">
                             <input name="id" type="hidden" id="id" value="<?php echo $id;?>"  /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                             
                               <label style=" margin-left:10px; float:left">
-                                <input type="radio" name="sexo" value="M" <?php if($enrolado->sexo=="M") echo "checked"; ?> id="sexo_1" onclick="getcurp();" required >
+                                <input type="radio" name="sexo" value="M" <?php if($enrolado->sexo=="M") echo "checked"; ?> id="sexo_1" onclick="getcurp();" title='requiere' required >
                                 Masculino</label>
                               <label style=" float:left">
                                 <input type="radio" name="sexo" value="F" <?php if($enrolado->sexo=="F") echo "checked"; ?> id="sexo_2" onclick="getcurp();">
@@ -408,23 +412,23 @@ if($enrolado)
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paterno" type="text" required id="paterno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->apellido_paterno; ?>" maxlength="20"></td>
+                            <td><input name="paterno" type="text" title='requiere' required id="paterno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->apellido_paterno; ?>" maxlength="20"></td>
                             <td><p align="right">Tipo de Sangre</p></td>
                             <td>
-                              <select name="sangre" id="sangre" style="width:80%; margin-left:10px;" required>                           
+                              <select name="sangre" id="sangre" style="width:80%; margin-left:10px;" title='requiere' required>                           
                             
                             </select></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="materno" type="text" required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->apellido_materno; ?>" maxlength="20"></td>
+                            <td><input name="materno" type="text" title='requiere' required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->apellido_materno; ?>" maxlength="20"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d-m-Y', strtotime($enrolado->fecha_nacimiento)); ?>" placeholder="dd-mm-yyyy"></td>
+                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" title='requiere' required value="<?php echo date('d-m-Y', strtotime($enrolado->fecha_nacimiento)); ?>" placeholder="dd-mm-yyyy"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
                             <td colspan="3">
-                            <div class="input-append" style="width:100%"><input name="lnacimientoT" type="text" required id="lnacimientoT" style="width:68%; margin-left:10px;" value="" readonly="readonly" >
+                            <div class="input-append" style="width:100%"><input name="lnacimientoT" type="text" title='requiere' required id="lnacimientoT" style="width:68%; margin-left:10px;" value="" readonly="readonly" >
                             	<input name="lnacimiento" type="hidden" id="lnacimiento" value="">                              
                               <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/' id="fba1" class="btn btn-primary">Seleccionar</a><div id="aqui"></div>
                               </div>
@@ -433,9 +437,9 @@ if($enrolado)
                           <tr>
                             <td><p align="right">CURP</p></td>
                             <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,0,12); ?>" maxlength="12">
-                            <input name="curp2" type="text" required id="curp2"  style="letter-spacing:1px; width:22.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,12,15); ?>" maxlength="6"></td>
+                            <input name="curp2" type="text" title='requiere' required id="curp2"  style="letter-spacing:1px; width:22.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,12,15); ?>" maxlength="6"></td>
                             <td><p align="right">Nacionalidad</p></td>
-                            <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" required="required">
+                            <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required">
                             </select></td>
                           </tr>
                         </table>
@@ -483,7 +487,7 @@ if($enrolado)
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">CURP</p></td>
-                            <td width="31%"><input name="curpT" type="text" required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo $enrolado->curpT; ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)"/></td>
+                            <td width="31%"><input name="curpT" type="text" title='requiere' required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo $enrolado->curpT; ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)"/></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px; float:left">
@@ -496,19 +500,19 @@ if($enrolado)
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombreT" type="text" required="required" id="nombreT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php  echo set_value('nombreT', $enrolado->nombreT) ; ?>" maxlength="35" readonly="readonly"/></td>
+                            <td width="31%"><input name="nombreT" type="text" title='requiere' required="title='requiere' required" id="nombreT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php  echo set_value('nombreT', $enrolado->nombreT) ; ?>" maxlength="35" readonly="readonly"/></td>
                             <td><p align="right">Telefono de Casa</p></td>
                             <td><input name="celularT" type="text" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->celularT; ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paternoT" type="text" required="required" id="paternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->paternoT; ?>" maxlength="20" readonly="readonly" /></td>
+                            <td><input name="paternoT" type="text" title='requiere' required="title='requiere' required" id="paternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->paternoT; ?>" maxlength="20" readonly="readonly" /></td>
                             <td><p align="right">Celular</p></td>
                             <td><input name="telefonoT" type="text" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->telefonoT; ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="maternoT" type="text" required="required" id="maternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->maternoT; ?>" maxlength="20" readonly="readonly" /></td>
+                            <td><input name="maternoT" type="text" title='requiere' required="title='requiere' required" id="maternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->maternoT; ?>" maxlength="20" readonly="readonly" /></td>
                             <td><p align="right">Compania Celular</p></td>
                             <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" >
                             </select></td>
@@ -567,7 +571,7 @@ if($enrolado)
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Calle</p></td>
-                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;" required value="<?php echo $enrolado->calle_domicilio; ?>"></td>
+                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;" title='requiere' required value="<?php echo $enrolado->calle_domicilio; ?>"></td>
                             <td width="25%"><p align="right">Número</p></td>
                             <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->numero_domicilio; ?>"></td>
                           </tr>
@@ -579,11 +583,11 @@ if($enrolado)
                             <td><p align="right">Colonia</p></td>
                             <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->colonia_domicilio; ?>"></td>
                             <td><p align="right">CP</p></td>
-                            <td><input name="cp" type="text" required id="cp" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->cp_domicilio; ?>" maxlength="5"></td>
+                            <td><input name="cp" type="text" title='requiere' required id="cp" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->cp_domicilio; ?>" maxlength="5"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Localidad</p></td>
-                            <td colspan="3"><div class="input-append" style="width:100%"><input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
+                            <td colspan="3"><div class="input-append" style="width:100%"><input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value=""/>
                               <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
                           </tr>
@@ -806,9 +810,9 @@ if($enrolado)
 				<table width="100%" >
 				<tr>
 					<th width="10%" >'.$num.'</th>
-					<th width="18%" align="left"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'.$num.'" required="required" style="width:85%;" value="'.$peso.'"></th> 
-					<th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'.$num.'" required="required" style="width:85%;" value="'.$altura.'"></th>  
-					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'" required="required" style="width:85%;" value="'.$talla.'"></th>  
+					<th width="18%" align="left"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'.$num.'" class="requiere" title="requiere" required style="width:85%;" value="'.$peso.'"></th> 
+					<th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'.$num.'" class="requiere" title="requiere" required style="width:85%;" value="'.$altura.'"></th>  
+					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'" class="requiere" title="requiere" required style="width:85%;" value="'.$talla.'"></th>  
 					<th width="36%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'"></th>
 				</tr>
 				</table> 
@@ -845,7 +849,7 @@ if($enrolado)
                 <td>
                 <br />
                 <span id="enviandoof" style="margin-left:-20px;">
-                <input class="btn btn-primary" type="submit" name="guardar" id="guardar" value="Guardar" />
+                <input class="btn btn-primary" type="submit" name="guardar" id="guardar" value="Guardar" onclick="return validarFormulario('enrolar')"/>
                 <input class="btn btn-primary" type="button" value="Cancelar" onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" />
                 </span>
     			
@@ -883,7 +887,7 @@ function getArray($array,$id,$nu)
 				<table width="100%" >
 				<tr>
 					<th width="10%" >'.$num.'</th>
-					<th width="50%" align="left"><select name="'.$id.'[]" id="'.$id.$num.'" required="required" style="width:95%;"></select>
+					<th width="50%" align="left"><select name="'.$id.'[]" id="'.$id.$num.'" class="requiere" title="requiere" required style="width:95%;"></select>
 					<script>$("#'.$id.$num.'").load("/tes/enrolamiento/catalog_select/'.$id.'/'.$x.'");</script>
 					</th>
 					<th width="40%" align="left"><input name="f'.$id.'[]" type="text" id="f'.$id.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'"></th>

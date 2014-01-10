@@ -81,7 +81,7 @@ class Enrolamiento extends CI_Controller
 					 "domicilio"=>$persona->calle_domicilio." ".$persona->numero_domicilio.", ".$persona->colonia_domicilio
 		);
 		$dom=$this->ArbolSegmentacion_model->getDescripcionById(array($persona->id_asu_localidad_domicilio),3);// loca edo
-		$asu=$this->ArbolSegmentacion_model->getDescripcionById(array($persona->id_localidad_registro_civil),3);// um juridiccion
+		$asu=$this->ArbolSegmentacion_model->getDescripcionById(array($persona->id_asu_um_tratante),3);// um juridiccion
 		$dom=explode(",",$dom[0]->descripcion);
 		$asu=explode(",",$asu[0]->descripcion);
 		$datos["localidad"]=$dom[0];
