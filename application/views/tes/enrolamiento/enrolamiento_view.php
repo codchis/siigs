@@ -1,6 +1,10 @@
     <link href="/resources/css/grid.css" rel="stylesheet" type="text/css" /> 
     <link href="/resources/SpryAssets/SpryAccordion.css" rel="stylesheet" type="text/css" /> 
 	<script src="/resources/SpryAssets/SpryAccordion.js" type="text/javascript"></script>
+<?php 
+if($enrolado)
+{
+?>
     <script>
 	$(document).ready(function()
 	{
@@ -69,6 +73,7 @@
 		});
 	});
 	</script>
+
 	<table align="center" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
     <h2><?php  echo $title ?></h2>
         	<table width="100%">
@@ -291,7 +296,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -319,7 +324,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -345,7 +350,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -371,7 +376,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -388,13 +393,22 @@
                         </code>
                       </div>
                     </div>
-                    <!-- nutricion  -->
+                    <!-- nutricion PESO -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control Nutricional</div>
+                      <div class="AccordionPanelTab">Control Nutricional (PESO)</div>
                       <div class="AccordionPanelContent"><br />
-                      <iframe width='100%' style='margin-left:5px;' border=0 height='500' src='/<?php  echo DIR_TES?>/Graph/graph/grafica/Nutricion/<?php  echo urlencode(($control_nutricional));?>/<?php  echo urlencode(($label));?>'></iframe>
+                      <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/Graph/graph_init/Grafica/Nutrición PESO/<?php  echo urlencode(($control_nutricional));?>/<?php  echo urlencode(($label));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
                       </div>
-                    </div>                                        
+                    </div>  
+                    
+                    <!-- nutricion ALTURA -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Control Nutricional (ALTURA)</div>
+                      <div class="AccordionPanelContent"><br />
+                      <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/Graph/graph_init/Grafica/Nutrición Altura/<?php  echo urlencode(($control_nutricional_altura));?>/<?php  echo urlencode(($label_altura));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
+                      </div>
+                    </div>  
+                                                          
                     
                     </td>
             </tr>
@@ -412,6 +426,13 @@
 var Accordion1 = new Spry.Widget.Accordion("Accordion1", { useFixedPanelHeights: false, defaultPanel: 0 });
 </script>
 <?php 
+}
+else
+{
+ echo "<div class='$infoclass'>".$msgResult."</div><div><br>";
+ echo '<a href="" class="btn btn-primary" onclick="window.location.href=\'/'.DIR_TES.'/enrolamiento/\';return false;">Regresar</a></div>';
+}
+
 function getArray($array)
 {
 	$id=0; $grid="";
