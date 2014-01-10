@@ -270,18 +270,24 @@ class Menu extends CI_Controller {
                 if ($this->form_validation->run() === true) {
                     if( !empty($datos['padre']) )
                         $this->Menu_model->setId_padre($datos['padre']);
+                    else
+                        $this->Menu_model->setId_padre(NULL);
 
                     if( !empty($datos['raiz']) )
                         $this->Menu_model->setId_raiz($datos['raiz']);
+                    else
+                        $this->Menu_model->setId_raiz(NULL);
 
                     if( !empty($datos['controlador']) )
                         $this->Menu_model->setId_controlador($datos['controlador']);
+                    else
+                        $this->Menu_model->setId_controlador(NULL);
 
                     if( !empty($datos['ruta']) )
                         $this->Menu_model->setRuta($datos['ruta']);
 
                     $this->Menu_model->setNombre($datos['nombre']);
-
+                    
                     $this->Menu_model->update($id);
 
                     Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Registro actualizado: '.$id);

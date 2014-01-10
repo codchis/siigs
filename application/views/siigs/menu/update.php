@@ -31,7 +31,9 @@ $(document).ready(function(){
 <?php
 if(!empty($msgResult)) {
     echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
-} else if(is_object($registro)) {
+}
+
+if(is_object($registro)) {
     echo '<h2>'.$title.'</h2>';
     echo validation_errors();
     ?>

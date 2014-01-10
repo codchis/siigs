@@ -2,8 +2,7 @@
             <!-- Prensa -->
             <div class="row-fluid broadcast visible-desktop">
                 <div class="span12">
-                    <ul>
-                    </ul>
+                    <button class="btn  btn-primary btn-soporte offset10 " type="button">Soporte</button>
                 </div>
             </div>
 
