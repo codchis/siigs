@@ -243,9 +243,6 @@ class Menu_model extends CI_Model
         $id = is_null($id) ? $this->id : $id;
         $result = $this->db->update('sis_menu', $data, array('id' => $id));
         
-        echo $this->db->last_query();
-        echo '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
-        
         if( $this->db->_error_number() ) {
             $this->error = true;
             $this->msg_error_usr = 'No se puede insertar el registro';
