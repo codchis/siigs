@@ -315,9 +315,9 @@ class ArbolSegmentacion_model extends CI_Model {
                                 if ($fila['id_'.$i] != null)
                                 {
                                     if ($i == $arbol['niveles'])
-                                        $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> utf8_decode($fila['descripcion_'.$i]));
+                                        $arraytemp = array('key' => $fila['id_'.$i] , 'parent' => $fila['padre_'.$i] , 'title'=> utf8_encode($fila['descripcion_'.$i]));
                                     else
-                                        $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> utf8_decode($fila['descripcion_'.$i]) , 'children'=>array());    
+                                        $arraytemp = array('key' => $fila['id_'.$i], 'parent' => $fila['padre_'.$i], 'title'=> utf8_encode($fila['descripcion_'.$i]) , 'children'=>array());    
 
                                     if (in_array($fila['id_'.$i],$seleccionados))
                                             $arraytemp["select"] = true;
