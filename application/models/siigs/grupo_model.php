@@ -245,6 +245,9 @@ class Grupo_model extends CI_Model {
 		$result = $this->db->delete('sis_grupo', array('id' => $this->getId()));
 		if (!$result){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			if (strpos($this->db->_error_message(),'Cannot delete or update a parent row') !== false) {
+				$this->msg_error_usr = "No se puede eliminar debido a que ese registro contiene información vinculada.";
+			}
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			throw new Exception(__CLASS__);
 		}

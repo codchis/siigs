@@ -130,7 +130,7 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
                     <td>'.htmlentities($fila->entorno).'</td>
                     <td>'.htmlentities($fila->controlador).'</td>
                     <td>'.htmlentities($fila->accion).'</td>';
-                    if($showView) echo '<td><a href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'" class="btn btn-small btn-primary">Ver</a></td>';
+                    if($showView) echo '<td><a href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles</a></td>';
                 echo '</tr>';
             }
         } else {

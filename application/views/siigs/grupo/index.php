@@ -52,7 +52,7 @@ Buscar grupo
 		<?php if($permiso_index) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/<?php echo $group_item->id ?>/permiso" class="btn btn-primary">Permisos</a></td><?php } ?>
 		<td><?php echo $group_item->nombre ?></td>
 		<td><?php echo $group_item->descripcion ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/view/<?php echo $group_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/view/<?php echo $group_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/update/<?php echo $group_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/delete/<?php echo $group_item->id ?>" class="btn btn-primary" onclick="if (confirm('Realmente desea eliminar este grupo?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 			</tr>

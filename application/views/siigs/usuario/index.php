@@ -55,7 +55,7 @@ Buscar usuario
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
 		<td><?php echo $user_item->apellido_materno ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/view/<?php echo $user_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/view/<?php echo $user_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/update/<?php echo $user_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/delete/<?php echo $user_item->id ?>"  class="btn btn-primary" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>

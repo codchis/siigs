@@ -24,7 +24,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <?php foreach ($raices as $raiz_item): ?>
 	<tr>
 		<td><?php echo $raiz_item->descripcion ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/view/<?php echo $raiz_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/view/<?php echo $raiz_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/update/<?php echo $raiz_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/raiz/delete/<?php echo $raiz_item->id ?>"  class="btn btn-primary"onclick="if (<?php echo $raiz_item->catalogos?>=='0'){if (confirm('Realmente desea eliminar esta raiz?')) { return true; } else {return false;}} else {alert('No se puede eliminar la raiz porque ya contiene catalogos asociados.') ; return false;}">Eliminar</a></td><?php } ?>
 	</tr>

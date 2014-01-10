@@ -44,10 +44,10 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<th>Nombre</th>
 	<th>Descripci&oacute;n</th>
 	<th>Clase</th>
-	<?php if($opcion_view) { ?><th>Detalles</th><?php } ?>
-	<?php if($opcion_accion) { ?><th>Acciones</th><?php } ?>
-	<?php if($opcion_update) { ?><th>Modificar</th><?php } ?>
-	<?php if($opcion_delete) { ?><th>Eliminar</th><?php } ?>
+	<?php if($opcion_view) { ?><th></th><?php } ?>
+	<?php if($opcion_accion) { ?><th></th><?php } ?>
+	<?php if($opcion_update) { ?><th></th><?php } ?>
+	<?php if($opcion_delete) { ?><th></th><?php } ?>
 	</tr>
 </thead>
 <?php if ( !empty($controladores) && !count($controladores) == 0) { ?>
@@ -57,7 +57,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $controlador_item->nombre ?></td>
 		<td><?php echo $controlador_item->descripcion ?></td>
 		<td><?php echo $controlador_item->clase ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/view/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary">Ver</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/view/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_accion) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/accion/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary">Acciones</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/update/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/delete/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary" onclick="if (confirm('Realmente desea eliminar este controlador?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>

@@ -35,11 +35,11 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $entorno_item->ip ?></td>
 		<td><?php echo $entorno_item->hostname ?></td>
 		<td><?php echo $entorno_item->directorio ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/entorno/view/<?php echo $entorno_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/entorno/view/<?php echo $entorno_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($controlador_index) { ?><td>
 		<form id="frm<?php echo $entorno_item->id;?>" action="/<?php echo DIR_SIIGS; ?>/controlador" method="post">
 		<input type="hidden" name="id_entorno" value="<?php echo $entorno_item->id;?>" />
-		<a href="#" onclick="$('#frm<?php echo $entorno_item->id;?>').submit(); return false;" class="btn btn-primary">Ver controladores</a>
+		<a href="#" onclick="$('#frm<?php echo $entorno_item->id;?>').submit(); return false;" class="btn btn-primary">Controladores</a>
 		</form>
 		</td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/entorno/update/<?php echo $entorno_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>

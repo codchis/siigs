@@ -37,7 +37,7 @@ $(document).ready(function()
 	if(isset($msgResult))
 	echo "<div class='$infoclass'>".$msgResult."</div>";
 ?>
-<table border="0" width="100%" id="tabla" class="table table-striped  ">
+<table border="0" width="100%" id="tabla" class="table table-striped">
     <?php
 	if(isset($datos))
 	{
@@ -50,7 +50,7 @@ $(document).ready(function()
 				echo "<tr>";
 				foreach ($datos[0] as $item => $value)
 				{
-					 echo "<th><h5>".$item."</h5></td>";
+					 echo "<th><h5>".$item."</h5></th>";
 				}
 				echo "</tr>";
 			}
@@ -67,7 +67,15 @@ $(document).ready(function()
 		echo "<tr>";
 		foreach ($datos[$i] as $item => $value)
 		{
+			if (!is_array($value))
     		 echo "<td>".$value."</td>";
+			else
+			{
+				foreach($value as $val)
+				{
+					echo "<td>".$val."</td>";
+				}
+			}
 		}
 		echo  "</tr>";
 	}

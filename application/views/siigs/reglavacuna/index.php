@@ -33,7 +33,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $regla_item->desde ?></td>
                 <td><?php echo $regla_item->hasta ?></td>
                 <td><?php echo $regla_item->previa ?></td>
-                    <?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/view/<?php echo $regla_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+                    <?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/view/<?php echo $regla_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/update/<?php echo $regla_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/delete/<?php echo $regla_item->id ?>" class="btn btn-primary" onclick="if (confirm('Realmente desea eliminar esta regla?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>

@@ -15,16 +15,16 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <thead>
 	<tr>
 	<th>Nombre</th>
-	<?php if($opcion_view) { ?><th>Detalles</th><?php } ?>
-	<?php if($opcion_update) { ?><th>Modificar</th><?php } ?>
-	<?php if($opcion_delete) { ?><th>Eliminar</th><?php } ?>
+	<?php if($opcion_view) { ?><th></th><?php } ?>
+	<?php if($opcion_update) { ?><th></th><?php } ?>
+	<?php if($opcion_delete) { ?><th></th><?php } ?>
 	</tr>
 </thead>
 <?php if ( !empty($catalogos) && !count($catalogos) == 0) { ?>
 <?php foreach ($catalogos as $catalogo_item): ?>
 	<tr>
 		<td><?php echo $catalogo_item->nombre ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/catalogo/view/<?php echo $catalogo_item->nombre ?>" class="btn btn-small btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/catalogo/view/<?php echo $catalogo_item->nombre ?>" class="btn btn-small btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/catalogo/update/<?php echo $catalogo_item->nombre ?>" class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/catalogo/delete/<?php echo $catalogo_item->nombre ?>" class="btn btn-small btn-primary" onclick="if (confirm('Realmente desea eliminar este catálogo?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>

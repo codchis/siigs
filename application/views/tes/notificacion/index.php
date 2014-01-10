@@ -89,7 +89,7 @@ Buscar<input type="text" name="busqueda" value="<?php echo set_value('busqueda',
 		<td><?php $time = strtotime($notification_item->fecha_fin);
 			echo date('d/m/Y', $time);
 			 ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/view/<?php echo $notification_item->id ?>" class="btn btn-primary">Ver detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/view/<?php echo $notification_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/update/<?php echo $notification_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/delete/<?php echo $notification_item->id ?>"  class="btn btn-primary"onclick="if (confirm('Realmente desea eliminar esta notificaci�n?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>

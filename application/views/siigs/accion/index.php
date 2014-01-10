@@ -18,9 +18,9 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<th>Nombre</th>
 	<th>Descripci&oacute;n</th>
 	<th>M&eacute;todo</th>
-	<?php if($opcion_view) { ?><th>Detalles</th> <?php } ?>
-	<?php if($opcion_update) { ?><th>Modificar</th> <?php } ?>
-	<?php if($opcion_delete) { ?><th>Eliminar</th> <?php } ?>
+	<?php if($opcion_view) { ?><th></th> <?php } ?>
+	<?php if($opcion_update) { ?><th></th> <?php } ?>
+	<?php if($opcion_delete) { ?><th></th> <?php } ?>
 	</tr>
 </thead>
 
@@ -30,7 +30,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $accion_item->nombre ?></td>
 		<td><?php echo $accion_item->descripcion ?></td>
 		<td><?php echo $accion_item->metodo ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/view/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary">Ver</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/view/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/update/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/delete/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary" onclick="if (confirm('Realmente desea eliminar esta acción?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>

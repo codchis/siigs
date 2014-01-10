@@ -86,7 +86,7 @@ echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm
                         ($fila->id_asu_um==0 ? 'Asignar' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
                     <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'" class="btn btn-small btn-primary">'.($fila->usuarios_asignados==0 ? 'Asignar' : 'Ver').'</a></td>';
                     
-                    if($showView) echo '<td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary">Ver</a></td>';
+                    if($showView) echo '<td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles</a></td>';
                     
                     if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'" class="btn btn-small btn-primary">Modificar</a></td>';
                     
