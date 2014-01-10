@@ -228,7 +228,7 @@ function limpiaformulario(formulario) //va en el evento keyup formulario onkeyup
 			if(frm.elements[c].type!="submit"&&frm.elements[c].type!="button")
 			frm.elements[c].className="norequiere";
 		}
-		else
+		else if(frm.elements[c].title=="requiere"&&(frm.elements[c].value==""))
 			frm.elements[c].className="requiere";
 	}
 	if(document.getElementById("alert"))
