@@ -8,7 +8,7 @@
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="/resources/ui/jquery-ui-1.8.17.custom.js"></script>	
+	
     <script type="text/javascript" src="/resources/js/validaciones.js"></script>	
 
     <script>
@@ -50,19 +50,33 @@
 				var array=document.getElementById(uri.substr(0,uri.search("/"))).value;
 				if(array!="")
 				{
+					var des=1;
+					if(uri.substr(uri.search("/")+1,uri.length)=="umt")des=5;
 					$.ajax({
 					type: "POST",
 					data: {
 						'claves':[array] ,
-						'desglose':1 },
+						'desglose':des },
 					url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 					})
 					.done(function(dato)
-					{console.log(dato);
+					{
 						if(dato)
 						{
 							var obj = jQuery.parseJSON( dato );
 							document.getElementById(uri.substr(uri.search("/")+1,uri.length)).value=obj[0]["descripcion"];
+							if(uri.substr(uri.search("/")+1,uri.length)=="umt")
+							{
+								$.get('/<?php echo DIR_TES.'/enrolamiento/validarisum/';?>'+document.getElementById("um").value, function(respuesta) 
+								{console.log(respuesta);
+									if(respuesta=="no")
+									{
+										alert("El nombre seleccionado no es una unidad medica \nPara continuar seleccione una unidad medica valida");
+										document.getElementById("um").value="";
+										document.getElementById("umt").value="";
+									}
+     							});
+							}
 						}
 						if(uri.substr(uri.search("/")+1,uri.length)=="lnacimientoT")
 						getcurp();
@@ -75,7 +89,7 @@
 		type: "POST",
 		data: {
 			'claves':[<?php echo $session;?>] ,
-			'desglose':1 },
+			'desglose':5 },
 		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
@@ -473,7 +487,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
-                            <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
+                            <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
                           </tr>
                         </table>
                         <br />
@@ -498,7 +512,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
                           </tr>
                         </table>
                         <br />
@@ -533,7 +547,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
                             </td>
                           </tr>
                           <tr>

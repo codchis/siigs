@@ -517,6 +517,7 @@ class Servicios extends CI_Controller {
 	// recibir datos de la tableta
 	public function ss_step_5($id_sesion, $datos)
 	{
+		header('Content-Type: text/html; charset=UTF-8');
 		$bien=0;
 		$datos=(array)json_decode($datos);
 		try
@@ -560,8 +561,8 @@ class Servicios extends CI_Controller {
 						{
 							$b_campo="id_persona";
 							$b_valor=$midato->id_persona;
-							$f_campo='';
-							$f_valor='';
+							$f_campo='fecha';
+							$f_valor=$midato->fecha;
 						}
 						
 						if($this->Enrolamiento_model->get_catalog2($catalog->descripcion,$b_campo,$b_valor,$f_campo,$f_valor))
@@ -738,7 +739,7 @@ class Servicios extends CI_Controller {
     }
 	
 	public function esquema_incompleto($id_persona,$fecha,$vacunas)
-	{
+	{//agregar dias a la fecha si periodo de colchon ver tabla tableta agregar bit de prioridad 1 ya le toca 0 periodo de ventana "prioridad"=>1 ó 0
 		$cadena=array();
 		$regla=$this->ReglaVacuna_model->getAll(); 
 		
@@ -750,6 +751,7 @@ class Servicios extends CI_Controller {
 		foreach($regla as $r)
 		{
 			$x=0;
+			if($vacunas!="")
 			foreach($vacunas as $v)
 			{
 				if($r->id==$v->id_vacuna)
@@ -763,6 +765,7 @@ class Servicios extends CI_Controller {
 				$reglase=$this->ReglaVacuna_model->getById($r->id);
 				
 				$x1=0;
+				if($vacunas!="")
 				foreach($vacunas as $v1)
 				{
 					if($reglase->id_vacuna_secuencial==$v1->id_vacuna)
@@ -818,7 +821,25 @@ class Servicios extends CI_Controller {
 		 json_encode(array("id_tab"=>$id_tab)) , 
 		 json_encode(array("id_sesion"=>$id_sesion)), 
 		 $version,
-		 json_encode(array("id_resultado"=>"ok","descripcion"=>"Error de no se que en no se cual")) );
+		 '{
+    "cns_control_vacuna": [
+        {
+            "id_persona": "c844dee37db76567e3a4e6ed64c10057",
+            "codigo_barras": "duplicada",
+            "fecha": "2014-01-07 14:57:08",
+            "id_asu_um": "1019",
+            "id_vacuna": "10"
+        }
+    ],
+    "sis_bitacora": [
+        {
+            "parametros": "paciente:c844dee37db76567e3a4e6ed64c10057, vacuna:10",
+            "fecha_hora": "2014-01-07 14:57:08",
+            "id_usuario": "6",
+            "id_controlador_accion": "104"
+        }
+    ]
+}' );
 	}    
 }
 ?>

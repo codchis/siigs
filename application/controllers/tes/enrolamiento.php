@@ -854,4 +854,12 @@ class Enrolamiento extends CI_Controller
 			}
 		}
 	}
+	public function validarisum($id)
+	{
+		$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+		$result=$this->Reporte_sincronizacion_model->getListado("SELECT grado_segmentacion FROM asu_arbol_segmentacion WHERE id='".$id."'");
+		
+		if($result[0]->grado_segmentacion!="5")
+		echo "no";
+	}
 }
