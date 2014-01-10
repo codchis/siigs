@@ -97,17 +97,7 @@ class Reporte_censo_nominal extends CI_Model
      * @access public
      * @var    varchar
      */
-    public $dpt1;
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $dpt2;
-    /**
-     * @access public
-     * @var    varchar
-     */
-    public $dpt3;
+    public $dptR;
     /**
      * @access public
      * @var    varchar

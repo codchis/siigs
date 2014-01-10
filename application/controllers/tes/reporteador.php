@@ -125,13 +125,13 @@ class Reporteador extends CI_Controller {
 				$data['headTable'] = '<tr><th></th><th></th><th></th>
 						<th></th><th></th><th></th><th></th>
 						<th></th><th colspan="3">HEPATITIS B</th><th colspan="4">PENTAVALENTE</th>
-						<th colspan="3">DPT</th><th colspan="2">SRP</th>
+						<th>DPT</th><th colspan="2">SRP</th>
 						<th colspan="3">ROTA</th><th colspan="3">NEUMOCOCO</th>
 						<th colspan="3">INFLUENZA</th></tr>
 						<tr><th>Apellido Paterno</th><th>Apellido Materno</th><th>Nombre</th>
 						<th>Domicilio</th><th>CURP</th><th>Fecha Nac</th><th>Sexo</th>
 						<th>BGC</th><th>1</th><th>2</th><th>3</th><th>1</th><th>2</th>
-						<th>3</th><th>4</th><th>1</th><th>2</th><th>3</th><th>1</th>
+						<th>3</th><th>4</th><th>R</th><th>1</th>
 						<th>2</th><th>1</th><th>2</th><th>3</th><th>1</th><th>2</th>
 						<th>3</th><th>1</th><th>2</th><th>R</th></tr>';
 			}

@@ -136,6 +136,33 @@ class Reporteador_model extends CI_Model {
 			FROM cns_persona p 
 			INNER JOIN cns_persona_x_tutor pt ON p.id=pt.id_persona
 			INNER JOIN cns_tutor t ON t.id=pt.id_tutor";
+		switch($nivel){
+			case 5:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante=".$id;
+				break;
+			case 4:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+									SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.")"; // ums por loc
+				break;
+			case 3:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+								SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+								SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") )"; // locs por mpio
+				break;
+			case 2:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") ) )"; // mpios por juris
+				break;
+			case 1:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+						SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") ) ) )"; // juris por estado
+				break;
+		}
         $queryIdsConTutor = $this->db->query($sqlIdsConTutor);
         $resultIdsConTutor = $queryIdsConTutor->result();
         
@@ -150,14 +177,14 @@ class Reporteador_model extends CI_Model {
             
         	$sqlVacunasAplicadas = "SELECT id_vacuna FROM cns_control_vacuna WHERE id_persona='".$IdConTutor->id."'";
         	$queryVacunasAplicadas = $this->db->query($sqlVacunasAplicadas);
-        	$resultVacunasAplicadas = $queryVacunasAplicadas->result();
-
-        	$sqlVacunasDebeTener = "SELECT id_vacuna FROM cns_regla_vacuna WHERE
-			    (".$IdConTutor->edad_dias." >= dia_inicio_aplicacion_nacido AND
-				".$IdConTutor->edad_dias." <= dia_fin_aplicacion_nacido) OR
-				(dia_fin_aplicacion_nacido<=".$IdConTutor->edad_dias.")";
-        	$queryVacunasDebeTener = $this->db->query($sqlVacunasDebeTener);
-        	$resultVacunasDebeTener = $queryVacunasDebeTener->result();
+        	$resultVacunasAplicadas = $this->object_to_array($queryVacunasAplicadas->result(), 'id_vacuna');
+        	
+//         	$sqlVacunasDebeTener = "SELECT id_vacuna FROM cns_regla_vacuna WHERE
+// 			    (".$IdConTutor->edad_dias." >= dia_inicio_aplicacion_nacido AND
+// 				".$IdConTutor->edad_dias." <= dia_fin_aplicacion_nacido) OR
+// 				(dia_fin_aplicacion_nacido<=".$IdConTutor->edad_dias.")";
+//         	$queryVacunasDebeTener = $this->db->query($sqlVacunasDebeTener);
+//         	$resultVacunasDebeTener = $queryVacunasDebeTener->result();
         	
             // se inserta el registro del infante
         	$objReporte = new Reporte_censo_nominal();
@@ -168,28 +195,26 @@ class Reporteador_model extends CI_Model {
             $objReporte->curp = $IdConTutor->curp;
             $objReporte->fecha_nacimiento = $IdConTutor->fecha_nacimiento;
             $objReporte->sexo = $IdConTutor->sexo;
-            $objReporte->bcg = 'x';
-            $objReporte->hepaB1 = 'x';
-            $objReporte->hepaB2 = 'x';
-            $objReporte->hepaB3 = 'x';
-            $objReporte->penta1 = 'x';
-            $objReporte->penta2 = 'x';
-            $objReporte->penta3 = 'x';
-            $objReporte->penta4 = '-';
-            $objReporte->dpt1 = '';
-            $objReporte->dpt2 = '';
-            $objReporte->dpt3 = '-';
-            $objReporte->srp1 = 'x';
-            $objReporte->srp2 = '';
-            $objReporte->rota1 = '|';
-            $objReporte->rota2 = '|';
-            $objReporte->rota3 = '';
-            $objReporte->neumo1 = 'T';
-            $objReporte->neumo2 = 'T';
-            $objReporte->neumo3 = 'T';
-            $objReporte->influenza1 = 'x';
-            $objReporte->influenza2 = '-';
-            $objReporte->influenzaR = '-';
+            $objReporte->bcg = in_array("1", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->hepaB1 = in_array("2", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->hepaB2 = in_array("3", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->hepaB3 = in_array("4", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->penta1 = in_array("5", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->penta2 = in_array("6", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->penta3 = in_array("7", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->penta4 = in_array("8", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->dptR = in_array("9", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->srp1 = in_array("19", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->srp2 = in_array("20", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->rota1 = in_array("10", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->rota2 = in_array("11", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->rota3 = in_array("12", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->neumo1 = in_array("13", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->neumo2 = in_array("14", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->neumo3 = in_array("15", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->influenza1 = in_array("16", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->influenza2 = in_array("17", $resultVacunasAplicadas) ? 'x' : '';
+            $objReporte->influenzaR = in_array("18", $resultVacunasAplicadas) ? 'x' : '';
             $result[] = $objReporte;
             // se inserta el registro del tutor
             $objReporte = new Reporte_censo_nominal();
@@ -208,9 +233,7 @@ class Reporteador_model extends CI_Model {
             $objReporte->penta2 = '';
             $objReporte->penta3 = '';
             $objReporte->penta4 = '';
-            $objReporte->dpt1 = '';
-            $objReporte->dpt2 = '';
-            $objReporte->dpt3 = '';
+            $objReporte->dptR = '';
             $objReporte->srp1 = '';
             $objReporte->srp2 = '';
             $objReporte->rota1 = '';
@@ -243,5 +266,17 @@ class Reporteador_model extends CI_Model {
 		return;
 	}
 	
+	// convierte array de objetos en array simple de un valor
+	function object_to_array($data, $campo1)
+	{
+		$result = array();
+		$i = 0;
+		foreach ($data as $key => $value)
+		{
+			$result[$i] = $value->$campo1;
+			$i++;
+		}
+		return $result;
+	}
 }
 ?>
