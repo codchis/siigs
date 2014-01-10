@@ -33,11 +33,12 @@ class Reporte_sincronizacion extends CI_Controller
 	public function index()
 	{
 		try{
-			if (empty($this->Usuario_model))
+			$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+			if (empty($this->Reporte_sincronizacion_model))
 				return false;
 			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
-			$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+			
 			$data['title'] = 'Reporte Sincronización';
 			
 			$ttr=$this->Reporte_sincronizacion_model->getCount("tes_tableta");
@@ -65,8 +66,11 @@ class Reporte_sincronizacion extends CI_Controller
 			$ttd=$this->Reporte_sincronizacion_model->getCount("","select * from tes_tableta where id_tes_estado_tableta not in(2,3)");
 			$array[8] = (array("atributo"=>"Total de tabletas desincronizadas","valor"=>$ttd,"lista"=>"8"));
 			
-			$array[9] = (array("atributo"=>"Total de pacientes que no llevan su tes sincrinizada con la plataforma","valor"=>"12","lista"=>"9"));
-			$array[10] = (array("atributo"=>"Total de controles no registrados en la tes","valor"=>"12","lista"=>"10"));
+			$tpn=$this->Reporte_sincronizacion_model->getCount("","select distinct(id_persona)  from tes_pendientes_tarjeta ");
+			$array[9] = (array("atributo"=>"Total de pacientes que no llevan su tes sincrinizada con la plataforma","valor"=>$tpn,"lista"=>"9"));
+			
+			$tpt=$this->Reporte_sincronizacion_model->getCount("tes_pendientes_tarjeta");
+			$array[10] = (array("atributo"=>"Total de controles no registrados en la tes","valor"=>$tpt,"lista"=>"10"));
 			
 			$version=$this->Reporte_sincronizacion_model->get_version();
 			$array[11] = (array("atributo"=>"Ultima version de la app","valor"=>$version[0]->version,"lista"=>"11"));
@@ -86,11 +90,12 @@ class Reporte_sincronizacion extends CI_Controller
 	public function view($op,$title)
 	{
 		try{
-			if (empty($this->Usuario_model))
+			$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+			if (empty($this->Reporte_sincronizacion_model))
 				return false;
 			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
-			$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+			
 			$data['title'] = $title;
 			$array=array();
 			$campos="t.id as No,mac as Mac, tv.version+' -> '+tv.descripcion as Version, et.descripcion as Estado, tc.descripcion as 'Tipo Censo', asu.descripcion as 'Unidad Medica'";
@@ -116,8 +121,14 @@ class Reporte_sincronizacion extends CI_Controller
 			if($op==5||$op==6)
 			$array=$this->Reporte_sincronizacion_model->getListado("SELECT $campos FROM tes_tableta t $join WHERE id_tes_estado_tableta IN (3,2)");
 			
-			if($op==7)
+			if($op==7||$op==8)
 			$array=$this->Reporte_sincronizacion_model->getListado("SELECT $campos FROM tes_tableta t $join WHERE id_tes_estado_tableta NOT IN (3,2)");	
+			
+			if($op==9)
+			$array=$this->Reporte_sincronizacion_model->getListado("SELECT distinct(*) FROM tes_pendientes_tarjeta");
+			
+			if($op==10)
+			$array=$this->Reporte_sincronizacion_model->getListado("SELECT * FROM tes_pendientes_tarjeta");
 			
 			if($op==11)
 			$array=$this->Reporte_sincronizacion_model->getListado("SELECT * FROM tes_version");
@@ -136,6 +147,230 @@ class Reporte_sincronizacion extends CI_Controller
 		$this->template->write('footer','',true);
 		$this->template->write('menu','',true);
 		$this->template->write_view('content',DIR_TES.'/reporteador/reporte_view', $data);
+ 		$this->template->render();
+	}
+	public function lote()
+	{
+		try{
+			$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+			if (empty($this->Reporte_sincronizacion_model))
+				return false;
+			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+				show_error('', 403, 'Acceso denegado');
+			$data['title'] = 'Seguimiento de lotes de vacunación';
+			$this->load->helper('form');
+			$unidad="";
+			$desde=date('Y-m-d H:i:s', strtotime($this->input->post('desde')));
+			if($this->input->post('hasta')=="")
+				$hasta=date("Y-m-d H:i:s");
+			else
+				$hasta=date('Y-m-d H:i:s', strtotime($this->input->post('hasta')));
+			$lotes=$this->input->post('lote');
+			$jurid=$this->input->post('juris');
+			if($jurid!="")$unidad="AND id_asu_um='$jurid'";
+			$munic=$this->input->post('municipios');
+			if($munic!="")$unidad="AND id_asu_um='$munic'";
+			$local=$this->input->post('localidades');
+			if($local!="")$unidad="AND id_asu_um='$local'";
+			$ums  =$this->input->post('ums');
+			if($ums!="")$unidad="AND id_asu_um='$ums'";
+			
+			$consulta="select distinct(codigo_barras) from cns_control_vacuna where (codigo_barras like '%$lotes%' OR codigo_barras IS NULL) $unidad and (fecha between '$desde' and '$hasta') ";
+			
+			$count=$this->Reporte_sincronizacion_model->getCount("",$consulta);
+			$array=$this->Reporte_sincronizacion_model->getListado($consulta);
+			$i=0;$midato=array();
+			foreach($array as $x)
+			{
+				$consulta="select * from cns_control_vacuna where codigo_barras ";
+				$consultb="select distinct(id_asu_um) from cns_control_vacuna where codigo_barras ";
+				$consultc="select distinct(cv.id_vacuna),v.descripcion from cns_control_vacuna cv left join cns_vacuna v on v.id=cv.id_vacuna where cv.codigo_barras";
+				$in="";
+				if($x->codigo_barras=="")
+				{
+					$tipoa="";
+					$midato[$i]["lote"]="Sin lote";
+					$cantidad=$this->Reporte_sincronizacion_model->getCount("",$consulta." IS NULL");
+					$ums=$this->Reporte_sincronizacion_model->getCount("",$consultb." IS NULL");
+					
+					$tipo1=$this->Reporte_sincronizacion_model->getListado($consultc." IS NULL");
+					foreach($tipo1 as $y)
+					{
+						$tipoa.=$y->descripcion." - ";
+					}
+					$umsx=$this->Reporte_sincronizacion_model->getListado($consultb." IS NULL");
+					
+					foreach($umsx as $u)
+					{
+						$in.=$u->id_asu_um.",";
+					}
+					$localidades=$this->Reporte_sincronizacion_model->getCount("","select distinct(id_padre) from asu_arbol_segmentacion where id in(".substr($in,0,strlen($in)-1).") and id_padre!=0");
+					
+					$midato[$i]["tipo"]=substr($tipoa,0,strlen($tipoa)-3);
+					$midato[$i]["cantidad"]=$cantidad;
+					$midato[$i]["ums"]=$ums;
+					$midato[$i]["localidades"]=$localidades;
+				}
+				else 
+				{
+					$tipob="";
+					$midato[$i]["lote"]=$x->codigo_barras;
+					$cantidad=$this->Reporte_sincronizacion_model->getCount("",$consulta."='".$x->codigo_barras."'");
+					$ums=$this->Reporte_sincronizacion_model->getCount("",$consultb."='".$x->codigo_barras."'");
+					
+					$tipo2=$this->Reporte_sincronizacion_model->getListado($consultc."='".$x->codigo_barras."'");
+					foreach($tipo2 as $y)
+					{
+						$tipob.=$y->descripcion." - ";
+					}
+					
+					$umsx=$this->Reporte_sincronizacion_model->getListado($consultb."='".$x->codigo_barras."'");
+					
+					foreach($umsx as $u)
+					{
+						$in.=$u->id_asu_um.",";
+					}
+					$localidades=$this->Reporte_sincronizacion_model->getCount("","select distinct(id_padre) from asu_arbol_segmentacion where id in(".substr($in,0,strlen($in)-1).") and id_padre!=0");
+					
+					$midato[$i]["tipo"]=substr($tipob,0,strlen($tipob)-3);
+					$midato[$i]["cantidad"]=$cantidad;
+					$midato[$i]["ums"]=$ums;
+					$midato[$i]["localidades"]=$localidades;
+				}
+				$i++;
+			}
+			$data["count"]=$count;
+			$data["datos"]=$midato;
+			$data['msgResult'] = $this->session->flashdata('msgResult');
+			$data['jurisdicciones'] = (array)$this->ArbolSegmentacion_model->getDataKeyValue(1, 2);
+		}
+		catch(Exception $e){
+			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+		}
+ 		$this->template->write_view('content',DIR_TES.'/reporteador/lote', $data);
+ 		$this->template->render();
+	}
+	
+	public function lote_view($lote,$title,$op)
+	{
+		try{
+			$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
+			if (empty($this->Reporte_sincronizacion_model))
+				return false;
+			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
+				show_error('', 403, 'Acceso denegado');
+			$pagina="reporte_view";
+			$lote=urldecode($lote);
+			$data['title'] = $title." - ".$lote;
+			$array=array();
+			$consulta="select distinct(id_persona) from cns_control_vacuna where codigo_barras ";
+			$consultb="select distinct(id_asu_um) from cns_control_vacuna where codigo_barras ";
+			$consultc="select distinct(cv.id_vacuna),v.descripcion from cns_control_vacuna cv left join cns_vacuna v on v.id=cv.id_vacuna where cv.codigo_barras";
+			if($lote=="Sin lote")
+			{
+				$consulta.=" IS NULL";
+				$consultb.=" IS NULL";
+				$consultc.=" IS NULL";
+			}
+			else
+			{
+				$consulta.="='".$lote."'";
+				$consultb.="='".$lote."'";
+				$consultc.="='".$lote."'";
+			}
+
+				
+			if($op==1)
+			{
+				$vacunas=$this->Reporte_sincronizacion_model->getListado($consulta);
+				foreach($vacunas as $x)
+				{
+					$result=$this->Reporte_sincronizacion_model->getListado("SELECT distinct curp,nombre, apellido_paterno as paterno, apellido_materno as materno, sexo FROM cns_persona WHERE id='".$x->id_persona."'");	
+					foreach($result as $y)
+					{
+						$array[]=array("Curp"=>$y->curp, "Ap. Paterno"=>$y->paterno, "Ap. Materno"=>$y->materno, "Sexo"=>$y->sexo);
+					}
+				}
+			}
+			
+			if($op==2)
+			{
+				$vacunas=$this->Reporte_sincronizacion_model->getListado($consultb);
+				foreach($vacunas as $x)
+				{
+					$dom=$this->ArbolSegmentacion_model->getDescripcionById(array($x->id_asu_um),5);
+					$array[]=array("Id"=>$x->id_asu_um, "Unidad Medica"=>$dom[0]->descripcion);
+				}
+			}
+			
+			if($op==3)
+			{
+				$in="";$pagina="reporte_map";
+				$umsx=$this->Reporte_sincronizacion_model->getListado($consultb);
+				$descripcion="";
+				foreach($umsx as $u)
+				{
+					$in.=$u->id_asu_um.",";
+					$res=$this->Reporte_sincronizacion_model->getListado("select descripcion from asu_arbol_segmentacion where id='".$u->id_asu_um."'");
+					$ccc=$this->Reporte_sincronizacion_model->getCount("","select id_asu_um from cns_control_vacuna where id_asu_um='".$u->id_asu_um."'");
+					$descripcion.="<tr><td>".$u->id_asu_um."</td><td>".$res[0]->descripcion."</td><td>$ccc</td></tr>";
+				}
+				$tipo1=$this->Reporte_sincronizacion_model->getListado($consultc." IS NULL");
+				$tipoa="";
+				foreach($tipo1 as $y)
+				{
+					$tipoa.=$y->descripcion." - ";
+				}
+					
+				$localidades=$this->Reporte_sincronizacion_model->getListado("select distinct(id_padre) from asu_arbol_segmentacion where id in(".substr($in,0,strlen($in)-1).") and id_padre!=0");
+				$arbol=array();
+				$mapas=array();
+				foreach($localidades as $x)
+				{
+					$arbol[]=$x->id_padre;					
+				}
+				$dom=$this->ArbolSegmentacion_model->getDescripcionById($arbol,1);
+				$datos=array();
+				if($dom)
+				foreach($dom as $y)
+				{
+					$m=explode(",",$y->descripcion);
+					$datos[]=array("Id"=>$y->id, "Localidad"=>$m[0], "Municipio"=>$m[1]);
+					$latlon=$this->Reporte_sincronizacion_model->getListado("SELECT * FROM asu_georeferencia WHERE id_asu='".$y->id."'");
+					if($latlon)
+					{
+						$table="<strong>Tipo: </strong>$tipoa<br><table width='300'><tr><th align='left'>No</th><th align='left'>UM.</th><th align='left'>Cant.</th></tr>$descripcion</table>";
+						$mapas[]=array(
+						"localidad"=>$m[0],
+						"lat"=> $latlon[0]->lat_dec,
+						"lon"=> $latlon[0]->lon_dec,
+						"descripcion"=> $table,
+						"imagen"=>"/resources/images/1success.png",
+						"icono"=>"/resources/images/1warning.png" );
+					}
+				}
+				$data["zoom"]=7;
+				$data["lugar"]="Chiapas";
+				$data["array"]=$mapas;				
+				$array=$datos;
+			}
+			
+			if($op==4)
+			$array=$this->Reporte_sincronizacion_model->getListado("SELECT $campos FROM tes_tableta t $join WHERE t.id_asu_um!=''");
+						
+			$data['datos']=$array;
+		}
+		catch(Exception $e)
+		{
+			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+		}
+		//$this->load->view('usuario/index', $data);
+		$this->template->write('header','',true);
+		$this->template->write('footer','',true);
+		$this->template->write('menu','',true);
+		$this->template->write_view('content',DIR_TES.'/reporteador/'.$pagina, $data);
  		$this->template->render();
 	}
 }

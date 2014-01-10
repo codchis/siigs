@@ -610,7 +610,8 @@ class Enrolamiento_model extends CI_Model
 	public function cns_update($tabla,$array,$id)
 	{
 		$this->db->where('id' , $id);
-		$result = $this->db->update($tabla, $array); $fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a");fputs($fp, $this->db->last_query()."\r\n"); //echo $this->db->last_query()."; <br>";
+		$result = $this->db->update($tabla, $array);  //echo $this->db->last_query()."; <br>";
+		
 		if (!$result)
 		{
 			$this->msg_error_usr = "Error $tabla.";
@@ -724,7 +725,7 @@ class Enrolamiento_model extends CI_Model
 				$this->msg_error_usr = "No se relaciono Tutor.";
 				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			}
-			$id_asu_um=1;
+			$id_asu_um=$this->umt;
 			
 			for($i=0;$i<sizeof($this->alergias);$i++)
 			{
@@ -928,6 +929,7 @@ class Enrolamiento_model extends CI_Model
 	 */
 	public function update()
 	{
+		//date_default_timezone_set('UTC');
 		$compania=$this->compania;
 		if($compania=="")$compania=NULL;
 		$data = array(
@@ -1039,7 +1041,7 @@ class Enrolamiento_model extends CI_Model
 			}
 			
 			
-			$id_asu_um=1;
+			$id_asu_um=$this->umt;
 			if ($this->db->delete('cns_persona_x_alergia', array('id_persona' => $this->id)))
 			for($i=0;$i<sizeof($this->alergias);$i++)
 			{
@@ -1432,6 +1434,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->select('*');
 		$this->db->from('cns_control_nutricional');
 		$this->db->where('id_persona', $id);
+		$this->db->order_by("fecha", "desc");
 		$query = $this->db->get(); 
 		if (!$query)
 		{

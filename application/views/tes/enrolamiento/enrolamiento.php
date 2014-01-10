@@ -8,7 +8,7 @@
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="/resources/ui/jquery-ui-1.8.17.custom.js"></script>	
+	
     <script type="text/javascript" src="/resources/js/validaciones.js"></script>	
 
     <script>
@@ -18,7 +18,7 @@
 			changeMonth: true,
 			changeYear: true,
 			duration:"fast",
-			dateFormat: 'dd/mm/yy',
+			dateFormat: 'dd-mm-yy',
 			constrainInput: true,
 			firstDay: 1,
 			closeText: 'X',
@@ -50,19 +50,33 @@
 				var array=document.getElementById(uri.substr(0,uri.search("/"))).value;
 				if(array!="")
 				{
+					var des=1;
+					if(uri.substr(uri.search("/")+1,uri.length)=="umt")des=5;
 					$.ajax({
 					type: "POST",
 					data: {
 						'claves':[array] ,
-						'desglose':1 },
+						'desglose':des },
 					url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 					})
 					.done(function(dato)
-					{console.log(dato);
+					{
 						if(dato)
 						{
 							var obj = jQuery.parseJSON( dato );
 							document.getElementById(uri.substr(uri.search("/")+1,uri.length)).value=obj[0]["descripcion"];
+							if(uri.substr(uri.search("/")+1,uri.length)=="umt")
+							{
+								$.get('/<?php echo DIR_TES.'/enrolamiento/validarisum/';?>'+document.getElementById("um").value, function(respuesta) 
+								{console.log(respuesta);
+									if(respuesta=="no")
+									{
+										alert("El nombre seleccionado no es una unidad medica \nPara continuar seleccione una unidad medica valida");
+										document.getElementById("um").value="";
+										document.getElementById("umt").value="";
+									}
+     							});
+							}
 						}
 						if(uri.substr(uri.search("/")+1,uri.length)=="lnacimientoT")
 						getcurp();
@@ -70,11 +84,12 @@
 				}
 			}						
 		}); 
+		<?php if($session!=""){?>
 		$.ajax({
 		type: "POST",
 		data: {
 			'claves':[<?php echo $session;?>] ,
-			'desglose':1 },
+			'desglose':5 },
 		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
@@ -86,6 +101,7 @@
 				document.getElementById("umt").value=obj[0]["descripcion"];
 			}
 		});
+		<?php }?>
 		<?php
 		$alergias="";
 		$afiliaciones="";
@@ -114,12 +130,12 @@
 		{       
 			getcurp();
 		});
-		$("#alergias").load("/tes/Enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>/tipo/tipo");	
-		$("#tbenef").load("/tes/Enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afiliaciones;?>");	
-		$("#sangre").load("/tes/Enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', ''); ?>");	
-		$("#nacionalidad").load("/tes/Enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', ''); ?>/descripcion/descripcion");
-		$("#compania").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo set_value('compania', ''); ?>");
-		$("#companiaT").load("/tes/Enrolamiento/catalog_select/operadora_celular/<?php echo set_value('companiaT', ''); ?>");
+		$("#alergias").load("/tes/enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>/tipo/tipo");	
+		$("#tbenef").load("/tes/enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afiliaciones;?>");	
+		$("#sangre").load("/tes/enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', ''); ?>");	
+		$("#nacionalidad").load("/tes/enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', ''); ?>/descripcion/descripcion");
+		$("#compania").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo set_value('compania', ''); ?>");
+		$("#companiaT").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo set_value('companiaT', ''); ?>");
 		
 		$("#captura").click(function(e) {
             habilitarTutor();
@@ -257,7 +273,7 @@
 					}
 				});
 			}
-			else {$("#fnacimiento").val("");$("#fnacimiento").attr("placeholder","dd/mm/yyyy"); $("#fnacimiento").focus();};
+			else {$("#fnacimiento").val("");$("#fnacimiento").attr("placeholder","dd-mm-yyyy"); $("#fnacimiento").focus();};
 		}
 	 	return false;
 	}
@@ -273,9 +289,9 @@
 		
 		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" required="required" style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
-		$("#f"+id+num).val($.datepicker.formatDate('dd/mm/yy', new Date()));
+		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#f"+id+num).datepicker(option);
-		$("#"+id+num).load("/tes/Enrolamiento/catalog_select/"+id);
+		$("#"+id+num).load("/tes/enrolamiento/catalog_select/"+id);
 	}
 	function rem(id,n)
 	{
@@ -301,7 +317,7 @@
 		
 		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" required="required" style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" required="required" style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" required="required" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 		$("#cNu").append(campo);
-		$("#fCNu"+num).val($.datepicker.formatDate('dd/mm/yy', new Date()));
+		$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#fCNu"+num).datepicker(option);
 		
 	}
@@ -364,7 +380,7 @@
                             <td><p align="right">Apellido Materno</p></td>
                             <td><input name="materno" type="text" required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('materno', ''); ?>" maxlength="20"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d/m/Y', strtotime(set_value('fnacimiento', ''))); ?>" placeholder="dd/mm/yyyy"></td>
+                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" required value="<?php echo date('d-m-Y', strtotime(set_value('fnacimiento', ''))); ?>" placeholder="dd-mm-yyyy"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
@@ -375,8 +391,8 @@
                             </tr>
                           <tr>
                             <td><p align="right">CURP</p></td>
-                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:48%;margin-left:10px;" value="<?php echo set_value('curp', ''); ?>" onkeypress="return validar(event,'NL',this.id)">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:20.5%" required value="<?php echo set_value('curp2', ''); ?>" onkeypress="return validar(event,'NL',this.id)"></td>
+                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp', ''); ?>" maxlength="12">
+                            <input name="curp2" type="text" required id="curp2"  style="letter-spacing:1px; width:24.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp2', ''); ?>" maxlength="6"></td>
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" required="required">
                             </select></td>
@@ -471,7 +487,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
-                            <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
+                            <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
                           </tr>
                         </table>
                         <br />
@@ -486,7 +502,7 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Fecha</p></td>
-                            <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date('d/m/Y', strtotime(set_value('fechacivil', ''))); ?>" placeholder="dd/mm/yyyy"></td>
+                            <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date('d-m-Y', strtotime(set_value('fechacivil', ''))); ?>" placeholder="dd-mm-yyyy"></td>
                             <td width="25%"><p align="right">&nbsp;</p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
@@ -496,7 +512,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
                           </tr>
                         </table>
                         <br />
@@ -531,7 +547,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="localidadT" type="text" required="required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
                             </td>
                           </tr>
                           <tr>
@@ -853,7 +869,7 @@ function getArray($array,$id,$nu)
 				<tr>
 					<th width="10%" >'.$num.'</th>
 					<th width="50%" align="left"><select name="'.$id.'[]" id="'.$id.$num.'" required="required" style="width:95%;"></select>
-					<script>$("#'.$id.$num.'").load("/tes/Enrolamiento/catalog_select/'.$id.'/'.$x.'");</script>
+					<script>$("#'.$id.$num.'").load("/tes/enrolamiento/catalog_select/'.$id.'/'.$x.'");</script>
 					</th>
 					<th width="40%" align="left"><input name="f'.$id.'[]" type="text" id="f'.$id.$num.'" value="'.date("Y-m-d",strtotime($fecha)).'"></th>
 				</tr>

@@ -61,6 +61,7 @@ $template['default']['regions'] = array(
    'header' => array('content' => array(file_get_contents('application/views/templates/header.php'))),
    'content',
    'ajustaAncho' => array('content' => array(0)),
+   'js',
    'footer' => array('content' => array(file_get_contents('application/views/templates/footer.php'))),
    'menu'=> array('content' => array( Menubuilder::build() ) )
 );
