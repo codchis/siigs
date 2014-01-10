@@ -317,7 +317,7 @@ class Reporte_sincronizacion extends CI_Controller
 					$ccc=$this->Reporte_sincronizacion_model->getCount("","select id_asu_um from cns_control_vacuna where id_asu_um='".$u->id_asu_um."'");
 					$descripcion.="<tr><td>".$u->id_asu_um."</td><td>".$res[0]->descripcion."</td><td>$ccc</td></tr>";
 				}
-				$tipo1=$this->Reporte_sincronizacion_model->getListado($consultc." IS NULL");
+				$tipo1=$this->Reporte_sincronizacion_model->getListado($consultc);
 				$tipoa="";
 				foreach($tipo1 as $y)
 				{
