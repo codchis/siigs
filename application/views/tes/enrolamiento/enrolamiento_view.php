@@ -28,7 +28,7 @@ if($enrolado)
 		type: "POST",
 		data: {
 			'claves':[<?php  echo $enrolado->id_asu_um_tratante;?>] ,
-			'desglose':1 },
+			'desglose':5 },
 		url: '/<?php  echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
@@ -397,7 +397,7 @@ if($enrolado)
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control Nutricional (PESO)</div>
                       <div class="AccordionPanelContent"><br />
-                      <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/Graph/graph_init/Grafica/Nutrición PESO/<?php  echo urlencode(($control_nutricional));?>/<?php  echo urlencode(($label));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
+                      <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/graph/graph_init/Grafica/Nutrición PESO/<?php  echo urlencode(($control_nutricional));?>/<?php  echo urlencode(($label));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
                       </div>
                     </div>  
                     
@@ -405,7 +405,7 @@ if($enrolado)
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control Nutricional (ALTURA)</div>
                       <div class="AccordionPanelContent"><br />
-                      <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/Graph/graph_init/Grafica/Nutrición Altura/<?php  echo urlencode(($control_nutricional_altura));?>/<?php  echo urlencode(($label_altura));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
+                      <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/graph/graph_init/Grafica/Nutrición Altura/<?php  echo urlencode(($control_nutricional_altura));?>/<?php  echo urlencode(($label_altura));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
                       </div>
                     </div>  
                                                           

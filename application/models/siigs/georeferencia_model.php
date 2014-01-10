@@ -99,7 +99,9 @@ class Georeferencia_model extends CI_Model
                     cat_georeferencia.lon_dec, 
                     cat_georeferencia.altitud
                 FROM 
-                    cat_georeferencia';
+                    cat_georeferencia
+                HAVING 
+                    id_asu IS NOT NULL';
 
         $result = $this->db->query($sql);
 

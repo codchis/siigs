@@ -74,6 +74,7 @@ class Reporteador extends CI_Controller {
             $data['datos'] = $array;
 
 			if($op==0) {
+                $this->load->helper('formatFecha');
                 $this->load->model(DIR_TES.'/Reporte_cobertura_biologico');
 				$array = $this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
                 $data['headTable'] = '<thead>

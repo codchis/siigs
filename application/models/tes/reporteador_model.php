@@ -51,8 +51,7 @@ class Reporteador_model extends CI_Model {
 	{
         $result = array();
 		$sqlGrupoEtareo = "SELECT 	
-                id, 
-                descripcion
+                *
             FROM 
                 asu_grupo_etareo
             ORDER BY dia_fin";
@@ -68,9 +67,13 @@ class Reporteador_model extends CI_Model {
         
         // Se obtiene datos del asu
         $queryAsu = $this->db->query('SELECT * FROM asu_arbol_segmentacion WHERE id='.$id);
-        $resultAsu = $queryAsu->result();
+        $resultAsu = $queryAsu->row();
         
-        echo 'nivel: '.$nivel.', id: '.$id.', fecha: '.$fecha;
+        if (!$resultAsu){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "No se encuentra el Identificador de ASU";
+			throw new Exception("No se encuentra el Identificador de ASU");
+		}
         
         foreach ($resultGrupoEtareo as $grupoEtareo) {
             $idsAsu = array();
@@ -79,9 +82,9 @@ class Reporteador_model extends CI_Model {
             switch ($resultAsu->grado_segmentacion) {
                 case 1: // Estado
                     // Obtiene todos los municipios del estado
-                    $queryIdsAsu = 'SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+                    $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
                                         SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$id.' 
-                                    )';
+                                    )');
                     $resultIdsAsu = $queryIdsAsu->result();
                     
                     if (!$resultIdsAsu){
@@ -90,14 +93,14 @@ class Reporteador_model extends CI_Model {
                         throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
                     }
                     
-                    foreach ($idsAsu as $tempAsu) {
+                    foreach ($resultIdsAsu as $tempAsu) {
                         $idsAsu[] = $tempAsu->id;
                     }
                     
                     break;
                 case 2: // Jurisdiccion
                     // Obtiene todos los municipios de la jurisdiccion
-                    $queryIdsAsu = 'SELECT id FROM asu_arbol_segmentacion WHERE id_padre = '.$id;
+                    $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre = '.$id);
                     $resultIdsAsu = $queryIdsAsu->result();
                     
                     if (!$resultIdsAsu){
@@ -106,7 +109,7 @@ class Reporteador_model extends CI_Model {
                         throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
                     }
                     
-                    foreach ($idsAsu as $tempAsu) {
+                    foreach ($resultIdsAsu as $tempAsu) {
                         $idsAsu[] = $tempAsu->id;
                     }
                     
@@ -129,7 +132,7 @@ class Reporteador_model extends CI_Model {
                 $idGrupoEtareo = 1;
             }
             
-            $queryPob = $this->db->query('SELECT 	
+            $queryPob = $this->db->query('SELECT
                     SUM(poblacion) AS poblacion
                 FROM 
                     asu_poblacion
@@ -137,36 +140,62 @@ class Reporteador_model extends CI_Model {
                     id_asu IN ('.implode(',', $idsAsu).') AND 
                     id_grupo_etareo = '.$idGrupoEtareo.' AND
                     ano = 2013');
-            $resultPob = $queryPob->result();
+            
+            $resultPob = $queryPob->row();
 
-            if (!$resultPob){
+            if (!$resultPob) {
                 $this->msg_error_usr = "Servicio temporalmente no disponible.";
                 $this->msg_error_log = "No se pudo obtener los datos de la población";
                 throw new Exception("No se pudo obtener los datos de la población");
             }
             
-        
+            $queryNom = $this->db->query('SELECT 
+                        COUNT(id) AS nominal
+                    FROM 
+                        cns_persona
+                    WHERE 
+                        id_asu_um_tratante IN (
+                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+                                SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
+                            )
+                        ) AND 
+                        TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
+                            BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
+            echo 'SELECT 
+                        COUNT(id) AS nominal
+                    FROM 
+                        cns_persona
+                    WHERE 
+                        id_asu_um_tratante IN (
+                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+                                SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
+                            )
+                        ) AND 
+                        TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
+                            BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin.'<br>';
+            $resultNom = $queryNom->row();
+            
             $objReporte->grupo_etareo = $grupoEtareo->descripcion;
-            $objReporte->pob_oficial = $resultPob->poblacion;
-            $objReporte->pob_nominal = 3;
-            $objReporte->concordancia = 4;
+            $objReporte->pob_oficial = (int)$resultPob->poblacion;
+            $objReporte->pob_nominal = (int)$resultNom->nominal;
+            $objReporte->concordancia = $objReporte->pob_oficial ? round($objReporte->pob_nominal/$objReporte->pob_oficial, 2) : 0;
             $objReporte->bcg_tot = 5;
-            $objReporte->bcg_cob = round($objReporte->bcg_tot/$objReporte->pob_oficial, 2);
+            $objReporte->bcg_cob = $objReporte->pob_oficial ? round($objReporte->bcg_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->hepB_tot = 7;
-            $objReporte->hepB_cob = round($objReporte->hepB_tot/$objReporte->pob_oficial, 2);
+            $objReporte->hepB_cob = $objReporte->pob_oficial ? round($objReporte->hepB_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->penta_tot = 9;
-            $objReporte->penta_cob = round($objReporte->penta_tot/$objReporte->pob_oficial, 2);
+            $objReporte->penta_cob = $objReporte->pob_oficial ? round($objReporte->penta_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->neumo_tot = 11;
-            $objReporte->neumo_cob = round($objReporte->neumo_tot/$objReporte->pob_oficial, 2);
+            $objReporte->neumo_cob = $objReporte->pob_oficial ? round($objReporte->neumo_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->rota_tot = 13;
-            $objReporte->rota_cob = round($objReporte->rota_tot/$objReporte->pob_oficial, 2);
+            $objReporte->rota_cob = $objReporte->pob_oficial ? round($objReporte->rota_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->srp_tot = 15;
-            $objReporte->srp_cob = round($objReporte->srp_tot/$objReporte->pob_oficial, 2);
+            $objReporte->srp_cob = $objReporte->pob_oficial ? round($objReporte->srp_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->dpt_tot = 17;
-            $objReporte->dpt_cob = round($objReporte->dpt_tot/$objReporte->pob_oficial, 2);
+            $objReporte->dpt_cob = $objReporte->pob_oficial ? round($objReporte->dpt_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->esq_comp_tot = 19;
-            $objReporte->esq_comp_oficial = round($objReporte->esq_comp_tot/$objReporte->pob_oficial, 2);
-            $objReporte->esq_comp_nominal = round($objReporte->esq_comp_tot/$objReporte->pob_nominal, 2);
+            $objReporte->esq_comp_oficial = $objReporte->pob_oficial ? round($objReporte->esq_comp_tot/$objReporte->pob_oficial, 2) : 0;
+            $objReporte->esq_comp_nominal = $objReporte->pob_nominal ? round($objReporte->esq_comp_tot/$objReporte->pob_nominal, 2) : 0;
 
             $result[] = $objReporte;
         }

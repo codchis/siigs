@@ -226,32 +226,32 @@ class Menu_model extends CI_Model
     {
         $result = false;
 
-        if( isset($this->id_padre) )
+        //if( isset($this->id_padre) )
             $data['id_padre' ] = $this->id_padre;
 
-        if( isset($this->id_raiz) )
+        //if( isset($this->id_raiz) )
             $data['id_raiz'] = $this->id_raiz;
 
-        if( isset($this->id_controlador) )
+        //if( isset($this->id_controlador) )
             $data['id_controlador'] = $this->id_controlador;
 
-        if( isset($this->ruta) )
+        //if( isset($this->ruta) )
             $data['ruta'] = $this->ruta;
 
         $data['nombre'] = $this->nombre;
 
         $id = is_null($id) ? $this->id : $id;
         $result = $this->db->update('sis_menu', $data, array('id' => $id));
-
+        
         if( $this->db->_error_number() ) {
             $this->error = true;
             $this->msg_error_usr = 'No se puede insertar el registro';
             $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
-            throw new Exception();
-        } else {
+            throw new Exception('('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message());
+        } /*else {
             // Obtiene el id asignado a la ultima inserción
             $this->id = $this->db->insert_id();
-        }
+        }*/
 
         return $result;
     }
