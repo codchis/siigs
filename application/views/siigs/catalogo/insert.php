@@ -1,6 +1,9 @@
 <script type="text/javascript" src="/resources/js/jquery.form.min.js" /></script>
 <script type="text/javascript">
       $(document).ready(function() {
+          
+          //Script para campos obligatorios
+          obligatorios('enviardatos');
 
     	  $('#nombre').keyup(function(){
 
@@ -239,11 +242,14 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 </table>
 </form>
 
-<?php echo form_open(DIR_SIIGS.'/catalogo/insert' , array('id' => 'enviardatos')) ?>
+<?php echo form_open(DIR_SIIGS.'/catalogo/insert' , array('onkeyup' => 'limpiaformulario(this.id)','id' => 'enviardatos')) ?>
+    
+    <div class="info requiere" style="width:93%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
+    <div id="alert"></div> 
 <table>
 	<tr>
 		<td><label for="nombre">Nombre (cat_)</label></td>
-		<td><input type="text" name="nombre" id="nombre" value="<?php echo set_value('nombre', '');?>" />
+		<td><input type="text" name="nombre" id="nombre" title='requiere' required value="<?php echo set_value('nombre', '');?>" />
 		</td>
 	</tr>
 	<tr>
@@ -262,7 +268,8 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<tr>
 		<td colspan=2>
 			<input type="hidden" name="llaves" id="llaves" value="1" />
-			<input type="submit" name="submit" id="submit" value="Guardar"  class="btn btn-primary"/>
+			<input type="submit" name="submit" id="submit" value="Guardar"  class="btn btn-primary" onclick="return validarFormulario('enviardatos')"/>
+                        <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary" />
 		<td>
 	</tr>
 </table>
