@@ -220,6 +220,8 @@ class Usuario_tableta_model extends CI_Model
             $this->id_usuario = $data['id_usuario'] ;
             $this->id_tes_tableta = $data['id_tes_tableta'];
         }
+        
+        $this->db->update('tes_tableta', array('usuarios_asignados'=>1), 'id = '.$data['id_tes_tableta']);
 
         return $result;
     }
