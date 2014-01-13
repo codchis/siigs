@@ -209,7 +209,7 @@ class Usuario extends CI_Controller {
 		$this->form_validation->set_rules('apellido_materno', 'Apellido Materno', 'trim|xss_clean|max_length[25]');
 		$this->form_validation->set_rules('correo', 'Email', 'trim|required|valid_email|xss_clean|max_length[50]');
 		$arrGrupos = $this->grupo_model->getAll();
-		$data['grupos'][0] = '-- Seleccione una opción --';
+		$data['grupos'][''] = '-- Seleccione una opción --';
 		foreach ($arrGrupos as $grupo) 
 		{
 			$data['grupos'][$grupo->id] = $grupo->nombre;
@@ -271,7 +271,7 @@ class Usuario extends CI_Controller {
 		$this->form_validation->set_rules('apellido_materno', 'Apellido Materno', 'trim|xss_clean|max_length[25]');
 		$this->form_validation->set_rules('correo', 'Email', 'trim|xss_clean|required|valid_email|max_length[50]');
 		$arrGrupos = $this->grupo_model->getAll();
-		$data['grupos'][0] = '-- Seleccione una opcion --';
+		$data['grupos'][''] = '-- Seleccione una opcion --';
 		foreach ($arrGrupos as $grupo) 
 		{
 			$data['grupos'][$grupo->id] = $grupo->nombre;
