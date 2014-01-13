@@ -12,7 +12,7 @@ if($enrolado)
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
     
-    <script type="text/javascript" src="/resources/js/validaciones.js"></script>
+   
     <script>
 	var g=new Date();
 		var option = 
@@ -377,7 +377,7 @@ if($enrolado)
 			if(!empty($msgResult))
 			echo "<div class='$infoclass'>".$msgResult."</div>";
 			echo validation_errors(); 
-			echo form_open(DIR_TES.'/enrolamiento/update/'.$enrolado->id,array('onkeyup' => 'limpiaformulario("enrolar")', 'id' => 'enrolar')); 
+			echo form_open(DIR_TES.'/enrolamiento/update/'.$enrolado->id,array('onkeyup' => 'limpiaformulario(\'enrolar\')','onclick' => 'limpiaformulario(\'enrolar\')', 'id' => 'enrolar')); 
 		?>
       <!-- mensaje -->
       <div class="info requiere" style="width:93%"><img src="/resources/images/asterisco.png" />Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
@@ -387,7 +387,7 @@ if($enrolado)
         	<table width="100%">
             <tr>
                 <td>
-                  <div id="Accordion1" class="Accordion" tabindex="0" style="margin-left:-20px;">
+                  <div id="Accordion1" class="Accordion" tabindex="0" style="margin-left:-20px;" >
                   
                   <!-- Datos basicos -->
                     <div class="AccordionPanel">
@@ -630,7 +630,7 @@ if($enrolado)
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -660,7 +660,7 @@ if($enrolado)
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -690,7 +690,7 @@ if($enrolado)
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -720,7 +720,7 @@ if($enrolado)
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -752,7 +752,7 @@ if($enrolado)
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -781,7 +781,7 @@ if($enrolado)
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>

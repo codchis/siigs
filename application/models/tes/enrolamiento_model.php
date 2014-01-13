@@ -677,23 +677,24 @@ class Enrolamiento_model extends CI_Model
 			
 			$this->setid($unico_id);
 			$unico_idtutor=md5(uniqid());
+			$data0 = array(
+					// tutor
+				'id' => $unico_idtutor,
+				'nombre' => $this->nombreT,
+				'apellido_paterno' => $this->paternoT,
+				'apellido_materno' => $this->maternoT,
+				'curp' => $this->curpT,
+				'sexo' => $this->sexoT,
+				
+				'telefono' => $this->telefonoT,
+				'id_operadora_celular' => $companiaT,
+				'celular' => $this->celularT,
+			);
 			if($this->idtutor=="")
 			{
 				$companiaT=$this->companiaT;
 				if($companiaT=="")$companiaT=NULL;
-				$data0 = array(
-					// tutor
-					'id' => $unico_idtutor,
-					'nombre' => $this->nombreT,
-					'apellido_paterno' => $this->paternoT,
-					'apellido_materno' => $this->maternoT,
-					'curp' => $this->curpT,
-					'sexo' => $this->sexoT,
-					
-					'telefono' => $this->telefonoT,
-					'id_operadora_celular' => $companiaT,
-					'celular' => $this->celularT,
-					);
+				
 				$result0 = $this->db->insert('cns_tutor', $data0);
 				if (!$result0)
 				{
@@ -1456,6 +1457,9 @@ class Enrolamiento_model extends CI_Model
 	 */
 	public function get_catalog($catalog,$campo="",$id="",$orden="")
 	{
+		 if($catalog=="cns_regla_vacuna")
+		$this->db->select('id, id_vacuna, dia_inicio_aplicacion_nacido, dia_fin_aplicacion_nacido, id_vacuna_secuencial, dia_inicio_aplicacion_secuencial, dia_fin_aplicacion_secuencial, ultima_actualizacion');
+		else
 		$this->db->select('*');
 		$this->db->from($catalog);
 		if($id!="")
@@ -1500,6 +1504,9 @@ class Enrolamiento_model extends CI_Model
 		$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
 		else if($catalog=="asu_arbol_segmentacion")
 		$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');
+		else if($catalog=="cns_persona")
+		$this->db->select('id, curp, nombre, apellido_paterno, apellido_materno, sexo,id_tipo_sanguineo, fecha_nacimiento, id_asu_localidad_nacimiento, calle_domicilio, numero_domicilio, colonia_domicilio, referencia_domicilio, id_asu_localidad_domicilio, cp_domicilio, telefono_domicilio, fecha_registro, id_asu_um_tratante, celular, ultima_actualizacion, id_nacionalidad, id_operadora_celular, ultima_sincronizacion');
+		
 		else
 		$this->db->select('*');
 		$this->db->from($catalog);

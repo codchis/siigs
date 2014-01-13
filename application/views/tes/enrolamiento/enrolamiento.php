@@ -286,7 +286,7 @@
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
 		
-		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
+		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
 		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#f"+id+num).datepicker(option);
@@ -314,7 +314,7 @@
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
 		
-		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" class="requiere" title="requiere" required style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
+		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" class="requiere" title="requiere" required style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 		$("#cNu").append(campo);
 		$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#fCNu"+num).datepicker(option);
@@ -337,7 +337,7 @@
 			if(!empty($msgResult))
 			echo "<div class='$infoclass'>".$msgResult."</div>";
 			echo validation_errors(); 
-			echo form_open(DIR_TES.'/enrolamiento/insert',array('onkeyup' => 'limpiaformulario(this.id)', 'id' => 'enrolar')); 
+			echo form_open(DIR_TES.'/enrolamiento/insert',array('onkeyup' => 'limpiaformulario(this.id)','onclick' => 'limpiaformulario(this.id)', 'id' => 'enrolar')); 
 		?>
         <!-- mensaje -->
     <div class="info requiere" style="width:93%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
@@ -590,7 +590,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -627,7 +627,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -664,7 +664,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -701,7 +701,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -738,7 +738,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -774,7 +774,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="80%">
+                                <div class="detalle" style="width:80%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
