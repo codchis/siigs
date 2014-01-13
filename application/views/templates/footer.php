@@ -2,7 +2,7 @@
             <!-- Prensa -->
             <div class="row-fluid broadcast visible-desktop">
                 <div class="span12">
-                    <button class="btn  btn-primary btn-soporte offset10 " type="button">Soporte</button>
+                    <a class="btn btn-primary btn-soporte offset10" href="http://www.sm2015.com.mx:3100/otrs/customer.pl" target="_blank">Soporte</a>
                 </div>
             </div>
 
