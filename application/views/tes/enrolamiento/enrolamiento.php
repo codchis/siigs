@@ -543,6 +543,20 @@
                             <td><input name="cp" type="text" title='requiere' required id="cp" style="width:75%; margin-left:10px;" value="<?php echo set_value('cp', ''); ?>" maxlength="5"></td>
                           </tr>
                           <tr>
+                          <td colspan="4" width="100%">
+                              <table width="97%" border="0">
+                                <tr>
+                                  <td width="19%" align="right">Ageb</td>
+                                  <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo set_value('ageb', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
+                                  <td  align="right">Sector</td>
+                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo set_value('sector', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td  align="right">Manzana</td>
+                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                </tr>
+                              </table>
+                          </td>
+                          </tr>
+                          <tr>
                             <td><p align="right">Localidad</p></td>
                             <td colspan="3">
                             <div class="input-append" style="width:100%">

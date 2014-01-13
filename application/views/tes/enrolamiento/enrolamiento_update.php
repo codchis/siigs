@@ -586,6 +586,20 @@ if($enrolado)
                             <td><input name="cp" type="text" title='requiere' required id="cp" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->cp_domicilio; ?>" maxlength="5"></td>
                           </tr>
                           <tr>
+                          <td colspan="4" width="100%">
+                              <table width="97%" border="0">
+                                <tr>
+                                  <td width="19%" align="right">Ageb</td>
+                                  <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo $enrolado->ageb; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
+                                  <td  align="right">Sector</td>
+                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->sector; ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td  align="right">Manzana</td>
+                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo $enrolado->manzana; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                </tr>
+                              </table>
+                          </td>
+                          </tr>
+                          <tr>
                             <td><p align="right">Localidad</p></td>
                             <td colspan="3"><div class="input-append" style="width:100%"><input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value=""/>

@@ -686,6 +686,9 @@ class Enrolamiento extends CI_Controller
 		$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
 		$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', 'xss_clean');
+		$this->form_validation->set_rules('ageb', 'ageb', 'xss_clean');
+		$this->form_validation->set_rules('sector', 'sector', 'xss_clean');
+		$this->form_validation->set_rules('manzana', 'manzana', 'xss_clean');
 		
 		$this->form_validation->set_rules('nacionalidad', 'Nacionalidad', '');
 		$this->form_validation->set_rules('sangre', 'Tipo de Sangre', 'required');
@@ -766,6 +769,9 @@ class Enrolamiento extends CI_Controller
 		$this->Enrolamiento_model->setcelular($this->input->post('celular'));
 		$this->Enrolamiento_model->setnumero($this->input->post('numero'));
 		$this->Enrolamiento_model->setcp($this->input->post('cp'));
+		$this->Enrolamiento_model->setageb($this->input->post('ageb'));
+		$this->Enrolamiento_model->setsector($this->input->post('sector'));
+		$this->Enrolamiento_model->setmanzana($this->input->post('manzana'));
 		
 		$this->Enrolamiento_model->setafiliacion($this->input->post('afiliacion'));
 		$this->Enrolamiento_model->setalergias($this->input->post('alergia'));
