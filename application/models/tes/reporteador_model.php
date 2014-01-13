@@ -298,7 +298,7 @@ class Reporteador_model extends CI_Model {
         	$objReporte = new Reporte_censo_nominal();
             $objReporte->apellido_paterno = $IdConTutor->apellido_paterno;
             $objReporte->apellido_materno = $IdConTutor->apellido_materno;
-            $objReporte->nombre = $IdConTutor->apellido_materno;
+            $objReporte->nombre = $IdConTutor->nombre;
             $objReporte->domicilio = $IdConTutor->domicilio;
             $objReporte->curp = $IdConTutor->curp;
             $objReporte->fecha_nacimiento = $IdConTutor->fecha_nacimiento;
@@ -324,19 +324,119 @@ class Reporteador_model extends CI_Model {
         return $result;
 	}
 	
-	public function getEsquemasIncompletos($nivel, $id)
+	public function getEsquemasIncompletos($nivel, $id, &$th)
 	{
-		$sql = "";
-		$query = $this->db->query($sql); //echo $this->db->last_query();
-	
-		if (!$query){
+        $result = array();
+		$sqlIdsConTutor = "SELECT p.id,p.apellido_paterno,p.apellido_materno,p.nombre,p.calle_domicilio as domicilio,p.curp,p.fecha_nacimiento,p.sexo,'' AS edadEmb,
+			'' AS esquema,t.apellido_paterno AS apellido_paterno_tutor,t.apellido_materno AS apellido_materno_tutor,
+			t.nombre AS nombre_tutor,t.curp AS curp_tutor,t.sexo AS sexo_tutor, TIMESTAMPDIFF(DAY, fecha_nacimiento, CURDATE()) AS edad_dias 
+			FROM cns_persona p 
+			INNER JOIN cns_persona_x_tutor pt ON p.id=pt.id_persona
+			INNER JOIN cns_tutor t ON t.id=pt.id_tutor";
+		switch($nivel){
+			case 5:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante=".$id;
+				break;
+			case 4:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+									SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.")"; // ums por loc
+				break;
+			case 3:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+								SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+								SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") )"; // locs por mpio
+				break;
+			case 2:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") ) )"; // mpios por juris
+				break;
+			case 1:
+				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+						SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") ) ) )"; // juris por estado
+				break;
+		}
+        $queryIdsConTutor = $this->db->query($sqlIdsConTutor);
+        $resultIdsConTutor = $queryIdsConTutor->result();
+        
+        if (!$resultIdsConTutor){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
-		else
-			return $query->result();
-		return;
+        
+		$sqlVacunasEsquemaCompleto = "SELECT v.id,v.descripcion FROM cns_regla_vacuna rv INNER JOIN cns_vacuna v ON rv.id_vacuna=v.id
+											WHERE rv.esq_com=1 ORDER BY rv.orden_esq_com";
+		$queryVacunasEsquemaCompleto = $this->db->query($sqlVacunasEsquemaCompleto);
+		$resultVacunasEsquemaCompleto = $queryVacunasEsquemaCompleto->result();
+		$th = '<tr><th>Apellido Paterno</th><th>Apellido Materno</th><th>Nombre</th>
+						<th>Domicilio</th><th>CURP</th><th>Fecha Nac</th><th>Sexo</th>';
+		foreach($resultVacunasEsquemaCompleto as $vacuna){
+			$th.= '<th>'.$vacuna->descripcion.'</th>';
+		}
+		$th.='</tr>';
+		
+        foreach ($resultIdsConTutor as $IdConTutor) {
+        	$sqlVacunasAplicadas = "SELECT id_vacuna FROM cns_control_vacuna WHERE id_persona='".$IdConTutor->id."'";
+        	$queryVacunasAplicadas = $this->db->query($sqlVacunasAplicadas);
+        	$resultVacunasAplicadas = $this->object_to_array($queryVacunasAplicadas->result(), 'id_vacuna');
+
+        	$sqlVacunasCorresponden = "SELECT 	id,	id_vacuna,	dia_inicio_aplicacion_nacido,	dia_fin_aplicacion_nacido 
+        			FROM cns_regla_vacuna WHERE  
+				    (".$IdConTutor->edad_dias." >= dia_inicio_aplicacion_nacido AND
+					".$IdConTutor->edad_dias." <= dia_fin_aplicacion_nacido) OR
+					(dia_fin_aplicacion_nacido<=".$IdConTutor->edad_dias.")";
+        	$queryVacunasCorresponden = $this->db->query($sqlVacunasCorresponden);
+        	$resultVacunasCorresponden = $this->object_to_array($queryVacunasCorresponden->result(), 'id_vacuna');
+        	
+//         	echo $IdConTutor->id."(".$IdConTutor->edad_dias.")<br>";
+//         	var_dump($resultVacunasAplicadas);
+//         	echo "<br>";
+//         	var_dump($resultVacunasCorresponden);
+//         	echo "<br>";
+        	
+        	// el infante debe aparecer si no tiene todas las vacunas que le correspondan
+        	$puestas = 0;
+        	foreach ($resultVacunasAplicadas as $vacunaPuesta){
+        		foreach ($resultVacunasCorresponden as $vacunaCorresponde){
+        			if ($vacunaPuesta == $vacunaCorresponde)
+        				$puestas++;
+        		}
+        	}
+        	if ($puestas == count($resultVacunasCorresponden)){
+        		// se inserta el registro del infante
+        		$objReporte = new Reporte_censo_nominal();
+        		$objReporte->apellido_paterno = $IdConTutor->apellido_paterno;
+        		$objReporte->apellido_materno = $IdConTutor->apellido_materno;
+        		$objReporte->nombre = $IdConTutor->nombre;
+        		$objReporte->domicilio = $IdConTutor->domicilio;
+        		$objReporte->curp = $IdConTutor->curp;
+        		$objReporte->fecha_nacimiento = $IdConTutor->fecha_nacimiento;
+        		$objReporte->sexo = $IdConTutor->sexo;
+        		foreach ($resultVacunasEsquemaCompleto as $vacuna){
+        			$objReporte->vacunas[$vacuna->id] = in_array($vacuna->id, $resultVacunasAplicadas) ? 'x' : '';
+        		}
+        		$result[] = $objReporte;
+        		// se inserta el registro del tutor
+        		$objReporte = new Reporte_censo_nominal();
+        		$objReporte->apellido_paterno = $IdConTutor->apellido_paterno_tutor;
+        		$objReporte->apellido_materno = $IdConTutor->apellido_materno_tutor;
+        		$objReporte->nombre = $IdConTutor->nombre_tutor;
+        		$objReporte->domicilio = '';
+        		$objReporte->curp = $IdConTutor->curp_tutor;
+        		$objReporte->fecha_nacimiento = '';
+        		$objReporte->sexo = $IdConTutor->sexo_tutor;
+        		foreach ($resultVacunasEsquemaCompleto as $vacuna){
+        			$objReporte->vacunas[$vacuna->id] = '';
+        		}
+        		$result[] = $objReporte;
+        	}
+        }
+        return $result;
 	}
 	
 	// convierte array de objetos en array simple de un valor
