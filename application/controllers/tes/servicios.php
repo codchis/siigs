@@ -26,7 +26,7 @@ class Servicios extends CI_Controller {
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
 		$this->load->model(DIR_SIIGS.'/Usuario_model');
 		$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
-		$this->load->model(DIR_TES.'/ReglaVacuna_model');
+		$this->load->model(DIR_SIIGS.'/ReglaVacuna_model');
     }
 
     /**
@@ -747,11 +747,11 @@ class Servicios extends CI_Controller {
 		$datetime1 = date_create($fecha);
 		$datetime2 = date_create(date("Y-m-d"));
 		$interval  = date_diff($datetime1, $datetime2);
-		$dias      = $interval->format('%R%a dias');
+		$dias      = $interval->format('%a');
 		foreach($regla as $r)
 		{
 			$x=0;
-			if($vacunas!="")
+			if($vacunas!=""&&$r->esq_com=="1")
 			foreach($vacunas as $v)
 			{
 				if($r->id==$v->id_vacuna)
@@ -760,7 +760,7 @@ class Servicios extends CI_Controller {
 				}
 			}
 			
-			if(trim($r->id_vacuna_secuencial)!=""&&!empty($r->id_vacuna_secuencial))
+			if(trim($r->id_vacuna_secuencial)!=""&&!empty($r->id_vacuna_secuencial)&&$r->esq_com=="1")
 			{
 				$reglase=$this->ReglaVacuna_model->getById($r->id);
 				
@@ -777,18 +777,22 @@ class Servicios extends CI_Controller {
 				if($x1==0)
 				{
 					if($dias>=$reglase->desdese&&$dias<=$reglase->hastase)
-						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial));
+						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>1));
 					if($dias>$reglase->hastase)
-						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial));	
+					{
+						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>1));	
+					}
 				}
 			}
 			
 			if($x==0)
 			{
 				if($dias>=$r->desde&&$dias<=$r->hasta)
-					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id));
+					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>1));
 				if($dias>$r->hasta)
-					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id));
+				{
+					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>1));
+				}
 			}
 		}
 		return $cadena;

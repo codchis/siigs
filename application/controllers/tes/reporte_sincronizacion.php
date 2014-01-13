@@ -309,13 +309,9 @@ class Reporte_sincronizacion extends CI_Controller
 			{
 				$in="";$pagina="reporte_map";
 				$umsx=$this->Reporte_sincronizacion_model->getListado($consultb);
-				$descripcion="";
 				foreach($umsx as $u)
 				{
 					$in.=$u->id_asu_um.",";
-					$res=$this->Reporte_sincronizacion_model->getListado("select descripcion from asu_arbol_segmentacion where id='".$u->id_asu_um."'");
-					$ccc=$this->Reporte_sincronizacion_model->getCount("","select id_asu_um from cns_control_vacuna where id_asu_um='".$u->id_asu_um."'");
-					$descripcion.="<tr><td>".$u->id_asu_um."</td><td>".$res[0]->descripcion."</td><td>$ccc</td></tr>";
 				}
 				$tipo1=$this->Reporte_sincronizacion_model->getListado($consultc);
 				$tipoa="";
@@ -341,6 +337,14 @@ class Reporte_sincronizacion extends CI_Controller
 					$latlon=$this->Reporte_sincronizacion_model->getListado("SELECT * FROM asu_georeferencia WHERE id_asu='".$y->id."'");
 					if($latlon)
 					{
+						$descripcion="";
+						$consultx="SELECT DISTINCT(id_asu_um) FROM cns_control_vacuna WHERE id_asu_um IN(SELECT id FROM asu_arbol_segmentacion WHERE id_padre='".$y->id."')";
+						$mres=$this->Reporte_sincronizacion_model->getListado("select * from asu_arbol_segmentacion where id in ($consultx)");
+						foreach($mres as $xy) 
+						{
+							$ccc=$this->Reporte_sincronizacion_model->getCount("","select id_asu_um from cns_control_vacuna where id_asu_um='".$xy->id."'");
+							$descripcion.="<tr><td>".$xy->id."</td><td>".$xy->descripcion."</td><td>$ccc</td></tr>";
+						}
 						$table="<strong>Tipo: </strong>$tipoa<br><table width='300'><tr><th align='left'>No</th><th align='left'>UM.</th><th align='left'>Cant.</th></tr>$descripcion</table>";
 						$mapas[]=array(
 						"localidad"=>$m[0],
