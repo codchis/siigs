@@ -238,6 +238,20 @@ if($enrolado)
                             <td><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->cp_domicilio;?></div></td>
                           </tr>
                           <tr>
+                          <td colspan="4" width="100%">
+                              <table width="89%" border="0">
+                                <tr>
+                                  <td width="22%" align="right">Ageb&nbsp;</td>
+                                  <td ><div style="width:75%; margin-left:15px; margin-top:-3px"><?php  echo $enrolado->ageb;?></div></td>
+                                  <td  align="right">Sector</td>
+                                  <td ><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->sector;?></div></td>
+                                  <td  align="right">Manzana</td>
+                                  <td width="16%"><div style="width:100%; margin-left:20px; margin-top:-3px"><?php  echo $enrolado->manzana;?></div></td>
+                                </tr>
+                              </table>
+                          </td>
+                          </tr>
+                          <tr>
                             <td><p align="right">Localidad</p></td>
                             <td colspan="3"><div id="localidadT" style="width:100%; margin-left:20px;"></div></tr>
                           <tr>

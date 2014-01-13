@@ -49,6 +49,9 @@ class Enrolamiento_model extends CI_Model
 	private $telefono;
 	private $compania;
 	private $celular;
+	private $ageb;
+	private $sector;
+	private $manzana;
 	
 	// Tipo de beneficiario
 	private $afiliacion= array();
@@ -384,6 +387,36 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->cp = $value;
 	}
+	
+	public function getageb()
+	{
+	    return $this->ageb;
+	}
+
+	public function setageb($value) 
+	{
+		$this->ageb = $value;
+	}
+	
+	public function getsector()
+	{
+	    return $this->sector;
+	}
+
+	public function setsector($value) 
+	{
+		$this->sector = $value;
+	}
+	
+	public function getmanzana()
+	{
+	    return $this->manzana;
+	}
+
+	public function setmanzana($value) 
+	{
+		$this->manzana = $value;
+	}
 	//*******************************
 	
 	public function getafiliacion()
@@ -653,6 +686,9 @@ class Enrolamiento_model extends CI_Model
 			'id_asu_localidad_domicilio' => $this->localidad,
 			'numero_domicilio' => $this->numero,
 			'cp_domicilio' => $this->cp,
+			'ageb' => $this->ageb,
+			'sector' => $this->sector,
+			'manzana' => $this->manzana,
 			
 			'telefono_domicilio' => $this->telefono,
 			'id_operadora_celular' => $compania,
@@ -956,6 +992,9 @@ class Enrolamiento_model extends CI_Model
 			'id_asu_localidad_domicilio' => $this->localidad,
 			'numero_domicilio' => $this->numero,
 			'cp_domicilio' => $this->cp,
+			'ageb' => $this->ageb,
+			'sector' => $this->sector,
+			'manzana' => $this->manzana,
 			
 			'telefono_domicilio' => $this->telefono,
 			'id_operadora_celular' => $compania,

@@ -35,12 +35,14 @@ $(document).ready(function()
 <h2><?php echo $title ?></h2>
 <div id='popimpr'  >
 <table border="0" width="100%" id="tabla" class="table table-striped  ">
+<thead>
 	<tr>
 		<th><h2>Atributo</h2></th>
 		<th><h2>Valor</h2></th>
 		<th><h2>Listar</h2></th>
 		
 	</tr>
+    </thead>
 	<?php if (isset($datos)) foreach ($datos as $dato): ?>
 	<tr>
 		<td><?php echo $dato["atributo"] ?></td>

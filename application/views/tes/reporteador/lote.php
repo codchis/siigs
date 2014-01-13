@@ -191,12 +191,14 @@ if (!$opcion_rpt3) unset($reports[3]);
 <?php for($i = 0; $i < $count; $i++){?>
 <div id='popimpr<?php echo $i?>'  >
 <table border="0" width="100%" id="tabla<?php echo $i?>" class="table table-striped  ">
+<thead>
 	<tr class="tr1">
 		<th width="49%"><h2>Atributo</h2></th>
 		<th width="36%"><h2>Valor</h2></th>
 		<th width="15%"><h2>Listar</h2></th>
 		
 	</tr>
+    </thead>
 	<tr class="tr2">
 		<td>Codigo</td>
 		<td><?php echo $datos[$i]["lote"]; ?></td>

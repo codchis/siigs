@@ -61,12 +61,12 @@ $(document).ready(function()
                     echo $headTable;
                 else
                 {
-                    echo "<tr>";
+                    echo "<thead><tr>";
                     foreach ($datos[0] as $item => $value)
                     {
                          echo "<th><h5>".$item."</h5></td>";
                     }
-                    echo "</tr>";
+                    echo "<thead></tr>";
                 }
             }
             else echo "<tr><th><h4>No se encontro resultados</h4></td></tr>";
