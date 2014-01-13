@@ -378,18 +378,33 @@ class CatalogoCsv extends CI_Controller {
 	 * @param  string $nombre
 	 * @return void
 	 */
-	public function update($nombre)
+	public function update($nombre, $pag = 0)
 	{
 		if (empty($this->CatalogoCsv_model))
 			return false;
                 if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');		
                 
+                $this->load->library('pagination');
+                $this->load->helper('form');
+
+                //Configuracion para la paginacion
+                $configPag['base_url']   ='/'. DIR_SIIGS.'/catalogocsv/update/'.$nombre.'/';
+                $configPag['first_link'] = 'Primero';
+                $configPag['last_link']  = '&Uacute;ltimo';
+                $configPag['total_rows'] = $this->CatalogoCsv_model->getNumRows($nombre);
+                $configPag['uri_segment'] = '5';
+                $configPag['per_page']   = REGISTROS_PAGINADOR*5;
+
+                $this->pagination->initialize($configPag);
+                $this->CatalogoCsv_model->setOffset($pag);
+                $this->CatalogoCsv_model->setRows($configPag['per_page']);
+                
 		try
 		{
 			$data['title'] = "Modificar datos del catálogo";
 			$data['catalogo_item'] = $this->CatalogoCsv_model->getByName($nombre);
-            $data['datos'] = $this->CatalogoCsv_model->getAllData($nombre);
+                        $data['datos'] = $this->CatalogoCsv_model->getAllData($nombre);
 		}
 		catch (Exception $e)
 		{

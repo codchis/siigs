@@ -17,10 +17,12 @@
     <link rel="stylesheet" type="text/css" href="/resources/plantillaSM/css/menu.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/alert.css">
     
-    <script src="/resources/js/jquery.js"></script>
+        <script src="/resources/js/jquery.js"></script>
 	<script src="/resources/js/jquery-ui.min.js"></script>
 	<script src="/resources/js/modernizr.js"></script>
 	<script src="/resources/js/customscript.js" type="text/javascript"></script>
+        
+        <script type="text/javascript" src="/resources/js/validaciones.js"></script>
     
     <?= $js ?>
 </head>

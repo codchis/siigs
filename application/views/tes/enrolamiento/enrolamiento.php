@@ -1,6 +1,6 @@
     <link href="/resources/css/grid.css" rel="stylesheet" type="text/css" /> 
     <link href="/resources/SpryAssets/SpryAccordion.css" rel="stylesheet" type="text/css" /> 
-	<script src="/resources/SpryAssets/SpryAccordion.js" type="text/javascript"></script>
+    <script src="/resources/SpryAssets/SpryAccordion.js" type="text/javascript"></script>
     
     <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
 	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
@@ -9,8 +9,6 @@
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 	
-    <script type="text/javascript" src="/resources/js/validaciones.js"></script>	
-
     <script>
 	var g=new Date();
 		var option = 

@@ -144,6 +144,19 @@ class Catalogo extends CI_Controller {
 			  	if ($cont == 1)
 			  	{
 			  		$columnas = $data;
+                                        
+                                        //Revisar si hay columnas con el mismo nombre
+                                        if (count($columnas) <> count(array_unique($columnas)))
+                                        {
+                                            echo json_encode("Error: El archivo contiene columnas con el mismo nombre");
+                                            return;
+                                        }
+                                        if (in_array('id', $columnas))
+                                        {
+                                            echo json_encode("Error: No puede usar el nombre de columna 'id', por favor intente con id_{nombre del catalogo}");
+                                            return;
+                                        }
+                                        
 			  		//elimina la tabla temporal para crear catalogos
 			  		$consulta = 'drop table if exists tmp_catalogo;';
 			  		$query = $this->db->query($consulta);
@@ -178,7 +191,8 @@ class Catalogo extends CI_Controller {
 		}
 		else
 		{
-			echo "Error:el archivo no se cargó correctamente";
+			echo json_encode("Error:el archivo no se cargó correctamente");
+                        return;
 		}
 	}
 
@@ -244,6 +258,7 @@ class Catalogo extends CI_Controller {
 			 	$datallaves = array();
 				//obtiene la estructura del catalogo
 			 	$catalogo = $this->Catalogo_model->getByName($nombrecat);
+                                 
 			 	//obtiene los nombres de los campos con su tipo de dato y otros valores
 			 	$campostemp = explode('||', $catalogo->campos);
 			 	$llavestemp = explode('||',$catalogo->llave);
@@ -259,12 +274,13 @@ class Catalogo extends CI_Controller {
 			 	//obtiene el nombre de los campos y las llaves
 			 	foreach($campostemp as $item)
 			 		array_push($campos, explode('|',$item)[0]);
+                                                                
 			 	foreach($llavestemp as $item)
 			 	{
 			 		$key = explode('|',$item)[0];
 			 		if ($key != 'id')
 			 			array_push($llaves, $key);
-			 	}
+			 	}                                
 			 	if (count($llaves) == 0)
 			 	{
 				 	// se obtienen todos los campos que contengan el subfijo id_ y se toman
@@ -287,7 +303,7 @@ class Catalogo extends CI_Controller {
 			 		$campos = $colstemp;
 			 	}
 			 	//agrega las llaves como campos normales para obtener el numero total de columnas
-			 	
+                                echo "select ".implode(",",$llaves)." from ".$nombrecat;
 		 		//obtiene las llaves primarias del catalogo
 		 		$rowsllaves = $this->db->query("select ".implode(",",$llaves)." from ".$nombrecat);
 		 		$rowsllaves = $rowsllaves->result();

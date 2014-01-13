@@ -331,11 +331,11 @@ class Cie10 extends CI_Controller {
             if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
             show_error('', 403, 'Acceso denegado');
             
-		//if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
-		if (TRUE)
+		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
+		//if (TRUE)
 		{
-		//	 $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
-			 $fp = fopen('catalogos/CIE10.csv', "r");
+			 $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
+		//	 $fp = fopen('catalogos/CIE10.csv', "r");
 			 $cont = 0;
 			 $columnas = array();
 			 $resultado = array();

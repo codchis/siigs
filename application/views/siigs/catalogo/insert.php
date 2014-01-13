@@ -27,8 +27,14 @@
     			    url:        '/<?php echo DIR_SIIGS.'/catalogo/load';?>',
     			    dataType : 'json',
     			    success:    function(data) {
-
-						$('#optcampos').html('<thead><tr><th colspan=4>Campos del catálogo</th></tr></thead><tr><td>Columna</td><td>Llave</td><td>Tipo</td><td>Tamaño</td></tr>');
+                                
+                                if (data.indexOf('Error:')>-1)
+                                {
+                                    alert(data);
+                                    return;
+                                }
+        
+                                $('#optcampos').html('<thead><tr><th colspan=4>Campos del catálogo</th></tr></thead><tr><td>Columna</td><td>Llave</td><td>Tipo</td><td>Tamaño</td></tr>');
 
     			    	$.each(data, function(i, item) {
 							//Agregar el TR
