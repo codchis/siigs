@@ -1,18 +1,9 @@
-<div id="loading" style="height:100px;width:100px;position:absolute;top:0px;left:0px;display:none;z-index:1000;background-color:black;">
-    
-</div>
 <script>
 $(document).ready(function(){
-   
-   $(document).bind("ajaxSend", function(){
-   $("#loading").show();
- }).bind("ajaxComplete", function(){
-   $("#loading").hide();
- }).bind("ajaxError",function(){
-   $("#loading").hide();  
- });
- 
+    obligatorios('frm_insert');
 });
+</script>
+<script>
 
 function generarAsu(raiz)
 {
@@ -124,12 +115,15 @@ if (!empty($raiz_item))
 {
 ?>
 <?php echo validation_errors(); ?>
-<?php echo form_open(DIR_SIIGS.'/raiz/update/'.$raiz_item->id) ?>
+<?php echo form_open(DIR_SIIGS.'/raiz/update/'.$raiz_item->id, array('id'=>'frm_insert', 'onkeyup' => 'limpiaformulario(\'frm_insert\')')) ?>
 <div class="table table-striped">
+    
+    <div class="info requiere" style="width:93%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
+    <div id="alert"></div> 
 <table>
 	<tr>
 		<td><label for="descripcion">Descripci&oacute;n</label></td>
-		<td><textarea name="descripcion"><?php echo $raiz_item->descripcion; ?></textarea></td>
+		<td><textarea name="descripcion" title='requiere' required><?php echo $raiz_item->descripcion; ?></textarea></td>
 	</tr>
 	<tr>
 		<td colspan=2>
@@ -186,7 +180,7 @@ if (!empty($raiz_item))
 	<tr>
 		<td colspan=2>
 		<input type="hidden" name="id" value="<?php echo $raiz_item->id; ?>"/>
-		<input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
+		<input type="submit" name="submit" value="Guardar" class="btn btn-primary"  onclick="return validarFormulario('frm_insert')"/>
 		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/raiz/'" class="btn btn-primary" />
 		<td>
 	</tr>

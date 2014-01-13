@@ -246,8 +246,10 @@ class Tableta_model extends CI_Model
         if( !empty($this->id_tipo_censo) )
             $data['id_tipo_censo'] = $this->id_tipo_censo;
 
-        if( !empty($this->id_asu_um) )
+        if( !empty($this->id_asu_um) ) {
             $data['id_asu_um'] = $this->id_asu_um;
+            $data['id_tes_estado_tableta'] = 2;
+        }
 
         $id = is_null($id) ? $this->id : $id;
         $result = $this->db->update('tes_tableta', $data, array('id' => $id));
@@ -259,7 +261,7 @@ class Tableta_model extends CI_Model
             throw new Exception();
         } else {
             // Obtiene el id asignado a la ultima inserción
-            $this->id = $this->db->insert_id();
+            $this->id = $id;
         }
 
         return $result;

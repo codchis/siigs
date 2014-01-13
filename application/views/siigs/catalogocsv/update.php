@@ -124,7 +124,14 @@ if (!empty($catalogo_item))
 <table>
 <tr>
 <td>[Archivo csv separado por comas]<input type="file" name="archivocsv" class="btn btn-primary" id="btncsv"/></td>
-<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" class="btn btn-primary" /></td>
+<td>
+    <input type="button" name="btnload" id="btnload" value="Cargar Datos" class="btn btn-primary" />
+</td>
+</tr>
+<tr>
+    <td colspan="2">
+        <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogocsv'" class="btn btn-primary" />
+    </td>
 </tr>
 </table>
 </form>

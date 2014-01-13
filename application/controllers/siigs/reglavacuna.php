@@ -105,7 +105,7 @@ class ReglaVacuna extends CI_Controller {
                 $this->form_validation->set_rules('tipo_aplicacion', 'Tipo de aplicación', 'trim|xss_clean|required');
 
                 $vacunas = $this->db->query("select id,descripcion from cns_vacuna where activo=1")->result();
-                $data['vacunas'][0] = 'Elige una vacuna';
+                $data['vacunas'][''] = 'Elige una vacuna';
 		foreach ($vacunas as $item) {
 			$data['vacunas'][$item->id] = $item->descripcion;
 		}
@@ -179,7 +179,7 @@ class ReglaVacuna extends CI_Controller {
                 $this->form_validation->set_rules('tipo_aplicacion', 'Tipo de aplicación', 'trim|xss_clean|required');
 
                 $vacunas = $this->db->query("select id,descripcion from cns_vacuna where activo=1")->result();
-                $data['vacunas'][0] = 'Elige una vacuna';
+                $data['vacunas'][''] = 'Elige una vacuna';
 		foreach ($vacunas as $item) {
 			$data['vacunas'][$item->id] = $item->descripcion;
 		}
