@@ -6313,19 +6313,20 @@ button.close {
     
 /*************** Modificaciones para tablas *******************/
 .table thead th{
-    border-right: 1px solid #DDDDDD;
+    border-right: 1px solid #ccc;
+    background-color:#E8ECED;
     text-align: center;
     vertical-align: middle;
 }
 
 /*************** Boton Soporte *******************/
 .btn-soporte {
-      background: #e82128;
-	  text-shadow: rgba(0,0,0,.4) 0 0px 0;
+    background: #e82128;
+    text-shadow: rgba(0,0,0,.4) 0 0px 0;
    color: white;
-   }
+}
    
 .btn-soporte:hover {
    background: #e82128;
    color: #edd1d3;
-   }
+}
