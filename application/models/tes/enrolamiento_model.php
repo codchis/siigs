@@ -49,6 +49,9 @@ class Enrolamiento_model extends CI_Model
 	private $telefono;
 	private $compania;
 	private $celular;
+	private $ageb;
+	private $sector;
+	private $manzana;
 	
 	// Tipo de beneficiario
 	private $afiliacion= array();
@@ -384,6 +387,36 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->cp = $value;
 	}
+	
+	public function getageb()
+	{
+	    return $this->ageb;
+	}
+
+	public function setageb($value) 
+	{
+		$this->ageb = $value;
+	}
+	
+	public function getsector()
+	{
+	    return $this->sector;
+	}
+
+	public function setsector($value) 
+	{
+		$this->sector = $value;
+	}
+	
+	public function getmanzana()
+	{
+	    return $this->manzana;
+	}
+
+	public function setmanzana($value) 
+	{
+		$this->manzana = $value;
+	}
 	//*******************************
 	
 	public function getafiliacion()
@@ -653,6 +686,9 @@ class Enrolamiento_model extends CI_Model
 			'id_asu_localidad_domicilio' => $this->localidad,
 			'numero_domicilio' => $this->numero,
 			'cp_domicilio' => $this->cp,
+			'ageb' => $this->ageb,
+			'sector' => $this->sector,
+			'manzana' => $this->manzana,
 			
 			'telefono_domicilio' => $this->telefono,
 			'id_operadora_celular' => $compania,
@@ -956,6 +992,9 @@ class Enrolamiento_model extends CI_Model
 			'id_asu_localidad_domicilio' => $this->localidad,
 			'numero_domicilio' => $this->numero,
 			'cp_domicilio' => $this->cp,
+			'ageb' => $this->ageb,
+			'sector' => $this->sector,
+			'manzana' => $this->manzana,
 			
 			'telefono_domicilio' => $this->telefono,
 			'id_operadora_celular' => $compania,
@@ -1464,7 +1503,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->from($catalog);
 		if($id!="")
 		$this->db->where($campo, $id);
-		$this->db->where('activo', 1);
+		
 		if($orden!="")
 		$this->db->order_by($orden, "asc");
 		$query = $this->db->get(); 
@@ -1503,10 +1542,7 @@ class Enrolamiento_model extends CI_Model
 		if($catalog=="tes_notificacion")
 		$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
 		else if($catalog=="asu_arbol_segmentacion")
-		$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');
-		else if($catalog=="cns_persona")
-		$this->db->select('id, curp, nombre, apellido_paterno, apellido_materno, sexo,id_tipo_sanguineo, fecha_nacimiento, id_asu_localidad_nacimiento, calle_domicilio, numero_domicilio, colonia_domicilio, referencia_domicilio, id_asu_localidad_domicilio, cp_domicilio, telefono_domicilio, fecha_registro, id_asu_um_tratante, celular, ultima_actualizacion, id_nacionalidad, id_operadora_celular, ultima_sincronizacion');
-		
+		$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');		
 		else
 		$this->db->select('*');
 		$this->db->from($catalog);

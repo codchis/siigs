@@ -149,7 +149,7 @@ class Controlador extends CI_Controller {
 
 		$data['id_entorno'] = ($id != FALSE) ? $id : $this->input->post('id_entorno');
 		$entornos = $this->Entorno_model->getAll();
-		$data['entornos'][0] = 'Elige un entorno';
+		$data['entornos'][''] = 'Elige un entorno';
 		foreach ($entornos as $item) {
 			$data['entornos'][$item->id] = $item->nombre;
 		}
@@ -223,7 +223,7 @@ class Controlador extends CI_Controller {
 				$data["controlador_item"] = $this->Controlador_model->getById($id);
                                 
                                 $entornos = $this->Entorno_model->getAll();
-                                $data['entornos'][0] = 'Elige un entorno';
+                                $data['entornos'][''] = 'Elige un entorno';
                                 foreach ($entornos as $item) {
                                         $data['entornos'][$item->id] = $item->nombre;
                                         }

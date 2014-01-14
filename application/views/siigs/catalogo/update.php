@@ -90,6 +90,7 @@ if (!empty($catalogo_item))
 </form>
 <table id="optcampos">
 </table>
+    <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary" />
 </div>
 <?php 
 }

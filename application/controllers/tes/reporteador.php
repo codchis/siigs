@@ -125,11 +125,12 @@ class Reporteador extends CI_Controller {
 				$array = $this->Reporteador_model->getCensoNominal($nivel, $id, $th);
 				$data['headTable'] = $th;
 			}
-			if($op==4)
-				$array=$this->Reporteador_model->getEsquemasIncompletos($nivel, $id);
-				
+			if($op==4){
+				$this->load->model(DIR_TES.'/Reporte_censo_nominal');
+				$array = $this->Reporteador_model->getEsquemasIncompletos($nivel, $id, $th);
+				$data['headTable'] = $th;
+			}
 			$data['datos'] = $array;
-			//var_dump($array);
 		}
 		catch(Exception $e)
 		{

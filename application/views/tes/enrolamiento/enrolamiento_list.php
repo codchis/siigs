@@ -48,14 +48,16 @@ Buscar usuario
 </div>
 <div class="table table-striped  " >
 <table width="100%">
+<thead>
 	<tr>
 		<th><h2>CURP</h2></th>
 		<th><h2>Nombre</h2></th>
 		<th><h2>Ap. Paterno</h2></th>
 		<th><h2>Ap. Materno</h2></th>
-		<?php if($opcion_view) { ?><td></td><?php } ?>
-		<?php if($opcion_update) { ?><td></td><?php } ?>
+		<?php if($opcion_view) { ?><th></th><?php } ?>
+		<?php if($opcion_update) { ?><th></th><?php } ?>
 	</tr>
+    </thead>
 	<?php if (isset($users)) foreach ($users as $user_item): ?>
 	<tr>
 		<td><?php echo $user_item->curp ?></td>

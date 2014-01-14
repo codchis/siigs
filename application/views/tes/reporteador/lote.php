@@ -191,12 +191,14 @@ if (!$opcion_rpt3) unset($reports[3]);
 <?php for($i = 0; $i < $count; $i++){?>
 <div id='popimpr<?php echo $i?>'  >
 <table border="0" width="100%" id="tabla<?php echo $i?>" class="table table-striped  ">
+<thead>
 	<tr class="tr1">
 		<th width="49%"><h2>Atributo</h2></th>
 		<th width="36%"><h2>Valor</h2></th>
 		<th width="15%"><h2>Listar</h2></th>
 		
 	</tr>
+    </thead>
 	<tr class="tr2">
 		<td>Codigo</td>
 		<td><?php echo $datos[$i]["lote"]; ?></td>
@@ -233,7 +235,7 @@ if (!$opcion_rpt3) unset($reports[3]);
 	</tr>
     
     <tr class="tr1">
-		<td>Personas que no pertenesca a esta unidad medica</td>
+		<td>Personas que no fueron atendidas en su unidad medica</td>
 		<td><?php //echo $dato["valor"] ?></td>
 		<td><a href="/<?php echo DIR_TES?>/reporte_sincronizacion/lote_view/<?php echo $datos[$i]["lote"]; ?>/Personas que no pertenecen <?php echo $datos[$i]["tipo"]; ?>/4" id="fba1"><img src="/resources/images/listar.png" style="border:none; width:30px; height:30px;" title="ver detalle" /></a></td>
 		

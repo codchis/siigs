@@ -470,6 +470,11 @@ class Enrolamiento extends CI_Controller
 		$data.=$enrolado["numero_domicilio"] ;                if($enrolado["numero_domicilio"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["colonia_domicilio"] ;               if($enrolado["colonia_domicilio"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["referencia_domicilio"] ;            if($enrolado["referencia_domicilio"]=="")$data.="¬=";else $data.="=";
+		
+		$data.=$enrolado["ageb"] ;                            if($enrolado["ageb"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["manzana"] ;            			  if($enrolado["manzana"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["sector"] ;            			  if($enrolado["sector"]=="")$data.="¬=";else $data.="=";
+		
 		$data.=$enrolado["id_asu_localidad_domicilio"] ;      if($enrolado["id_asu_localidad_domicilio"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["cp_domicilio"] ;                    if($enrolado["cp_domicilio"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["telefono_domicilio"] ;              if($enrolado["telefono_domicilio"]=="")$data.="¬=";else $data.="=";
@@ -686,6 +691,9 @@ class Enrolamiento extends CI_Controller
 		$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
 		$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', 'xss_clean');
+		$this->form_validation->set_rules('ageb', 'ageb', 'xss_clean');
+		$this->form_validation->set_rules('sector', 'sector', 'xss_clean');
+		$this->form_validation->set_rules('manzana', 'manzana', 'xss_clean');
 		
 		$this->form_validation->set_rules('nacionalidad', 'Nacionalidad', '');
 		$this->form_validation->set_rules('sangre', 'Tipo de Sangre', 'required');
@@ -766,6 +774,9 @@ class Enrolamiento extends CI_Controller
 		$this->Enrolamiento_model->setcelular($this->input->post('celular'));
 		$this->Enrolamiento_model->setnumero($this->input->post('numero'));
 		$this->Enrolamiento_model->setcp($this->input->post('cp'));
+		$this->Enrolamiento_model->setageb($this->input->post('ageb'));
+		$this->Enrolamiento_model->setsector($this->input->post('sector'));
+		$this->Enrolamiento_model->setmanzana($this->input->post('manzana'));
 		
 		$this->Enrolamiento_model->setafiliacion($this->input->post('afiliacion'));
 		$this->Enrolamiento_model->setalergias($this->input->post('alergia'));

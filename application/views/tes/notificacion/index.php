@@ -70,9 +70,9 @@ Buscar<input type="text" name="busqueda" value="<?php echo set_value('busqueda',
 		<th><h2>Reportar a tabletas</h2></th>
 		<th><h2>Desde</h2></th>
 		<th><h2>Hasta</h2></th>
-		<?php if($opcion_view) { ?><td><h2></h2></td><?php } ?>
-		<?php if($opcion_update) { ?><td><h2></h2></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><h2></h2></td><?php } ?>
+		<?php if($opcion_view) { ?><th><h2></h2></th><?php } ?>
+		<?php if($opcion_update) { ?><th><h2></h2></th><?php } ?>
+		<?php if($opcion_delete) { ?><th><h2></h2></th><?php } ?>
 	</tr>
 </thead>
 <tbody>

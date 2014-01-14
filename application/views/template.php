@@ -47,8 +47,8 @@
     <div class="container enlace-portales">
 
         <div class="row-fluid hidden-phone" style="background:#E4E4E4;" >
-            <div class="span6"> <script type='text/javascript' src='http://www.chiapas.gob.mx/quicklink-responsive/portales.js'></script></div>
-            <div class="span6"> <script type='text/javascript' src='http://www.chiapas.gob.mx/quicklink-responsive/clima.js'></script></div>
+            <!--div class="span6"> <script type='text/javascript' src='http://www.chiapas.gob.mx/quicklink-responsive/portales.js'></script></div>
+            <div class="span6"> <script type='text/javascript' src='http://www.chiapas.gob.mx/quicklink-responsive/clima.js'></script></div-->
         </div>
     </div>
 
