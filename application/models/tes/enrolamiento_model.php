@@ -1503,7 +1503,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->from($catalog);
 		if($id!="")
 		$this->db->where($campo, $id);
-		$this->db->where('activo', 1);
+		
 		if($orden!="")
 		$this->db->order_by($orden, "asc");
 		$query = $this->db->get(); 
@@ -1542,10 +1542,7 @@ class Enrolamiento_model extends CI_Model
 		if($catalog=="tes_notificacion")
 		$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
 		else if($catalog=="asu_arbol_segmentacion")
-		$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');
-		else if($catalog=="cns_persona")
-		$this->db->select('id, curp, nombre, apellido_paterno, apellido_materno, sexo,id_tipo_sanguineo, fecha_nacimiento, id_asu_localidad_nacimiento, calle_domicilio, numero_domicilio, colonia_domicilio, referencia_domicilio, id_asu_localidad_domicilio, cp_domicilio, telefono_domicilio, fecha_registro, id_asu_um_tratante, celular, ultima_actualizacion, id_nacionalidad, id_operadora_celular, ultima_sincronizacion');
-		
+		$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');		
 		else
 		$this->db->select('*');
 		$this->db->from($catalog);

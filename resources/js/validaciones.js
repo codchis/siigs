@@ -187,11 +187,11 @@ function getXHTTP( ) {
 
 /**Funcion estándard para AJAX**/
 var http = getXHTTP();
-
+var clk=0;
 // inicio validar formularios
 function validarFormulario(formulario)//para este metodo los inputs agregar title='requiere' y  llamar en el boton o submit asi                                              onclick="return validarFormulario('formulario')"  formulario=nombre del formulario
 {
-		bien =true;
+		bien =true; clk=1;
         var c=0;var frm=document.getElementById(formulario);  //formulario
         for(c=0;c<frm.length;c++)//tantos imputs tenga el formulario
         {
@@ -231,11 +231,12 @@ function limpiaformulario(formulario) //va en el evento keyup formulario onkeyup
 		else if(frm.elements[c].title=="requiere"&&(frm.elements[c].value==""))
 			frm.elements[c].className="requiere";
 	}
-	if(document.getElementById("alert"))
+	if(document.getElementById("alert")&&clk==0)
 	{
 		document.getElementById("alert").innerHTML="";
 		document.getElementById("alert").className="";
 	}
+	clk=0;
 }
 function obligatorios(formulario)
 {

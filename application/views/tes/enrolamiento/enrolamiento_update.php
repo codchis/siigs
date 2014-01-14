@@ -583,7 +583,7 @@ if($enrolado)
                             <td><p align="right">Colonia</p></td>
                             <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->colonia_domicilio; ?>"></td>
                             <td><p align="right">CP</p></td>
-                            <td><input name="cp" type="text" title='requiere' required id="cp" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->cp_domicilio; ?>" maxlength="5"></td>
+                            <td><input name="cp" type="text" title='requiere' required id="cp" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->cp_domicilio; ?>" maxlength="5" ></td>
                           </tr>
                           <tr>
                           <td colspan="4" width="100%">

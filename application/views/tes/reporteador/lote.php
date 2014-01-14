@@ -235,7 +235,7 @@ if (!$opcion_rpt3) unset($reports[3]);
 	</tr>
     
     <tr class="tr1">
-		<td>Personas que no pertenesca a esta unidad medica</td>
+		<td>Personas que no fueron atendidas en su unidad medica</td>
 		<td><?php //echo $dato["valor"] ?></td>
 		<td><a href="/<?php echo DIR_TES?>/reporte_sincronizacion/lote_view/<?php echo $datos[$i]["lote"]; ?>/Personas que no pertenecen <?php echo $datos[$i]["tipo"]; ?>/4" id="fba1"><img src="/resources/images/listar.png" style="border:none; width:30px; height:30px;" title="ver detalle" /></a></td>
 		

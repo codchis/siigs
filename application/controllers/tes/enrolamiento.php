@@ -470,6 +470,11 @@ class Enrolamiento extends CI_Controller
 		$data.=$enrolado["numero_domicilio"] ;                if($enrolado["numero_domicilio"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["colonia_domicilio"] ;               if($enrolado["colonia_domicilio"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["referencia_domicilio"] ;            if($enrolado["referencia_domicilio"]=="")$data.="¬=";else $data.="=";
+		
+		$data.=$enrolado["ageb"] ;                            if($enrolado["ageb"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["manzana"] ;            			  if($enrolado["manzana"]=="")$data.="¬=";else $data.="=";
+		$data.=$enrolado["sector"] ;            			  if($enrolado["sector"]=="")$data.="¬=";else $data.="=";
+		
 		$data.=$enrolado["id_asu_localidad_domicilio"] ;      if($enrolado["id_asu_localidad_domicilio"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["cp_domicilio"] ;                    if($enrolado["cp_domicilio"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["telefono_domicilio"] ;              if($enrolado["telefono_domicilio"]=="")$data.="¬=";else $data.="=";
