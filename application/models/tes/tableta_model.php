@@ -57,7 +57,12 @@ class Tableta_model extends CI_Model
      * @var    int(11)
      */
     private $id_asu_um;
-
+    
+    /**
+     * @access private
+     * @var    int(11)
+     */
+    private $periodo_esq_inc;
 
     /********************************************
      * Estas variables no pertenecen a la tabla *
@@ -128,6 +133,10 @@ class Tableta_model extends CI_Model
         return $this->id_asu_um;
     }
     
+    public function getPeriodo_esq_inc() {
+        return $this->periodo_esq_inc;
+    }
+    
     public function setId($id)
     {
         return $this->id = $id;
@@ -161,6 +170,9 @@ class Tableta_model extends CI_Model
         $this->id_asu_um = $id_asu_um;
     }
     
+    public function setPeriodo_esq_inc($periodo_esq_inc) {
+        return $this->periodo_esq_inc = $periodo_esq_inc;
+    }
     
     /**
      * Devuelve el mensaje de error,
@@ -250,6 +262,9 @@ class Tableta_model extends CI_Model
             $data['id_asu_um'] = $this->id_asu_um;
             $data['id_tes_estado_tableta'] = 2;
         }
+        
+        if( !empty($this->periodo_esq_inc) )
+            $data['periodo_esq_inc'] = $this->periodo_esq_inc;
 
         $id = is_null($id) ? $this->id : $id;
         $result = $this->db->update('tes_tableta', $data, array('id' => $id));
@@ -343,6 +358,7 @@ class Tableta_model extends CI_Model
             $this->id_tes_estado_tableta = $result->id_tes_estado_tableta;
             $this->id_tipo_censo = $result->id_tipo_censo;
             $this->id_asu_um = $result->id_asu_um;
+            $this->periodo_esq_inc = $result->periodo_esq_inc;
         }
 
         return $result;
@@ -384,6 +400,7 @@ class Tableta_model extends CI_Model
             $this->id_tes_estado_tableta = $result->id_tes_estado_tableta;
             $this->id_tipo_censo = $result->id_tipo_censo;
             $this->id_asu_um = $result->id_asu_um;
+            $this->periodo_esq_inc = $result->periodo_esq_inc;
         }
 
         return $result;

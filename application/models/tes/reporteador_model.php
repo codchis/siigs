@@ -47,14 +47,20 @@ class Reporteador_model extends CI_Model {
 		return $this->msg_error_usr;
 	}
 	
+    /**
+	 * Obtiene el reporte de cobertura por tipo de biologico
+	 *
+	 * @access  public
+	 * @param   int     $nivel  Nivel del elemento del arbol ASU
+     * @param   int     $id     Identificador del elemento ASU
+     * @param   date    $fecha  Fecha de corte de elemento
+	 * @return  void
+	 */
 	public function getCoberturaBiologicoListado($nivel, $id, $fecha)
 	{
         $result = array();
-		$sqlGrupoEtareo = "SELECT 	
-                *
-            FROM 
-                asu_grupo_etareo
-            ORDER BY dia_fin";
+        $idsAsu = array();
+		$sqlGrupoEtareo = "SELECT * FROM asu_grupo_etareo ORDER BY dia_fin";
         
         $queryGrupoEtareo = $this->db->query($sqlGrupoEtareo);
         $resultGrupoEtareo = $queryGrupoEtareo->result();
@@ -75,57 +81,56 @@ class Reporteador_model extends CI_Model {
 			throw new Exception("No se encuentra el Identificador de ASU");
 		}
         
-        foreach ($resultGrupoEtareo as $grupoEtareo) {
-            $idsAsu = array();
-            $objReporte = new Reporte_cobertura_biologico();
-            
-            switch ($resultAsu->grado_segmentacion) {
-                case 1: // Estado
-                    // Obtiene todos los municipios del estado
-                    $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$id.' 
-                                    )');
-                    $resultIdsAsu = $queryIdsAsu->result();
-                    
-                    if (!$resultIdsAsu){
-                        $this->msg_error_usr = "Servicio temporalmente no disponible.";
-                        $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-                        throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
-                    }
-                    
-                    foreach ($resultIdsAsu as $tempAsu) {
-                        $idsAsu[] = $tempAsu->id;
-                    }
-                    
-                    break;
-                case 2: // Jurisdiccion
-                    // Obtiene todos los municipios de la jurisdiccion
-                    $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre = '.$id);
-                    $resultIdsAsu = $queryIdsAsu->result();
-                    
-                    if (!$resultIdsAsu){
-                        $this->msg_error_usr = "Servicio temporalmente no disponible.";
-                        $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-                        throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
-                    }
-                    
-                    foreach ($resultIdsAsu as $tempAsu) {
-                        $idsAsu[] = $tempAsu->id;
-                    }
-                    
-                    break;
-                case 3: // Municipio
-                    $idsAsu = array($id);
-                    break;
-                default:
-                    $this->msg_error_usr = "El grado de segmentación especifico no es valido para este reporte";
+        switch ($resultAsu->grado_segmentacion) {
+            case 1: // Estado
+                // Obtiene todos los municipios del estado
+                $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
+                                    ( SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$id.' )');
+                $resultIdsAsu = $queryIdsAsu->result();
+
+                if (!$resultIdsAsu){
+                    $this->msg_error_usr = "Servicio temporalmente no disponible.";
                     $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-                    throw new Exception("El grado de segmentación especifico no es valido para este reporte");
-                    break;
-            }
-            
+                    throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                }
+
+                foreach ($resultIdsAsu as $tempAsu) {
+                    $idsAsu[] = $tempAsu->id;
+                }
+
+                break;
+            case 2: // Jurisdiccion
+                // Obtiene todos los municipios de la jurisdiccion
+                $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre = '.$id);
+                $resultIdsAsu = $queryIdsAsu->result();
+
+                if (!$resultIdsAsu){
+                    $this->msg_error_usr = "Servicio temporalmente no disponible.";
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                }
+
+                foreach ($resultIdsAsu as $tempAsu) {
+                    $idsAsu[] = $tempAsu->id;
+                }
+
+                break;
+            case 3: // Municipio
+                $idsAsu = array($id);
+                break;
+            default:
+                $this->msg_error_usr = "El grado de segmentación especifico no es valido para este reporte";
+                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                throw new Exception("El grado de segmentación especifico no es valido para este reporte");
+                break;
+        }
+
+        echo implode(',', $idsAsu);
+        
+        foreach ($resultGrupoEtareo as $grupoEtareo) {
+            $objReporte = new Reporte_cobertura_biologico();
             // Corrige el grupo etareo
-            // se toma la poblacion de menores de uno para todos los meses
+            // se toma la poblacion de menores de uno para todos grupos de meses
             $idGrupoEtareo = $grupoEtareo->id;
             
             if($idGrupoEtareo>=10 && $idGrupoEtareo<=21) {
@@ -138,8 +143,8 @@ class Reporteador_model extends CI_Model {
                     asu_poblacion
                 WHERE 
                     id_asu IN ('.implode(',', $idsAsu).') AND 
-                    id_grupo_etareo = '.$idGrupoEtareo.' AND
-                    ano = 2013');
+                    id_grupo_etareo = '.$idGrupoEtareo.' AND 
+                    ano = 2013'); 
             
             $resultPob = $queryPob->row();
 
@@ -150,38 +155,65 @@ class Reporteador_model extends CI_Model {
             }
             
             $queryNom = $this->db->query('SELECT 
-                        COUNT(id) AS nominal
-                    FROM 
-                        cns_persona
-                    WHERE 
-                        id_asu_um_tratante IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                                SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                            )
-                        ) AND 
-                        TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
-                            BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
-            echo 'SELECT 
-                        COUNT(id) AS nominal
-                    FROM 
-                        cns_persona
-                    WHERE 
-                        id_asu_um_tratante IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                                SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                            )
-                        ) AND 
-                        TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
-                            BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin.'<br>';
+                    COUNT(id) AS nominal 
+                FROM 
+                    cns_persona 
+                WHERE 
+                    id_asu_um_tratante IN (
+                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
+                        )
+                    ) AND 
+                    TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
+                        BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
+            
             $resultNom = $queryNom->row();
+            
+            // NOTA: Revisar los ID de las vacunas si cambian el catalogo cns_vacuna
+            $queryBCG = $this->db->query('SELECT 
+                    COUNT(cns_persona.id) AS total
+                FROM 
+                    cns_persona
+                INNER JOIN
+                    cns_control_vacuna 
+                        ON cns_persona.id = cns_control_vacuna.id_persona
+                WHERE 
+                    id_vacuna=1 AND
+                    id_asu_um_tratante IN (
+                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
+                        )
+                    ) AND 
+                    TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
+                        BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
+            $resultBCG = $queryBCG->row();
+            
+            $queryHepB = $this->db->query('SELECT 
+                    COUNT(cns_persona.id) AS total
+                FROM 
+                    cns_persona
+                INNER JOIN
+                    cns_control_vacuna 
+                        ON cns_persona.id = cns_control_vacuna.id_persona
+                WHERE 
+                    cns_control_vacuna.fecha<="'.formatFecha($fecha, 'Y-m-d').'" AND
+                    id_vacuna IN (2,3,4) AND
+                    id_asu_um_tratante IN (
+                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
+                        )
+                    ) AND 
+                    TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
+                        BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
+            $resultHepB = $queryHepB->row();
             
             $objReporte->grupo_etareo = $grupoEtareo->descripcion;
             $objReporte->pob_oficial = (int)$resultPob->poblacion;
             $objReporte->pob_nominal = (int)$resultNom->nominal;
             $objReporte->concordancia = $objReporte->pob_oficial ? round($objReporte->pob_nominal/$objReporte->pob_oficial, 2) : 0;
-            $objReporte->bcg_tot = 5;
+            $objReporte->bcg_tot = $resultBCG->total;
             $objReporte->bcg_cob = $objReporte->pob_oficial ? round($objReporte->bcg_tot/$objReporte->pob_oficial, 2) : 0;
-            $objReporte->hepB_tot = 7;
+            $objReporte->hepB_tot = $resultHepB->total;
             $objReporte->hepB_cob = $objReporte->pob_oficial ? round($objReporte->hepB_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->penta_tot = 9;
             $objReporte->penta_cob = $objReporte->pob_oficial ? round($objReporte->penta_tot/$objReporte->pob_oficial, 2) : 0;

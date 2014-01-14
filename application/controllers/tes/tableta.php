@@ -192,6 +192,9 @@ class Tableta extends CI_Controller {
                     
                     if(isset($datos['status']))
                         $this->Tableta_model->setId_tes_estado_tableta($datos['status']);
+                    
+                    if(isset($datos['periodo_esq_inc']))
+                        $this->Tableta_model->setPeriodo_esq_inc($datos['periodo_esq_inc']);
 
                     $this->Tableta_model->update($id);
 
@@ -390,6 +393,7 @@ class Tableta extends CI_Controller {
             if(!empty($datos)) {
                 $this->Tableta_model->setId_tipo_censo($datos['id_tipo_censo']);
                 $this->Tableta_model->setId_asu_um($datos['id_unidad_medica']);
+                $this->Tableta_model->setPeriodo_esq_inc($datos['periodo_esq_inc']);
 
                 $this->Tableta_model->update($id);
 
