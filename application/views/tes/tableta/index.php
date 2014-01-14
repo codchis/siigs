@@ -82,7 +82,7 @@ echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm
                     <td><a href="/'.DIR_TES.'/tree/create/TES/Unidad Médica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/'.
                         urlencode(json_encode(array(null))).'/'.urlencode(json_encode(array(($fila->id_asu_um==0 ? null : $fila->id_asu_um)))).'" '.
                         'class="agregarUM '.($fila->id_asu_um==0 ? 'btn btn-small btn-primary' : '').'" '
-                        . 'data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'">'.
+                        . 'data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'" data-periodo="'.$fila->periodo_esq_inc.'">'.
                         ($fila->id_asu_um==0 ? 'Asignar' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
                     <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'" class="btn btn-small btn-primary">'.($fila->usuarios_asignados==0 ? 'Asignar' : 'Ver').'</a></td>';
                     
@@ -115,9 +115,10 @@ $(function() {
     DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
     var tipo_censo = $("#id_tipo_censo"),
         unidad_medica = $("#id_unidad_medica"),
+        periodo = $("#periodo_esq_inc"),
         mac = $("#mac");
 
-    allFields = $([]).add(tipo_censo).add(unidad_medica).add(mac);
+    allFields = $([]).add(tipo_censo).add(unidad_medica).add(mac).add(periodo);
     tips = $(".validateTips");
 
     function updateTips(t) {
@@ -139,7 +140,7 @@ $(function() {
 
     $("#dialog-form").dialog({
         autoOpen: false,
-        height: 350,
+        height: 380,
         width: 600,
         modal: true,
         buttons: {
@@ -193,6 +194,7 @@ $(function() {
         
         $("#id_tipo_censo option[value="+ $(this).data('tipocenso') +"]").attr("selected",true);
         $("#id_unidad_medica").val($(this).data('um'));
+        $("#periodo_esq_inc").val($(this).data('periodo'));
         $("#show_um").attr('href', $(this).attr('href'));
         
         $("#form-addUM").attr('action', actionSetUM+$(this).data('tableta'));
@@ -255,7 +257,9 @@ $(function() {
             <a href='/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/
                 <?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(array(1020)));?>' 
                id="show_um">Seleccionar Unidad Médica</a>
-            <input type="hidden" name="id_unidad_medica" id="id_unidad_medica" />
+            <input type="hidden" name="id_unidad_medica" id="id_unidad_medica" /><br />
+            <label for="periodo_esq_inc">Periodo de esquema incompleto</label>
+            <input type="text" name="periodo_esq_inc" id="periodo_esq_inc" size="60" value="" />
         </fieldset>
     </form>
 </div>
