@@ -420,7 +420,8 @@ class Usuario extends CI_Controller {
 				for($i=0;$i<64;$i++) 
 				$valor.= substr($todos,rand(0,62),1);								
 				
-				$url="http://www.siigs.com/siigs/usuario/token/$valor";
+				$url="http://".$_SERVER['HTTP_HOST']."/siigs/usuario/token/$valor";
+				//$url="http://www.siigs.com/siigs/usuario/token/$valor";
 				$subject="Cómo restablecer su contraseña de SIIGS";
 				$adj[0]="resources/images/logo.png";
 				$body="<html>

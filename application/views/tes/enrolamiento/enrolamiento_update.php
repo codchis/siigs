@@ -35,7 +35,12 @@ if($enrolado)
 	$(document).ready(function()
 	{
 		$("#buscar").autocomplete({
-				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/"
+				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/",
+				select: function (a, b) 
+				{
+					var valor=b.item.value;
+					buscarTutor(valor.substr(0,valor.indexOf(" ")));
+				}
 		})
 		
 		$("#fnacimiento").datepicker(option);
@@ -181,7 +186,7 @@ if($enrolado)
             habilitarTutor();
         });
 		$("#buscarCurp").click(function(e) {
-            buscarTutor($("#buscar").val().substr(0,18));
+            buscarTutor($("#buscar").val().substr(0,$("#buscar").val().indexOf(" ")));
 			return false;
         });
 		$("#curpT").blur(function(e) {
