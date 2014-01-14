@@ -1446,12 +1446,14 @@ class Enrolamiento_model extends CI_Model
 	 *el parametro $id tipo int contiene el id de la persona  
 	 *@return result
 	 */
-	public function get_catalog_view($catalog,$id)
+	public function get_catalog_view($catalog,$id,$order="")
 	{
 		$this->db->select('a.id, a.descripcion, p.fecha');
 		$this->db->from('cns_control_'.$catalog.' p');
 		$this->db->join('cns_'.$catalog.' a', 'a.id = p.id_'.$catalog,'left');
 		$this->db->where('p.id_persona', $id);
+		if($order!="")
+		$this->db->order_by($order, "asc");
 		$query = $this->db->get(); 
 		if (!$query)
 		{
@@ -1540,11 +1542,11 @@ class Enrolamiento_model extends CI_Model
 	public function get_catalog2($catalog,$campo1="",$id1="",$campo2="",$id2="",$l1="",$l2="")
 	{
 		if($catalog=="tes_notificacion")
-		$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
+			$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
 		else if($catalog=="asu_arbol_segmentacion")
-		$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');		
+			$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');
 		else
-		$this->db->select('*');
+			$this->db->select('*');
 		$this->db->from($catalog);
 		if($id1!="")
 		$this->db->where($campo1, $id1);

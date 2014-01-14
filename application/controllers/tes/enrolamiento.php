@@ -75,7 +75,7 @@ class Enrolamiento extends CI_Controller
 		$alergia=$this->Enrolamiento_model->getAlergia($id);
 		//$persona = (array) $persona;
 		//var_dump($persona);
-		$datos=array("nombre"=>$persona->nombre." ".$persona->apellido_paterno." ".$persona->apellido_materno,
+		$datos=array("nombre"=>$persona->apellido_paterno." ".$persona->apellido_materno." ".$persona->nombre,
 					 "sexo"=>$persona->sexo,
 					 "nombre_madre"=>$persona->nombreT." ".$persona->paternoT." ".$persona->maternoT,
 					 "domicilio"=>$persona->calle_domicilio." ".$persona->numero_domicilio.", ".$persona->colonia_domicilio
@@ -84,11 +84,11 @@ class Enrolamiento extends CI_Controller
 		$asu=$this->ArbolSegmentacion_model->getDescripcionById(array($persona->id_asu_um_tratante),3);// um juridiccion
 		$dom=explode(",",$dom[0]->descripcion);
 		$asu=explode(",",$asu[0]->descripcion);
-		$datos["localidad"]=$dom[0];
-		$datos["municipio"]=$dom[1];
+		$datos["localidad"]=trim($dom[0]);
+		$datos["municipio"]=trim($dom[1]);
 		
-		$datos["um"]=$asu[0];
-		$datos["juridiccion"]=$asu[3];
+		$datos["um"]=trim($asu[0]);
+		$datos["juridiccion"]=trim($asu[3]);
 		$valor=array();
 		foreach($alergia as $x)
 		{
@@ -224,7 +224,7 @@ class Enrolamiento extends CI_Controller
 			$data['alergias'] = $this->Enrolamiento_model->getAlergia($id);
 			$data['afiliaciones'] = $this->Enrolamiento_model->getAfiliaciones($id);
 			
-			$data['vacunas']=$this->Enrolamiento_model->get_catalog_view("vacuna",$id);
+			$data['vacunas']=$this->Enrolamiento_model->get_catalog_view("vacuna",$id,"id_vacuna");
 			
 			$data['iras']=$this->Enrolamiento_model->get_catalog_view("ira",$id);
 			$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);

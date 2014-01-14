@@ -31,7 +31,12 @@
 	{
 		obligatorios("enrolar");
 		$("#buscar").autocomplete({
-				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/"
+				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/",
+				select: function (a, b) 
+				{
+					var valor=b.item.value;
+					buscarTutor(valor.substr(0,valor.indexOf(" ")));
+				}
 		})
 		$("#fnacimiento").datepicker(option);
 		$("#fechacivil").datepicker(option);
@@ -140,7 +145,7 @@
             habilitarTutor();
         });
 		$("#buscarCurp").click(function(e) {
-            buscarTutor($("#buscar").val().substr(0,18));
+            buscarTutor($("#buscar").val().substr(0,$("#buscar").val().indexOf(" ")));
 			return false;
         });
 		$("#curpT").blur(function(e) {
@@ -286,7 +291,7 @@
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
 		
-		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
+		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
 		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#f"+id+num).datepicker(option);
@@ -314,7 +319,7 @@
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
 		
-		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:80%"><table width="90%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" class="requiere" title="requiere" required style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
+		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" class="requiere" title="requiere" required style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 		$("#cNu").append(campo);
 		$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#fCNu"+num).datepicker(option);
@@ -604,7 +609,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="width:80%">
+                                <div class="detalle" style="width:100%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -641,7 +646,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="width:80%">
+                                <div class="detalle" style="width:100%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -678,7 +683,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="width:80%">
+                                <div class="detalle" style="width:100%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -715,7 +720,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="width:80%">
+                                <div class="detalle" style="width:100%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -752,7 +757,7 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="width:80%">
+                                <div class="detalle" style="width:100%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
@@ -788,13 +793,13 @@
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
-                                <div class="detalle" style="width:80%">
+                                <div class="detalle" style="width:100%">
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="18%" align="left">Peso</th>
-                                        <th width="18%" align="left">Altura</th>
-                                        <th width="18%" align="left">Talla</th>
+                                        <th width="18%" align="left">Peso (kg)</th>
+                                        <th width="18%" align="left">Altura (cm)</th>
+                                        <th width="18%" align="left">Talla (cm)</th>
                                         <th width="36%" align="left">Fecha</th>
                                     </tr>
                                   </table> 
@@ -820,7 +825,7 @@
 				<tr>
 					<th width="10%" >'.$num.'</th>
 					<th width="18%" align="left"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'.$num.'"  required title="requiere" style="width:85%;" value="'.$peso.'"></th> 
-					<th width="18%"><input type="number" step=".01" min="0" max="3" name="caltura[]" id="caltura'.$num.'" required title="requiere" style="width:85%;" value="'.$altura.'"></th>  
+					<th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'.$num.'" required title="requiere" style="width:85%;" value="'.$altura.'"></th>  
 					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'"  required title="requiere" style="width:85%;" value="'.$talla.'"></th>  
 					<th width="36%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("Y-m-d",strtotime($fecha)).'"></th>
 				</tr>

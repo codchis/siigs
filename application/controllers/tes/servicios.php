@@ -110,6 +110,7 @@ class Servicios extends CI_Controller {
 								$this->session->set_userdata( 'fecha', $tableta->ultima_actualizacion );
 								$this->session->set_userdata( 'paso', "1" );
 								$this->session->set_userdata( 'id_version', $id_version );
+								$this->session->set_userdata( 'dias_extras', $tableta->periodo_esq_inc );
 								echo json_encode(array("id_sesion" => $this->session->userdata('session')));
 								ob_flush();
 							}
@@ -158,7 +159,7 @@ class Servicios extends CI_Controller {
 	// generacion de informacion de catalogos
 	public function is_step_2($id_sesion, $si="", $sf="")
 	{
-		ini_set("max_execution_time", 36000);
+		ini_set("max_execution_time", 999999999);
 		
 		$micadena="";
 		$misesion=$this->session->userdata('session');
@@ -436,6 +437,7 @@ class Servicios extends CI_Controller {
 	// envio de inofrmacion de personas
 	public function is_step_4($id_sesion)
 	{
+		ini_set("max_execution_time", 999999999);
 		if ($id_sesion == $this->session->userdata('session')) // valida el token de entrada es el token que solicito el servicio
 		{
 			// se obtiene el dispositivo por token
@@ -445,7 +447,7 @@ class Servicios extends CI_Controller {
 			{
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
-				$i=0; $cadena="";
+				$i=0; 
 				foreach($asu_um as $id)
 				{
 					$personas=$this->Enrolamiento_model->get_catalog2("cns_persona", "id_asu_um_tratante", $id);
@@ -468,14 +470,20 @@ class Servicios extends CI_Controller {
 										$array=$this->Enrolamiento_model->get_catalog2($catalog->descripcion, "id_persona", $persona->id);
 										if($array)
 										{
-											$cadena[$catalog->descripcion]= $array;
+											if(array_key_exists($catalog->descripcion,$cadena))
+												array_push($cadena[$catalog->descripcion], $array[0]);
+											else
+												$cadena[$catalog->descripcion]=$array;
 											if($catalog->descripcion=="cns_control_vacuna")$vacunas=$array;
 											if($catalog->descripcion=="cns_persona_x_tutor")
 											{
 												foreach($array as $dato)
 												{
 													$array2=$this->Enrolamiento_model->get_catalog2("cns_tutor", "id", $dato->id_tutor);
-													$cadena["cns_tutor"]= $array2;
+													if(array_key_exists("cns_tutor",$cadena))
+														array_push($cadena["cns_tutor"], $array2[0]);
+													else
+														$cadena["cns_tutor"]= $array2;
 												}
 											}
 										}
@@ -487,7 +495,13 @@ class Servicios extends CI_Controller {
 							}
 							array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$vacunas));
 						}
-						$cadena["esquema_incompleto"]=$regla_vacuna[0];
+						$rv=array();
+						for($x=0;$x<count($regla_vacuna);$x++)
+							for($y=0;$y<count($regla_vacuna[$x]);$y++)
+							$rv[]=array("id_persona"=>$regla_vacuna[$x][$y]["id_persona"],
+									  "id_vacuna"=> $regla_vacuna[$x][$y]["id_vacuna"],
+									  "prioridad"=> $regla_vacuna[$x][$y]["prioridad"]);
+						$cadena["esquema_incompleto"]=$rv;
 						//************ fin control catalogos X persona ************
 					}
 					
@@ -602,6 +616,7 @@ class Servicios extends CI_Controller {
 	// envio de datos de personas que se agregaron o actualizaron depues de la ultima sincronizacion de la tableta
 	public function ss_step_6($id_sesion)
 	{
+		ini_set("max_execution_time", 999999999);
 		$fecha=$this->session->userdata('fecha');
 		$mi_version = $this->Enrolamiento_model->get_version();
 		foreach($mi_version as $dato)
@@ -686,7 +701,13 @@ class Servicios extends CI_Controller {
 							array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$vacunas));
 							$xy++;
 						}
-						$cadena["esquema_incompleto"]=$regla_vacuna[0];
+						$rv=array();
+						for($x=0;$x<count($regla_vacuna);$x++)
+							for($y=0;$y<count($regla_vacuna[$x]);$y++)
+							$rv[]=array("id_persona"=>$regla_vacuna[$x][$y]["id_persona"],
+									  "id_vacuna"=> $regla_vacuna[$x][$y]["id_vacuna"],
+									  "prioridad"=> $regla_vacuna[$x][$y]["prioridad"]);
+						$cadena["esquema_incompleto"]=$rv;
 						$micadena=json_encode($cadena);
 						echo ",".(substr($micadena,1,strlen($micadena)-2));
 						$micadena="";
@@ -740,7 +761,7 @@ class Servicios extends CI_Controller {
 	
 	public function esquema_incompleto($id_persona,$fecha,$vacunas)
 	{//agregar dias a la fecha si periodo de colchon ver tabla tableta agregar bit de prioridad 1 ya le toca 0 periodo de ventana "prioridad"=>1 ó 0
-		$cadena=array();
+		$cadena= array();
 		$regla=$this->ReglaVacuna_model->getAll(); 
 		
 		$fecha     = date("Y-m-d",strtotime($fecha));
@@ -748,6 +769,8 @@ class Servicios extends CI_Controller {
 		$datetime2 = date_create(date("Y-m-d"));
 		$interval  = date_diff($datetime1, $datetime2);
 		$dias      = $interval->format('%a');
+		$dias_extra= $dias+$this->session->userdata('dias_extras');
+		
 		foreach($regla as $r)
 		{
 			$x=0;
@@ -760,7 +783,7 @@ class Servicios extends CI_Controller {
 				}
 			}
 			
-			if(trim($r->id_vacuna_secuencial)!=""&&!empty($r->id_vacuna_secuencial)&&$r->esq_com=="1")
+			/*if(trim($r->id_vacuna_secuencial)!=""&&!empty($r->id_vacuna_secuencial)&&$r->esq_com=="1")
 			{
 				$reglase=$this->ReglaVacuna_model->getById($r->id);
 				
@@ -776,25 +799,22 @@ class Servicios extends CI_Controller {
 				
 				if($x1==0)
 				{
-					if($dias>=$reglase->desdese&&$dias<=$reglase->hastase)
+					if($dias>=$reglase->desdese&&$dias<=$reglase->hastase||$dias>$reglase->hastase)
 						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>1));
-					if($dias>$reglase->hastase)
-					{
-						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>1));	
-					}
+					if($dias_extra>=$reglase->desdese&&$dias_extra<=$reglase->hastase)
+						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>0));	
 				}
-			}
+			}*/
 			
 			if($x==0)
 			{
-				if($dias>=$r->desde&&$dias<=$r->hasta)
+				if($dias>=$r->desde&&$dias<=$r->hasta||$dias>$r->hasta)
 					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>1));
-				if($dias>$r->hasta)
-				{
-					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>1));
-				}
+				if($dias_extra>=$r->desde&&$dias_extra<=$r->hasta)
+					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>0));
 			}
 		}
+		
 		return $cadena;
 	}
 		
@@ -826,6 +846,7 @@ class Servicios extends CI_Controller {
 		 json_encode(array("id_sesion"=>$id_sesion)), 
 		 $version,
 		 '{
+			  "id_resultado": "ok",
     "cns_control_vacuna": [
         {
             "id_persona": "c844dee37db76567e3a4e6ed64c10057",
