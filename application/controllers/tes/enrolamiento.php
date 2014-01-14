@@ -224,7 +224,7 @@ class Enrolamiento extends CI_Controller
 			$data['alergias'] = $this->Enrolamiento_model->getAlergia($id);
 			$data['afiliaciones'] = $this->Enrolamiento_model->getAfiliaciones($id);
 			
-			$data['vacunas']=$this->Enrolamiento_model->get_catalog_view("vacuna",$id);
+			$data['vacunas']=$this->Enrolamiento_model->get_catalog_view("vacuna",$id,"id_vacuna");
 			
 			$data['iras']=$this->Enrolamiento_model->get_catalog_view("ira",$id);
 			$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);
