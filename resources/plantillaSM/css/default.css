@@ -947,3 +947,17 @@ color:#59595C;
 	background-image: url(/resources/images/asteriscof.png); 
 	background-repeat: no-repeat; 
 }
+
+.vacuna thead 
+{
+	background-color:#6C3;
+}
+.vacuna div
+{
+	width:100%;
+	height:20px;
+	background-color:#CCC;
+	padding-top:5px;
+	padding-bottom:5px;
+	display:block;
+}

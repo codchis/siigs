@@ -616,7 +616,7 @@ class Usuario_model extends CI_Model {
 		$this->db->where('u.activo' , 1);
 		$this->db->where('u.id !=' , '');
 		if($inusuario!="")
-		$this->db->where_in('e.id' , $inusuario);
+		$this->db->where_in('u.id' , $inusuario);
 		$query = $this->db->get(); 
 		if (!$query)
 		{
