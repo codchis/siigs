@@ -133,7 +133,7 @@ class Enrolamiento extends CI_Controller
 			$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);
 			$data['consultas']=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
-			$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, CASE WHEN cv.fecha IS NULL THEN 'No aplicado' ELSE DATE_FORMAT(cv.fecha, '%d-%m-%Y') END AS fecha FROM siigs.cns_regla_vacuna r LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  LEFT JOIN cns_persona p ON p.id=cv.id_persona WHERE r.esq_com=1 ORDER BY r.orden_esq_com ASC");
+			$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, CASE WHEN cv.fecha IS NULL THEN 'No aplicado' ELSE DATE_FORMAT(cv.fecha, '%d-%m-%Y') END AS fecha FROM siigs.cns_regla_vacuna r LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  LEFT JOIN cns_persona p ON p.id=cv.id_persona ORDER BY r.orden_esq_com ASC");
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 			$peso_x_edad   = $this->Enrolamiento_model->get_catalog2("cns_peso_x_edad","sexo"  ,$data['enrolado']->sexo);

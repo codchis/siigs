@@ -74,7 +74,7 @@ if($enrolado)
 	});
 function vacunacion(id,tiene,fecha)
 {
-	$('#'+id).html(tiene);
+	$('#'+id).html("<span style='margin-left:-8px;'>"+tiene+"</span>");
 	$('#'+id).attr("title",fecha);
 	$('#'+id).css({'background-color':'white','cursor':'pointer'});
 }
@@ -306,7 +306,7 @@ function vacunacion(id,tiene,fecha)
                       <div class="AccordionPanelTab">Control de Vacunación</div>
                       <div class="AccordionPanelContent" ><br />
                        <table width="100%" border="0" class="table vacuna" style="margin-left:10px" cellpadding="0" cellspacing="0">
-                           <thead>
+                           <thead bgcolor="#8ECA35">
                               <tr>
                                 <th width="30%" rowspan="2" scope="col">Vacunas</th>
                                 <th colspan="6" scope="col">Dosis</th>
@@ -325,19 +325,25 @@ function vacunacion(id,tiene,fecha)
 						   $tem=0; $i=0;
 						   foreach($vacunacion as $vacuna)
 						   {
-							   $vc=$vacuna->descripcion;
+							   $vc=$vacuna->descripcion." ";
+							   $color=array("","#2828FF","#FF9326","#09F","#FDB802","#009","#26CDFD","#AC72FC","#FD9BF3","#960BA6","#FDAB02");
+							   
    							if($tem!=stripos($vc," "))
+							{
+								$a++;
 							 echo " 
                            	  <tr>
-                           		<td ><div id='var0$i'>".str_replace('Primera','',$vc)."</div></td>
+                           		<td ><div id='var0$i' style='padding-left:14px; background-color:$color[$a]; color:white'>".str_replace('Primera','',$vc)."</div></td>
                                 <td ><div id='var1$i' align='center'></div></td>
                                 <td ><div id='var2$i' align='center'></div></td>
                                 <td ><div id='var3$i' align='center'></div></td>
                                 <td ><div id='var4$i' align='center'></div></td>
                                 <td ><div id='var5$i' align='center'></div></td>
                                 <td ><div id='var6$i' align='center'></div></td>
-                                <td ><div id='var7$i' align='center'></div></td>
+                                <td ><div id='var7$i' align='center' style='background-color:#F4F4F4;'>Por ver</div></td>
                            	  </tr>";
+							}
+							$tem=stripos($vc," ");
 						  
 if(stripos($vc,"nica"))   
 {?>
@@ -345,10 +351,10 @@ if(stripos($vc,"nica"))
 	vacunacion("var1<?php echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
 </script><?php 
 }
-if(stripos($vc,"efuerzo"))
+if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci"))
 {?>
 <script>
-	vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+	vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
 </script><?php 
 }
 if(stripos($vc,"rimera")) 
@@ -375,7 +381,7 @@ if(stripos($vc,"uarta"))
 	vacunacion("var6<?php echo $i-3?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
 </script><?php 
 }
-$i++;$tem=stripos($vc," ");
+$i++;
 						   }
 							?>
                         </table>
