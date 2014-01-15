@@ -439,7 +439,7 @@ class Reporteador_model extends CI_Model {
         				$puestas++;
         		}
         	}
-        	if ($puestas == count($resultVacunasCorresponden)){
+        	if ($puestas != count($resultVacunasCorresponden)){
         		// se inserta el registro del infante
         		$objReporte = new Reporte_censo_nominal();
         		$objReporte->apellido_paterno = $IdConTutor->apellido_paterno;
