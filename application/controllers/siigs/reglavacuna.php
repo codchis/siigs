@@ -102,12 +102,17 @@ class ReglaVacuna extends CI_Controller {
 		$this->form_validation->set_rules('aplicacion_inicio', 'Inicio aplicación', 'trim|xss_clean|required|is_natural_no_zero');
 		$this->form_validation->set_rules('aplicacion_fin', 'Fin aplicación', 'trim|xss_clean|required|is_natural_no_zero');
 		$this->form_validation->set_rules('id_vacuna', 'Vacuna', 'trim|xss_clean|required|is_natural_no_zero');
-                $this->form_validation->set_rules('tipo_aplicacion', 'Tipo de aplicación', 'trim|xss_clean|required');
+                //$this->form_validation->set_rules('tipo_aplicacion', 'Tipo de aplicación', 'trim|xss_clean|required');
 
                 $vacunas = $this->db->query("select id,descripcion from cns_vacuna where activo=1")->result();
                 $data['vacunas'][''] = 'Elige una vacuna';
 		foreach ($vacunas as $item) {
 			$data['vacunas'][$item->id] = $item->descripcion;
+		}
+                $vias_vacuna = $this->db->query("select id,descripcion from cns_via_vacuna where activo=1")->result();
+                $data['vias_vacuna'][''] = 'Elige una vía de vacuna';
+		foreach ($vias_vacuna as $item) {
+			$data['vias_vacuna'][$item->id] = $item->descripcion;
 		}
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -122,16 +127,16 @@ class ReglaVacuna extends CI_Controller {
 
 				$this->ReglaVacuna_model->setIdVacuna($this->input->post('id_vacuna'));
 				$this->ReglaVacuna_model->setIdVacunaPrevia($this->input->post('id_vacuna_previa'));
-				if ($this->input->post('tipo_aplicacion') == 'nacimiento')
-                                {
+				//if ($this->input->post('tipo_aplicacion') == 'nacimiento')
+                                //{
                                     $this->ReglaVacuna_model->setDiaInicioNacido($this->input->post('aplicacion_inicio'));
                                     $this->ReglaVacuna_model->setDiaFinNacido($this->input->post('aplicacion_fin'));
-                                }
-                                else
-                                {
-                                    $this->ReglaVacuna_model->setDiaInicioPrevia($this->input->post('aplicacion_inicio'));
-                                    $this->ReglaVacuna_model->setDiaFinPrevia($this->input->post('aplicacion_fin'));                                    
-                                }
+                                //}
+//                                else
+//                                {
+//                                    $this->ReglaVacuna_model->setDiaInicioPrevia($this->input->post('aplicacion_inicio'));
+//                                    $this->ReglaVacuna_model->setDiaFinPrevia($this->input->post('aplicacion_fin'));                                    
+//                                }
 
 				$this->ReglaVacuna_model->insert();
 			}

@@ -20,6 +20,8 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<th><h2>Desde</h2></th>
         <th><h2>Hasta</h2></th>
         <th><h2>Vacuna Previa</h2></th>
+        <th><h2>Dosis</h2></th>
+        <th><h2>Esquema Completo</h2></th>
 	<?php if($opcion_view) { ?><th></th><?php } ?>
 	<?php if($opcion_update) { ?><th></th><?php } ?>
 	<?php if($opcion_delete) { ?><th></th><?php } ?>
@@ -33,6 +35,8 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $regla_item->desde ?></td>
                 <td><?php echo $regla_item->hasta ?></td>
                 <td><?php echo $regla_item->previa ?></td>
+                <td><?php echo $regla_item->dosis ?></td>
+                <td><?php echo ($regla_item->esq_com == 1) ? 'Si' : 'No' ; ?></td>
                     <?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/view/<?php echo $regla_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/update/<?php echo $regla_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/delete/<?php echo $regla_item->id ?>" class="btn btn-primary" onclick="if (confirm('Realmente desea eliminar esta regla?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
