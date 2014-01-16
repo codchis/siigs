@@ -257,13 +257,13 @@ class Cie10_model extends CI_Model {
                 if ($valor == 1)
                 {
                     if ($existe == 0)
-                        $consulta = "insert into ".$catalogo." (id_cie10,descripcion,activo) values (".$id.",(select descripcion from cns_cie10 where id='".$id."') , 1)";
+                        $consulta = "insert into ".$catalogo." (id_cie10,descripcion,activo,clave) values (".$id.",(select descripcion from cns_cie10 where id='".$id."') , 1,(select cie10 from cns_cie10 where id='".$id."'))";
                     else
-                        $consulta = "update ".$catalogo." set descripcion= (select descripcion from cns_cie10 where id='".$id."') , activo = 1 where id_cie10 = '".$id."'";
+                        $consulta = "update ".$catalogo." set descripcion= (select descripcion from cns_cie10 where id='".$id."') , activo = 1, clave =(select cie10 from cns_cie10 where id='".$id."') where id_cie10 = '".$id."'";
                 }
                 else
                 {
-                           $consulta = "update ".$catalogo." set descripcion= (select descripcion from cns_cie10 where id='".$id."') , activo = 0 where id_cie10 = '".$id."'";
+                           $consulta = "update ".$catalogo." set descripcion= (select descripcion from cns_cie10 where id='".$id."') , activo = 0, clave =(select cie10 from cns_cie10 where id='".$id."') where id_cie10 = '".$id."'";
                 }
                     $datos = $this->db->query($consulta);
 

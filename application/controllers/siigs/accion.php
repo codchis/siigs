@@ -101,7 +101,7 @@ class Accion extends CI_Controller {
 		$data['title'] = 'Crear una nueva acción';
 		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[30]');
 		$this->form_validation->set_rules('descripcion', 'Descripción', 'trim|xss_clean|required|max_length[100]');
-		$this->form_validation->set_rules('metodo', 'Método', 'trim|xss_clean|alpha|required|max_length[30]');
+		$this->form_validation->set_rules('metodo', 'Método', 'trim|xss_clean|required|max_length[30]');
                 //$this->form_validation->set_message('alpha','Los campos Nombre y Método solo pueden contener caracteres del alfabeto');
 
 		if ($this->form_validation->run() === FALSE)
@@ -161,7 +161,7 @@ class Accion extends CI_Controller {
 		$data['title'] = 'Modificar acción';
 		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[30]');
 		$this->form_validation->set_rules('descripcion', 'Descripción', 'trim|xss_clean|required|max_length[100]');
-		$this->form_validation->set_rules('metodo', 'Método', 'trim|xss_clean|required|alpha|max_length[30]');
+		$this->form_validation->set_rules('metodo', 'Método', 'trim|xss_clean|required|max_length[30]');
 
 		if ($this->form_validation->run() === FALSE)
 		{

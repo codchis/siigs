@@ -194,11 +194,12 @@ class Servicios extends CI_Controller {
 				ob_flush();
 				unset($cadena);
 				$cadena=array();
-				$inusuario=array();	
+				$inusuario=array(0);	
 				$usuariosXtableta = $this->Usuario_tableta_model->getUsuariosByTableta($tableta->id);
+				
 				if($usuariosXtableta)
 				{
-					foreach($usuariosXtableta as $dato)
+					foreach($usuariosXtableta as $dato)	
 					array_push($inusuario,$dato->id_usuario);
 					
 					/*$cadena= array("tes_usuario_x_tableta"=> $usuariosXtableta);
@@ -775,43 +776,45 @@ class Servicios extends CI_Controller {
 		{
 			$x=0;
 			if($vacunas!=""&&$r->esq_com=="1")
-			foreach($vacunas as $v)
 			{
-				if($r->id==$v->id_vacuna)
+				foreach($vacunas as $v)
 				{
-					$x++;
-				}
-			}
-			
-			/*if(trim($r->id_vacuna_secuencial)!=""&&!empty($r->id_vacuna_secuencial)&&$r->esq_com=="1")
-			{
-				$reglase=$this->ReglaVacuna_model->getById($r->id);
-				
-				$x1=0;
-				if($vacunas!="")
-				foreach($vacunas as $v1)
-				{
-					if($reglase->id_vacuna_secuencial==$v1->id_vacuna)
+					if($r->id==$v->id_vacuna)
 					{
-						$x1++;
+						$x++;
 					}
 				}
 				
-				if($x1==0)
+				/*if(trim($r->id_vacuna_secuencial)!=""&&!empty($r->id_vacuna_secuencial)&&$r->esq_com=="1")
 				{
-					if($dias>=$reglase->desdese&&$dias<=$reglase->hastase||$dias>$reglase->hastase)
-						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>1));
-					if($dias_extra>=$reglase->desdese&&$dias_extra<=$reglase->hastase)
-						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>0));	
+					$reglase=$this->ReglaVacuna_model->getById($r->id);
+					
+					$x1=0;
+					if($vacunas!="")
+					foreach($vacunas as $v1)
+					{
+						if($reglase->id_vacuna_secuencial==$v1->id_vacuna)
+						{
+							$x1++;
+						}
+					}
+					
+					if($x1==0)
+					{
+						if($dias>=$reglase->desdese&&$dias<=$reglase->hastase||$dias>$reglase->hastase)
+							array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>1));
+						if($dias_extra>=$reglase->desdese&&$dias_extra<=$reglase->hastase)
+							array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>0));	
+					}
+				}*/
+				
+				if($x==0)
+				{
+					if($dias>=$r->desde&&$dias<=$r->hasta||$dias>$r->hasta)
+						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>1));
+					if($dias_extra>=$r->desde&&$dias_extra<=$r->hasta)
+						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>0));
 				}
-			}*/
-			
-			if($x==0)
-			{
-				if($dias>=$r->desde&&$dias<=$r->hasta||$dias>$r->hasta)
-					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>1));
-				if($dias_extra>=$r->desde&&$dias_extra<=$r->hasta)
-					array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>0));
 			}
 		}
 		

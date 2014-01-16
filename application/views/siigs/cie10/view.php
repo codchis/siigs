@@ -50,6 +50,7 @@ if (!empty($datos))
 	<tr>
 	<th><h2>CIE10</h2></th>
 	<th><h2>Descripción</h2></th>
+        <th><h2>Clave</h2></th>
         <th><h2>Activo</h2></th>
 	</tr>
 </thead>
@@ -57,6 +58,7 @@ if (!empty($datos))
 	<tr>
 		<td><?php echo $item->id_cie10 ?></td>
 		<td><?php echo $item->descripcion ?></td>
+                <td><?php echo $item->clave ?></td>
                 <td>
                     <input class="check_activar" type="checkbox" id="<?php echo $item->id;?>" catalogo="<?php echo $catalogo; ?>" <?php echo ($item->activo == false) ? "" : "checked" ; ?> >
                     <label for="<?php echo $item->id;?>"><?php echo ($item->activo == false) ? "Activar" : "Desactivar" ; ?></label>

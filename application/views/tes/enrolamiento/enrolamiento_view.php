@@ -72,6 +72,12 @@ if($enrolado)
 			}
 		});
 	});
+function vacunacion(id,tiene,fecha)
+{
+	$('#'+id).html("<span style='margin-left:-8px;'>"+tiene+"</span>");
+	$('#'+id).attr("title",fecha);
+	$('#'+id).css({'background-color':'white','cursor':'pointer'});
+}
 	</script>
 
 	<table align="center" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
@@ -126,7 +132,7 @@ if($enrolado)
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Tipo de Beneficiario</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	
                         	<div style="width:100%; margin-left:20px; margin-top:-3px"><?php  
 							$i=0;$a=0;
 							$opcion='<table width="85%"><tr>';
@@ -140,7 +146,7 @@ if($enrolado)
 							$opcion.='</tr></table>';
 							echo $opcion;
 							?></div>
-                        </code>
+                        
                       </div>
                     </div>
                     <!-- Tutor -->
@@ -275,7 +281,7 @@ if($enrolado)
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Historial de Alergias y Reacciones Febriles</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	
                         	<div style="width:100%; margin-left:20px; margin-top:-3px"><?php  
 							$i=0;$a=0;
 							$opcion='<table width="85%"><tr>';
@@ -290,7 +296,7 @@ if($enrolado)
 							echo $opcion;
 							?></div>
                             
-                        </code>
+                        
                       </div>
                     </div>
                     
@@ -298,7 +304,88 @@ if($enrolado)
                     <!-- vacunacion  -->
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Vacunación</div>
-                      <div class="AccordionPanelContent"><br />
+                      <div class="AccordionPanelContent" ><br />
+                       <table width="100%" border="0" class="table vacuna" style="margin-left:10px" cellpadding="0" cellspacing="0">
+                           <thead bgcolor="#8ECA35">
+                              <tr>
+                                <th width="30%" rowspan="2" scope="col">Vacunas</th>
+                                <th colspan="6" scope="col">Dosis</th>
+                                <th width="22%" rowspan="2" scope="col">Estatus</th>
+                              </tr>
+                              <tr>
+                                <th width="8%" scope="col">U</th>
+                                <th width="8%" scope="col">R</th>
+                                <th width="8%" scope="col">1a</th>
+                                <th width="8%" scope="col">2a</th>
+                                <th width="8%" scope="col">3a</th>
+                                <th width="8%" scope="col">4a</th>
+                              </tr>
+                           </thead>
+                           <?php 
+						   $tem=0; $i=0;
+						   foreach($vacunacion as $vacuna)
+						   {
+							   $vc=$vacuna->descripcion." ";
+							   $color=array("","#2828FF","#FF9326","#09F","#FDB802","#009","#26CDFD","#AC72FC","#FD9BF3","#960BA6","#FDAB02");
+							   
+   							if($tem!=stripos($vc," "))
+							{
+								$a++;
+							 echo " 
+                           	  <tr>
+                           		<td ><div id='var0$i' style='padding-left:14px; background-color:$color[$a]; color:white'>".str_replace('Primera','',$vc)."</div></td>
+                                <td ><div id='var1$i' align='center'></div></td>
+                                <td ><div id='var2$i' align='center'></div></td>
+                                <td ><div id='var3$i' align='center'></div></td>
+                                <td ><div id='var4$i' align='center'></div></td>
+                                <td ><div id='var5$i' align='center'></div></td>
+                                <td ><div id='var6$i' align='center'></div></td>
+                                <td ><div id='var7$i' align='center' style='background-color:#F4F4F4;'>Por ver</div></td>
+                           	  </tr>";
+							}
+							$tem=stripos($vc," ");
+						  
+if(stripos($vc,"nica"))   
+{?>
+<script>
+	vacunacion("var1<?php echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+</script><?php 
+}
+if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci"))
+{?>
+<script>
+	vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+</script><?php 
+}
+if(stripos($vc,"rimera")) 
+{?>
+<script>
+	vacunacion("var3<?php echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+</script><?php 
+}
+if(stripos($vc,"egunda")) 
+{?>
+<script>
+	vacunacion("var4<?php echo $i-1?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+</script><?php 
+}
+if(stripos($vc,"rcera"))  
+{?>
+<script>
+	vacunacion("var5<?php echo $i-2?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+</script><?php 
+}
+if(stripos($vc,"uarta"))  
+{?>
+<script>
+	vacunacion("var6<?php echo $i-3?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+</script><?php 
+}
+$i++;
+						   }
+							?>
+                        </table>
+
                       </div>
                     </div>
                     
@@ -306,7 +393,7 @@ if($enrolado)
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de IRA</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -326,7 +413,7 @@ if($enrolado)
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
                           </table>
-                        </code>
+                        
                       </div>
                     </div>
                     
@@ -334,7 +421,7 @@ if($enrolado)
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de EDA</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -352,7 +439,7 @@ if($enrolado)
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
                           </table>
-                        </code>
+                        
                       </div>
                     </div>
                     
@@ -360,7 +447,7 @@ if($enrolado)
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Consulta</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -378,7 +465,7 @@ if($enrolado)
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
                           </table>
-                        </code>
+                        
                       </div>
                     </div>
                     
@@ -386,7 +473,7 @@ if($enrolado)
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Acción Nutricional</div>
                       <div class="AccordionPanelContent"><br />
-                      	<code style="margin-left:20px; width:60%">
+                      	
                         <table>
                             <tr>
                                 <td width="85%" valign="top">
@@ -404,7 +491,7 @@ if($enrolado)
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
                           </table>
-                        </code>
+                        
                       </div>
                     </div>
                     <!-- nutricion PESO -->
