@@ -947,3 +947,8 @@ color:#59595C;
 	background-image: url(/resources/images/asteriscof.png); 
 	background-repeat: no-repeat; 
 }
+
+div.portada div#content{
+padding: 0 ;
+width: 100% ;
+}
