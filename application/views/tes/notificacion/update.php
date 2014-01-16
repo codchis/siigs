@@ -9,24 +9,6 @@
 <script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
 
 <script type="text/javascript">
-var objFecha = new Date();
-
-var optionsFecha = {
-    changeMonth: true,
-    changeYear: true,
-    duration: "fast",
-    dateFormat: 'dd-mm-yy',
-    constrainInput: true,
-    firstDay: 1,
-    closeText: 'X',
-    showOn: 'both',
-    buttonImage: '/resources/images/calendar.gif',
-    buttonImageOnly: true,
-    buttonText: 'Clic para seleccionar una fecha',
-    yearRange: '2005:'+objFecha.getFullYear(),
-    showButtonPanel: false
-};
-    
 $(document).ready(function(){ 
 	$("a#tabletas").fancybox({
 		'width'             : '50%',

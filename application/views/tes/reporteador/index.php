@@ -30,26 +30,7 @@ function generaUrl(param, path){
 	return '';
 }
 
-var objFecha = new Date();
-
-var optionsFecha = {
-    changeMonth: true,
-    changeYear: true,
-    duration: "fast",
-    dateFormat: 'dd-mm-yy',
-    constrainInput: true,
-    firstDay: 1,
-    closeText: 'X',
-    showOn: 'both',
-    buttonImage: '/resources/images/calendar.gif',
-    buttonImageOnly: true,
-    buttonText: 'Clic para seleccionar una fecha',
-    yearRange: '2005:'+objFecha.getFullYear(),
-    showButtonPanel: false
-};
-
 $(document).ready(function(){
-
 	$("#fecha_corte").datepicker(optionsFecha);
 	
     $("a").click(function(event){
