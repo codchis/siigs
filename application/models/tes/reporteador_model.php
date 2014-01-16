@@ -336,7 +336,7 @@ class Reporteador_model extends CI_Model {
             $objReporte->fecha_nacimiento = $IdConTutor->fecha_nacimiento;
             $objReporte->sexo = $IdConTutor->sexo;
             foreach ($resultVacunasEsquemaCompleto as $vacuna){
-            	$objReporte->vacunas[$vacuna->id] = in_array($vacuna->id, $resultVacunasAplicadas) ? 'x' : '';
+            	$objReporte->vacunas[$vacuna->id] = in_array($vacuna->id, $resultVacunasAplicadas) ? VACUNA_APLICADA : VACUNA_NOAPLICADA;
             }
             $result[] = $objReporte;
             // se inserta el registro del tutor
@@ -349,7 +349,7 @@ class Reporteador_model extends CI_Model {
             $objReporte->fecha_nacimiento = '';
             $objReporte->sexo = $IdConTutor->sexo_tutor;
             foreach ($resultVacunasEsquemaCompleto as $vacuna){
-            	$objReporte->vacunas[$vacuna->id] = '';
+            	$objReporte->vacunas[$vacuna->id] = VACUNA_NOAPLICADA;
             }
             $result[] = $objReporte;
         }
@@ -450,7 +450,7 @@ class Reporteador_model extends CI_Model {
         		$objReporte->fecha_nacimiento = $IdConTutor->fecha_nacimiento;
         		$objReporte->sexo = $IdConTutor->sexo;
         		foreach ($resultVacunasEsquemaCompleto as $vacuna){
-        			$objReporte->vacunas[$vacuna->id] = in_array($vacuna->id, $resultVacunasAplicadas) ? 'x' : '';
+        			$objReporte->vacunas[$vacuna->id] = in_array($vacuna->id, $resultVacunasAplicadas) ? VACUNA_APLICADA : VACUNA_NOAPLICADA;
         		}
         		$result[] = $objReporte;
         		// se inserta el registro del tutor
@@ -463,7 +463,7 @@ class Reporteador_model extends CI_Model {
         		$objReporte->fecha_nacimiento = '';
         		$objReporte->sexo = $IdConTutor->sexo_tutor;
         		foreach ($resultVacunasEsquemaCompleto as $vacuna){
-        			$objReporte->vacunas[$vacuna->id] = '';
+        			$objReporte->vacunas[$vacuna->id] = VACUNA_NOAPLICADA;
         		}
         		$result[] = $objReporte;
         	}
