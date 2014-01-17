@@ -310,8 +310,11 @@ class ArbolSegmentacion_model extends CI_Model {
                         for($i = 1 ; $i<=$arbol['niveles'];$i++)
                         {
                             $esseleccionable = false;
-                            if (count($seleccionables)>0 && in_array($i, $seleccionables));
-                            $esseleccionable = true;
+                            if (count($seleccionables)==0)
+                                $esseleccionable = true;
+                            else if (in_array($i, $seleccionables))
+                                $esseleccionable = true;
+                                
                                 
                             foreach($arbol['resultado'] as $fila)
                             {
@@ -327,7 +330,7 @@ class ArbolSegmentacion_model extends CI_Model {
                                             $arraytemp["select"] = true;
                                     
                                     if (!$esseleccionable)
-                                            $arraytemp["isFolder"] = true;
+                                            $arraytemp["unselectable"] = true;
 
                                     if (!isset($resultado[$i]))
                                         $resultado[$i] = array();
@@ -391,9 +394,10 @@ class ArbolSegmentacion_model extends CI_Model {
                 {
                     $datos[$clave]["select"] = true;
                 }
+                if (count($seleccionables)>0)
                 if (!in_array($nivel,$seleccionables))
                 {
-                    $datos[$clave]["isFolder"] = true;
+                    $datos[$clave]["unselectable"] = true;
                 }
             }
             return $datos;

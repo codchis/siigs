@@ -586,7 +586,10 @@ class Raiz extends CI_Controller {
                     $nivel = $this->input->post('nivel');
                     $omitidos = $this->input->post('omitidos');
                     $seleccionados = $this->input->post('seleccionados');
-                    $seleccionables = (!empty($this->input->post('seleccionables')) ? $this->input->post('seleccionables') : array());
+                    $seleccionables = array();
+                   
+                    if (($this->input->post('seleccionables')))
+                    $seleccionables = $this->input->post('seleccionables');
 //                    $idarbol = 1;
 //                    $nivel = 1;
 //                    $omitidos = array(null);
