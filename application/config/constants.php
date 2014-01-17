@@ -27,7 +27,6 @@ define('USER_LOGGED', 'user_id');
 define('GROUP_ID', 'group_id');
 define('REDIRECT_TO', 'redirect_to');
 define('PERMISSIONS', 'permissions');
-define('REGISTROS_PAGINADOR', 10);
 define('VACUNA_APLICADA', 'x');
 define('VACUNA_NOAPLICADA', '');
 

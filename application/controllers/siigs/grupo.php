@@ -56,7 +56,7 @@ class Grupo extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['uri_segment'] = '4';
 			$configPag['total_rows'] = $this->Grupo_model->getNumRows($this->input->post('busqueda'));
-			$configPag['per_page']   = REGISTROS_PAGINADOR;
+			$configPag['per_page']   = 15;
 			$this->pagination->initialize($configPag);
 			if ($this->input->post('busqueda'))
 				$data['groups'] = $this->Grupo_model->getAll($this->input->post('busqueda'), $configPag['per_page'], $pag);
@@ -87,6 +87,7 @@ class Grupo extends CI_Controller {
 				show_error('', 403, 'Acceso denegado');
 			$data['title'] = 'Ver detalles de grupo';
 			$data['group_item'] = $this->Grupo_model->getById($id);
+			$data['entornos'] = $this->Grupo_model->getEntornosById($id);
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);	
@@ -111,7 +112,7 @@ class Grupo extends CI_Controller {
 		$data['title'] = 'Crear un nuevo grupo';
 		$this->load->helper('form');
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|callback__ifGroupExists|max_length[20]');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|callback__ifGroupExists|max_length[30]');
 		$this->form_validation->set_rules('descripcion', 'Descripcion', 'trim|xss_clean|max_length[100]');
 		if ($this->form_validation->run() === FALSE)
 		{

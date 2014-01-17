@@ -17,6 +17,10 @@
 		<td><label for="descripcion">Descripción</label></td>
 		<td><?php echo $group_item->descripcion ?></td>
 	</tr>
+	<tr>
+	<td><label for="entorno">Entornos vinculados</label></td>
+	<td><?php if (isset($entornos)) foreach ($entornos as $entorno_item): echo $entorno_item->entorno.'<br>'; endforeach; ?></td>
+	</tr>
 </table>
 </div>
 <?php } ?>

@@ -146,6 +146,28 @@ class Grupo_model extends CI_Model {
 	}
 
 	/**
+	 * Obtiene el grupo solicitado con sus entornos vinculados
+	 *
+	 * @access 		public
+	 * @param 		int			$id			id del grupo
+	 * @return void|object		false si ocurrió algún error, object si se ejecutó correctamente
+	 */
+	public function getEntornosById($id)
+	{
+		$sql = "SELECT DISTINCT e.nombre as entorno FROM sis_grupo g INNER JOIN sis_permiso p ON g.id=p.id_grupo INNER JOIN sis_controlador_x_accion ca ON p.id_controlador_accion=ca.id
+				INNER JOIN sis_controlador c ON ca.id_controlador=c.id INNER JOIN sis_entorno e ON c.id_entorno=e.id WHERE g.id=".$id." ORDER BY e.nombre";
+        $query = $this->db->query($sql);
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return;
+	}
+	
+	/**
 	 * Obtiene el grupo solicitado
 	 *
 	 * @access 		public

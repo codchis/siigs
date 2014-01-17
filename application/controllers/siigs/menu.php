@@ -104,7 +104,7 @@ class Menu extends CI_Controller {
             $configPag['last_link']   = '&Uacute;ltimo';
             $configPag['uri_segment'] = 4;
             $configPag['total_rows']  = $this->Menu_model->getNumRows();
-            $configPag['per_page']    = REGISTROS_PAGINADOR;
+            $configPag['per_page']    = 30;
 
             $this->pagination->initialize($configPag);
 
