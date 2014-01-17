@@ -65,11 +65,7 @@
 
             <!-- Boletines -->
             <div class="row-fluid hidden-phone " id="boletines" >
-                <a href="http://www.icosochiapas.gob.mx/">Sala de Prensa:</a>
-                <div>
-                    <iframe src="http://www.chiapas.gob.mx/newstickernosune.php" width="600px" height="17"
-                            marginwidth="0" marginheight="1" frameborder="0" scrolling="no" margintop="10px"> </iframe>
-                </div>
+                <?= $sala_prensa ?>
             </div>
 
         </header>

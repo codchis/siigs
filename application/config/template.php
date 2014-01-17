@@ -62,6 +62,11 @@ $template['default']['regions'] = array(
    'content',
    'ajustaAncho' => array('content' => array(0)),
    'js',
+   'sala_prensa' => array('content' => array('<a href="http://www.icosochiapas.gob.mx/">Sala de Prensa:</a>
+                <div>
+                    <iframe src="http://www.chiapas.gob.mx/newstickernosune.php" width="600px" height="17"
+                            marginwidth="0" marginheight="1" frameborder="0" scrolling="no" margintop="10px"> </iframe>
+                </div>')),
    'footer' => array('content' => array(file_get_contents('application/views/templates/footer.php'))),
    'menu'=> array('content' => array( Menubuilder::build() ) )
 );

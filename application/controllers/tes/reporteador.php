@@ -141,6 +141,7 @@ class Reporteador extends CI_Controller {
 		$this->template->write('header','',true);
 		$this->template->write('footer','',true);
 		$this->template->write('menu','',true);
+        $this->template->write('sala_prensa','',true);
         $this->template->write('ajustaAncho',1,true);
 		$this->template->write_view('content',DIR_TES.'/reporteador/reporte_view', $data);
 		$this->template->render();
