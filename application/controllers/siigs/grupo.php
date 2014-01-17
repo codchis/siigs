@@ -56,7 +56,7 @@ class Grupo extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['uri_segment'] = '4';
 			$configPag['total_rows'] = $this->Grupo_model->getNumRows($this->input->post('busqueda'));
-			$configPag['per_page']   = REGISTROS_PAGINADOR;
+			$configPag['per_page']   = 15;
 			$this->pagination->initialize($configPag);
 			if ($this->input->post('busqueda'))
 				$data['groups'] = $this->Grupo_model->getAll($this->input->post('busqueda'), $configPag['per_page'], $pag);

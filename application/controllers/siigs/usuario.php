@@ -140,7 +140,7 @@ class Usuario extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['uri_segment'] = '4';
 			$configPag['total_rows'] = $this->Usuario_model->getNumRows($this->input->post('busqueda'));
-			$configPag['per_page']   = REGISTROS_PAGINADOR;
+			$configPag['per_page']   = 20;
 			$this->pagination->initialize($configPag);
 			if ($this->input->post('busqueda'))
 				$data['users'] = $this->Usuario_model->getOnlyActives($this->input->post('busqueda'), FALSE, $configPag['per_page'], $pag);

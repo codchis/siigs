@@ -52,7 +52,7 @@ class Controlador extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['total_rows'] = $this->Controlador_model->getNumRows($id);
 			$configPag['uri_segment'] = '4';
-			$configPag['per_page']   = REGISTROS_PAGINADOR;
+			$configPag['per_page']   = 20;
 
 			$this->pagination->initialize($configPag);
 

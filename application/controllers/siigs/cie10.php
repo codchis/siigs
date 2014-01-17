@@ -50,7 +50,7 @@ class Cie10 extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['total_rows'] = $this->Cie10_model->getNumRows();
 			$configPag['uri_segment'] = '4';
-			$configPag['per_page']   = REGISTROS_PAGINADOR;
+			$configPag['per_page']   = 100;
 
 			$this->pagination->initialize($configPag);
 
