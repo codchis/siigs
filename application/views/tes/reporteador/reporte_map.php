@@ -35,7 +35,8 @@ $(document).ready(function()
 	{
 		$("#mapa").html(dato);
 	});
-	
+	var ancho = $("#tabla").width()+600;
+	$("#bodyPagina").width(ancho+"px");
 });
 </script>
 
@@ -48,7 +49,7 @@ $(document).ready(function()
 </div>
 <div id='popimpr'>
 <h2>Listado - <?php echo urldecode($title) ?></h2>
-<table width="100%" border="0">
+<table width="100%" border="0" id="tabla">
   <tr>
     <td align="left" valign="top" width="20%">
         <table border="0" width="100%" id="tabla" class="table table-striped  ">
@@ -89,7 +90,7 @@ $(document).ready(function()
     </table>
     </td>
     <td align="left" valign="top">
-    <div id="mapa" style="border: 1px rgb(51, 51, 51); height: 650px; width: 100%; display: block; position: relative; background-color: rgb(229, 227, 223); overflow: hidden; -webkit-transform: translateZ(0); padding-top:-30px"></div>
+    <div id="mapa" style="border: 1px rgb(51, 51, 51); height: 750px; width: 100%; display: block; position: relative; background-color: rgb(229, 227, 223); overflow: hidden; -webkit-transform: translateZ(0); padding-top:-30px"></div>
     </td>
   </tr>
 </table>

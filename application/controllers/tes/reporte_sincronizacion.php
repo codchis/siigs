@@ -146,6 +146,7 @@ class Reporte_sincronizacion extends CI_Controller
 		$this->template->write('header','',true);
 		$this->template->write('footer','',true);
 		$this->template->write('menu','',true);
+		$this->template->write('sala_prensa','',true);
 		$this->template->write_view('content',DIR_TES.'/reporteador/reporte_view', $data);
  		$this->template->render();
 	}
@@ -167,16 +168,30 @@ class Reporte_sincronizacion extends CI_Controller
 			else
 				$hasta=date('Y-m-d H:i:s', strtotime($this->input->post('hasta')));
 			$lotes=$this->input->post('lote');
-			$jurid=$this->input->post('juris');
-			if($jurid!="")$unidad="AND id_asu_um='$jurid'";
-			$munic=$this->input->post('municipios');
-			if($munic!="")$unidad="AND id_asu_um='$munic'";
-			$local=$this->input->post('localidades');
-			if($local!="")$unidad="AND id_asu_um='$local'";
-			$ums  =$this->input->post('ums');
-			if($ums!="")$unidad="AND id_asu_um='$ums'";
 			
-			$consulta="select distinct(codigo_barras) from cns_control_vacuna where (codigo_barras like '%$lotes%' OR codigo_barras IS NULL) $unidad and (fecha between '$desde' and '$hasta') ";
+			$jurid=$this->input->post('juris');
+			$munic=$this->input->post('municipios');
+			$local=$this->input->post('localidades');
+			$ums  =$this->input->post('ums');
+			
+			if($ums!="")
+				$unidad = "AND id_asu_um='$ums'";
+				
+			if($local!="")
+				$unidad = "AND id_asu_um IN (
+									SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$local.")"; // ums por loc
+			if($munic!="")
+				$unidad = "AND id_asu_um IN (
+								SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+								SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$munic.") )"; // locs por mpio
+			if($jurid!="")
+				$unidad = "AND id_asu_um IN (
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$jurid.") ) )"; // mpios por juris
+							
+			if($lotes=="")$mas="OR codigo_barras IS NULL";else $mas="";
+			$consulta="select distinct(codigo_barras) from cns_control_vacuna where (codigo_barras like '%$lotes%' $mas) $unidad and (fecha between '$desde' and '$hasta') ";
 			
 			$count=$this->Reporte_sincronizacion_model->getCount("",$consulta);
 			$array=$this->Reporte_sincronizacion_model->getListado($consulta);
@@ -355,8 +370,16 @@ class Reporte_sincronizacion extends CI_Controller
 					if($latlon)
 					{
 						$descripcion="";
-						$consultx="SELECT DISTINCT(id_asu_um) FROM cns_control_vacuna WHERE id_asu_um IN(SELECT id FROM asu_arbol_segmentacion WHERE id_padre='".$y->id."')";
-						$mres=$this->Reporte_sincronizacion_model->getListado("select * from asu_arbol_segmentacion where id in ($consultx)");
+						$consultx=$this->Reporte_sincronizacion_model->getListado("SELECT DISTINCT(id_asu_um) FROM cns_control_vacuna WHERE id_asu_um IN(SELECT id FROM asu_arbol_segmentacion WHERE id_padre='".$y->id."')");
+						$consulty=array();$i=0;
+						foreach($consultx as $cx)
+						{
+							$consulty[$i]=$cx->id_asu_um;
+							$i++;
+						}
+						$consultx=implode(",",$consulty);
+						
+						$mres=$this->Reporte_sincronizacion_model->getListado("select id,descripcion from asu_arbol_segmentacion where id in ($consultx)");
 						foreach($mres as $xy) 
 						{
 							$ccc=$this->Reporte_sincronizacion_model->getCount("","select id_asu_um from cns_control_vacuna where id_asu_um='".$xy->id."'");
@@ -368,11 +391,11 @@ class Reporte_sincronizacion extends CI_Controller
 						"lat"=> $latlon[0]->lat_dec,
 						"lon"=> $latlon[0]->lon_dec,
 						"descripcion"=> $table,
-						"imagen"=>"/resources/images/1success.png",
-						"icono"=>"/resources/images/1warning.png" );
+						"imagen"=>"/resources/images/1info.png",
+						"icono"=>"/resources/images/1success.png" );
 					}
 				}
-				$data["zoom"]=7;
+				$data["zoom"]=8;
 				$data["lugar"]="Chiapas";
 				$data["array"]=$mapas;				
 				$array=$datos;
@@ -388,6 +411,7 @@ class Reporte_sincronizacion extends CI_Controller
 		$this->template->write('header','',true);
 		$this->template->write('footer','',true);
 		$this->template->write('menu','',true);
+		$this->template->write('sala_prensa','',true);
 		$this->template->write_view('content',DIR_TES.'/reporteador/'.$pagina, $data);
  		$this->template->render();
 	}

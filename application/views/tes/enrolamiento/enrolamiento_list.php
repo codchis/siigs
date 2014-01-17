@@ -31,7 +31,7 @@ $(document).ready(function()
 $opcion_insert = Menubuilder::isGranted(DIR_TES.'::enrolamiento::insert');
 $opcion_view = Menubuilder::isGranted(DIR_TES.'::enrolamiento::view');
 $opcion_update = Menubuilder::isGranted(DIR_TES.'::enrolamiento::update');
-$opcion_print = Menubuilder::isGranted(DIR_TES.'::enrolamiento::print');
+$opcion_print = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card');
 ?>
 <?php 
 if(!empty($msgResult))

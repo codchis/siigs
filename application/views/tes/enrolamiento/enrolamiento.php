@@ -38,8 +38,8 @@
 					buscarTutor(valor.substr(0,valor.indexOf(" ")));
 				}
 		})
-		$("#fnacimiento").datepicker(option);
-		$("#fechacivil").datepicker(option);
+		$("#fnacimiento").datepicker(optionsFecha );
+		$("#fechacivil").datepicker(optionsFecha );
 		
 		$("a#fba1").fancybox({
 			'width'             : '50%',
@@ -186,6 +186,8 @@
 	
 	function buscarTutor(buscar)
 	{
+		buscar=buscar.replace(" ","");
+		buscar=buscar.replace("=","");
 		$("#idtutor").val("");
 		$("#nombreT").val("");
 		$("#paternoT").val("");
@@ -221,12 +223,75 @@
 					$("#sexoT_1").attr("checked",true);
 					if(obj[0]["sexoT_2"]=="1")
 					$("#sexoT_2").attr("checked",true);
-					
+					$("#tutoredit").html("Editar datos de la Madre o Tutor");
+					$("#captura").attr("checked","true");
+					$("#curpT").click();
+					$.get('/<?php echo DIR_TES.'/enrolamiento/brothers_search/';?>'+$("#idtutor").val(), function(respuesta) 
+					{
+						if(respuesta.length>5)
+						{
+							var obj = jQuery.parseJSON( respuesta );
+							var campo = '<span id="hermanos" >Hay personas con el mismo tutor: Si desea importar su misma dirección dele click<br>';
+							for(var c=0;c<obj.length; c++)
+								campo+='<input type="button"  value="'+obj[c]["nombre"]+'" onclick="importarDatos(\''+obj[c]["id_persona"]+'\')" style="padding:5px" />&nbsp;&nbsp;'
+							campo+='<br><input type="button"  value="LIMPIAR" onclick="limpiar_direccion()" style="padding:5px" /></span>';
+							$("#compartetutor").append(campo);
+							$("#compartetutor").attr("class","info");
+						}
+					});
 				}
 				else
 				{
-					$("#buscarError").html('<strong>'+obj[0]["error"]+'&nbsp;</strong>');		
+					$("#tutoredit").html("Capturar Nueva Madre o Tutor");
+					$("#buscarError").html('<strong>'+obj[0]["error"]+'&nbsp;</strong>');
+					if(document.getElementById("hermanos"))
+					{
+						$("#hermanos").remove();	
+						$("#compartetutor").attr("class","");	
+					}
 				}
+				habilitarTutor();
+			}
+		});
+	}
+	function limpiar_direccion()
+	{
+		$('#ladireccion').data('old-state', $('#ladireccion').html());
+		$('#ladireccion').html($('#ladireccion').data('old-state'));
+	}
+	function importarDatos(id)
+	{
+		$.get('/<?php echo DIR_TES.'/enrolamiento/brother_found/';?>'+id, function(respuesta) 
+		{
+			if(respuesta.length>5)
+			{
+				var obj = jQuery.parseJSON( respuesta );
+				$("#calle").val(obj[0]["calle_domicilio"]);
+				$("#numero").val(obj[0]["numero_domicilio"]);
+				$("#referencia").val(obj[0]["referencia_domicilio"]);
+				$("#colonia").val(obj[0]["colonia_domicilio"]);
+				$("#cp").val(obj[0]["cp_domicilio"]);
+				$("#ageb").val(obj[0]["ageb"]);
+				$("#sector").val(obj[0]["sector"]);
+				$("#manzana").val(obj[0]["manzana"]);
+				$("#localidad").val(obj[0]["id_asu_localidad_domicilio"]);
+				$("#telefono").val(obj[0]["telefono_domicilio"]);
+				$.ajax({
+				type: "POST",
+				data: {
+					'claves':[$("#localidad").val()] ,
+					'desglose':3 },
+				url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+				})
+				.done(function(dato)
+				{
+					if(dato)
+					{
+						var obj = jQuery.parseJSON( dato );
+						document.getElementById("localidadT").value=obj[0]["descripcion"];
+					}
+				});
+				$("#calle").click();
 			}
 		});
 	}
@@ -294,7 +359,7 @@
 		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
 		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
-		$("#f"+id+num).datepicker(option);
+		$("#f"+id+num).datepicker(optionsFecha );
 		$("#"+id+num).load("/tes/enrolamiento/catalog_select/"+id);
 	}
 	function rem(id,n)
@@ -319,10 +384,10 @@
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
 		
-		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'" class="requiere" title="requiere" required style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" class="requiere" title="requiere" required style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
+		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'"  style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'+num+'"  style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 		$("#cNu").append(campo);
 		$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
-		$("#fCNu"+num).datepicker(option);
+		$("#fCNu"+num).datepicker(optionsFecha );
 		
 	}
 	function remNutricional()
@@ -429,13 +494,13 @@
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
-                            <td height="50" colspan="2"><p align="right">Madres o Tutores ya Capturados</p></td>
+                            <td height="50" colspan="2"><p align="right" >Madres o Tutores ya Capturados</p></td>
                             <td colspan="2"><div class="input-append" >
                               <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" value="<?php echo set_value('buscar', ''); ?>" />
                            <a href="#" id="buscarCurp" class="btn btn-primary">Buscar</a></div></td>
                           </tr>
                           <tr>
-                            <td colspan="2"><p align="right">Capturar Nueva Madre o Tutor</p>                              <label for="captura"></label></td>
+                            <td colspan="2"><p align="right" id="tutoredit">Capturar Nueva Madre o Tutor</p>                              <label for="captura"></label></td>
                             <td colspan="2" align="left">
                               <input type="checkbox" name="captura" id="captura" style="margin-left:10px;" value="1"  <?php echo set_checkbox('captura', '1'); ?>/>
                               <input name="idtutor" type="hidden" id="idtutor"  />
@@ -508,7 +573,7 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Fecha</p></td>
-                            <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date('d-m-Y', strtotime(set_value('fechacivil', ''))); ?>" placeholder="dd-mm-yyyy"></td>
+                            <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date('d-m-Y', strtotime(set_value('fechacivil', date("d-m-Y")))); ?>" placeholder="dd-mm-yyyy"></td>
                             <td width="25%"><p align="right">&nbsp;</p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
@@ -516,7 +581,7 @@
                             <td><p align="right">Lugar</p></td>
                             <td colspan="3">
                             <div class="input-append" style="width:100%">
-                            <input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
+                            <input name="lugarcivilT" title="requiere" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
                               <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
                           </tr>
@@ -530,6 +595,8 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Dirección</div>
                       <div class="AccordionPanelContent">
+                      	<div id="compartetutor" style="width:94.7%" > </div>
+                        <div id="ladireccion">
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Calle</p></td>
@@ -584,6 +651,7 @@
                             <td></td>                          
                           </tr>
                         </table>
+                        </div>
                         <br />
                       </div>
                     </div>
@@ -824,9 +892,9 @@
 				<table width="100%" >
 				<tr>
 					<th width="10%" >'.$num.'</th>
-					<th width="18%" align="left"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'.$num.'"  required title="requiere" style="width:85%;" value="'.$peso.'"></th> 
-					<th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'.$num.'" required title="requiere" style="width:85%;" value="'.$altura.'"></th>  
-					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'"  required title="requiere" style="width:85%;" value="'.$talla.'"></th>  
+					<th width="18%" align="left"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'.$num.'" style="width:85%;" value="'.$peso.'"></th> 
+					<th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'.$num.'" style="width:85%;" value="'.$altura.'"></th>  
+					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'"  style="width:85%;" value="'.$talla.'"></th>  
 					<th width="36%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("Y-m-d",strtotime($fecha)).'"></th>
 				</tr>
 				</table> 

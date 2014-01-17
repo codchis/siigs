@@ -72,11 +72,19 @@ if($enrolado)
 			}
 		});
 	});
-function vacunacion(id,tiene,fecha)
+function vacunacion(id,tiene,fecha,prioridad)
 {
+	if(prioridad==1)
+		color="#F66";
+	else if(prioridad==2)
+		color="#B90000";
+	else if(prioridad==3)
+		color="#FF6FB7";
+	else
+		color='white';
 	$('#'+id).html("<span style='margin-left:-8px;'>"+tiene+"</span>");
 	$('#'+id).attr("title",fecha);
-	$('#'+id).css({'background-color':'white','cursor':'pointer'});
+	$('#'+id).css({'background-color':color,'cursor':'pointer'});
 }
 	</script>
 
@@ -305,12 +313,12 @@ function vacunacion(id,tiene,fecha)
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Vacunación</div>
                       <div class="AccordionPanelContent" ><br />
+                      <h2>Numero de días: <?php echo $vacunacion[0]->dias ?></h2>
                        <table width="100%" border="0" class="table vacuna" style="margin-left:10px" cellpadding="0" cellspacing="0">
                            <thead bgcolor="#8ECA35">
                               <tr>
                                 <th width="30%" rowspan="2" scope="col">Vacunas</th>
                                 <th colspan="6" scope="col">Dosis</th>
-                                <th width="22%" rowspan="2" scope="col">Estatus</th>
                               </tr>
                               <tr>
                                 <th width="8%" scope="col">U</th>
@@ -322,63 +330,66 @@ function vacunacion(id,tiene,fecha)
                               </tr>
                            </thead>
                            <?php 
-						   $tem=0; $i=0;
+							$tem=0; $i=0;
 						   foreach($vacunacion as $vacuna)
 						   {
 							   $vc=$vacuna->descripcion." ";
 							   $color=array("","#2828FF","#FF9326","#09F","#FDB802","#009","#26CDFD","#AC72FC","#FD9BF3","#960BA6","#FDAB02");
 							   
-   							if($tem!=stripos($vc," "))
+							if($tem!=stripos($vc," "))
 							{
 								$a++;
 							 echo " 
                            	  <tr>
-                           		<td ><div id='var0$i' style='padding-left:14px; background-color:$color[$a]; color:white'>".str_replace('Primera','',$vc)."</div></td>
+                           		<td ><div id='var0$i' style='padding-left:14px; background-color:".@$color[$a]."; color:white'>".str_replace('Primera','',$vc)."</div></td>
                                 <td ><div id='var1$i' align='center'></div></td>
                                 <td ><div id='var2$i' align='center'></div></td>
                                 <td ><div id='var3$i' align='center'></div></td>
                                 <td ><div id='var4$i' align='center'></div></td>
                                 <td ><div id='var5$i' align='center'></div></td>
                                 <td ><div id='var6$i' align='center'></div></td>
-                                <td ><div id='var7$i' align='center' style='background-color:#F4F4F4;'>Por ver</div></td>
                            	  </tr>";
 							}
 							$tem=stripos($vc," ");
+							if($vacuna->tiene=='No aplicado')
+							{
+								
+							}
 						  
 if(stripos($vc,"nica"))   
 {?>
 <script>
-	vacunacion("var1<?php echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+	vacunacion("var1<?php echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>');
 </script><?php 
 }
 if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci"))
 {?>
 <script>
-	vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+	vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>');
 </script><?php 
 }
 if(stripos($vc,"rimera")) 
 {?>
 <script>
-	vacunacion("var3<?php echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+	vacunacion("var3<?php echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>');
 </script><?php 
 }
 if(stripos($vc,"egunda")) 
 {?>
 <script>
-	vacunacion("var4<?php echo $i-1?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+	vacunacion("var4<?php echo $i-1?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>');
 </script><?php 
 }
 if(stripos($vc,"rcera"))  
 {?>
 <script>
-	vacunacion("var5<?php echo $i-2?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+	vacunacion("var5<?php echo $i-2?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>');
 </script><?php 
 }
 if(stripos($vc,"uarta"))  
 {?>
 <script>
-	vacunacion("var6<?php echo $i-3?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>');
+	vacunacion("var6<?php echo $i-3?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>');
 </script><?php 
 }
 $i++;
