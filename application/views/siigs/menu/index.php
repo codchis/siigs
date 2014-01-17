@@ -1,3 +1,7 @@
+<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
+	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/> 
 <script type="text/javascript">
 DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
 
@@ -17,7 +21,13 @@ $(document).ready(function(){
         $('#form_filter_menu').attr('action',action);
         $('#form_filter_menu').submit();
     });
-
+	$("a#detalles").fancybox({
+		'width'             : '50%',
+		'height'            : '60%',				
+		'transitionIn'	: 'elastic',
+		'transitionOut'	: 'elastic',
+		'type'			: 'iframe',									
+	}); 
     $('select[name="entorno"]').change(function(e){
         $.ajax({
             type: 'POST',
@@ -103,7 +113,7 @@ $(document).ready(function(){
                     <td>'.htmlentities($fila->nombre).'</td>
                     <td>'.htmlentities($fila->ruta).'</td>
                     <td><a href="'.site_url().DIR_SIIGS.'/controlador/view/'.$fila->id_controlador.'">'.htmlentities($fila->nombre_controlador).'</a></td>';
-                    if($showView) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles</a></td>';
+                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_SIIGS.'/menu/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles</a></td>';
                     if($showUpdate) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/update/'.$fila->id.'" class="btn btn-small btn-primary">Modificar</a></td>';
                     if($showDelete) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/delete/'.$fila->id.'"
                         onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary">Eliminar</a></td>';

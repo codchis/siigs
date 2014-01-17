@@ -73,7 +73,7 @@ class Notificacion extends CI_Controller {
 			$configPag['last_link']  = '&Uacute;ltimo';
 			$configPag['uri_segment'] = '4';
 			$configPag['total_rows'] = $this->Notificacion_model->getNumRows($this->input->post('busqueda'));
-			$configPag['per_page']   = REGISTROS_PAGINADOR;
+			$configPag['per_page']   = 20;
 			$this->pagination->initialize($configPag);
 			$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
 			$notifications = $this->Notificacion_model->getAll($this->input->post('busqueda'), $configPag['per_page'], $pag);
@@ -124,6 +124,8 @@ class Notificacion extends CI_Controller {
 			$data['clsResult'] = 'error';
 		}
  		$this->template->write_view('content',DIR_TES.'/notificacion/view', $data);
+ 		$this->template->write('menu','',true);
+ 		$this->template->write('sala_prensa','',true);
  		$this->template->render();
 	}
 

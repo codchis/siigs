@@ -322,6 +322,8 @@ class Bitacora extends CI_Controller {
         }
 
         $this->template->write_view('content',DIR_SIIGS.'/bitacora/view', $data);
+        $this->template->write('menu','',true);
+        $this->template->write('sala_prensa','',true);
 		$this->template->render();
     }
 

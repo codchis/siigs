@@ -94,6 +94,8 @@ class Grupo extends CI_Controller {
 			$data['clsResult'] = 'error';
 		}
  		$this->template->write_view('content',DIR_SIIGS.'/grupo/view', $data);
+		$this->template->write('menu','',true);
+        $this->template->write('sala_prensa','',true);
  		$this->template->render();
 	}
 	

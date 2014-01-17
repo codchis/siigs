@@ -1,5 +1,9 @@
 <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 <script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
+<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
+	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/> 
 <script type="text/javascript">
 
 $(document).ready(function(){
@@ -19,7 +23,13 @@ $(document).ready(function(){
         $("#fechaIni").val('');
         $("#fechaFin").val('');
     });
-    
+	$("a#detalles").fancybox({
+		'width'             : '50%',
+		'height'            : '60%',				
+		'transitionIn'	: 'elastic',
+		'transitionOut'	: 'elastic',
+		'type'			: 'iframe',									
+	}); 
 });
 </script>
 <?php 
@@ -72,7 +82,7 @@ Buscar<input type="text" name="busqueda" value="<?php echo set_value('busqueda',
 		<td><?php $time = strtotime($notification_item->fecha_fin);
 			echo date('d/m/Y', $time);
 			 ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/view/<?php echo $notification_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a id="detalles" href="/<?php echo DIR_TES?>/notificacion/view/<?php echo $notification_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/update/<?php echo $notification_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/delete/<?php echo $notification_item->id ?>"  class="btn btn-primary"onclick="if (confirm('Realmente desea eliminar esta notificaci�n?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>

@@ -24,4 +24,3 @@
 </table>
 </div>
 <?php } ?>
-<a href="<?php echo site_url().DIR_SIIGS; ?>/grupo/" class="btn btn-primary">Regresar al listado</a>

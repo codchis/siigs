@@ -151,7 +151,6 @@ class Usuario extends CI_Controller {
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 			$data['clsResult'] = 'error';
 		}
-		//$this->load->view('usuario/index', $data);
  		$this->template->write_view('content',DIR_SIIGS.'/usuario/index', $data);
  		$this->template->render();
 
@@ -179,6 +178,8 @@ class Usuario extends CI_Controller {
 			$data['clsResult'] = 'error';
 		}
  		$this->template->write_view('content',DIR_SIIGS.'/usuario/view', $data);
+ 		$this->template->write('menu','',true);
+ 		$this->template->write('sala_prensa','',true);
  		$this->template->render();
 	}
 

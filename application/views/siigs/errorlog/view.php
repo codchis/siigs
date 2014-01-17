@@ -17,6 +17,3 @@ if(!empty($msgResult)) {
     echo '<div class="'.($clsResult ? $clsResult : 'info').'">ERROR: Registro no encontrado</div>';
 }
 ?>
-<br />
-
-<a href="<?php echo site_url().DIR_SIIGS; ?>/errorlog/" class="btn btn-primary">Regresar al listado</a>

@@ -159,6 +159,8 @@ class Errorlog extends CI_Controller {
         } catch (Exception $e) { }
 
         $this->template->write_view('content',DIR_SIIGS.'/errorlog/view', $data);
+        $this->template->write('menu','',true);
+        $this->template->write('sala_prensa','',true);
 		$this->template->render();
     }
     
