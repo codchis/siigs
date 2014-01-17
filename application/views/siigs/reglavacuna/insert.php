@@ -10,20 +10,17 @@ $(function(){
    $.fn.editable.defaults.mode = 'popup';
   
  
-   $('#alergias').editable({
+   $('#list_alergias').editable({
        pk: 1,
        limit: 3,
+       target: '#alergias',
        source: [
-        {value: 1, text: 'banana'},
-        {value: 2, text: 'peach'},
-        {value: 3, text: 'apple'},
-        {value: 4, text: 'watermelon'},
-        {value: 5, text: 'orange'}
+           <?php
+           foreach($alergias as $item)
+               echo "{value:".$item->id.",text:'".$item->descripcion."'},";
+           ?>
        ],
-       tokenSeparators: [",", " "],
-      validate: function(){
-           alert(this.value);
-       }
+       tokenSeparators: [",", " "]
     }); 
        
 });    
@@ -41,6 +38,20 @@ $(document).ready(function(){
     });
     
     $('#frm_insert').submit(function(){
+        
+        if ($('input[name=esq_com]').is(':checked') == true)
+        {
+            if($('select[name=orden_esq_com]').val()*1<=0)
+            {
+                alert('Debe elegir el orden de la vacuna en el esquema completo');
+                return false;            
+            }
+        }
+        
+        $('#alergias').val($('#list_alergias').attr("data-value"));
+//        alert($('#alergias').val());
+//        return false;
+        
         if($('select[name=id_vacuna]').val()*1<=0)
         {
             alert('Debe elegir una vacuna antes de guardar');
@@ -52,16 +63,16 @@ $(document).ready(function(){
             alert('El dia inicial de la aplicación debe ser mayor al dia final');
             return false;
         }
-        if ($('input[name=tipo_aplicacion]').is(':checked') == false)
-        {
-            alert('Debe elegir el tipo de aplicación');
-            return false;
-        }
-        if ($('input[name=tipo_aplicacion]:checked').val() == 'previa' && $('select[name=id_vacuna_previa]').val()*1<=0)
-        {
-            alert('Debe elegir el tipo de vacuna previa para esta regla');
-            return false;
-        }
+//        if ($('input[name=tipo_aplicacion]').is(':checked') == false)
+//        {
+//            alert('Debe elegir el tipo de aplicación');
+//            return false;
+//        }
+//        if ($('input[name=tipo_aplicacion]:checked').val() == 'previa' && $('select[name=id_vacuna_previa]').val()*1<=0)
+//        {
+//            alert('Debe elegir el tipo de vacuna previa para esta regla');
+//            return false;
+//        }
     });
 });
 </script>
@@ -92,8 +103,8 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	</tr-->
 	<tr>
                 <td><label for="descripcion">D&iacute;as de aplicaci&oacute;n<br/>a partir del nacimiento:</label></td>
-                <td>Desde:<br/><input type="text" name="aplicacion_inicio" id="dia_inicio" title='requiere' required/></td>
-                <td>Hasta:<br/><input type="text" name="aplicacion_fin" id="dia_fin" title='requiere' required/></td>
+                <td>Desde:<br/><input type="text" name="aplicacion_inicio" id="dia_inicio" title='requiere' value="<?php echo set_value('aplicacion_inicio', ''); ?>" required/></td>
+                <td>Hasta:<br/><input type="text" name="aplicacion_fin" id="dia_fin" title='requiere' value="<?php echo set_value('aplicacion_fin', ''); ?>" required/></td>
 	</tr>
         <tr>
 		<td><label for="id_via_vacuna">V&iacute;a Vacuna:</label></td>
@@ -101,23 +112,28 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	</tr>
         <tr>
 		<td><label for="dosis">Dosis:</label></td>
-                <td colspan="2"><input type="text" name="dosis" id="dosis"/></td>
+                <td colspan="2"><input type="text" name="dosis" id="dosis"  value="<?php echo set_value('dosis', ''); ?>"/></td>
 	</tr>
         <tr>
 		<td><label for="region">Regi&oacute;n:</label></td>
-                <td colspan="2"><input type="text" name="region" id="region"/></td>
+                <td colspan="2"><input type="text" name="region" id="region" value="<?php echo set_value('region', ''); ?>"/></td>
 	</tr>
 	<tr>
 		<td><input type="checkbox" name="esq_com" id="esq_com"/> Esquema Completo</td>
-                <td colspan="2" id="td_orden" style="visibility:hidden">Orden: <input type="text" name="orden_esq_com" id="orden_esq_com"/></td>
+                <td colspan="2" id="td_orden" style="visibility:hidden">Orden: <?php  echo  form_dropdown('orden_esq_com', $orden); ?></td>
 	</tr>
         <tr>         
-            <td>Checklist</td>
-            <td colspan="2"><a href="#" id="alergias" data-type="checklist" data-value="" data-title="Seleccione Alergias" class="editable editable-click">peach<br>apple</a></td>
+            <td>Alergias</td>
+            <td colspan="2">
+                <a href="#" id="list_alergias" data-type="checklist" data-value="" data-title="Seleccione Alergias" class="editable editable-click">Seleccione Alergias</a>
+            </td>
         </tr>
 	<tr>
-		<td colspan=2><input type="submit" name="submit" value="Guardar" class="btn btn-primary" onclick="return validarFormulario('frm_insert')"/>
-		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/reglavacuna/'" class="btn btn-primary" /><td>
+		<td colspan=2>
+                    <input type="hidden" name="alergias" id="alergias" />
+                    <input type="submit" name="submit" value="Guardar" class="btn btn-primary" onclick="return validarFormulario('frm_insert')"/>
+                    <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/reglavacuna/'" class="btn btn-primary" />
+                <td>
 	</tr>
 </table>
 </div>

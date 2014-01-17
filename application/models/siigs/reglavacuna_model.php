@@ -261,7 +261,7 @@ class ReglaVacuna_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->query("SELECT distinct a.id,a.id_vacuna,a.id_vacuna_secuencial,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa, a.dia_inicio_aplicacion_secuencial as desdese, a.dia_fin_aplicacion_secuencial as hastase, case when ifnull(a.id_via_vacuna,'') = '' then '' else d.descripcion end as via_vacuna, a.dosis as dosis, a.region as region, a.esq_com, a.orden_esq_com, a.alergias as id_alergias FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 left outer join cns_via_vacuna d on a.id_via_vacuna = d.id where a.id=".$id);
+		$query = $this->db->query("SELECT distinct a.id,a.id_vacuna,a.id_via_vacuna,a.id_vacuna_secuencial,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa, a.dia_inicio_aplicacion_secuencial as desdese, a.dia_fin_aplicacion_secuencial as hastase, case when ifnull(a.id_via_vacuna,'') = '' then '' else d.descripcion end as via_vacuna, a.dosis as dosis, a.region as region, a.esq_com, a.orden_esq_com, a.alergias as id_alergias FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 left outer join cns_via_vacuna d on a.id_via_vacuna = d.id where a.id=".$id);
 
 		if (!$query)
 		{
@@ -272,7 +272,9 @@ class ReglaVacuna_model extends CI_Model {
 		else
                 {
 		$info = $query->row();
+                //var_dump($info);
                 $descalergias = '';
+                if(!empty($info->id_alergias))
                 if (count($info->id_alergias)>0)
                 {
                 $infoalergias = $this->db->query("select * from cns_alergia where id in (".$info->id_alergias.")");                
@@ -305,8 +307,15 @@ class ReglaVacuna_model extends CI_Model {
 				'dia_fin_aplicacion_nacido' => ($this->dia_fin_nacido == 0) ? null : $this->dia_fin_nacido,
                                 'dia_inicio_aplicacion_secuencial' => ($this->dia_inicio_previa == 0) ? null : $this->dia_inicio_previa,
                                 'dia_fin_aplicacion_secuencial' => ($this->dia_fin_previa == 0) ? null : $this->dia_fin_previa,
+                                'id_via_vacuna' => $this->id_via_vacuna,
+                                'dosis' => $this->dosis,
+                                'region' => $this->region,
+                                'alergias' => (!empty($this->alergias)) ? $this->alergias : null,
+                                'esq_com' => $this->esq_com,
                                 'ultima_actualizacion' => date('Y-m-d H:i:s')
 		);
+                
+                $data['orden_esq_com'] = ($this->esq_com) ? $this->orden_esq_comp : null;
 
 		$query = $this->db->insert('cns_regla_vacuna', $data);
 
@@ -339,9 +348,16 @@ class ReglaVacuna_model extends CI_Model {
 				'dia_fin_aplicacion_nacido' => ($this->dia_fin_nacido == 0) ? null : $this->dia_fin_nacido,
                                 'dia_inicio_aplicacion_secuencial' => ($this->dia_inicio_previa == 0) ? null : $this->dia_inicio_previa,
                                 'dia_fin_aplicacion_secuencial' => ($this->dia_fin_previa == 0) ? null : $this->dia_fin_previa,
+                                'id_via_vacuna' => $this->id_via_vacuna,
+                                'dosis' => $this->dosis,
+                                'region' => $this->region,
+                                'alergias' => (!empty($this->alergias)) ? $this->alergias : null,
+                                'esq_com' => $this->esq_com,
                                 'ultima_actualizacion' => date('Y-m-d H:i:s')
 		);
 
+                $data['orden_esq_com'] = ($this->esq_com) ? $this->orden_esq_comp : null;
+                
 		$this->db->where('id' , $this->getId());
 		$query = $this->db->update('cns_regla_vacuna', $data);
 

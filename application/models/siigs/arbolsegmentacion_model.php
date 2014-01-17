@@ -410,8 +410,8 @@ class ArbolSegmentacion_model extends CI_Model {
 //                
 //            }
 //        }
-                
-        /**
+
+                /**
          * Accion para obtener la descripcion e información adicional del elemento en el ASU
          * @param Array int $claves arreglo de valores a recuperar
          * @param Int $desglose Nivel de desglose de información requerida
@@ -420,6 +420,52 @@ class ArbolSegmentacion_model extends CI_Model {
          */
         
         public function getDescripcionById($claves,$desglose = 0)
+        {
+            if (count($claves)>0)
+            {
+                if ($desglose == 0)
+                    $consulta = 'select id,descripcion from asu_arbol_segmentacion where id in ('.implode(',',$claves).')';
+                else
+                {
+                    //si se van a hacer joins para informacion adicional, se empieza a crear la estructura de la consulta
+                    $consultavalues = 'select a.id,concat("",a.descripcion';
+                    $consultafrom = ') as descripcion from asu_arbol_segmentacion a ';
+                    $consultawhere = ' where a.id in ('.implode(',',$claves).')';
+                       
+                  //crear los joins a partir del numero de niveles de desglose requeridos
+                    for($i=1;$i<=$desglose;$i++)   
+                    {
+                        $tablajoin = ($i==1) ? array("a","tb".$i) : array("tb".($i-1),"tb".$i);
+                        $consultavalues .= ",case when ifnull(tb".$i.".descripcion,'') = '' then '' else concat(', ',tb".$i.".descripcion) end";
+                        $consultafrom .= " left outer join asu_arbol_segmentacion ".$tablajoin[1]." on ".$tablajoin[0].".id_padre = ".$tablajoin[1].".id"; 
+                    }
+                    $consulta = $consultavalues . $consultafrom . $consultawhere;
+                    //var_dump($consulta);
+                }
+                $query = $this->db->query($consulta);
+
+                if (!$query)
+                {
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion por id";
+                    throw new Exception(__CLASS__);
+                }
+                else
+                {
+                    return $query->result();
+                }
+            }
+        }
+        
+        /**
+         * Accion para obtener la descripcion e información adicional del elemento en el ASU
+         * @param Array int $claves arreglo de valores a recuperar
+         * @param Int $desglose Nivel de desglose de información requerida
+         * @return Object
+         * @throws Exception Si ocurre error al recuperar datos de la base de datos
+         */
+        
+        public function isChild($claves,$desglose = 0)
         {
             if (count($claves)>0)
             {

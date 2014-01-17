@@ -96,6 +96,11 @@
    margin-left: 1px; 
 }
 
+.editable-checklist{
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x:hidden;
+}
 
 /* checklist vertical alignment */
 .editable-checklist label input[type="checkbox"], 

@@ -9,6 +9,7 @@ $(document).ready(function(){
 				$('#optcampos').html('<thead><tr><th colspan=4>Datos a Modificar/Agregar</td></tr>');
 
 				var errordatos = false;
+                                var eserror = false;
 		    	$.each(data, function(i, item) {
 					//Agregar un TR
 			    	$tr = $('<tr></tr>');
@@ -22,10 +23,13 @@ $(document).ready(function(){
 			    	}
 			    	else
 			    	{
-			    		$td = $('<td>'+item+'</td>');
+                                if (!eserror)
+                                    eserror = (item == 'Error');
+                                
+		    		$td = $('<td>'+((item != 'Error' && item != 'Ok') ? '<div class="'+((eserror) ? 'warning' : 'info')+'">' : '<div>') + item +'</div></td>');
 			    		$tr.append($td);
 			    		errordatos = true;
-				    }
+				 }
 			    	
 			    	$('#optcampos').append($tr);
 		    	});
