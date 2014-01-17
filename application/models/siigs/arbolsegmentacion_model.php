@@ -290,7 +290,7 @@ class ArbolSegmentacion_model extends CI_Model {
                     $str_datos = file_get_contents($ruta);
                     $datos = json_decode($str_datos,true);
                     if (count($seleccionados)>0)
-                    $datos = $this->_addSelectedItems($datos,$seleccionados, $nivel, $seleccionables);
+                    $datos = $this->_addSelectedItems($datos,$seleccionados, $nivel , $omitidos, $seleccionables);
                     return $datos;
                 }
                 else
@@ -382,13 +382,17 @@ class ArbolSegmentacion_model extends CI_Model {
             }
         }
         
-        public function _addSelectedItems($datos,$seleccionados, $nivel, $seleccionables)
+        public function _addSelectedItems($datos,$seleccionados, $nivel, $omitidos, $seleccionables)
         {
+            $nivel += 1;
+            while(in_array($nivel, $omitidos))
+                $nivel += 1;
+            
             foreach($datos as $clave => $dato)
             {
                 if (array_key_exists('children', $dato) && count($dato['children'])>0)
                 {
-                    $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados, $nivel, $seleccionables);
+                    $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados, $nivel, $omitidos , $seleccionables);
                 }
                 if (in_array($dato["key"],$seleccionados))
                 {
