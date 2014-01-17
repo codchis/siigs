@@ -348,24 +348,36 @@ class Servicios extends CI_Controller {
 				
 				//************ inicio notificacion ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
-				$i=0;
+				$i=0;$array=array();$tem="";
 				foreach($asu_um as $id)
 				{
-					$array=$this->Enrolamiento_model->get_catalog2("tes_notificacion", "id_arr_asu", $id);
-					if($array)
+					$result=$this->Enrolamiento_model->get_notificacion($id);
+					if($result)
 					{
-						echo ",";
-						$cadena["tes_notificacion"]= $array;
-						$micadena=json_encode($cadena);
-						echo substr($micadena,1,strlen($micadena)-2);
-						$micadena="";
-						ob_flush();
-						unset($cadena);
-						$cadena=array();
+						if($tem!=$result[0]->id)
+						{
+							if($i==0)
+								$array=$result;
+							else
+								array_push($array,$result[0]);
+							$i++;
+						}
+						$tem=$result[0]->id;
 					}
 					//else 
 					//	$cadena["tes_notificacion"]= 'Error recuperando tes_notificacion';
-					$i++;
+					
+				}
+				if(count($array)>0)
+				{
+					echo ",";
+					$cadena["tes_notificacion"]= $array;
+					$micadena=json_encode($cadena);
+					echo substr($micadena,1,strlen($micadena)-2);
+					$micadena="";
+					ob_flush();
+					unset($cadena);
+					$cadena=array();
 				}	
 				//************ fin notificacion ************
 				

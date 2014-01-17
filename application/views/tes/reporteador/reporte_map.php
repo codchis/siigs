@@ -29,7 +29,7 @@ $(document).ready(function()
 		'lugar'   :"Chiapas",
 		'zoom'    :6,
 		'rewrite' :0 },
-	url: '/<?php echo DIR_TES.'/graph/map/Chiapas/7/1';?>',
+	url: '/<?php echo DIR_TES."/graph/map/$lugar/$zoom/1";?>',
 	})
 	.done(function(dato)
 	{

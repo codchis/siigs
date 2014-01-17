@@ -1565,6 +1565,22 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
+	public function get_notificacion($id)
+	{
+		$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
+		$this->db->from("tes_notificacion");
+		$this->db->like("id_arr_asu", $id);
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
 	 
 	/**
 	 *obtiene catalogos relevante x entorno para la sincronizacion

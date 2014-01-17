@@ -147,7 +147,7 @@ FROM siigs.cns_regla_vacuna r
 LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna 
 LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  
 LEFT JOIN cns_persona p ON p.id=cv.id_persona 
-ORDER BY r.orden_esq_com ASC");
+ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 			$peso_x_edad   = $this->Enrolamiento_model->get_catalog2("cns_peso_x_edad","sexo"  ,$data['enrolado']->sexo);

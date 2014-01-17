@@ -26,8 +26,8 @@ var g=new Date();
 		}
 $(document).ready(function(){
 	
-	$("#desde").datepicker(option);
-	$("#hasta").datepicker(option);
+	$("#desde").datepicker(optionsFecha);
+	$("#hasta").datepicker(optionsFecha);
 	
 	$("a#fba1").fancybox({
 		'width'             : '90%',
@@ -230,14 +230,14 @@ if (!$opcion_rpt3) unset($reports[3]);
     <tr class="tr2">
 		<td>Localidades</td>
 		<td><?php echo $datos[$i]["localidades"] ?></td>
-		<td><a href="/<?php echo DIR_TES?>/reporte_sincronizacion/lote_view/<?php echo $datos[$i]["lote"]; ?>/Localidades donde se aplico <?php echo $datos[$i]["tipo"]; ?>/3" id="fba1"><img src="/resources/images/listar.png" style="border:none; width:30px; height:30px;" title="ver detalle" /></a></td>
+		<td><a href="/<?php echo DIR_TES?>/reporte_sincronizacion/lote_view/<?php echo $datos[$i]["lote"]; ?>/Localidades donde se aplico <?php echo $datos[$i]["tipo"]; ?>/3/<?php echo $datos[$i]["lugar"]; ?>" id="fba1"><img src="/resources/images/listar.png" style="border:none; width:30px; height:30px;" title="ver detalle" /></a></td>
 		
 	</tr>
     
     <tr class="tr1">
 		<td>Personas que no fueron atendidas en su unidad medica</td>
 		<td><?php echo $datos[$i]["personas"] ?></td>
-		<td><a href="/<?php echo DIR_TES?>/reporte_sincronizacion/lote_view/<?php echo $datos[$i]["lote"]; ?>/Personas que no pertenecen <?php echo $datos[$i]["tipo"]; ?>/4" id="fba1"><img src="/resources/images/listar.png" style="border:none; width:30px; height:30px;" title="ver detalle" /></a></td>
+		<td><a href="/<?php echo DIR_TES?>/reporte_sincronizacion/lote_view/<?php echo $datos[$i]["lote"]; ?>/Personas que no pertenecen <?php echo $datos[$i]["tipo"]; ?>/4/<?php echo $datos[$i]["lugar"]; ?>" id="fba1"><img src="/resources/images/listar.png" style="border:none; width:30px; height:30px;" title="ver detalle" /></a></td>
 		
 	</tr>
 </table>

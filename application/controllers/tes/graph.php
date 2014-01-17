@@ -79,6 +79,7 @@ class Graph extends CI_Controller
 			$this->template->write('header','',true);
 			$this->template->write('footer','',true);
 			$this->template->write('menu','',true);
+			$this->template->write('sala_prensa','',true);
 			$this->template->write_view('content',DIR_TES.'/grafica/map', $data);
 			$this->template->render();
 

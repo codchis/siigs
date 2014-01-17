@@ -233,8 +233,8 @@
 							var obj = jQuery.parseJSON( respuesta );
 							var campo = '<span id="hermanos" >Hay personas con el mismo tutor: Si desea importar su misma dirección dele click<br>';
 							for(var c=0;c<obj.length; c++)
-								campo+='<input type="button"  value="'+obj[c]["nombre"]+'" onclick="importarDatos(\''+obj[c]["id_persona"]+'\')" style="padding:5px" />&nbsp;&nbsp;'
-							campo+='<br><input type="button"  value="LIMPIAR" onclick="limpiar_direccion()" style="padding:5px" /></span>';
+								campo+='<input type="button"  value="'+obj[c]["nombre"]+'" onclick="importarDatos(\''+obj[c]["id_persona"]+'\')" style="padding:5px" class="btn btn-small btn-primary"/>&nbsp;&nbsp;'
+							campo+='<br><input type="button"  value="LIMPIAR" onclick="limpiar_direccion()" style="padding:5px" class="btn btn-small btn-primary"/></span>';
 							$("#compartetutor").append(campo);
 							$("#compartetutor").attr("class","info");
 						}
