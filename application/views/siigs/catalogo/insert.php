@@ -31,105 +31,112 @@
     			    dataType : 'json',
     			    success:    function(data) {
                                 
-                                if (data.indexOf('Error:')>-1)
-                                {
-                                    alert(data);
-                                    return;
-                                }
-        
+                                        
                                 $('#optcampos').html('<thead><tr><th colspan=4>Campos del catálogo</th></tr></thead><tr><td>Columna</td><td>Llave</td><td>Tipo</td><td>Tamaño</td></tr>');
-
+                                
+                                var eserror = false;
     			    	$.each(data, function(i, item) {
 							//Agregar el TR
         			    	$tr = $('<tr></tr>');
-
-        			    	//Agregar el TD y el checkbox para el campo
-        			    	$td = $('<td></td>');
-        			    	$tr.append($td);
-        			    	$input = $('<input type="checkbox" id="campos" name="campos[]" value="'+item.columnName+'" id="'+item.columnName+'" checked> '+item.columnName+ '</checkbox>');
-        			    	$td.append($input);
-        			    	$input.change(function(){
-            			    	 var disabled = $(this).is(':checked');
-            			    	 if (disabled == false)
-            			    	 {
-                			    	 $('input[name=pk'+item.columnName+']').attr('disabled' , 'disabled');
-                			    	 $('select[name=type'+item.columnName+']').attr('disabled' , 'disabled');
-                			    	 $('input[name=len'+item.columnName+']').attr('disabled' , 'disabled');
-                			     }
-            			    	 else
-            			    	 {
-            			    		 $('input[name=pk'+item.columnName+']').removeAttr('disabled');
-            			    		 $('select[name=type'+item.columnName+']').removeAttr('disabled');
-            			    		 $('input[name=len'+item.columnName+']').removeAttr('disabled');
-                			     }
-            			    	});
-
-        			    	//Agregar el TD y el checkbox para llaves primarias
-        			    	$td = $('<td></td>');
-        			    	$tr.append($td);
-        			    	$input = $('<input type="checkbox" name="pk'+item.columnName+'" id="pkcampo">Llave primaria</checkbox>');
-        			    	$td.append($input);
-        			    	//$('#enviardatos').append($input);
-							
-							$input.change(function(){
-								
-								var datos = "";
-								$('#pkcampo:checked').each(function(i, item) {
-									datos += $(item).attr("name").substr(2)+'|';
-								});	
-								
-								datos = datos.substring(0,datos.length-1);
-													
-								$.ajax({
-								   type: "GET",
-								   url: '/<?php echo DIR_SIIGS.'/catalogo/checkpk/';?>'+datos,
-								  })
-								 .done(function(dato)
-							   		{
-									if (dato == 'false')
-									{
-										alert('La llave primaria contiene registros repetidos, por favor corrija sus datos e intente de nuevo.');									    	            			    	 $('#submit').attr('disabled' , 'disabled');
-									}
-									else
-										$('#submit').removeAttr("disabled");	
-								});
-							});					
-							
-        			    	//Agregar el TD y el combo para tipo de dato
-        			    	$td = $('<td></td>');
-        			    	$tr.append($td);
-        			    	$input = $('<select name="type'+item.columnName+'" id="typecampo"></select>');
-        			    	$td.append($input);
-								$.each(item.tiposDato , function(i,item2){
-									$opt = $('<option value="'+item2.valor+'">'+item2.valor+'</option>');
-									$input.append($opt);
-									});
-
-                                        //seleccionar por default el valor varchar
-                                        $input.val('varchar');
-                                        //Agregar la revisión de tipos de datos
-                                        //por columnas
-                                        $input.change(function(){
-                                            $.ajax({
-                                            context:this,
-                                            type: "GET",
-                                            url: '/<?php echo DIR_SIIGS.'/catalogo/checkTypeData/';?>'+item.columnName+'/'+$(this).val(),
-                                        })
-                                        .done(function(dato)
+                                        
+                                        if (typeof(item) == 'string')
                                         {
-                                                if (dato == 'false')
-                                                {
-                                                        alert('El tipo de dato no coincide con los datos del archivo CSV');
-                                                        $(this).val('varchar');
-                                                }
-                                                });
-                                        });
-        			    	//Agregar el TD y el checkbox para llaves primarias
-        			    	$td = $('<td></td>');
-        			    	$tr.append($td);
-        			    	$input = $('<input type="textbox" name="len'+item.columnName+'" id="lencampo">');
-        			    	$td.append($input);
+                                        if (!eserror)
+                                        eserror = (item == 'Error');
+                                
+                                        $td = $('<td>'+((item != 'Error' && item != 'Ok') ? '<div class="'+((eserror) ? 'warning' : 'info')+'">' : '<div>') + item +'</div></td>');
+			    		$tr.append($td);
+			    		
+                                        }
+                                        else
+                                        {
+                                            //Agregar el TD y el checkbox para el campo
+                                            $td = $('<td></td>');
+                                            $tr.append($td);
+                                            $input = $('<input type="checkbox" id="campos" name="campos[]" value="'+item.columnName+'" id="'+item.columnName+'" checked> '+item.columnName+ '</checkbox>');
+                                            $td.append($input);
+                                            $input.change(function(){
+                                             var disabled = $(this).is(':checked');
+                                             if (disabled == false)
+                                             {
+                                                     $('input[name=pk'+item.columnName+']').attr('disabled' , 'disabled');
+                                                     $('select[name=type'+item.columnName+']').attr('disabled' , 'disabled');
+                                                     $('input[name=len'+item.columnName+']').attr('disabled' , 'disabled');
+                                                 }
+                                             else
+                                             {
+                                                     $('input[name=pk'+item.columnName+']').removeAttr('disabled');
+                                                     $('select[name=type'+item.columnName+']').removeAttr('disabled');
+                                                     $('input[name=len'+item.columnName+']').removeAttr('disabled');
+                                                 }
+                                            });
 
+                                            //Agregar el TD y el checkbox para llaves primarias
+                                            $td = $('<td></td>');
+                                            $tr.append($td);
+                                            $input = $('<input type="checkbox" name="pk'+item.columnName+'" id="pkcampo">Llave primaria</checkbox>');
+                                            $td.append($input);
+                                            //$('#enviardatos').append($input);
+
+                                                            $input.change(function(){
+
+                                                                    var datos = "";
+                                                                    $('#pkcampo:checked').each(function(i, item) {
+                                                                            datos += $(item).attr("name").substr(2)+'|';
+                                                                    });	
+
+                                                                    datos = datos.substring(0,datos.length-1);
+
+                                                                    $.ajax({
+                                                                       type: "GET",
+                                                                       url: '/<?php echo DIR_SIIGS.'/catalogo/checkpk/';?>'+datos,
+                                                                      })
+                                                                     .done(function(dato)
+                                                                            {
+                                                                            if (dato == 'false')
+                                                                            {
+                                                                                    alert('La llave primaria contiene registros repetidos, por favor corrija sus datos e intente de nuevo.');									    	            			    	 $('#submit').attr('disabled' , 'disabled');
+                                                                            }
+                                                                            else
+                                                                                    $('#submit').removeAttr("disabled");	
+                                                                    });
+                                                            });					
+
+                                            //Agregar el TD y el combo para tipo de dato
+                                            $td = $('<td></td>');
+                                            $tr.append($td);
+                                            $input = $('<select name="type'+item.columnName+'" id="typecampo"></select>');
+                                            $td.append($input);
+                                                                    $.each(item.tiposDato , function(i,item2){
+                                                                            $opt = $('<option value="'+item2.valor+'">'+item2.valor+'</option>');
+                                                                            $input.append($opt);
+                                                                            });
+
+                                            //seleccionar por default el valor varchar
+                                            $input.val('varchar');
+                                            //Agregar la revisión de tipos de datos
+                                            //por columnas
+                                            $input.change(function(){
+                                                $.ajax({
+                                                context:this,
+                                                type: "GET",
+                                                url: '/<?php echo DIR_SIIGS.'/catalogo/checkTypeData/';?>'+item.columnName+'/'+$(this).val(),
+                                            })
+                                            .done(function(dato)
+                                            {
+                                                    if (dato == 'false')
+                                                    {
+                                                            alert('El tipo de dato no coincide con los datos del archivo CSV');
+                                                            $(this).val('varchar');
+                                                    }
+                                                    });
+                                            });
+                                            //Agregar el TD y el checkbox para llaves primarias
+                                            $td = $('<td></td>');
+                                            $tr.append($td);
+                                            $input = $('<input type="textbox" name="len'+item.columnName+'" id="lencampo">');
+                                            $td.append($input);
+                                        }
         			    	$('#optcampos').append($tr);
     			    	});
     			}

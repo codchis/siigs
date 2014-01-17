@@ -70,6 +70,7 @@
 					$("#echoSelection").text(selValor.join(", "));
 					parent.document.getElementById("<?php echo $id;?>").value=selKeys.join(", ");
 					parent.document.getElementById("<?php echo $text;?>").value=selTitle.join(", ");
+					parent.document.getElementById("<?php echo $text;?>").click();
 				},
 				
 				onClick: function(node, event) 

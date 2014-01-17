@@ -148,12 +148,12 @@ class Catalogo extends CI_Controller {
                                         //Revisar si hay columnas con el mismo nombre
                                         if (count($columnas) <> count(array_unique($columnas)))
                                         {
-                                            echo json_encode("Error: El archivo contiene columnas con el mismo nombre");
+                                            echo json_encode(array("Error","El archivo contiene columnas con el mismo nombre"));
                                             return;
                                         }
                                         if (in_array('id', $columnas))
                                         {
-                                            echo json_encode("Error: No puede usar el nombre de columna 'id', por favor intente con id_{nombre del catalogo}");
+                                            echo json_encode(array("Error","No puede usar el nombre de columna 'id', por favor intente con id_{nombre del catalogo}"));
                                             return;
                                         }
                                         
@@ -248,7 +248,7 @@ class Catalogo extends CI_Controller {
 	  		 }
 	    	 catch (Exception $e) 
 			 {
-			 	echo Errorlog_model::save($e->getMessage(), __METHOD__);
+			 	Errorlog_model::save($e->getMessage(), __METHOD__);
 			 	return;
 			 }
 			 
@@ -303,7 +303,7 @@ class Catalogo extends CI_Controller {
 			 		$campos = $colstemp;
 			 	}
 			 	//agrega las llaves como campos normales para obtener el numero total de columnas
-                                echo "select ".implode(",",$llaves)." from ".$nombrecat;
+                                //echo "select ".implode(",",$llaves)." from ".$nombrecat;
 		 		//obtiene las llaves primarias del catalogo
 		 		$rowsllaves = $this->db->query("select ".implode(",",$llaves)." from ".$nombrecat);
 		 		$rowsllaves = $rowsllaves->result();
@@ -311,7 +311,7 @@ class Catalogo extends CI_Controller {
 			 } 
 			 catch (Exception $e) 
 			 {
-			 	echo Errorlog_model::save($e->getMessage(), __METHOD__);
+			 	Errorlog_model::save($e->getMessage(), __METHOD__);
 			 	die();
 			 }
 			 while (!feof($fp))

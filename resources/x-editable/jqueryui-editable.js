@@ -3320,15 +3320,19 @@ $(function(){
        //collect text of checked boxes
         value2htmlFinal: function(value, element) {
            var html = [],
+               values = [],
                checked = $.fn.editableutils.itemsByValue(value, this.sourceData),
                escape = this.options.escape;
                
            if(checked.length) {
                $.each(checked, function(i, v) {
                    var text = escape ? $.fn.editableutils.escape(v.text) : v.text; 
-                   html.push(text); 
+                   html.push(text);
+                   values.push(v.value);
                });
-               $(element).html(html.join('<br>'));
+               //$(element).html(html.join('<br>'));
+               $(element).html(html.join(', '));
+               $(element).attr("data-value",values);
            } else {
                $(element).empty(); 
            }

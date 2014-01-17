@@ -229,6 +229,10 @@ class Reporte_sincronizacion extends CI_Controller
 					$midato[$i]["ums"]=$ums;
 					$midato[$i]["localidades"]=$localidades;
 					$midato[$i]["personas"]=$personas;
+					$vacunas=$this->Reporte_sincronizacion_model->getListado("select distinct(id_asu_um) from cns_control_vacuna where codigo_barras IS NULL");
+					$dom=$this->ArbolSegmentacion_model->getDescripcionById(array($vacunas[0]->id_asu_um),5);
+					$dom=(explode(",",$dom[0]->descripcion));
+					$midato[$i]["lugar"]=$dom[count($dom)-1];
 				}
 				else 
 				{
@@ -257,6 +261,10 @@ class Reporte_sincronizacion extends CI_Controller
 					$midato[$i]["ums"]=$ums;
 					$midato[$i]["localidades"]=$localidades;
 					$midato[$i]["personas"]=$personas;
+					$vacunas=$this->Reporte_sincronizacion_model->getListado("select distinct(id_asu_um) from cns_control_vacuna where codigo_barras "."='".$x->codigo_barras."'");
+					$dom=$this->ArbolSegmentacion_model->getDescripcionById(array($vacunas[0]->id_asu_um),5);
+					$dom=(explode(",",$dom[0]->descripcion));
+					$midato[$i]["lugar"]=$dom[count($dom)-1];
 				}
 				$i++;
 			}
@@ -272,7 +280,7 @@ class Reporte_sincronizacion extends CI_Controller
  		$this->template->render();
 	}
 	
-	public function lote_view($lote,$title,$op)
+	public function lote_view($lote,$title,$op,$lugar="Chiapas")
 	{
 		try{
 			$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
@@ -396,7 +404,7 @@ class Reporte_sincronizacion extends CI_Controller
 					}
 				}
 				$data["zoom"]=8;
-				$data["lugar"]="Chiapas";
+				$data["lugar"]=$lugar;
 				$data["array"]=$mapas;				
 				$array=$datos;
 			}
