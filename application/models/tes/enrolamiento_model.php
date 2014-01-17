@@ -900,7 +900,7 @@ class Enrolamiento_model extends CI_Model
 					'id_asu_um' => $id_asu_um,
 					
 				);
-				if($this->peso[$i]!="")
+				if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!="")
 				{
 					$result7 = $this->db->insert('cns_control_nutricional', $data7);
 					if (!$result7)
@@ -1224,7 +1224,7 @@ class Enrolamiento_model extends CI_Model
 					'id_asu_um' => $id_asu_um,
 					
 				);
-				if($this->peso[$i]!="")
+				if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!="")
 				{
 					$result7 = $this->db->insert('cns_control_nutricional', $data7);
 					if (!$result7)
@@ -1476,7 +1476,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->select('*');
 		$this->db->from('cns_control_nutricional');
 		$this->db->where('id_persona', $id);
-		$this->db->order_by("fecha", "desc");
+		$this->db->order_by("fecha", "ASC");
 		$query = $this->db->get(); 
 		if (!$query)
 		{

@@ -133,7 +133,21 @@ class Enrolamiento extends CI_Controller
 			$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);
 			$data['consultas']=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
-			$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, CASE WHEN cv.fecha IS NULL THEN 'No aplicado' ELSE DATE_FORMAT(cv.fecha, '%d-%m-%Y') END AS fecha FROM siigs.cns_regla_vacuna r LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  LEFT JOIN cns_persona p ON p.id=cv.id_persona ORDER BY r.orden_esq_com ASC");
+			$fecha=$data['enrolado']->fecha_nacimiento;
+			$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("
+SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, 
+CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, 
+CASE WHEN cv.fecha IS NULL THEN CONCAT('Desde:',r.dia_inicio_aplicacion_nacido,' Hasta:',r.dia_fin_aplicacion_nacido) ELSE DATE_FORMAT(cv.fecha, '%d-%m-%Y') END AS fecha,
+DATEDIFF(NOW(),'$fecha') AS dias,
+CASE WHEN DATEDIFF(NOW(),'$fecha') >=r.dia_inicio_aplicacion_nacido AND DATEDIFF(NOW(),'$fecha')<=r.dia_fin_aplicacion_nacido  THEN '1' ELSE 
+CASE WHEN DATEDIFF(NOW(),'$fecha')>r.dia_fin_aplicacion_nacido AND cv.fecha IS NULL THEN '2' ELSE 
+CASE WHEN DATEDIFF(NOW(),'$fecha') <r.dia_inicio_aplicacion_nacido AND cv.fecha IS NULL THEN '3' END END 
+END AS prioridad
+FROM siigs.cns_regla_vacuna r 
+LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna 
+LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  
+LEFT JOIN cns_persona p ON p.id=cv.id_persona 
+ORDER BY r.orden_esq_com ASC");
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 			$peso_x_edad   = $this->Enrolamiento_model->get_catalog2("cns_peso_x_edad","sexo"  ,$data['enrolado']->sexo);
@@ -146,8 +160,8 @@ class Enrolamiento extends CI_Controller
 				{
 					$fecha     = date("Y-m-d",strtotime($nutricion[$i]->fecha));
 					$datetime1 = date_create($fecha);
-					$datetime2 = date_create(date("Y-m-d"));
-					$interval  = date_diff($datetime1, $datetime2);
+					$datetime2 = date_create(date("Y-m-d", strtotime($data['enrolado']->fecha_nacimiento)));
+					$interval  = date_diff($datetime2, $datetime1);
 					$dias      = $interval->format('%R%a dias');
 					$meses=(int)($dias/30);
 					$peso=$nutricion[$i]->peso;
@@ -168,17 +182,17 @@ class Enrolamiento extends CI_Controller
 				{
 					$fecha     = date("Y-m-d",strtotime($nutricion[$i]->fecha));
 					$datetime1 = date_create($fecha);
-					$datetime2 = date_create(date("Y-m-d"));
-					$interval  = date_diff($datetime1, $datetime2);
+					$datetime2 = date_create(date("Y-m-d", strtotime($data['enrolado']->fecha_nacimiento)));
+					$interval  = date_diff($datetime2, $datetime1);
 					$dias      = $interval->format('%R%a dias');
 					$meses=(int)($dias/30);
-					$peso=$nutricion[$i]->altura;
+					$altura=$nutricion[$i]->altura;
 				}
-				else {$meses=""; $peso="";}
+				else {$meses=""; $altura="";}
 				$dato = array(
 					"d1"=>"[".$x->meses.",".$x->minima."]", 
 					"d2"=>"[".$x->meses.",".$x->ideal."]", 
-					"d3"=>"[".$meses.",".$peso."]");
+					"d3"=>"[".$meses.",".$altura."]");
 				$array2[$i] = $dato;
 				$i++;
 			}
@@ -186,7 +200,7 @@ class Enrolamiento extends CI_Controller
 			$data['control_nutricional']=json_encode($array);
 			
 			$data['label_altura']=json_encode(array("d1"=>"Minima","d2"=>"Ideal","d3"=>"Altura"));
-			$data['control_nutricional_altura']=json_encode($array);
+			$data['control_nutricional_altura']=json_encode($array2);
 			
 		}
 		catch(Exception $e)
@@ -867,6 +881,24 @@ class Enrolamiento extends CI_Controller
 				return false;
 			}
 		}
+	}
+	public function brother_found($id)
+	{
+		$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+		$result=$this->Reporte_sincronizacion_model->getListado("SELECT p.id,  UPPER(CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno)) AS nombre, p.calle_domicilio,  p.numero_domicilio, 
+p.referencia_domicilio, p.colonia_domicilio, p.cp_domicilio, p.ageb, p.sector, p.manzana, p.id_asu_localidad_domicilio, p.telefono_domicilio
+FROM  cns_persona p WHERE p.id='$id'");
+		echo json_encode($result);
+	}
+	public function brothers_search($tutor)
+	{
+		$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+		$result=$this->Reporte_sincronizacion_model->getListado("SELECT DISTINCT t.id_persona,  UPPER(CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno)) AS nombre, p.calle_domicilio,  p.numero_domicilio, 
+p.referencia_domicilio, p.colonia_domicilio, p.cp_domicilio, p.ageb, p.sector, p.manzana, p.id_asu_localidad_domicilio, p.telefono_domicilio
+FROM cns_persona_x_tutor t
+LEFT JOIN cns_persona p ON p.id=t.id_persona
+WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
+		echo json_encode($result);
 	}
 	public function validarisum($id)
 	{
