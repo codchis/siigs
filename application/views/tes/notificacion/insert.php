@@ -8,24 +8,6 @@
     <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
 <script type="text/javascript">
-var objFecha = new Date();
-
-var optionsFecha = {
-    changeMonth: true,
-    changeYear: true,
-    duration: "fast",
-    dateFormat: 'dd-mm-yy',
-    constrainInput: true,
-    firstDay: 1,
-    closeText: 'X',
-    showOn: 'both',
-    buttonImage: '/resources/images/calendar.gif',
-    buttonImageOnly: true,
-    buttonText: 'Clic para seleccionar una fecha',
-    yearRange: '2005:'+objFecha.getFullYear(),
-    showButtonPanel: false
-};
-
 $(document).ready(function(){ 
 	$("a#tabletas").fancybox({
 		'width'             : '50%',

@@ -6330,3 +6330,10 @@ button.close {
    background: #e82128;
    color: #edd1d3;
 }
+
+.btn-bienvenida {
+   width:220px;
+   background: #e82128;
+   text-shadow: rgba(0,0,0,.4) 0 0px 0;
+   color: white;
+   }

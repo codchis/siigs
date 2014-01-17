@@ -51,8 +51,43 @@ class ReglaVacuna_model extends CI_Model {
 	 * @var    int
 	 */
 	private $dia_fin_previa;
+        
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $id_via_vacuna;
 
+        /**
+	 * @access private
+	 * @var    float
+	 */
+	private $dosis;
+        
+	/**
+	 * @access private
+	 * @var    string
+	 */
+	private $region;
+        
+	/**
+	 * @access private
+	 * @var    bool
+	 */
+	private $esq_com;
 
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $orden_esq_comp;
+        
+	/**
+	 * @access private
+	 * @var    array(int)
+	 */
+	private $alergias;
+        
 	/**
 	 * @access private
 	 * @var    string
@@ -117,6 +152,48 @@ class ReglaVacuna_model extends CI_Model {
 		$this->dia_fin_previa = $value;
 	}
         
+        public function getIdViaVacuna() {
+		return $this->id_via_vacuna;
+	}
+	public function setIdViaVacuna($value) {
+		$this->id_via_vacuna = $value;
+	}
+        
+        public function getDosis() {
+		return $this->dosis;
+	}
+	public function setDosis($value) {
+		$this->dosis = $value;
+	}
+        
+        public function getRegion() {
+		return $this->region;
+	}
+	public function setRegion($value) {
+		$this->region = $value;
+	}
+        
+        public function getEsqComp() {
+		return $this->esq_com;
+	}
+	public function setEsqComp($value) {
+		$this->esq_com = $value;
+	}
+        
+        public function getOrdenEsqComp() {
+		return $this->orden_esq_comp;
+	}
+	public function setOrdenEsqComp($value) {
+		$this->orden_esq_comp = $value;
+	}
+        
+        public function getAlergias() {
+		return $this->alergias;
+	}
+	public function setAlergias($value) {
+		$this->alergias = $value;
+	}
+        
         /*******************************/
 	/*Getters and setters block END*/
 	/*******************************/
@@ -163,8 +240,7 @@ class ReglaVacuna_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->query("SELECT distinct a.id,a.esq_com,b.descripcion as vacuna,a.id_vacuna_secuencial , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1");
-
+		$query = $this->db->query("SELECT distinct a.id,b.descripcion as vacuna,a.id_vacuna_secuencial , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa, case when ifnull(a.id_via_vacuna,'') = '' then '' else d.descripcion end as via_vacuna, a.dosis as dosis, a.region as region, a.esq_com, a.orden_esq_com, a.alergias FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 left outer join cns_via_vacuna d on a.id_via_vacuna = d.id");
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -185,7 +261,7 @@ class ReglaVacuna_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->query("SELECT distinct a.id,a.id_vacuna,a.id_vacuna_secuencial,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa, a.dia_inicio_aplicacion_secuencial as desdese, a.dia_fin_aplicacion_secuencial as hastase FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 where a.id=".$id);
+		$query = $this->db->query("SELECT distinct a.id,a.id_vacuna,a.id_vacuna_secuencial,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa, a.dia_inicio_aplicacion_secuencial as desdese, a.dia_fin_aplicacion_secuencial as hastase, case when ifnull(a.id_via_vacuna,'') = '' then '' else d.descripcion end as via_vacuna, a.dosis as dosis, a.region as region, a.esq_com, a.orden_esq_com, a.alergias as id_alergias FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 left outer join cns_via_vacuna d on a.id_via_vacuna = d.id where a.id=".$id);
 
 		if (!$query)
 		{
@@ -194,7 +270,23 @@ class ReglaVacuna_model extends CI_Model {
 			throw new Exception(__CLASS__);
 		}
 		else
-			return $query->row();
+                {
+		$info = $query->row();
+                $descalergias = '';
+                if (count($info->id_alergias)>0)
+                {
+                $infoalergias = $this->db->query("select * from cns_alergia where id in (".$info->id_alergias.")");                
+                if ($infoalergias)
+                if (count($infoalergias->result())>0)
+                {
+                    foreach($infoalergias->result() as $infoalergia)
+                    $descalergias.= $infoalergia->descripcion.", ";
+                    $descalergias = substr($descalergias, 0, count($descalergias)-3);
+                }
+                }
+                $info->alergias = $descalergias;
+                return $info;
+                }
 	}
 
 	/**

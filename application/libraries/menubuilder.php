@@ -33,7 +33,7 @@ class Menubuilder
             self::$CI->load->model(DIR_SIIGS.'/Bitacora_model');
             self::$CI->load->model(DIR_SIIGS.'/Usuario_model');
 
-            $strMenu = '<ul class="nav"><li><a href="#">Inicio</a></li>';
+            $strMenu = '<ul class="nav"><li><a href="/index">Inicio</a></li>';
             self::crearMenu($strMenu);
             $strMenu .= '<li><a href="/siigs/usuario/logout">Cerrar sesión</a></li>';
             $strMenu .= '</ul>';

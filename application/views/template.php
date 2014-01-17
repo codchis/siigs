@@ -23,6 +23,7 @@
 	<script src="/resources/js/customscript.js" type="text/javascript"></script>
         
         <script type="text/javascript" src="/resources/js/validaciones.js"></script>
+        <script type="text/javascript" src="/resources/js/funciones.js"></script>
     
     <?= $js ?>
 </head>

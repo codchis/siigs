@@ -3,23 +3,6 @@
 
 <script type="text/javascript">
 DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
-var objFecha = new Date();
-
-var optionsFecha = {
-    changeMonth: true,
-    changeYear: true,
-    duration: "fast",
-    dateFormat: 'dd-mm-yy',
-    constrainInput: true,
-    firstDay: 1,
-    closeText: 'X',
-    showOn: 'both',
-    buttonImage: '/resources/images/calendar.gif',
-    buttonImageOnly: true,
-    buttonText: 'Clic para seleccionar una fecha',
-    yearRange: '2005:'+objFecha.getFullYear(),
-    showButtonPanel: false
-};
 
 $(document).ready(function(){
     $('#paginador a').click(function(e){

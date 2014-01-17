@@ -108,11 +108,13 @@ class Enrolamiento extends CI_Controller
 	{
 		try 
 		{
-			if (empty($this->Usuario_model))
+			$this->load->model(DIR_TES.'/Enrolamiento_model');
+			$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+			if (empty($this->Enrolamiento_model))
 				return false;
 			if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
-			$this->load->model(DIR_TES.'/Enrolamiento_model');
+			
 			$data['title'] = 'Ver Paciente';
 			$data['enrolado'] = $this->Enrolamiento_model->getById($id);
 			if(empty($data['enrolado']))
@@ -131,6 +133,7 @@ class Enrolamiento extends CI_Controller
 			$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);
 			$data['consultas']=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
+			$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, CASE WHEN cv.fecha IS NULL THEN 'No aplicado' ELSE DATE_FORMAT(cv.fecha, '%d-%m-%Y') END AS fecha FROM siigs.cns_regla_vacuna r LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  LEFT JOIN cns_persona p ON p.id=cv.id_persona ORDER BY r.orden_esq_com ASC");
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 			$peso_x_edad   = $this->Enrolamiento_model->get_catalog2("cns_peso_x_edad","sexo"  ,$data['enrolado']->sexo);
@@ -679,10 +682,10 @@ class Enrolamiento extends CI_Controller
 		$this->form_validation->set_rules('fnacimiento', 'Fecha de Nacimiento', 'trim|required');
 		$this->form_validation->set_rules('lnacimiento', 'Lugar de Nacimiento', 'trim|required');
 		$this->form_validation->set_rules('lnacimientoT', 'Lugar de Nacimiento', 'trim');
-		$this->form_validation->set_rules('curp', 'CURP', 'trim|required');
+		$this->form_validation->set_rules('curp', 'CURP', 'trim|xss_clean');
 		$this->form_validation->set_rules('curp2', 'CURP', 'callback_ifCurpExists');
 		$this->form_validation->set_rules('lnacimientoT', 'Lugar de Nacimiento', 'xss_clean|trim');
-		$this->form_validation->set_rules('curp', 'CURP', 'trim|xss_clean|required');
+		$this->form_validation->set_rules('curp', 'CURP', 'trim|xss_clean');
 		$this->form_validation->set_rules('curp2', 'CURP', 'xss_clean|callback_ifCurpExists');
 		$this->form_validation->set_rules('calle', 'Calle', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('cp', 'Codigo Postal', 'trim|xss_clean|required');

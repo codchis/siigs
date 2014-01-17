@@ -31,7 +31,7 @@ $(document).ready(function()
 $opcion_insert = Menubuilder::isGranted(DIR_TES.'::enrolamiento::insert');
 $opcion_view = Menubuilder::isGranted(DIR_TES.'::enrolamiento::view');
 $opcion_update = Menubuilder::isGranted(DIR_TES.'::enrolamiento::update');
-$opcion_delete = Menubuilder::isGranted(DIR_TES.'::enrolamiento::delete');
+$opcion_print = Menubuilder::isGranted(DIR_TES.'::enrolamiento::print');
 ?>
 <?php 
 if(!empty($msgResult))
@@ -56,6 +56,7 @@ Buscar usuario
 		<th><h2>Ap. Materno</h2></th>
 		<?php if($opcion_view) { ?><th></th><?php } ?>
 		<?php if($opcion_update) { ?><th></th><?php } ?>
+        <?php if($opcion_print) { ?><th></th><?php } ?>
 	</tr>
     </thead>
 	<?php if (isset($users)) foreach ($users as $user_item): ?>
@@ -66,6 +67,7 @@ Buscar usuario
 		<td><?php echo $user_item->apellido_materno ?></td>
 		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
+        <?php if($opcion_print) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" target="_blank">Descargar</a></td><?php } ?>
 	</tr>
 	<?php endforeach ?>
     <tfoot>

@@ -73,7 +73,7 @@ class Usuario extends CI_Controller {
 						{
 							$this->session->set_flashdata('msgResult', 'Inicio de sesión exitoso');
 							$this->session->set_flashdata('clsResult', 'success');
-							redirect(DIR_SIIGS.'/usuario','refresh'); // aca se debe poner la pagina HOME
+							redirect('/index','refresh'); // aca se debe poner la pagina HOME
 						}
 						else
 							redirect($this->session->userdata(REDIRECT_TO, 'refresh'));
@@ -108,7 +108,7 @@ class Usuario extends CI_Controller {
 			Bitacora_model::insert(DIR_SIIGS.'::'.__CLASS__.'::index', 'Sesion finalizada: '.$this->session->userdata(USERNAME));
 		// destruye la sesión y redirige al login
 		$this->session->sess_destroy();
-		redirect(DIR_SIIGS.'/usuario/login','refresh');
+		redirect('/index','refresh');
 	}
 	
 	/**

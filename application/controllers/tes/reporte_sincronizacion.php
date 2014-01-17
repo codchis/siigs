@@ -186,6 +186,7 @@ class Reporte_sincronizacion extends CI_Controller
 				$consulta="select * from cns_control_vacuna where codigo_barras ";
 				$consultb="select distinct(id_asu_um) from cns_control_vacuna where codigo_barras ";
 				$consultc="select distinct(cv.id_vacuna),v.descripcion from cns_control_vacuna cv left join cns_vacuna v on v.id=cv.id_vacuna where cv.codigo_barras";
+				$consultd="select distinct(p.id_persona) from cns_control_vacuna cv  left join tes_pendientes_tarjeta p on p.id_persona=cv.id_persona where p.id_persona!='' and cv.codigo_barras ";
 				$in="";
 				if($x->codigo_barras=="")
 				{
@@ -193,6 +194,7 @@ class Reporte_sincronizacion extends CI_Controller
 					$midato[$i]["lote"]="Sin lote";
 					$cantidad=$this->Reporte_sincronizacion_model->getCount("",$consulta." IS NULL");
 					$ums=$this->Reporte_sincronizacion_model->getCount("",$consultb." IS NULL");
+					$personas=$this->Reporte_sincronizacion_model->getCount("",$consultd." IS NULL");
 					
 					$tipo1=$this->Reporte_sincronizacion_model->getListado($consultc." IS NULL");
 					foreach($tipo1 as $y)
@@ -211,6 +213,7 @@ class Reporte_sincronizacion extends CI_Controller
 					$midato[$i]["cantidad"]=$cantidad;
 					$midato[$i]["ums"]=$ums;
 					$midato[$i]["localidades"]=$localidades;
+					$midato[$i]["personas"]=$personas;
 				}
 				else 
 				{
@@ -218,6 +221,7 @@ class Reporte_sincronizacion extends CI_Controller
 					$midato[$i]["lote"]=$x->codigo_barras;
 					$cantidad=$this->Reporte_sincronizacion_model->getCount("",$consulta."='".$x->codigo_barras."'");
 					$ums=$this->Reporte_sincronizacion_model->getCount("",$consultb."='".$x->codigo_barras."'");
+					$personas=$this->Reporte_sincronizacion_model->getCount("",$consultd."='".$x->codigo_barras."'");
 					
 					$tipo2=$this->Reporte_sincronizacion_model->getListado($consultc."='".$x->codigo_barras."'");
 					foreach($tipo2 as $y)
@@ -237,6 +241,7 @@ class Reporte_sincronizacion extends CI_Controller
 					$midato[$i]["cantidad"]=$cantidad;
 					$midato[$i]["ums"]=$ums;
 					$midato[$i]["localidades"]=$localidades;
+					$midato[$i]["personas"]=$personas;
 				}
 				$i++;
 			}
@@ -268,17 +273,20 @@ class Reporte_sincronizacion extends CI_Controller
 			$consulta="select distinct(id_persona) from cns_control_vacuna where codigo_barras ";
 			$consultb="select distinct(id_asu_um) from cns_control_vacuna where codigo_barras ";
 			$consultc="select distinct(cv.id_vacuna),v.descripcion from cns_control_vacuna cv left join cns_vacuna v on v.id=cv.id_vacuna where cv.codigo_barras";
+			$consultd="select distinct(p.id_persona) from cns_control_vacuna cv  left join tes_pendientes_tarjeta p on p.id_persona=cv.id_persona where p.id_persona!='' and cv.codigo_barras ";
 			if($lote=="Sin lote")
 			{
 				$consulta.=" IS NULL";
 				$consultb.=" IS NULL";
 				$consultc.=" IS NULL";
+				$consultd.=" IS NULL";
 			}
 			else
 			{
 				$consulta.="='".$lote."'";
 				$consultb.="='".$lote."'";
 				$consultc.="='".$lote."'";
+				$consultd.="='".$lote."'";
 			}
 
 				
@@ -305,10 +313,19 @@ class Reporte_sincronizacion extends CI_Controller
 				}
 			}
 			
-			if($op==3)
+			if($op==3||$op==4)
 			{
 				$in="";$pagina="reporte_map";
 				$umsx=$this->Reporte_sincronizacion_model->getListado($consultb);
+				if($op==4)
+				{
+					$id_p="";
+					$cns_p=(array)$this->Reporte_sincronizacion_model->getListado($consultd);
+					foreach($cns_p as $person)
+						$id_p.="'".$person->id_persona."',";
+					$id_p=substr($id_p,0,strlen($id_p)-1);
+					$umsx=$this->Reporte_sincronizacion_model->getListado("SELECT id_asu_um_tratante AS id_asu_um FROM cns_persona WHERE id IN($id_p) ");
+				}
 				foreach($umsx as $u)
 				{
 					$in.=$u->id_asu_um.",";
@@ -361,9 +378,6 @@ class Reporte_sincronizacion extends CI_Controller
 				$array=$datos;
 			}
 			
-			if($op==4)
-			$array=$this->Reporte_sincronizacion_model->getListado("SELECT $campos FROM tes_tableta t $join WHERE t.id_asu_um!=''");
-						
 			$data['datos']=$array;
 		}
 		catch(Exception $e)
