@@ -35,7 +35,8 @@
 				'idarbol':<?php echo $idarbol;?> ,
 				'nivel':<?php echo $nivel;?> ,
 				'omitidos': <?php echo json_encode($omitidos);?>,
-				'seleccionados': parent.document.getElementById("<?php echo $id;?>").value.split(',') },
+				'seleccionados': parent.document.getElementById("<?php echo $id;?>").value.split(',') ,
+				'seleccionables': <?php echo json_encode($seleccionables);?>},
 			//(count($omitidos) > 0) ? explode(',',$omitidos) : 'null';
 			url: '/<?php echo DIR_SIIGS.'/raiz/getChildrenFromLevel';?>',
 			})

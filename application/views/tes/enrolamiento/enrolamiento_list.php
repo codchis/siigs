@@ -1,4 +1,8 @@
 <link href="/resources/css/alert.css" rel="stylesheet" type="text/css" /> 
+<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
+	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
 <script type="text/javascript">
 $(document).ready(function()
 {
@@ -24,7 +28,14 @@ $(document).ready(function()
         $('#form_filter_bitacora').attr('action',action);
         $('#form_filter_bitacora').submit();
     });
-    
+	
+    $("a#detalles").fancybox({
+		'width'             : '90%',
+		'height'            : '100%',				
+		'transitionIn'	: 'elastic',
+		'transitionOut'	: 'elastic',
+		'type'			: 'iframe',								
+	}); 
 });
 </script>
 <?php 
@@ -65,7 +76,7 @@ Buscar usuario
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
 		<td><?php echo $user_item->apellido_materno ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" id="detalles">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
         <?php if($opcion_print) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" target="_blank">Descargar</a></td><?php } ?>
 	</tr>
