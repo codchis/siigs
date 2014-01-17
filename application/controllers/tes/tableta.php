@@ -247,6 +247,8 @@ class Tableta extends CI_Controller {
         }
 
         $this->template->write_view('content',DIR_TES.'/tableta/view', $data);
+        $this->template->write('menu','',true);
+        $this->template->write('sala_prensa','',true);
 		$this->template->render();
     }
 

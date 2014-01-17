@@ -125,7 +125,7 @@ class Reporteador_model extends CI_Model {
                 break;
         }
 
-        echo implode(',', $idsAsu);
+        //echo implode(',', $idsAsu);
         
         foreach ($resultGrupoEtareo as $grupoEtareo) {
             $objReporte = new Reporte_cobertura_biologico();

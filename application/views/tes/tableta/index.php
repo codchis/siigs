@@ -1,7 +1,4 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-<!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
-
 <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
 <script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
 <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
@@ -86,7 +83,7 @@ echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm
                         ($fila->id_asu_um==0 ? 'Asignar' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
                     <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'" class="btn btn-small btn-primary">'.($fila->usuarios_asignados==0 ? 'Asignar' : 'Ver').'</a></td>';
                     
-                    if($showView) echo '<td><a href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles</a></td>';
+                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles</a></td>';
                     
                     if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'" class="btn btn-small btn-primary">Modificar</a></td>';
                     
@@ -235,6 +232,14 @@ $(function() {
     });
 
     $("#show_um").button();
+    
+    $("a#detalles").fancybox({
+		'width'         : '50%',
+		'height'        : '60%',				
+		'transitionIn'	: 'elastic',
+		'transitionOut'	: 'elastic',
+		'type'			: 'iframe',									
+	}); 
 });
 </script>
   
