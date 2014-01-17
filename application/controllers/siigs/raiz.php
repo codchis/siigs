@@ -586,12 +586,13 @@ class Raiz extends CI_Controller {
                     $nivel = $this->input->post('nivel');
                     $omitidos = $this->input->post('omitidos');
                     $seleccionados = $this->input->post('seleccionados');
+                    $seleccionables = (!empty($this->input->post('seleccionables')) ? $this->input->post('seleccionables') : array());
 //                    $idarbol = 1;
 //                    $nivel = 1;
 //                    $omitidos = array(null);
 //                    $seleccionados = array(775,776);
                     if ($idarbol && $nivel && $omitidos && $seleccionados)
-                        echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos,$seleccionados));
+                        echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos,$seleccionados,$seleccionables));
                     else
                         echo "Parámetros incorrectos";
 		}

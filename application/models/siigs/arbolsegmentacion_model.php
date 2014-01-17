@@ -264,7 +264,7 @@ class ArbolSegmentacion_model extends CI_Model {
          * @return Object
          */
                
-        public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array())
+        public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array(), $seleccionables = array())
         {
             try
             {
@@ -290,7 +290,7 @@ class ArbolSegmentacion_model extends CI_Model {
                     $str_datos = file_get_contents($ruta);
                     $datos = json_decode($str_datos,true);
                     if (count($seleccionados)>0)
-                    $datos = $this->_addSelectedItems($datos,$seleccionados);
+                    $datos = $this->_addSelectedItems($datos,$seleccionados, $nivel, $seleccionables);
                     return $datos;
                 }
                 else
@@ -309,6 +309,10 @@ class ArbolSegmentacion_model extends CI_Model {
 
                         for($i = 1 ; $i<=$arbol['niveles'];$i++)
                         {
+                            $esseleccionable = false;
+                            if (count($seleccionables)>0 && in_array($i, $seleccionables));
+                            $esseleccionable = true;
+                                
                             foreach($arbol['resultado'] as $fila)
                             {
                                 $fila = (array) $fila;
@@ -321,6 +325,9 @@ class ArbolSegmentacion_model extends CI_Model {
 
                                     if (in_array($fila['id_'.$i],$seleccionados))
                                             $arraytemp["select"] = true;
+                                    
+                                    if (!$esseleccionable)
+                                            $arraytemp["isFolder"] = true;
 
                                     if (!isset($resultado[$i]))
                                         $resultado[$i] = array();
@@ -372,17 +379,21 @@ class ArbolSegmentacion_model extends CI_Model {
             }
         }
         
-        public function _addSelectedItems($datos,$seleccionados)
+        public function _addSelectedItems($datos,$seleccionados, $nivel, $seleccionables)
         {
             foreach($datos as $clave => $dato)
             {
                 if (array_key_exists('children', $dato) && count($dato['children'])>0)
                 {
-                    $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados);
+                    $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados, $nivel, $seleccionables);
                 }
                 if (in_array($dato["key"],$seleccionados))
                 {
                     $datos[$clave]["select"] = true;
+                }
+                if (!in_array($nivel,$seleccionables))
+                {
+                    $datos[$clave]["isFolder"] = true;
                 }
             }
             return $datos;
