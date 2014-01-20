@@ -976,3 +976,7 @@ width: 100% ;
 	margin-bottom:-8.51px;
 }
 
+/********Botones agregar, detalles, ver/lista, modificar y eliminar***********/
+
+.btn-small [class^="icon-"], .btn-small [class*=" icon-"] {
+    margin-left: 5px;}
