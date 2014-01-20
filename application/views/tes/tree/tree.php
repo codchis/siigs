@@ -44,8 +44,9 @@
 			{
 				treeData=jQuery.parseJSON(dato);
 				$("#tree").dynatree({
-			
+				<?php if($tipo!="none"){?>
 				checkbox: true,
+				<?php } ?>
 				<?php if($tipo=="radio"){?>
 				classNames: {checkbox: "dynatree-radio"}, // cambia check por radio
 				<?php } ?>
