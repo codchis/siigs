@@ -45,6 +45,12 @@ class Menu_model extends CI_Model
      * @var    boolean
      */
     private $ruta;
+    
+    /**
+     * @access private
+     * @var    string
+     */
+    private $atributo;
 
 
     /********************************************
@@ -148,6 +154,16 @@ class Menu_model extends CI_Model
     {
         return $this->ruta;
     }
+    
+    public function setAtributo($atributo)
+    {
+        $this->atributo = $atributo;
+    }
+
+    public function getAtributo()
+    {
+        return $this->atributo;
+    }
 
     /**
      * Devuelve el mensaje de error,
@@ -197,6 +213,9 @@ class Menu_model extends CI_Model
 
         if( isset($this->ruta) )
             $data['ruta'] = $this->ruta;
+        
+        if( isset($this->atributo) )
+            $data['atributo'] = $this->atributo;
 
         $data['nombre'] = $this->nombre;
 
@@ -237,6 +256,8 @@ class Menu_model extends CI_Model
 
         //if( isset($this->ruta) )
             $data['ruta'] = $this->ruta;
+            
+        $data['atributo'] = $this->atributo;
 
         $data['nombre'] = $this->nombre;
 
@@ -338,7 +359,7 @@ class Menu_model extends CI_Model
     {
         $result = false;
         
-        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador, sis_entorno.nombre AS nombre_entorno, sis_entorno.id AS id_entorno,
+        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.atributo, sis_menu.id_controlador, sis_entorno.nombre AS nombre_entorno, sis_entorno.id AS id_entorno,
                           sis_menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
         $this->db->from('sis_menu');
         $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
@@ -385,6 +406,7 @@ class Menu_model extends CI_Model
             'id_raiz',
             'id_controlador',
             'ruta',
+            'atributo',
         );
 
         $condicionesPermitidas = array('=', '>', '<', '!=', '>=', '<=', 'like');
@@ -448,7 +470,7 @@ class Menu_model extends CI_Model
     {
         $result = 0;
         
-        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador,
+        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.atributo, sis_menu.nombre, sis_menu.id_controlador,
                           sis_menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
         $this->db->from('sis_menu');
         $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');
@@ -490,7 +512,7 @@ class Menu_model extends CI_Model
     {
         $result = 0;
 
-        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.nombre, sis_menu.id_controlador,
+        $this->db->select('sis_menu.id, sis_menu.id_padre, sis_menu.id_raiz, sis_menu.atributo, sis_menu.nombre, sis_menu.id_controlador,
                           sis_menu.ruta, raiz.nombre AS nombre_raiz, padre.nombre AS nombre_padre, sis_controlador.nombre AS nombre_controlador');
         $this->db->from('sis_menu');
         $this->db->join('sis_menu raiz', 'raiz.id=sis_menu.id_raiz', 'left');

@@ -190,6 +190,9 @@ class Menu extends CI_Controller {
 
                     if( !empty($datos['ruta']) )
                         $this->Menu_model->setRuta($datos['ruta']);
+                    
+                    if( !empty($datos['atributo']) )
+                        $this->Menu_model->setAtributo($datos['atributo']);
 
                     $this->Menu_model->setNombre($datos['nombre']);
 
@@ -289,6 +292,9 @@ class Menu extends CI_Controller {
 
                     if( !empty($datos['ruta']) )
                         $this->Menu_model->setRuta($datos['ruta']);
+                    
+                    if( !empty($datos['atributo']) )
+                        $this->Menu_model->setAtributo($datos['atributo']);
 
                     $this->Menu_model->setNombre($datos['nombre']);
                     

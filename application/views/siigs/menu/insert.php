@@ -49,6 +49,7 @@ echo form_open(site_url().DIR_SIIGS.'/menu/insert/', array('onkeyup'=>'limpiafor
     <tr><td>Nombre: </td><td><?php echo form_input( array('name'=>'nombre', 'required'=>'required', 'title'=>'requiere') ); ?> </td></tr>
     <tr><td>Entorno: </td><td><?php echo form_dropdown('entorno', $entornos); ?> </td></tr>
     <tr><td>Controlador: </td><td><?php echo form_dropdown('controlador', $controladores); ?> </td></tr>
+    <tr><td>Atributo: </td><td><?php echo form_input( array('name'=>'atributo', 'maxlength'=>'300') ); ?> </td></tr>
     <tr align="center"><td colspan="2"><input type="submit" value="Guardar" class="btn btn-primary" onclick="return validarFormulario('insertMenu')"/>
         <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/'" class="btn btn-primary" /></td></tr>
 </table>

@@ -90,7 +90,7 @@ class Menubuilder
             if($todos)
                 $strMenu .= '<li class="expanded" id="'.$item->id.'">'.$item->nombre.($hijos ? ' >>' : '');
             else
-                $strMenu .= '<li class="expanded" id="'.$item->id.'"><a href="'.$ruta.'">'.$item->nombre.($hijos ? ' >>' : '').'</a>';
+                $strMenu .= '<li class="expanded" id="'.$item->id.'"><a href="'.$ruta.'" '.$item->atributo.'>'.$item->nombre.($hijos ? ' >>' : '').'</a>';
 
             if ($hijos) {
                 $strMenu .= '<ul>';

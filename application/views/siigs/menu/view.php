@@ -12,6 +12,7 @@ if(!empty($msgResult)) {
         <tr><td><strong>Nombre</strong></td><td>'.$registro->nombre.'</td></tr>
         <tr><td><strong>Entorno</strong></td><td>'.$registro->nombre_entorno.'</td></tr>
         <tr><td><strong>Controlador</strong></td><td>'.$registro->nombre_controlador.'</td></tr>
+        <tr><td><strong>Atributos</strong></td><td>'.$registro->atributo.'</td></tr>
     </table></div>';
 } else {
     echo '<div class="'.($clsResult ? $clsResult : 'info').'">ERROR: Registro no encontrado</div>';
