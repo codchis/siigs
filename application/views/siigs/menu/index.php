@@ -102,14 +102,14 @@ $(document).ready(function(){
 <br />
 <?php
     if($showInsert)
-        echo ' <a id="crear" data-ruta="'.site_url().DIR_SIIGS.'/menu/insert/" href="'.site_url().DIR_SIIGS.'/menu/insert/" class="btn btn-primary">Crear nuevo</a>';
+        echo ' <a id="crear" data-ruta="'.site_url().DIR_SIIGS.'/menu/insert/" href="'.site_url().DIR_SIIGS.'/menu/insert/" class="btn btn-primary">Crear nuevo <i class="icon-plus"></i></a>';
 
     if($showView) 
-        echo ' <a id="detalles" data-ruta="'.site_url().DIR_SIIGS.'/menu/view/" href="" class="btn btn-primary">Detalles</a>';
+        echo ' <a id="detalles" data-ruta="'.site_url().DIR_SIIGS.'/menu/view/" href="" class="btn btn-primary">Detalles <i class="icon-eye-open"></i></a>';
     
     if($showUpdate) 
-        echo ' <a id="modificar" data-ruta="'.site_url().DIR_SIIGS.'/menu/update/" href="" class="btn btn-primary">Modificar</a>';
+        echo ' <a id="modificar" data-ruta="'.site_url().DIR_SIIGS.'/menu/update/" href="" class="btn btn-primary">Modificar <i class="icon-pencil"></i></a>';
     
     if($showDelete)
-        echo ' <a id="eliminar" data-ruta="'.site_url().DIR_SIIGS.'/menu/delete/" href="" class="btn btn-primary">Eliminar</a>';
+        echo ' <a id="eliminar" data-ruta="'.site_url().DIR_SIIGS.'/menu/delete/" href="" class="btn btn-primary">Eliminar <i class="icon-remove"></i></a>';
 ?>
