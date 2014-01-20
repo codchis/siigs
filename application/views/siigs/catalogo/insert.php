@@ -260,6 +260,11 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		</td>
 	</tr>
 	<tr>
+		<td><label for="nombre">Comentario:</label></td>
+                <td><textarea type="text" name="comentario" id="comentario" ></textarea>
+		</td>
+	</tr>
+	<tr>
 <td colspan = 2>
 </td>
 	</tr>

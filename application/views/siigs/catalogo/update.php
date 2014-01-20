@@ -94,7 +94,11 @@ if (!empty($catalogo_item))
 </form>
 <table id="optcampos">
 </table>
-    <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary" />
+    <?php echo form_open(DIR_SIIGS.'/catalogo/update/'.$catalogo_item->nombre) ?>
+    Comentarios: <textarea name="comentario"><?php echo $catalogo_item->comentario; ?></textarea><br/><br/>
+        <input type="submit" name="submit" value="Guardar" class="btn btn-primary"/>
+        <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary" />
+    </form> 
 </div>
 <?php 
 if (!empty($datos))

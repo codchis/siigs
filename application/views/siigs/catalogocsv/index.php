@@ -14,6 +14,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <thead>
 	<tr>
 	<th><h2>Nombre</h2></th>
+        <th><h2>Comentario</h2></th>
 	<?php if($opcion_view) { ?><th></th><?php } ?>
 	<?php if($opcion_update) { ?><th></th><?php } ?>
 	<?php if($opcion_create) { ?><th></th><?php } ?>
@@ -24,6 +25,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <?php foreach ($catalogos as $catalogo_item): ?>
 	<tr>
 		<td><?php if ($catalogo_item->nombre == CAT_POBLACION) $esPoblacion = 1; else $esPoblacion = 0; echo $catalogo_item->nombre ?></td>
+                <td><?php echo $catalogo_item->comentario ?></td>
 		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/catalogocsv/view/<?php echo $catalogo_item->nombre ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/catalogocsv/update/<?php echo $catalogo_item->nombre ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_create) { ?><td>

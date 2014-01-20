@@ -27,6 +27,8 @@ foreach ($campos as $campo)
 echo '</table>';
 echo '</div>';
 
+echo 'Comentarios: <textarea readonly>'.$catalogo_item->comentario.'</textarea><br/><br/>';
+
 if (!empty($datos_cat))
 {
     if (count($datos_cat)>0)

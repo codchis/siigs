@@ -143,7 +143,7 @@ class Catalogo_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$catalogos = $this->db->query('SELECT table_name as nombre FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name LIKE "cat_%" and table_name <> "cat_georeferencia" and table_name <> "cat_poblacion"');
+		$catalogos = $this->db->query('SELECT table_name as nombre, table_comment as comentario FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name LIKE "cat_%" and table_name <> "cat_georeferencia" and table_name <> "cat_poblacion"');
 		if (!$catalogos)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -169,7 +169,7 @@ class Catalogo_model extends CI_Model {
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			$this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo ".$nombre;
-			throw new Exception(__CLASS__);
+			//throw new Exception(__CLASS__);
 		}
 		else
 			return $query->row()->num;
@@ -237,6 +237,8 @@ class Catalogo_model extends CI_Model {
 			$result['llave'] = substr($llave, 0,count($llave)-3);
 		}
 
+                        $result['comentario'] = $this->db->query('SELECT table_comment as comentario FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name ="'.$nombre.'"')->result()[0]->comentario;
+                        
 			return (object)$result;
 	}
 	
@@ -347,6 +349,30 @@ class Catalogo_model extends CI_Model {
 			else
 				return true;
 		}
+	}
+        
+	/**
+	 *Cambia el comentario de la tabla indicada
+	 *
+	 *@access  public
+	 *@param string $nombre
+	 *@param string $comentario
+	 *@return  boolean (si la insercion es correcta)
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function updateComentario($nombre, $comentario)
+	{
+
+            $query = $this->db->query('alter table '.$nombre.' comment "'.$comentario.'"');
+
+            if (!$query)
+            {
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al modificar el comentario del catálogo";
+                    throw new Exception(__CLASS__);
+            }
+            else
+                    return true;
 	}
 
 	/**
