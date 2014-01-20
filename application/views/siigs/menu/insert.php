@@ -43,8 +43,8 @@ echo '<div id="alert"></div>';
 echo form_open(site_url().DIR_SIIGS.'/menu/insert/', array('onkeyup'=>'limpiaformulario(this.id)', 'onclick'=>'limpiaformulario(this.id)', 'id'=>'insertMenu')); ?>
 <div class="table table-striped">
 <table>
-    <tr><td>Raíz: </td><td><?php echo form_dropdown('raiz', $menus); ?> </td></tr>
-    <tr><td>Padre: </td><td><?php echo form_dropdown('padre', $menus); ?> </td></tr>
+    <tr><td>Raíz: </td><td><?php echo form_dropdown('raiz', $menus, (!empty($menuSeleccionado) ? $menuSeleccionado->id_raiz : null) ); ?> </td></tr>
+    <tr><td>Padre: </td><td><?php echo form_dropdown('padre', $menus, (!empty($menuSeleccionado) ? $menuSeleccionado->id_padre : null) ); ?> </td></tr>
     <tr><td>Ruta: </td><td><?php echo form_input( array('name'=>'ruta', 'maxlength'=>'200', 'required'=>'required', 'title'=>'requiere') ); ?> </td></tr>
     <tr><td>Nombre: </td><td><?php echo form_input( array('name'=>'nombre', 'required'=>'required', 'title'=>'requiere') ); ?> </td></tr>
     <tr><td>Entorno: </td><td><?php echo form_dropdown('entorno', $entornos); ?> </td></tr>

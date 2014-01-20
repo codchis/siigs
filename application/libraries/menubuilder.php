@@ -22,9 +22,9 @@ class Menubuilder
      * @access public
      * @return string
      */
-    public static function build()
+    public static function build($todos=false)
     {
-        $strMenu = '';
+        $strMenu = '<ul class="nav">';
 
         if(self::$CI->session->userdata(GROUP_ID)) {
             self::$CI->load->model(DIR_SIIGS.'/Controlador_model');
@@ -33,12 +33,16 @@ class Menubuilder
             self::$CI->load->model(DIR_SIIGS.'/Bitacora_model');
             self::$CI->load->model(DIR_SIIGS.'/Usuario_model');
 
-            $strMenu = '<ul class="nav"><li><a href="/index">Inicio</a></li>';
-            self::crearMenu($strMenu);
-            $strMenu .= '<li><a href="/siigs/usuario/logout">Cerrar sesión</a></li>';
+            if(!$todos)
+                $strMenu .= '<li><a href="/index" id="0">Inicio</a></li>';
+            
+            self::crearMenu($strMenu, 'NULL', $todos);
+            
+            if(!$todos)
+                $strMenu .= '<li><a href="/siigs/usuario/logout">Cerrar sesión</a></li>';
+            
             $strMenu .= '</ul>';
         }
-        //echo $strMenu;
 
         return $strMenu;
     }
@@ -51,7 +55,7 @@ class Menubuilder
      * @param  string $id_padre ID del padre de los elementos del arbol de menu
      * @return void
      */
-    public static function crearMenu(&$strMenu, $id_padre = 'NULL')
+    public static function crearMenu(&$strMenu, $id_padre='NULL', $todos=false)
     {
         $items = self::$CI->Menu_model->getByPadre($id_padre);
         $controlador = '';
@@ -73,19 +77,24 @@ class Menubuilder
 
                 $ruta = '/'.$entorno->directorio.'/'.$controlador->clase;
 
-                // Revisa permisos de acceso para el controlador especifico
-                if(!Usuario_model::checkCredentials($entorno->directorio.'::'.$controlador->clase.'::index', '')) {
-                    continue; // Ignorar la secuencia normal y Seguir con la iteraccion del foreach
+                if(!$todos) {
+                    // Revisa permisos de acceso para el controlador especifico
+                    if(!Usuario_model::checkCredentials($entorno->directorio.'::'.$controlador->clase.'::index', '')) {
+                        continue; // Ignorar la secuencia normal y Seguir con la iteraccion del foreach
+                    }
                 }
             }
             
             $hijos = self::$CI->Menu_model->hasChild($item->id);
-
-            $strMenu .= '<li><a href="'.$ruta.'">'.$item->nombre.($hijos ? ' >>' : '').'</a>';
+            
+            if($todos)
+                $strMenu .= '<li class="expanded" id="'.$item->id.'">'.$item->nombre.($hijos ? ' >>' : '');
+            else
+                $strMenu .= '<li class="expanded" id="'.$item->id.'"><a href="'.$ruta.'">'.$item->nombre.($hijos ? ' >>' : '').'</a>';
 
             if ($hijos) {
                 $strMenu .= '<ul>';
-                self::crearMenu($strMenu, $item->id);
+                self::crearMenu($strMenu, $item->id, $todos);
                 $strMenu .= '</ul>';
             }
             $strMenu .= '</li>';

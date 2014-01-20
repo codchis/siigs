@@ -1,52 +1,79 @@
 <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
-	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/> 
+<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/> 
+
+<link   href="/resources/src/skin/ui.dynatree.css" rel="stylesheet" type="text/css" id="skinSheet">
+<script src="/resources/src/jquery.dynatree.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
 
 $(document).ready(function(){
-    $('#paginador a').click(function(e){
-        e.preventDefault();
-        pag = $(this).attr('href');
-        $('#form_filter_menu').attr('action', pag);
-        $('#form_filter_menu').submit();
+    $("#menuTree").dynatree({
+        onClick: function(node, event) {
+            $('#detalles').attr('href', $('#detalles').data('ruta')+node.data.key);
+            $('#modificar').attr('href', $('#modificar').data('ruta')+node.data.key);
+            $('#eliminar').attr('href', $('#eliminar').data('ruta')+node.data.key);
+            $('#crear').attr('href', $('#crear').data('ruta')+node.data.key);
+        },
+        debugLevel: 0
     });
-
-    $('#btnFiltrar').click(function(e){
-        // Eliminar la pagina de la url del action
-        action = $('#form_filter_menu').attr('action');
-        action = action.replace(/\d+(\/)*$/,'');
-
-        $('#form_filter_menu').attr('action',action);
-        $('#form_filter_menu').submit();
-    });
-	$("a#detalles").fancybox({
-		'width'             : '50%',
-		'height'            : '60%',				
-		'transitionIn'	: 'elastic',
-		'transitionOut'	: 'elastic',
-		'type'			: 'iframe',									
-	}); 
-    $('select[name="entorno"]').change(function(e){
-        $.ajax({
-            type: 'POST',
-            url:  '/'+DIR_SIIGS+'/controlador',
-            data: 'id_entorno='+$(this).val(),
-            dataType: 'json'
-        }).done(function(controladores){
-            $('select[name="controlador"] > :not(option[value=0])').remove();
+    
+    $("a#detalles")
+        .click(function(event){
+            //rutaView = $(this).data('ruta');
+            seleccionado = $("#menuTree").dynatree("getActiveNode");
             
-            $.each(controladores, function(index) {
-                option = $('<option />');
-                option.val(controladores[index].id);
-                option.text(controladores[index].nombre);
-
-                $('select[name="controlador"]').append(option);
-            });
+            if(seleccionado == null) {
+                alert('Debe seleccionar un elemento del menu');
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                event.stopPropagation();
+                return false;
+            }
+        })
+        .fancybox({
+            'width'             : '50%',
+            'height'            : '60%',				
+            'transitionIn'	: 'elastic',
+            'transitionOut'	: 'elastic',
+            'type'			: 'iframe',	
         });
-    });
+    
+    $("#modificar").click(function(event){
+        seleccionado = $("#menuTree").dynatree("getActiveNode");
 
+        if(seleccionado == null) {
+            alert('Debe seleccionar un elemento del menu');
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            return false;
+        }
+    });
+    
+    $("#eliminar").click(function(event){
+        seleccionado = $("#menuTree").dynatree("getActiveNode");
+
+        if(seleccionado == null) {
+            alert('Debe seleccionar un elemento del menu');
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            event.stopPropagation();
+            return false;
+        } else {
+            confirma = confirm('¿Esta seguro que desea elminar el elemento?');
+            
+            if(!confirma) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                event.stopPropagation();
+                return false;
+            }
+        }  
+    });
+    
 });
 </script>
 
@@ -61,75 +88,28 @@ $(document).ready(function(){
     $showUpdate = Menubuilder::isGranted(DIR_SIIGS.'::menu::update');
     $showDelete = Menubuilder::isGranted(DIR_SIIGS.'::menu::delete');
     $showView   = Menubuilder::isGranted(DIR_SIIGS.'::menu::view');
-?>
-
-<h2><?=$title;?></h2>
-
-<?php echo form_open(site_url().DIR_SIIGS.'/menu/index/'.$pag, array('name'=>'form_filter_menu', 'id'=>'form_filter_menu')); ?>
-    <input type="hidden" name="filtrar" value="true" />
-    Raíz: <?php echo form_dropdown('raiz', $menus); ?>
-    <input type="button" name="btnFiltrar" id="btnFiltrar" value="Filtrar" class="btn btn-primary" /> 
-</form>
-
-<?php echo form_open(site_url().DIR_SIIGS.'/menu/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');"));
-
-    if($showDelete)
-        echo '<input type="submit" value="Eliminar Seleccionados" class="btn btn-primary" /> ';
-
-    if($showInsert)
-        echo '<input type="button" name="crear" value="Crear nuevo" onclick="location.href=\''.site_url().DIR_SIIGS.'/menu/insert\'" class="btn btn-primary"/>';
-?><br>
-
-<?php
+    
+    echo '<h2>'.$title.'</h2>';
+    
     if(!empty($msgResult))
         echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 ?>
 
-<div class="table table-striped">
-<table>
-    <thead>
-        <tr>
-            <?php if($showDelete) echo '<th></th>'; ?>
-            <th><h2>Raiz</h2></th>
-            <th><h2>Padre</h2></th>
-            <th><h2>Nombre</h2></th>
-            <th><h2>Ruta</h2></th>
-            <th><h2>Controlador</h2></th>
-            <?php if($showView) echo '<th><h2></h2></th>'; ?>
-            <?php if($showUpdate) echo '<th><h2></h2></th>'; ?>
-            <?php if($showDelete) echo '<th><h2></h2></th>'; ?>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        if(!empty($registros)) {
-            foreach ($registros as $fila) {
-                echo '<tr id="'.$fila->id.'">';
-                
-                    if($showDelete) echo '<td><input type="checkbox" name="registroEliminar[]" value="'.$fila->id.'" /></td>';
-                    
-                    echo '<td>'.$fila->nombre_raiz.'</td>
-                    <td>'.$fila->nombre_padre.'</td>
-                    <td>'.htmlentities($fila->nombre).'</td>
-                    <td>'.htmlentities($fila->ruta).'</td>
-                    <td><a href="'.site_url().DIR_SIIGS.'/controlador/view/'.$fila->id_controlador.'">'.htmlentities($fila->nombre_controlador).'</a></td>';
-                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_SIIGS.'/menu/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles</a></td>';
-                    if($showUpdate) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/update/'.$fila->id.'" class="btn btn-small btn-primary">Modificar</a></td>';
-                    if($showDelete) echo '<td><a href="'.site_url().DIR_SIIGS.'/menu/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary">Eliminar</a></td>';
-                echo '</tr>';
-            }
-        } else {
-            echo '<tr><td colspan="7"><div align="center">No se encontraron registros en la busqueda</div></td></tr>';
-        }
-        ?>
-    </tbody>
-    <tfoot>
-        <tr><td colspan="9">
-            <div id="paginador" align="center"><?php echo $this->pagination->create_links(); ?></div>
-        </td></tr>
-    </tfoot>
-</table>
+<div id="menuTree">
+    <?php echo $menuTree; ?>
 </div>
 
-</form>
+<br />
+<?php
+    if($showInsert)
+        echo ' <a id="crear" data-ruta="'.site_url().DIR_SIIGS.'/menu/insert/" href="'.site_url().DIR_SIIGS.'/menu/insert/" class="btn btn-primary">Crear nuevo</a>';
+
+    if($showView) 
+        echo ' <a id="detalles" data-ruta="'.site_url().DIR_SIIGS.'/menu/view/" href="" class="btn btn-primary">Detalles</a>';
+    
+    if($showUpdate) 
+        echo ' <a id="modificar" data-ruta="'.site_url().DIR_SIIGS.'/menu/update/" href="" class="btn btn-primary">Modificar</a>';
+    
+    if($showDelete)
+        echo ' <a id="eliminar" data-ruta="'.site_url().DIR_SIIGS.'/menu/delete/" href="" class="btn btn-primary">Eliminar</a>';
+?>

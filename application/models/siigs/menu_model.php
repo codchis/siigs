@@ -519,6 +519,12 @@ class Menu_model extends CI_Model
         return $result;
     }
 
+    /**
+     * Verifica si el nodo actual tiene hijos
+     *
+     * @access public
+     * @return boolean
+     */
     public function hasChild($id) {
         $query = $this->db->query('SELECT COUNT(id) as num_children FROM sis_menu WHERE id_padre='.$id);
         $result = $query->row();
@@ -529,6 +535,12 @@ class Menu_model extends CI_Model
         return true;
     }
 
+    /**
+     * Obtiene todos los nodos hijos de un padre
+     *
+     * @access public
+     * @return boolean
+     */
     public function getByPadre($padre) {
         $cond = '';
 
@@ -560,6 +572,6 @@ class Menu_model extends CI_Model
 
         return $result;
     }*/
-
+    
 }
 ?>

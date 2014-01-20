@@ -55,7 +55,7 @@ class Menu extends CI_Controller {
             return false;
 
         try {
-            $this->load->library('pagination');
+            $this->load->library(array('pagination', 'menubuilder'));
             $this->load->helper('form');
 
             $filtros = array();
@@ -107,8 +107,10 @@ class Menu extends CI_Controller {
             $configPag['per_page']    = 30;
 
             $this->pagination->initialize($configPag);
+            
+            $data['menuTree'] = Menubuilder::build(true);
 
-            $data['registros'] = $this->Menu_model->getAll($configPag['per_page'], $pag);
+            //$data['registros'] = $this->Menu_model->getAll($configPag['per_page'], $pag);
         } catch (Exception $e) {
             $data['clsResult'] = 'error';
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
@@ -125,7 +127,7 @@ class Menu extends CI_Controller {
      * @access public
      * @return void
      */
-    public function insert()
+    public function insert($id = null)
     {
         if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
@@ -138,6 +140,8 @@ class Menu extends CI_Controller {
         try {
             $this->load->helper('form');
             $this->load->model( array(DIR_SIIGS.'/Entorno_model', DIR_SIIGS.'/Controlador_model') );
+            
+            $data['menuSeleccionado'] = $this->Menu_model->getById($id);
 
             $menus = $this->Menu_model->getAll();
             $data['menus'][0] = 'Elegir';
