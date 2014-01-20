@@ -207,6 +207,10 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
+		$this->template->write('header','',true);
+		$this->template->write('footer','',true);
+		$this->template->write('menu','',true);
+		$this->template->write('sala_prensa','',true);
  		$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_view', $data);
  		$this->template->render();
 	}
@@ -390,6 +394,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			}
 			$opcion.='</tr></table>';
 			echo $opcion;
+			
 		}
 		else
 		echo "No hay Datos";

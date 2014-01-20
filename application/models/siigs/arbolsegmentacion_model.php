@@ -264,7 +264,7 @@ class ArbolSegmentacion_model extends CI_Model {
          * @return Object
          */
                
-        public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array())
+        public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array(), $seleccionables = array())
         {
             try
             {
@@ -290,7 +290,7 @@ class ArbolSegmentacion_model extends CI_Model {
                     $str_datos = file_get_contents($ruta);
                     $datos = json_decode($str_datos,true);
                     if (count($seleccionados)>0)
-                    $datos = $this->_addSelectedItems($datos,$seleccionados);
+                    $datos = $this->_addSelectedItems($datos,$seleccionados, $nivel , $omitidos, $seleccionables);
                     return $datos;
                 }
                 else
@@ -309,6 +309,13 @@ class ArbolSegmentacion_model extends CI_Model {
 
                         for($i = 1 ; $i<=$arbol['niveles'];$i++)
                         {
+                            $esseleccionable = false;
+                            if (count($seleccionables)==0)
+                                $esseleccionable = true;
+                            else if (in_array($i, $seleccionables))
+                                $esseleccionable = true;
+                                
+                                
                             foreach($arbol['resultado'] as $fila)
                             {
                                 $fila = (array) $fila;
@@ -321,6 +328,9 @@ class ArbolSegmentacion_model extends CI_Model {
 
                                     if (in_array($fila['id_'.$i],$seleccionados))
                                             $arraytemp["select"] = true;
+                                    
+                                    if (!$esseleccionable)
+                                            $arraytemp["unselectable"] = true;
 
                                     if (!isset($resultado[$i]))
                                         $resultado[$i] = array();
@@ -372,17 +382,26 @@ class ArbolSegmentacion_model extends CI_Model {
             }
         }
         
-        public function _addSelectedItems($datos,$seleccionados)
+        public function _addSelectedItems($datos,$seleccionados, $nivel, $omitidos, $seleccionables)
         {
+            $nivel += 1;
+            while(in_array($nivel, $omitidos))
+                $nivel += 1;
+            
             foreach($datos as $clave => $dato)
             {
                 if (array_key_exists('children', $dato) && count($dato['children'])>0)
                 {
-                    $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados);
+                    $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados, $nivel, $omitidos , $seleccionables);
                 }
                 if (in_array($dato["key"],$seleccionados))
                 {
                     $datos[$clave]["select"] = true;
+                }
+                if (count($seleccionables)>0)
+                if (!in_array($nivel,$seleccionables))
+                {
+                    $datos[$clave]["unselectable"] = true;
                 }
             }
             return $datos;
