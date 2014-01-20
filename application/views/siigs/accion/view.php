@@ -18,4 +18,4 @@ else
 	echo '<div class="error">Registro no encontrado</div>';
 }
 ?>
-<a href="<?php echo site_url().DIR_SIIGS; ?>/accion/" class="btn btn-primary">Regresar al listado</a>
+<!--a href="<?php //echo site_url().DIR_SIIGS; ?>/accion/" class="btn btn-primary">Regresar al listado</a-->

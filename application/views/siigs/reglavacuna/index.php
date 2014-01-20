@@ -1,3 +1,19 @@
+<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
+	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
+
+<script>
+$(document).ready(function(){
+  	$("a#detalles").fancybox({
+		'width'             : '50%',
+		'height'            : '60%',				
+		'transitionIn'	: 'elastic',
+		'transitionOut'	: 'elastic',
+		'type'			: 'iframe',									
+	});
+    });
+</script>
 <?php 
 $opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::reglavacuna::insert');
 $opcion_view = Menubuilder::isGranted(DIR_SIIGS.'::reglavacuna::view');
@@ -37,7 +53,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
                 <td><?php echo $regla_item->previa ?></td>
                 <td><?php echo $regla_item->dosis ?></td>
                 <td><?php echo ($regla_item->esq_com == 1) ? 'Si' : 'No' ; ?></td>
-                    <?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/view/<?php echo $regla_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
+                    <?php if($opcion_view) { ?><td><a id="detalles" href="/<?php echo DIR_SIIGS; ?>/reglavacuna/view/<?php echo $regla_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/update/<?php echo $regla_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/reglavacuna/delete/<?php echo $regla_item->id ?>" class="btn btn-primary" onclick="if (confirm('Realmente desea eliminar esta regla?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>

@@ -149,7 +149,7 @@ class CatalogoCsv_model extends CI_Model {
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			$this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo ".$nombre;
-			throw new Exception(__CLASS__);
+			//throw new Exception(__CLASS__);
 		}
 		else
 			return $query->row()->num;
@@ -164,7 +164,7 @@ class CatalogoCsv_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$catalogos = $this->db->query('SELECT table_name as nombre FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name in ('.CATALOGOSCSV.')');
+		$catalogos = $this->db->query('SELECT table_name as nombre, table_comment as comentario FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name in ('.CATALOGOSCSV.')');
 		if (!$catalogos)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -237,6 +237,8 @@ class CatalogoCsv_model extends CI_Model {
 			$result['llave'] = substr($llave, 0,count($llave)-3);
 		}
 
+                        $result['comentario'] = $this->db->query('SELECT table_comment as comentario FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name ="'.$nombre.'"')->result()[0]->comentario;
+                        
 			return (object)$result;
 	}
         

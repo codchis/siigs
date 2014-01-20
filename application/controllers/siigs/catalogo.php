@@ -64,7 +64,7 @@ class Catalogo extends CI_Controller {
 	 * @param  string $nombre Este parametro no puede ser nulo
 	 * @return void
 	 */
-	public function view($nombre)
+	public function view($nombre, $pag = 0)
 	{
 		if (empty($this->Catalogo_model))
 			return false;
@@ -85,10 +85,28 @@ class Catalogo extends CI_Controller {
 			}
 		exit;
 		}
+                
+                                
+                $this->load->library('pagination');
+                $this->load->helper('form');
+
+                //Configuracion para la paginacion
+                $configPag['base_url']   ='/'. DIR_SIIGS.'/catalogo/view/'.$nombre.'/';
+                $configPag['first_link'] = 'Primero';
+                $configPag['last_link']  = '&Uacute;ltimo';
+                $configPag['total_rows'] = $this->Catalogo_model->getNumRows($nombre);
+                $configPag['uri_segment'] = '5';
+                $configPag['per_page']   = 50;
+
+                $this->pagination->initialize($configPag);
+                $this->Catalogo_model->setOffset($pag);
+                $this->Catalogo_model->setRows($configPag['per_page']);                
+                
 		try
 		{
 			$data['title'] = "Detalles del catálogo";
 			$data['catalogo_item'] = $this->Catalogo_model->getByName($nombre);
+                        $data['datos_cat'] = $this->Catalogo_model->getAllData($nombre);
 		}
 		catch (Exception $e)
 		{
@@ -558,7 +576,7 @@ class Catalogo extends CI_Controller {
 				//se asignan los campos para crear la tabla
 				//anteriormente se asignan las llaves
 				$camposquery = substr($camposquery, 0,  count($camposquery)-2);
-				$querycreate .= $camposquery.');';
+				$querycreate .= $camposquery.') comment "'.$this->input->post('comentario').'";';
 
 				$queryselect .= '('.(($llavespost == 1) ?implode(",", $llaves).',' : '').implode(",", $campos).') select ';
 
@@ -598,17 +616,50 @@ class Catalogo extends CI_Controller {
 	 * @param  string $nombre
 	 * @return void
 	 */
-	public function update($nombre)
+	public function update($nombre, $pag=0)
 	{
 		if (empty($this->Catalogo_model))
 			return false;
                 if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');		
                 
+                                
+                $this->load->library('pagination');
+                $this->load->helper('form');
+
+                //Configuracion para la paginacion
+                $configPag['base_url']   ='/'. DIR_SIIGS.'/catalogo/update/'.$nombre.'/';
+                $configPag['first_link'] = 'Primero';
+                $configPag['last_link']  = '&Uacute;ltimo';
+                $configPag['total_rows'] = $this->Catalogo_model->getNumRows($nombre);
+                $configPag['uri_segment'] = '5';
+                $configPag['per_page']   = 50;
+
+                $this->pagination->initialize($configPag);
+                $this->Catalogo_model->setOffset($pag);
+                $this->Catalogo_model->setRows($configPag['per_page']); 
+                
+                if ($this->input->post('comentario'))
+		{
+                    try
+			{
+                            $this->Catalogo_model->updateComentario($nombre, $this->input->post('comentario'));
+                            $data['clsResult'] = 'success';
+                            $data['msgResult'] = 'Se modificó correctamente el comentario del catalogo';
+			}
+			catch (Exception $e)
+			{
+                        $data['clsResult'] = 'error';
+			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);       
+                        }
+                }
+                
 		try
 		{
 			$data['title'] = "Modificar datos del catálogo";
 			$data['catalogo_item'] = $this->Catalogo_model->getByName($nombre);
+                        $data['catalogo_item']->nombre = $nombre;
+                        $data['datos'] = $this->Catalogo_model->getAllData($nombre);
 		}
 		catch (Exception $e)
 		{

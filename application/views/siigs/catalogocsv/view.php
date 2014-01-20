@@ -25,6 +25,8 @@ foreach ($campos as $campo)
 }
 echo '</table></div>';
 
+echo 'Comentarios: <textarea readonly>'.$catalogo_item->comentario.'</textarea><br/><br/>';
+
 if (!empty($datos_cat))
 {
     if (count($datos_cat)>0)
@@ -37,7 +39,10 @@ if (!empty($datos_cat))
                 echo "<td>".$col."</td>";
             echo "</tr>";
         }
-        echo "</table></div'>";
+        
+        echo "<tfoot><tr><td colspan='7'>
+            <div id='paginador' align='center'>".$this->pagination->create_links()."</div>
+        </td></tr></tfoot></table></div'>";
     }
 }
 

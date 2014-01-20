@@ -74,7 +74,7 @@
                                             //Agregar el TD y el checkbox para llaves primarias
                                             $td = $('<td></td>');
                                             $tr.append($td);
-                                            $input = $('<input type="checkbox" name="pk'+item.columnName+'" id="pkcampo">Llave primaria</checkbox>');
+                                            $input = $('<input type="checkbox" name="pk'+item.columnName+'" id="pkcampo" '+ ((item.columnName.indexOf('id_')==-1) ? 'disabled' : '') +'>Llave primaria</checkbox>');
                                             $td.append($input);
                                             //$('#enviardatos').append($input);
 
@@ -257,6 +257,11 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<tr>
 		<td><label for="nombre">Nombre (cat_)</label></td>
 		<td><input type="text" name="nombre" id="nombre" title='requiere' required value="<?php echo set_value('nombre', '');?>" />
+		</td>
+	</tr>
+	<tr>
+		<td><label for="nombre">Comentario:</label></td>
+                <td><textarea type="text" name="comentario" id="comentario" ></textarea>
 		</td>
 	</tr>
 	<tr>
