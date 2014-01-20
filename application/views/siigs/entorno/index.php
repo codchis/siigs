@@ -1,3 +1,20 @@
+<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
+	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
+
+<script>
+$(document).ready(function(){
+  	$("a#detalles").fancybox({
+		'width'             : '50%',
+		'height'            : '60%',				
+		'transitionIn'	: 'elastic',
+		'transitionOut'	: 'elastic',
+		'type'			: 'iframe',									
+	});
+    });
+</script>
+
 <?php 
 $controlador_index = Menubuilder::isGranted(DIR_SIIGS.'::controlador::index');
 $opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::entorno::insert');
@@ -35,7 +52,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $entorno_item->ip ?></td>
 		<td><?php echo $entorno_item->hostname ?></td>
 		<td><?php echo $entorno_item->directorio ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/entorno/view/<?php echo $entorno_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a id="detalles" href="/<?php echo DIR_SIIGS; ?>/entorno/view/<?php echo $entorno_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
 		<?php if($controlador_index) { ?><td>
 		<form id="frm<?php echo $entorno_item->id;?>" action="/<?php echo DIR_SIIGS; ?>/controlador" method="post">
 		<input type="hidden" name="id_entorno" value="<?php echo $entorno_item->id;?>" />

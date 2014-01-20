@@ -97,6 +97,37 @@ if (!empty($catalogo_item))
     <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary" />
 </div>
 <?php 
+if (!empty($datos))
+{
+?>
+<div class='table table-striped'>
+<table>
+    <thead>
+         <thead><tr><th colspan = >Datos del catalogo</td></tr>
+       </thead>
+        <tr>
+        <?php foreach(array_keys((array)$datos[0]) as $claves) { ?>
+            <td><h2><?php echo $claves;?></h2></td>
+            <?php } ?>
+        </tr>
+    </thead>
+    <?php foreach($datos as $dato) { ?>
+    <tr>
+        <?php foreach($dato as $clave => $item) { ?>
+                    <td><?php echo $item; ?></td>
+           <?php } ?>
+    </tr>
+    <?php } ?>
+<tfoot>
+        <tr><td colspan="7">
+            <div id="paginador" align="center"><?php echo $this->pagination->create_links(); ?></div>
+        </td></tr>
+</tfoot>
+</table>
+</div>
+</div>
+<?php
+}
 }
 else
 {

@@ -1,3 +1,20 @@
+<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
+	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
+
+<script>
+$(document).ready(function(){
+  	$("a#detalles").fancybox({
+		'width'             : '50%',
+		'height'            : '60%',				
+		'transitionIn'	: 'elastic',
+		'transitionOut'	: 'elastic',
+		'type'			: 'iframe',									
+	});  
+});
+</script>
+
 <?php 
 $opcion_insert = Menubuilder::isGranted(DIR_SIIGS.'::accion::insert');
 $opcion_view = Menubuilder::isGranted(DIR_SIIGS.'::accion::view');
@@ -30,7 +47,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $accion_item->nombre ?></td>
 		<td><?php echo $accion_item->descripcion ?></td>
 		<td><?php echo $accion_item->metodo ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/view/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary">Detalles</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/view/<?php echo $accion_item->id ?>" id="detalles" class="btn btn-small btn-primary">Detalles</a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/update/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
 		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/delete/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary" onclick="if (confirm('Realmente desea eliminar esta acción?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
 	</tr>

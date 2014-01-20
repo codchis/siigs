@@ -141,8 +141,10 @@ if (!empty($catalogo_item))
 if (!empty($datos))
 {
 ?>
+<div class='table table-striped'>
 <table>
     <thead>
+        <thead><tr><th colspan ="<?php echo count($datos[0]);?>">Datos del catalogo</td></tr></thead>
         <tr>
         <?php foreach(array_keys((array)$datos[0]) as $claves) {
             if ($claves != 'activo') {?>
@@ -175,6 +177,7 @@ if (!empty($datos))
         </td></tr>
 </tfoot>
 </table>
+</div>
 </div>
 <?php
 }

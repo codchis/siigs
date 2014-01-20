@@ -31,7 +31,7 @@ class Raiz extends CI_Controller {
         
         public function iniciarasu($id){
             
-            if (($this->ArbolSegmentacion_model->getChildrenFromLevel($id,1,array(),array())) != "false")
+            if (($this->ArbolSegmentacion_model->getChildrenFromLevel($id,1,array(),array(), array())) != "false")
                     echo "true";
             else
                 echo "false";

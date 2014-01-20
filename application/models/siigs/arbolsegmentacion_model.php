@@ -289,8 +289,9 @@ class ArbolSegmentacion_model extends CI_Model {
                 {
                     $str_datos = file_get_contents($ruta);
                     $datos = json_decode($str_datos,true);
-                    if (count($seleccionados)>0)
+                    //if (count($seleccionados)>0)
                     $datos = $this->_addSelectedItems($datos,$seleccionados, $nivel , $omitidos, $seleccionables);
+                    //var_dump($datos);
                     return $datos;
                 }
                 else
@@ -384,15 +385,18 @@ class ArbolSegmentacion_model extends CI_Model {
         
         public function _addSelectedItems($datos,$seleccionados, $nivel, $omitidos, $seleccionables)
         {
-            $nivel += 1;
             while(in_array($nivel, $omitidos))
                 $nivel += 1;
+            
+            //var_dump($nivel);
             
             foreach($datos as $clave => $dato)
             {
                 if (array_key_exists('children', $dato) && count($dato['children'])>0)
                 {
+                    $nivel += 1;
                     $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados, $nivel, $omitidos , $seleccionables);
+                    $nivel -= 1;
                 }
                 if (in_array($dato["key"],$seleccionados))
                 {
@@ -401,6 +405,9 @@ class ArbolSegmentacion_model extends CI_Model {
                 if (count($seleccionables)>0)
                 if (!in_array($nivel,$seleccionables))
                 {
+                   // echo $nivel;
+                   // var_dump($seleccionables);
+                   // echo "<br/><br/><br/>";
                     $datos[$clave]["unselectable"] = true;
                 }
             }

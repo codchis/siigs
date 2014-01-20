@@ -26,6 +26,26 @@ foreach ($campos as $campo)
 }
 echo '</table>';
 echo '</div>';
+
+if (!empty($datos_cat))
+{
+    if (count($datos_cat)>0)
+    {
+        echo "<div class='table table-striped' style='overflow:auto'><table><thead><tr><th colspan = ".count($datos_cat[0]).">Datos del catalogo</td></tr></thead>";
+        foreach ($datos_cat as $dato)
+        {
+            echo "<tr>";
+            foreach($dato as $col)
+                echo "<td>".$col."</td>";
+            echo "</tr>";
+        }
+        
+        echo "<tfoot><tr><td colspan='7'>
+            <div id='paginador' align='center'>".$this->pagination->create_links()."</div>
+        </td></tr></tfoot></table></div'>";
+    }
+}
+
 }
 else
 {

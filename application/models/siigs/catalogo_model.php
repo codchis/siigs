@@ -36,6 +36,18 @@ class Catalogo_model extends CI_Model {
 
 	/**
 	 * @access private
+	 * @var    int
+	 */
+	private $offset;
+
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $rows;
+        
+	/**
+	 * @access private
 	 * @var    string
 	 */
    	private $msg_error_log;
@@ -78,6 +90,13 @@ class Catalogo_model extends CI_Model {
 		$this->llave = $value;
 	}
 
+        
+	public function setOffset($value) {
+		$this->offset = $value;
+	}
+	public function setRows($value) {
+		$this->rows = $value;
+	}
 	/*******************************/
 	/*Getters and setters block END*/
 	/*******************************/
@@ -124,7 +143,7 @@ class Catalogo_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$catalogos = $this->db->query('SELECT table_name as nombre FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name LIKE "cat_%"');
+		$catalogos = $this->db->query('SELECT table_name as nombre FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name LIKE "cat_%" and table_name <> "cat_georeferencia" and table_name <> "cat_poblacion"');
 		if (!$catalogos)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -136,6 +155,27 @@ class Catalogo_model extends CI_Model {
 	}
 	
 	/**
+	 *Devuelve el numero de registros
+	 *
+	 *@access  public
+	 *@return  int
+	 *@param   string $nombre Nombre del catalogo
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function getNumRows($nombre)
+	{
+		$query = $this->db->query('select count(*) as num from '.$nombre);
+		if (!$query)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener los datos del catalogo ".$nombre;
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->row()->num;
+	}
+        
+	/**
 	 *Devuelve los datos de un catalogo pasado como parametro
 	 *
 	 *@access  public
@@ -144,16 +184,21 @@ class Catalogo_model extends CI_Model {
 	 */
 	public function getAllData($nombrecat)
 	{
-		$catalogos = $this->db->query('select * from '.$nombrecat);
-
-		if (!$catalogos)
-		{
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al obtener los datos de los catálogos";
-			throw new Exception(__CLASS__);
-		}
-		else
-		return $catalogos->result();
+            $string = 'select * from '.$nombrecat;
+            
+            if ((!empty($this->offset) || $this->offset == 0) && !empty($this->rows))
+            $string .= ' limit '.$this->offset. ','.$this->rows;
+	
+            $catalogos = $this->db->query($string);
+            
+            if (!$catalogos)
+            {
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al obtener los datos de los catálogos";
+                    throw new Exception(__CLASS__);
+            }
+            else
+            return $catalogos->result();
 	}
 
 	/**

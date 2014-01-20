@@ -37,7 +37,10 @@ if (!empty($datos_cat))
                 echo "<td>".$col."</td>";
             echo "</tr>";
         }
-        echo "</table></div'>";
+        
+        echo "<tfoot><tr><td colspan='7'>
+            <div id='paginador' align='center'>".$this->pagination->create_links()."</div>
+        </td></tr></tfoot></table></div'>";
     }
 }
 

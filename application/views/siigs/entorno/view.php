@@ -20,4 +20,4 @@ else
 echo "No se ha encontrado el elemento";
 }
 ?>
-<a href="<?php echo site_url().DIR_SIIGS; ?>/entorno/" class="btn btn-primary">Regresar al listado</a>
+<!--a href="<?php //echo site_url().DIR_SIIGS; ?>/entorno/" class="btn btn-primary">Regresar al listado</a-->

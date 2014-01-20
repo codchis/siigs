@@ -64,7 +64,7 @@ class Catalogo extends CI_Controller {
 	 * @param  string $nombre Este parametro no puede ser nulo
 	 * @return void
 	 */
-	public function view($nombre)
+	public function view($nombre, $pag = 0)
 	{
 		if (empty($this->Catalogo_model))
 			return false;
@@ -85,10 +85,28 @@ class Catalogo extends CI_Controller {
 			}
 		exit;
 		}
+                
+                                
+                $this->load->library('pagination');
+                $this->load->helper('form');
+
+                //Configuracion para la paginacion
+                $configPag['base_url']   ='/'. DIR_SIIGS.'/catalogo/view/'.$nombre.'/';
+                $configPag['first_link'] = 'Primero';
+                $configPag['last_link']  = '&Uacute;ltimo';
+                $configPag['total_rows'] = $this->Catalogo_model->getNumRows($nombre);
+                $configPag['uri_segment'] = '5';
+                $configPag['per_page']   = 50;
+
+                $this->pagination->initialize($configPag);
+                $this->Catalogo_model->setOffset($pag);
+                $this->Catalogo_model->setRows($configPag['per_page']);                
+                
 		try
 		{
 			$data['title'] = "Detalles del catálogo";
 			$data['catalogo_item'] = $this->Catalogo_model->getByName($nombre);
+                        $data['datos_cat'] = $this->Catalogo_model->getAllData($nombre);
 		}
 		catch (Exception $e)
 		{
@@ -598,17 +616,34 @@ class Catalogo extends CI_Controller {
 	 * @param  string $nombre
 	 * @return void
 	 */
-	public function update($nombre)
+	public function update($nombre, $pag=0)
 	{
 		if (empty($this->Catalogo_model))
 			return false;
                 if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');		
                 
+                                
+                $this->load->library('pagination');
+                $this->load->helper('form');
+
+                //Configuracion para la paginacion
+                $configPag['base_url']   ='/'. DIR_SIIGS.'/catalogo/update/'.$nombre.'/';
+                $configPag['first_link'] = 'Primero';
+                $configPag['last_link']  = '&Uacute;ltimo';
+                $configPag['total_rows'] = $this->Catalogo_model->getNumRows($nombre);
+                $configPag['uri_segment'] = '5';
+                $configPag['per_page']   = 50;
+
+                $this->pagination->initialize($configPag);
+                $this->Catalogo_model->setOffset($pag);
+                $this->Catalogo_model->setRows($configPag['per_page']); 
+                
 		try
 		{
 			$data['title'] = "Modificar datos del catálogo";
 			$data['catalogo_item'] = $this->Catalogo_model->getByName($nombre);
+                        $data['datos'] = $this->Catalogo_model->getAllData($nombre);
 		}
 		catch (Exception $e)
 		{
