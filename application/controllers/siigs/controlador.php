@@ -376,7 +376,7 @@ class Controlador extends CI_Controller {
 			$this->Controlador_model->setId($id);
 			$this->Controlador_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
-                        $this->session->set_flashdata('clsResult', 'success');
+            $this->session->set_flashdata('clsResult', 'success');
 		}
 		catch(Exception $e)
 		{
@@ -412,4 +412,40 @@ class Controlador extends CI_Controller {
 			echo $e->getMessage();
 		}
 	}
+    
+    /**
+	 * Establece el texto de ayuda para el controlador accion
+	 *
+	 * @param  int $id_controlador_accion
+	 * @return void
+	 */
+    public function help($idControladorAccion) 
+    {
+        $data['id_controlador_accion'] = $idControladorAccion;
+        
+        $this->load->helper('form');
+        
+        if($this->input->post('ayuda_controlador_accion')) {
+            $this->load->model('ControladorAccion_model');
+            
+            try {
+                $this->ControladorAccion_model->setHelp($idControladorAccion, $this->input->post('ayuda_controlador_accion'));
+                $data['msgResult'] = 'Registro actualizado exitosamente';
+                $data['clsResult'] = 'success';
+            }
+            catch(Exception $e)
+            {
+                $data['msgResult'] = $e->getMessage();
+                $data['clsResult'] = 'error';
+            }
+        } else {
+            $datos = $this->ControladorAccion_model->getById($idControladorAccion);
+            $data['ayuda'] = $datos->ayuda;
+        }
+        
+        $this->template->write('sala_prensa', '', true);
+        $this->template->write('menu', '', true);
+        $this->template->write_view('content',DIR_SIIGS.'/controlador/help', $data);
+        $this->template->render();
+    }
 }
