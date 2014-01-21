@@ -68,6 +68,8 @@ $template['default']['regions'] = array(
                             marginwidth="0" marginheight="1" frameborder="0" scrolling="no" margintop="10px"> </iframe>
                 </div>')),
    'footer' => array('content' => array(file_get_contents('application/views/templates/footer.php'))),
+   'seccion_ayuda' => array('content' => array('<div style="float: right; display: inline; cursor: help;">'
+       . '<a id="ayuda" href="/ayuda"><img src="/resources/images/icons28x28-09.png"></a></div>')),
    'menu'=> array('content' => array( Menubuilder::build() ) )
 );
 $template['default']['parser'] = 'parser';

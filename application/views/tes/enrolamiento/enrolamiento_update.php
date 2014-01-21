@@ -4,20 +4,20 @@
 <?php 
 if($enrolado)
 {
-$cn_basico = Menubuilder::isGranted(DIR_TES.'::enrolamiento::insert1');
-$cn_beneficiario = Menubuilder::isGranted(DIR_TES.'::enrolamiento::view1');
-$cn_tutor = Menubuilder::isGranted(DIR_TES.'::enrolamiento::update1');
-$cn_umt = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card1');
-$cn_regcivil = Menubuilder::isGranted(DIR_TES.'::enrolamiento::insert1');
-$cn_direccion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::view1');
+$cn_basico = Menubuilder::isGranted(DIR_TES.'::enrolamiento::basico_edit');
+$cn_beneficiario = Menubuilder::isGranted(DIR_TES.'::enrolamiento::beneficiario_edit');
+$cn_tutor = Menubuilder::isGranted(DIR_TES.'::enrolamiento::tutor_edit');
+$cn_umt = Menubuilder::isGranted(DIR_TES.'::enrolamiento::umt_edit');
+$cn_regcivil = Menubuilder::isGranted(DIR_TES.'::enrolamiento::regcivil_edit');
+$cn_direccion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::direccion_edit');
 
-$cn_alergia = Menubuilder::isGranted(DIR_TES.'::enrolamiento::update1');
-$cn_vacuna = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card1');
-$cn_ira = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card1');
-$cn_eda = Menubuilder::isGranted(DIR_TES.'::enrolamiento::insert1');
-$cn_consulta = Menubuilder::isGranted(DIR_TES.'::enrolamiento::view1');
-$cn_accion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::update1');
-$cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card');
+$cn_alergia = Menubuilder::isGranted(DIR_TES.'::enrolamiento::alergia_edit');
+$cn_vacuna = Menubuilder::isGranted(DIR_TES.'::enrolamiento::vacuna_edit');
+$cn_ira = Menubuilder::isGranted(DIR_TES.'::enrolamiento::ira_edit');
+$cn_eda = Menubuilder::isGranted(DIR_TES.'::enrolamiento::eda_edit');
+$cn_consulta = Menubuilder::isGranted(DIR_TES.'::enrolamiento::consulta_edit');
+$cn_accion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::accion_edit');
+$cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit');
 ?>    
     <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
 	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
@@ -501,7 +501,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card');
                             <td width="19%" height="50"><p align="right">Nombre</p></td>
                             <td width="31%"><input name="nombre" type="text" title='requiere' required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->nombre; ?>" maxlength="35">
                             <input name="id" type="hidden" id="id" value="<?php echo $id;?>"  />
-                            <input name="id_cn_basico" type="hidden" id="id_cn_basico" value="<?php echo $id;?>"  /></td>
+                            <input name="id_cns_basico" type="hidden" id="id_cns_basico" value="<?php echo $id;?>"  /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                             
@@ -600,6 +600,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card');
                        	<div id="tbenef" style="margin-left:10px;">
                             
                             </div>
+                            <input name="id_cns_beneficiario" type="hidden" id="id_cns_beneficiario" value="<?php echo $id;?>"  />
                       	</div>
                       </div>
                     </div>
@@ -607,9 +608,6 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card');
                     
                     <!-- Tutor -->
                   	<?php if($cn_tutor){ ?>
-                  	<span class="AccordionPanelContent">
-                  	<input name="id_cns_beneficiario" type="hidden" id="id_cns_beneficiario" value="<?php echo $id;?>"  />
-                  	</span>
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Datos de la Madre o Tutor</div>
                       <div class="AccordionPanelContent" >
@@ -755,9 +753,9 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card');
                                   <td width="19%" align="right">Ageb</td>
                                   <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo $enrolado->ageb; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
                                   <td  align="right">Sector</td>
-                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->sector; ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->sector; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
                                   <td  align="right">Manzana</td>
-                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo $enrolado->manzana; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo $enrolado->manzana; ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
                                 </tr>
                               </table>
                           </td>
@@ -797,6 +795,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card');
                         	<div id="alergias" style="margin-left:10px;">
                             
                             </div>
+                            <input name="id_cns_alergia" type="hidden" id="id_cns_alergia" value="<?php echo $id;?>"  />
                         </div>
                       </div>
                     </div>
@@ -804,9 +803,6 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card');
                     
                   <!-- vacunacion  -->
                     <?php if($cn_vacuna){ ?>
-                    <span class="AccordionPanelContent">
-                    <input name="id_cns_alergia" type="hidden" id="id_cns_alergia" value="<?php echo $id;?>"  />
-                    </span>
                   <div class="AccordionPanel">
                     <div class="AccordionPanelTab">Control de Vacunación</div>
                       <div class="AccordionPanelContent"><br />                      

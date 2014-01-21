@@ -35,10 +35,13 @@ $(document).ready(function(){
 	
     $("a").click(function(event){
     	if ($(this).attr("id").indexOf("rpt") != -1) { // solo valida clicks de anchors de reportes
+    		document.getElementById("alert");
+			document.getElementById("alert").className="warning";
+			
 	        // fecha obligatoria en 3 primeros reportes
 	        if (($(this).attr("id") == 'rpt0' || $(this).attr("id") == 'rpt1' || $(this).attr("id") == 'rpt2') && $('#fecha_corte').val() == '')
 	        {
-				alert('Capture la fecha de corte.');
+	        	document.getElementById("alert").innerHTML='<div>Capture la fecha de corte</div>';
 				event.preventDefault();
 	        }
 	        else // al menos un filtro de búsqueda debe estar seleccionado
@@ -60,7 +63,7 @@ $(document).ready(function(){
 		                    if (path == ''){
 		                    	path = generaUrl("estados", pathBase);
 		                    	if (path == ''){
-			        				alert('No hay parámetros para realizar la búsqueda');
+		            				document.getElementById("alert").innerHTML='<div>No hay parámetros para realizar la búsqueda</div>';
 			        				event.preventDefault();
 			        				return;
 		                    	}
@@ -81,6 +84,8 @@ $(document).ready(function(){
 		    		'href'			: this.href,							
 		    	});
 		        event.preventDefault();
+		        document.getElementById("alert").className="";
+		        document.getElementById("alert").innerHTML='';
 	        }
     	}
     });
@@ -247,6 +252,7 @@ if (!$opcion_rpt5) unset($datos[4]);
         echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>'; ?>
 <fieldset style="width: 50%">
 <?php echo form_open(DIR_TES.'/reporteador/index/'); ?>
+<div id="alert"></div>
 <div class="table table-striped">
 <table>
 <tr>

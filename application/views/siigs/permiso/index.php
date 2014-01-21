@@ -47,6 +47,15 @@
             }         
             else $('#acciones').html('');    
         });
+        $('#btnGuardar').click(function(){ 
+        	if ($('select[name="id_entorno"]').val() == -1)
+        	{
+        		document.getElementById("alert");
+				document.getElementById("alert").className="warning";
+				document.getElementById("alert").innerHTML='<div>Debe seleccionar un entorno</div>';
+            	event.preventDefault();
+        	}
+        });
 	});
 </script>
 <h2><?php echo $title; ?></h2>
@@ -55,6 +64,7 @@
 	if (isset($actions)) { 
 	echo validation_errors(); 
 	echo form_open(DIR_SIIGS.'/grupo/'.$id_grupo.'/permiso') ?>
+<div id="alert"></div>   
 <label for="id_entorno">Entorno</label>
 <?php echo form_dropdown('id_entorno', $entornos, ($this->input->post('id_entorno')) ? $this->input->post('id_entorno') : '-1', 'id="id_entorno"'); ?>
 <br />

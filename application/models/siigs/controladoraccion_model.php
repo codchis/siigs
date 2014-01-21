@@ -105,7 +105,7 @@ class ControladorAccion_model extends CI_Model {
 			throw new Exception(__CLASS__);
 		}
 		else
-			return $query->row()->id;
+			return @$query->row()->id;
 	}
 
 	/**

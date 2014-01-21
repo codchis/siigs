@@ -286,51 +286,51 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 					$this->Enrolamiento_model->setId($id);
 					$this->addForm();
 					// actualizar si todo bien
-					if(isset($_POST["id_cn_basico"]))
+					if(isset($_POST["id_cns_basico"]))
 						$id=$this->Enrolamiento_model->update_basico();
 					
-					if(isset($_POST["id_cn_beneficiario"]))
+					if(isset($_POST["id_cns_beneficiario"]))
 						$id=$this->Enrolamiento_model->update_beneficiario();
 					
-					if(isset($_POST["id_cn_tutor"]))
+					if(isset($_POST["id_cns_tutor"]))
 						$id=$this->Enrolamiento_model->update_tutor();
 						
-					if(isset($_POST["id_cn_umt"]))
+					if(isset($_POST["id_cns_umt"]))
 						$id=$this->Enrolamiento_model->update_umt();
 						
-					if(isset($_POST["id_cn_regcivil"]))
+					if(isset($_POST["id_cns_regcivil"]))
 						$id=$this->Enrolamiento_model->update_regcivil();
 						
-					if(isset($_POST["id_cn_direccion"]))
+					if(isset($_POST["id_cns_direccion"]))
 						$id=$this->Enrolamiento_model->update_direccion();
 						
-					if(isset($_POST["id_cn_alergia"]))
+					if(isset($_POST["id_cns_alergia"]))
 						$id=$this->Enrolamiento_model->update_alergia();
 						
-					if(isset($_POST["id_cn_vacuna"]))
+					if(isset($_POST["id_cns_vacuna"]))
 						$id=$this->Enrolamiento_model->update_vacuna();
 						
-					if(isset($_POST["id_cn_ira"]))
+					if(isset($_POST["id_cns_ira"]))
 						$id=$this->Enrolamiento_model->update_ira();
 						
-					if(isset($_POST["id_cn_eda"]))
+					if(isset($_POST["id_cns_eda"]))
 						$id=$this->Enrolamiento_model->update_eda();
 						
-					if(isset($_POST["id_cn_consulta"]))
+					if(isset($_POST["id_cns_consulta"]))
 						$id=$this->Enrolamiento_model->update_consulta();
 						
-					if(isset($_POST["id_cn_accion"]))
+					if(isset($_POST["id_cns_accion"]))
 						$id=$this->Enrolamiento_model->update_accion();
 						
-					if(isset($_POST["id_cn_nutricion"]))
+					if(isset($_POST["id_cns_nutricion"]))
 						$id=$this->Enrolamiento_model->update_nutricion();
-						
-					$data['id'] = $id;
+					
+					$data['id'] = $this->Enrolamiento_model->getId();	
 					$this->session->set_flashdata('infoclass','success');
 					$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
 					//Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario Enrolado: '.strtoupper($this->input->post('nombre')));
 					
- 					$this->index(0,$id);
+ 					$this->index(0,$data['id']);
 				}
 				catch (Exception $e)
 				{
@@ -347,7 +347,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 				}
 			}
 			else
-			{echo "hola";
+			{
 				$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_update', $data);
  				$this->template->render();
 			}
@@ -732,7 +732,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		$data['titulo'] = 'Nuevo Enrolamiento';
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
-		if(isset($_POST["id_cn_basico"])||$op=="")
+		if(isset($_POST["id_cns_basico"])||$op=="")
 		{
 			$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
 			$this->form_validation->set_rules('paterno', 'Apellido Paterno', 'trim|xss_clean|required|max_length[25]');
@@ -747,20 +747,20 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$this->form_validation->set_rules('nacionalidad', 'Nacionalidad', '');
 		}
 		
-		if(isset($_POST["id_cn_regcivil"])||$op=="")
+		if(isset($_POST["id_cns_regcivil"])||$op=="")
 		{
 			$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
 			$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|required');
 			$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', '');
 		}
 		
-		if(isset($_POST["id_cn_umt"])||$op=="")
+		if(isset($_POST["id_cns_umt"])||$op=="")
 		{
 			$this->form_validation->set_rules('um', 'Unidad medica tratante', 'trim|required');
 			$this->form_validation->set_rules('umt', 'Unidad medica tratante', '');
 		}
 		
-		if(isset($_POST["id_cn_direccion"])||$op=="")
+		if(isset($_POST["id_cns_direccion"])||$op=="")
 		{
 			$this->form_validation->set_rules('calle', 'Calle', 'trim|required');
 			$this->form_validation->set_rules('numero', 'numero', '');
@@ -777,7 +777,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$this->form_validation->set_rules('compania', 'compania', 'trim');
 		}
 		
-		if(isset($_POST["id_cn_tutor"])||$op=="")
+		if(isset($_POST["id_cns_tutor"])||$op=="")
 		{
 			$this->form_validation->set_rules('buscar', 'buscar', 'xss_clean');
 			$this->form_validation->set_rules('captura', 'captura', '');

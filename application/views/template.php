@@ -17,13 +17,18 @@
     <link rel="stylesheet" type="text/css" href="/resources/plantillaSM/css/menu.css">
     <link rel="stylesheet" type="text/css" href="/resources/css/alert.css">
     
-        <script src="/resources/js/jquery.js"></script>
+    <script src="/resources/js/jquery.js"></script>
 	<script src="/resources/js/jquery-ui.min.js"></script>
 	<script src="/resources/js/modernizr.js"></script>
 	<script src="/resources/js/customscript.js" type="text/javascript"></script>
         
-        <script type="text/javascript" src="/resources/js/validaciones.js"></script>
-        <script type="text/javascript" src="/resources/js/funciones.js"></script>
+    <script type="text/javascript" src="/resources/js/validaciones.js"></script>
+    <script type="text/javascript" src="/resources/js/funciones.js"></script>
+    
+    <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
+    <script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/> 
     
     <?= $js ?>
 </head>
@@ -68,7 +73,7 @@
             <div class="row-fluid hidden-phone " id="boletines" >
                 <?= $sala_prensa ?>
             </div>
-
+            
         </header>
 
         <!-- contenido -->
@@ -79,6 +84,7 @@
               </div>
                 
               <div class="span10 contenido">
+                <?= $seccion_ayuda; ?>
                 <?= $content ?>
               </div>
             </div>
