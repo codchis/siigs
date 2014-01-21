@@ -198,7 +198,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			$afili.=$afiliacion->id."_";
 		}
 		?>
-		$("#alergias").load("/tes/enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alerg;?>/tipo");	
+		$("#alergias").load("/tes/enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alerg;?>/tipo/tipo");	
 		$("#tbenef").load("/tes/enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afili;?>");		
 		$("#sangre").load("/tes/enrolamiento/catalog_select/tipo_sanguineo/<?php echo $enrolado->sangre; ?>");	
 		$("#nacionalidad").load("/tes/enrolamiento/catalog_select/nacionalidad/<?php echo $enrolado->nacionalidadid; ?>/descripcion");
@@ -533,7 +533,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td colspan="3">
                             <div class="input-append" style="width:100%"><input name="lnacimientoT" type="text" title='requiere' required id="lnacimientoT" style="width:68%; margin-left:10px;" value="" readonly="readonly" >
                             	<input name="lnacimiento" type="hidden" id="lnacimiento" value="">                              
-                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/' id="fba1" class="btn btn-primary">Seleccionar</a><div id="aqui"></div>
+                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/' id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a><div id="aqui"></div>
                               </div>
                               </td>
                             </tr>
@@ -617,7 +617,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td colspan="2" height="50"><p align="right">Madres o Tutores ya Capturados</p></td>
                             <td colspan="2"><div class="input-append">
                               <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" value="<?php echo set_value('buscar', '') ?>" class="spa10" placeholder="Buscar"/>
-                              <input type="submit" name="buscarCurp" id="buscarCurp" value="Buscar" class="btn btn-primary"/>
+                              <a href="#" id="buscarCurp" class="btn btn-primary">Buscar <i class="icon-search"></i></a>
                               <input name="id_cns_tutor" type="hidden" id="id_cns_tutor" value="<?php echo $id;?>"  />
                               
                             </td>
@@ -684,7 +684,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             Lugar</p></td>
                             <td width="81%" colspan="3"><div class="input-append" style="width:100%"><input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
                           </tr>
                         </table>
                         <br />
@@ -711,7 +711,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td><p align="right">Lugar</p></td>
                             <td colspan="3"><div class="input-append" style="width:100%"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="" readonly="readonly" title="requiere">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value=""/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(null)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(null)));?>/" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
                           </tr>
                         </table>
                         <br />
@@ -764,7 +764,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td><p align="right">Localidad</p></td>
                             <td colspan="3"><div class="input-append" style="width:100%"><input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value=""/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
                           </tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
@@ -824,8 +824,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   </div>                           
                                  </td>
                               <td valign="top" > 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('vacuna','vn','vc');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('vacuna','vn');" style="height:40px; width:80px;"/></td>
+                                   <button type="button" class="btn btn-primary" onclick="add('vacuna','vn','vc');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('vacuna','vn');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> </td>
                               </tr>                     
                           </table>
                         <input name="id_cns_vacuna" type="hidden" id="id_cns_vacuna" value="<?php echo $id;?>"  />
@@ -857,8 +857,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   </div>                           
                                  </td>
                               <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('ira','in','ic');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('ira','in');" style="height:40px; width:80px;"/></td>
+                                   <button type="button" class="btn btn-primary" onclick="add('ira','in','ic');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('ira','in');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> </td>
                               </tr>                     
                           </table>
                         <input name="id_cns_ira" type="hidden" id="id_cns_ira" value="<?php echo $id;?>"  />
@@ -890,8 +890,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('eda','en','ec');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('eda','en');" style="height:40px; width:80px;"/></td>
+                                   <button type="button" class="btn btn-primary" onclick="add('eda','en','ec');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('eda','en');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> </td>
                               </tr>                     
                           </table>
                         <input name="id_cns_eda" type="hidden" id="id_cns_beneficiario2" value="<?php echo $id;?>"  />
@@ -923,8 +923,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('consulta','ncc','ccc');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('consulta','ncc');" style="height:40px; width:80px;"/>  
+                                   <button type="button" class="btn btn-primary" onclick="add('consulta','ncc','ccc');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('consulta','ncc');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button>   
                                    
                                   </td>
                               </tr>                     
@@ -958,8 +958,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('accion_nutricional','nac');" style="height:40px; width:80px;"/></td>
+                                   <button type="button" class="btn btn-primary" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('accion_nutricional','nac');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> </td>
                               </tr>                     
                           </table>
                         <input name="id_cns_accion" type="hidden" id="id_cns_accion" value="<?php echo $id;?>"  />
@@ -1029,8 +1029,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="addNutricional();" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="remNutricional();" style="height:40px; width:80px;"/>  
+                                   <button type="button" class="btn btn-primary" onclick="addNutricional();" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="remNutricional();" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
                                    
                                   </td>
                               </tr>                     

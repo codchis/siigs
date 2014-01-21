@@ -459,7 +459,7 @@
                             <td><p align="right">Lugar de Nacimiento</p></td>
                             <td colspan="3"><div class="input-append" style="width:100%"><input name="lnacimientoT" type="text" title='requiere' required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo set_value('lnacimientoT', ''); ?>" readonly="readonly">
                             	<input name="lnacimiento" type="hidden" id="lnacimiento" value="<?php echo set_value('lnacimiento', ''); ?>">                              
-                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(4,5)));?>/<?php echo urlencode(json_encode(array(3)));?>' id="fba1" class="btn btn-primary">Seleccionar</a><div id="aqui"></div></div>
+                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(4,5)));?>/<?php echo urlencode(json_encode(array(3)));?>' id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a><div id="aqui"></div></div>
                               </td>
                             </tr>
                           <tr>
@@ -499,7 +499,7 @@
                             <td height="50" colspan="2"><p align="right" >Madres o Tutores ya Capturados</p></td>
                             <td colspan="2"><div class="input-append" >
                               <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" value="<?php echo set_value('buscar', ''); ?>" />
-                           <a href="#" id="buscarCurp" class="btn btn-primary">Buscar</a></div></td>
+                           <a href="#" id="buscarCurp" class="btn btn-primary">Buscar <i class="icon-search"></i></a></div></td>
                           </tr>
                           <tr>
                             <td colspan="2"><p align="right" id="tutoredit">Capturar Nueva Madre o Tutor</p>                              <label for="captura"></label></td>
@@ -560,7 +560,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly" title="requiere">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
-                            <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/<?php echo urlencode(json_encode(array(5)));?>" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
+                            <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/<?php echo urlencode(json_encode(array(5)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div></td>
                           </tr>
                         </table>
                         <br />
@@ -585,7 +585,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="lugarcivilT" title="requiere" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/<?php echo urlencode(json_encode(array(3)));?>" id="fba1" class="btn btn-primary">Seleccionar</a></div></td>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/<?php echo urlencode(json_encode(array(3)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div></td>
                           </tr>
                         </table>
                         <br />
@@ -636,7 +636,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>" id="fba1" class="btn btn-primary">Seleccionar</a></div>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
                             </td>
                           </tr>
                           <tr>
@@ -698,8 +698,8 @@
 </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar"  onclick="add('vacuna','vn','vc');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"   onclick="rem('vacuna','vn');" style="height:40px; width:80px;"/>  
+                                   <button type="button" class="btn btn-primary" onclick="add('vacuna','vn','vc');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('vacuna','vn');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
                                    
                                   </td>
                               </tr>                     
@@ -735,8 +735,8 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('ira','in','ic');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('ira','in');" style="height:40px; width:80px;"/>  
+                                   <button type="button" class="btn btn-primary" onclick="add('ira','in','ic');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('ira','in');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
                                   
                                   </td>
                               </tr>                     
@@ -772,8 +772,8 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('eda','en','ec');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('eda','en');" style="height:40px; width:80px;"/>  
+                                   <button type="button" class="btn btn-primary" onclick="add('eda','en','ec');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('eda','en');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
                                    
                                   </td>
                               </tr>                     
@@ -809,8 +809,8 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('consulta','ncc','ccc');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('consulta','ncc');" style="height:40px; width:80px;"/>  
+                                   <button type="button" class="btn btn-primary" onclick="add('consulta','ncc','ccc');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('consulta','ncc');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
                                                                       
                                   </td>
                               </tr>                     
@@ -846,8 +846,8 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('accion_nutricional','nac');" style="height:40px; width:80px;"/>  
+                                   <button type="button" class="btn btn-primary" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('accion_nutricional','nac');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
                                    
                                   </td>
                               </tr>                     
@@ -912,8 +912,8 @@
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
-                                   <input type="button" class="btn btn-primary" value="Agregar" onclick="addNutricional();" style="height:40px; width:80px;"/> 
-                                   <input type="button" class="btn btn-primary" value="Quitar"  onclick="remNutricional();" style="height:40px; width:80px;"/>  
+                                   <button type="button" class="btn btn-primary" onclick="addNutricional();" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="remNutricional();" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
                                    
                                   </td>
                               </tr>                     
@@ -928,8 +928,8 @@
                 <td>
                 <br />
                 <span id="enviandoof" style="margin-left:-20px;">
-                <input type="submit" name="guardar" id="guardar" value="Guardar" class="btn btn-primary" onclick="return validarFormulario('enrolar')" />
-                <input type="button" value="Cancelar" onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary" />
+                <button type="submit" name="guardar" id="guardar" class="btn btn-primary" onclick="return validarFormulario('enrolar')" >Guardar <i class="icon-floppy-disk"></i></button>
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-left"></i></button>
                 </span>
     			
                 </td>
