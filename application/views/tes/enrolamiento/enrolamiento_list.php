@@ -53,8 +53,8 @@ if(!empty($msgResult))
 <?php echo form_open(DIR_TES.'/enrolamiento/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
 Buscar usuario
 <input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" class="spa10" placeholder="Buscar Paciente" /> 
-<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" class="btn btn-primary"/>
-<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/enrolamiento/insert" class="btn btn-primary" style="margin-left:5px">Crear nuevo</a><?php } ?>
+<button type="submit" name="btnFiltrar" id="btnFiltrar"   class="btn btn-primary">Buscar <i class="icon-search"></i></button>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/enrolamiento/insert" class="btn btn-primary" style="margin-left:5px">Crear nuevo <i class="icon-plus"></i></a><?php } ?>
 </form>
 </div>
 <div class="table table-striped  " >
@@ -76,9 +76,9 @@ Buscar usuario
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
 		<td><?php echo $user_item->apellido_materno ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" id="detalles">Detalles</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
-        <?php if($opcion_print) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" target="_blank">Descargar</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" id="detalles">Detalles<i class="icon-eye-open"></i></a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Modificar<i class="icon-pencil"></i></a></td><?php } ?>
+        <?php if($opcion_print) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" target="_blank">Descargar<i class="icon-download-alt"></i></a></td><?php } ?>
 	</tr>
 	<?php endforeach ?>
     <tfoot>

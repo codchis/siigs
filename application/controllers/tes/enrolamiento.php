@@ -95,7 +95,8 @@ class Enrolamiento extends CI_Controller
 			$valor[]=$x->descripcion;
 		}
 		$datos["alergias"]=implode(", ",$valor);
-		
+		$folio=$this->Enrolamiento_model->getfolio($persona->id);
+		$datos["folio"]=$folio[0]->folio;
 		
 		echo implode("|",$datos);
 	}
@@ -278,14 +279,52 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 			show_error('', 403, 'Acceso denegado');*/
 			
-			if($this->validarForm())
+			if($this->validarForm("update"))
 			{
 				try 
 				{
 					$this->Enrolamiento_model->setId($id);
 					$this->addForm();
 					// actualizar si todo bien
-					$id=$this->Enrolamiento_model->update();
+					if(isset($_POST["id_cn_basico"]))
+						$id=$this->Enrolamiento_model->update_basico();
+					
+					if(isset($_POST["id_cn_beneficiario"]))
+						$id=$this->Enrolamiento_model->update_beneficiario();
+					
+					if(isset($_POST["id_cn_tutor"]))
+						$id=$this->Enrolamiento_model->update_tutor();
+						
+					if(isset($_POST["id_cn_umt"]))
+						$id=$this->Enrolamiento_model->update_umt();
+						
+					if(isset($_POST["id_cn_regcivil"]))
+						$id=$this->Enrolamiento_model->update_regcivil();
+						
+					if(isset($_POST["id_cn_direccion"]))
+						$id=$this->Enrolamiento_model->update_direccion();
+						
+					if(isset($_POST["id_cn_alergia"]))
+						$id=$this->Enrolamiento_model->update_alergia();
+						
+					if(isset($_POST["id_cn_vacuna"]))
+						$id=$this->Enrolamiento_model->update_vacuna();
+						
+					if(isset($_POST["id_cn_ira"]))
+						$id=$this->Enrolamiento_model->update_ira();
+						
+					if(isset($_POST["id_cn_eda"]))
+						$id=$this->Enrolamiento_model->update_eda();
+						
+					if(isset($_POST["id_cn_consulta"]))
+						$id=$this->Enrolamiento_model->update_consulta();
+						
+					if(isset($_POST["id_cn_accion"]))
+						$id=$this->Enrolamiento_model->update_accion();
+						
+					if(isset($_POST["id_cn_nutricion"]))
+						$id=$this->Enrolamiento_model->update_nutricion();
+						
 					$data['id'] = $id;
 					$this->session->set_flashdata('infoclass','success');
 					$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
@@ -308,7 +347,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 				}
 			}
 			else
-			{
+			{echo "hola";
 				$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_update', $data);
  				$this->template->render();
 			}
@@ -688,71 +727,71 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 	 *valida los datos de entrada en el formulario
 	 *
 	 */
-	public function validarForm()
+	public function validarForm($op="")
 	{
 		$data['titulo'] = 'Nuevo Enrolamiento';
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
-		$this->form_validation->set_rules('paterno', 'Apellido Paterno', 'trim|xss_clean|required|max_length[25]');
-		$this->form_validation->set_rules('materno', 'Apellido Materno', 'trim|xss_clean|required|max_length[25]');
-		$this->form_validation->set_rules('sexo', 'Sexo', 'trim|required');
-		$this->form_validation->set_rules('sangre', 'Tipo de Sangre', 'trim|required');
-		$this->form_validation->set_rules('fnacimiento', 'Fecha de Nacimiento', 'trim|required');
-		$this->form_validation->set_rules('lnacimiento', 'Lugar de Nacimiento', 'trim|required');
-		$this->form_validation->set_rules('lnacimientoT', 'Lugar de Nacimiento', 'trim');
-		$this->form_validation->set_rules('curp', 'CURP', 'trim|xss_clean');
-		$this->form_validation->set_rules('curp2', 'CURP', 'callback_ifCurpExists');
-		$this->form_validation->set_rules('lnacimientoT', 'Lugar de Nacimiento', 'xss_clean|trim');
-		$this->form_validation->set_rules('curp', 'CURP', 'trim|xss_clean');
-		$this->form_validation->set_rules('curp2', 'CURP', 'xss_clean|callback_ifCurpExists');
-		$this->form_validation->set_rules('calle', 'Calle', 'trim|xss_clean|required');
-		$this->form_validation->set_rules('cp', 'Codigo Postal', 'trim|xss_clean|required');
-		$this->form_validation->set_rules('localidad', 'Localidad', 'trim|xss_clean|required');
-		$this->form_validation->set_rules('localidadT', 'Localidad', 'xss_clean');
-		$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
-		$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|xss_clean|required');
-		$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', 'xss_clean');
-		$this->form_validation->set_rules('ageb', 'ageb', 'xss_clean');
-		$this->form_validation->set_rules('sector', 'sector', 'xss_clean');
-		$this->form_validation->set_rules('manzana', 'manzana', 'xss_clean');
+		if(isset($_POST["id_cn_basico"])||$op=="")
+		{
+			$this->form_validation->set_rules('nombre', 'Nombre', 'trim|xss_clean|required|max_length[40]');
+			$this->form_validation->set_rules('paterno', 'Apellido Paterno', 'trim|xss_clean|required|max_length[25]');
+			$this->form_validation->set_rules('materno', 'Apellido Materno', 'trim|xss_clean|required|max_length[25]');
+			$this->form_validation->set_rules('sexo', 'Sexo', 'trim|required');
+			$this->form_validation->set_rules('sangre', 'Tipo de Sangre', 'trim|required');
+			$this->form_validation->set_rules('fnacimiento', 'Fecha de Nacimiento', 'trim|required');
+			$this->form_validation->set_rules('lnacimiento', 'Lugar de Nacimiento', 'trim|required');
+			$this->form_validation->set_rules('lnacimientoT', 'Lugar de Nacimiento', 'xss_clean|trim');
+			$this->form_validation->set_rules('curp', 'CURP', 'trim|xss_clean');
+			$this->form_validation->set_rules('curp2', 'CURP', 'xss_clean|callback_ifCurpExists');
+			$this->form_validation->set_rules('nacionalidad', 'Nacionalidad', '');
+		}
 		
-		$this->form_validation->set_rules('nacionalidad', 'Nacionalidad', '');
-		$this->form_validation->set_rules('sangre', 'Tipo de Sangre', 'required');
+		if(isset($_POST["id_cn_regcivil"])||$op=="")
+		{
+			$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
+			$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|required');
+			$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', '');
+		}
 		
-		$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
-		$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|required');
-		$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', '');
+		if(isset($_POST["id_cn_umt"])||$op=="")
+		{
+			$this->form_validation->set_rules('um', 'Unidad medica tratante', 'trim|required');
+			$this->form_validation->set_rules('umt', 'Unidad medica tratante', '');
+		}
 		
-		$this->form_validation->set_rules('um', 'Unidad medica tratante', 'trim|required');
-		$this->form_validation->set_rules('umt', 'Unidad medica tratante', '');
+		if(isset($_POST["id_cn_direccion"])||$op=="")
+		{
+			$this->form_validation->set_rules('calle', 'Calle', 'trim|required');
+			$this->form_validation->set_rules('numero', 'numero', '');
+			$this->form_validation->set_rules('referencia', 'referencia', '');
+			$this->form_validation->set_rules('colonia', 'colonia', '');
+			$this->form_validation->set_rules('cp', 'Codigo Postal', 'trim|required');
+			$this->form_validation->set_rules('ageb', 'ageb', 'xss_clean');
+			$this->form_validation->set_rules('sector', 'sector', 'xss_clean');
+			$this->form_validation->set_rules('manzana', 'manzana', 'xss_clean');
+			$this->form_validation->set_rules('localidad', 'Localidad', 'trim|required');
+			$this->form_validation->set_rules('localidadT', 'Localidad', '');
+			$this->form_validation->set_rules('celular', 'celular', '');
+			$this->form_validation->set_rules('telefono', 'telefono', '');
+			$this->form_validation->set_rules('compania', 'compania', 'trim');
+		}
 		
-		$this->form_validation->set_rules('calle', 'Calle', 'trim|required');
-		$this->form_validation->set_rules('referencia', 'referencia', '');
-		$this->form_validation->set_rules('colonia', 'colonia', '');
-		$this->form_validation->set_rules('cp', 'Codigo Postal', 'trim|required');
-		$this->form_validation->set_rules('localidad', 'Localidad', 'trim|required');
-		$this->form_validation->set_rules('localidadT', 'Localidad', '');
-		$this->form_validation->set_rules('numero', 'numero', '');
-		$this->form_validation->set_rules('celular', 'celular', '');
-		$this->form_validation->set_rules('telefono', 'telefono', '');
-		$this->form_validation->set_rules('colonia', 'colonia', 'xss_clean');
-		$this->form_validation->set_rules('numero', 'numero', 'xss_clean');
-		$this->form_validation->set_rules('celular', 'celular', 'xss_clean');
-		$this->form_validation->set_rules('telefono', 'telefono', 'xss_clean');
-		$this->form_validation->set_rules('compania', 'compania', 'trim');
-		$this->form_validation->set_rules('companiaT', 'companiaT', 'trim');
-		
-		$this->form_validation->set_rules('buscar', 'buscar', 'xss_clean');
-		$this->form_validation->set_rules('captura', 'captura', '');
-		$this->form_validation->set_rules('nombreT', 'nombreT', 'xss_clean');
-		$this->form_validation->set_rules('paternoT', 'paternoT', 'xss_clean');
-		$this->form_validation->set_rules('maternoT', 'maternoT', 'xss_clean');
-		$this->form_validation->set_rules('celularT', 'celularT', 'xss_clean');
-		$this->form_validation->set_rules('curpT', 'curpT', 'xss_clean|callback_ifCurpTExists');
-		$this->form_validation->set_rules('telefonoT', 'telefonoT', 'xss_clean');
-		$this->form_validation->set_rules('sexoT', 'sexoT', '');
-					
+		if(isset($_POST["id_cn_tutor"])||$op=="")
+		{
+			$this->form_validation->set_rules('buscar', 'buscar', 'xss_clean');
+			$this->form_validation->set_rules('captura', 'captura', '');
+			$this->form_validation->set_rules('nombreT', 'nombreT', 'xss_clean');
+			$this->form_validation->set_rules('paternoT', 'paternoT', 'xss_clean');
+			$this->form_validation->set_rules('maternoT', 'maternoT', 'xss_clean');
+			$this->form_validation->set_rules('celularT', 'celularT', 'xss_clean');
+			$this->form_validation->set_rules('curpT', 'curpT', 'xss_clean|callback_ifCurpTExists');
+			$this->form_validation->set_rules('telefonoT', 'telefonoT', 'xss_clean');
+			$this->form_validation->set_rules('sexoT', 'sexoT', '');
+			$this->form_validation->set_rules('companiaT', 'companiaT', 'trim');
+		}
+		if($op=="update")
+			$this->form_validation->set_rules('id', 'id', 'trim');		
 		return $this->form_validation->run();
 	}
 	
