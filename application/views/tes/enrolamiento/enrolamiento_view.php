@@ -44,7 +44,7 @@ if($enrolado)
 		type: "POST",
 		data: {
 			'claves':[<?php  echo $enrolado->id_localidad_registro_civil;?>] ,
-			'desglose':1 },
+			'desglose':5 },
 		url: '/<?php  echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
@@ -60,7 +60,7 @@ if($enrolado)
 		type: "POST",
 		data: {
 			'claves':[<?php  echo $enrolado->id_asu_localidad_domicilio;?>] ,
-			'desglose':1 },
+			'desglose':5 },
 		url: '/<?php  echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)

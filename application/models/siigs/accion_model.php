@@ -33,6 +33,18 @@ class Accion_model extends CI_Model {
 	 * @var    string
 	 */
 	private $metodo;
+        
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $offset;
+
+	/**
+	 * @access private
+	 * @var    int
+	 */
+	private $rows;
 
 	/**
 	 * @access private
@@ -78,6 +90,13 @@ class Accion_model extends CI_Model {
 
 	public function setMetodo($value) {
 		$this->metodo = $value;
+	}
+        
+	public function setOffset($value) {
+		$this->offset = $value;
+	}
+	public function setRows($value) {
+		$this->rows = $value;
 	}
 	/*******************************/
 	/*Getters and setters block END*/
@@ -125,7 +144,12 @@ class Accion_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->get('sis_accion');
+                $string = 'select * from sis_accion';
+
+		if ((!empty($this->offset) || $this->offset == 0) && !empty($this->rows))
+		$string .= ' limit '.$this->offset. ','.$this->rows;
+
+		$query = $this->db->query($string);
 
 		if (!$query)
 		{
@@ -137,6 +161,27 @@ class Accion_model extends CI_Model {
 			return $query->result();
 	}
 
+	/**
+	 *Devuelve el numero de registros
+	 *
+	 *@access  public
+	 *@return  int
+	 *@param   int $entorno , default 0 (Id del entorno)
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function getNumRows()
+	{
+		$query = $this->db->query('select count(*) as num from sis_accion');
+		if (!$query)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener los datos de las acciones";
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->row()->num;
+	}
+        
 	/**
 	 *Devuelve la información de una accion por su ID
 	 *

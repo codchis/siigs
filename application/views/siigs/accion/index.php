@@ -58,5 +58,10 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<th colspan="6">No se encontraron registros</th>
 </tr>
 <?php } ?>
+<tfoot>
+        <tr><td colspan="7">
+            <div id="paginador" align="center"><?php echo $this->pagination->create_links(); ?></div>
+        </td></tr>
+</tfoot>
 </table>
 </div>

@@ -640,9 +640,11 @@ class Enrolamiento_model extends CI_Model
 	 *el parametro $array tipo array() contiene los datos  
 	 *
 	 */
-	public function cns_update($tabla,$array,$id)
+	public function cns_update($tabla,$array,$id,$campo="", $valor="")
 	{
 		$this->db->where('id' , $id);
+		if($campo!="")
+			$this->db->where($campo , $valor);
 		$result = $this->db->update($tabla, $array);  //echo $this->db->last_query()."; <br>";
 		
 		if (!$result)
@@ -710,7 +712,8 @@ class Enrolamiento_model extends CI_Model
 				'id_localidad_registro_civil' => $this->lugarcivil,
 			);
 			$res = $this->db->insert('cns_registro_civil', $dat);
-			
+			$companiaT=$this->companiaT;
+			if($companiaT=="")$companiaT=NULL;
 			$this->setid($unico_id);
 			$unico_idtutor=md5(uniqid());
 			$data0 = array(
@@ -959,16 +962,19 @@ class Enrolamiento_model extends CI_Model
 		$query = $this->db->get_where('tes_entorno_x_persona', array('id_persona' => $persona,"nombre_archivo"=>$archivo));
 		return ($query->num_rows() >0);		
 	}
+	public function getfolio($persona)
+	{
+		$query = $this->db->get_where('tes_entorno_x_persona', array('id_persona' => $persona));
+		return $query->result();		
+	}
 	
 	/**
 	 *Actualiza la informacion del paciente enrolado
 	 *@return el resulatdo de la consulta
 	 */
-	public function update()
+	public function update_basico()
 	{
 		//date_default_timezone_set('UTC');
-		$compania=$this->compania;
-		if($compania=="")$compania=NULL;
 		$data = array(
 			// basico
 			'id_nacionalidad' => $this->nacionalidad,
@@ -979,12 +985,46 @@ class Enrolamiento_model extends CI_Model
 			'curp' => $this->curp,
 			'sexo' => $this->sexo,
 			'id_tipo_sanguineo' => $this->sangre,
-			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)),
-			
+			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)));
+		$this->db->where('id' , $this->id);
+		$result = $this->db->update('cns_persona', $data); 
+		if (!$result)
+		{
+			$this->msg_error_usr = "Actualizacion Fallida.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+	}
+	/**
+	 * actualiza el registro de umt del paciente
+	 *
+	 */
+	public function update_umt()
+	{
+		//date_default_timezone_set('UTC');
+		$data = array(
 			// civil
 			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
-			'id_asu_um_tratante' => $this->umt,
-			
+			'id_asu_um_tratante' => $this->umt);
+		$this->db->where('id' , $this->id);
+		$result = $this->db->update('cns_persona', $data); 
+		if (!$result)
+		{
+			$this->msg_error_usr = "Actualizacion Fallida.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+	}
+	/**
+	 * actualiza el registro de direccion del paciente
+	 *
+	 */
+	public function update_direccion()
+	{
+		//date_default_timezone_set('UTC');
+		$compania=$this->compania;
+		if($compania=="")$compania=NULL;
+		$data = array(
 			// direccion 
 			'calle_domicilio' => $this->calle,
 			'referencia_domicilio' => $this->referencia,
@@ -1009,253 +1049,321 @@ class Enrolamiento_model extends CI_Model
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			throw new Exception(__CLASS__);
 		}
-		else
+	}
+	/**
+	 * actualiza el registro civil del paciente
+	 *
+	 */
+	public function update_regcivil()
+	{
+		
+		$data = array(
+			'id_persona' => $this->id,
+			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
+			'id_localidad_registro_civil' => $this->lugarcivil,
+		);
+		$query = $this->db->get_where('cns_registro_civil', array('id_persona' => $this->id));
+		if($query->num_rows() >0)
 		{
-			$dat = array(
-				'id_persona' => $this->id,
-				'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
-				'id_localidad_registro_civil' => $this->lugarcivil,
+			$this->db->where('id_persona' , $this->id);
+			$result = $this->db->update('cns_registro_civil', $data);
+		}
+		else
+			$res = $this->db->insert('cns_registro_civil', $data);
+	}
+	/**
+	 * actualiza los tutores del paciente
+	 *
+	 */
+	public function update_tutor()
+	{
+		$companiaT=$this->companiaT;
+		if($companiaT=="")$companiaT=NULL;
+		$data0 = array(
+			// tutor
+			'nombre' => $this->nombreT,
+			'apellido_paterno' => $this->paternoT,
+			'apellido_materno' => $this->maternoT,
+			'curp' => $this->curpT,
+			'sexo' => $this->sexoT,
+			
+			'telefono' => $this->telefonoT,
+			'id_operadora_celular' => $companiaT,
+			'celular' => $this->celularT,
 			);
-			$query = $this->db->get_where('cns_registro_civil', array('id_persona' => $this->id));
-			if($query->num_rows() >0)
+		//
+		if($this->idtutor=="")
+		{
+			$unico_idtutor=md5(uniqid());
+			$data0['id']=$unico_idtutor;
+			$result0 = $this->db->insert('cns_tutor', $data0);
+			if (!$result0)
 			{
-				$this->db->where('id_persona' , $this->id);
-				$result = $this->db->update('cns_registro_civil', $data);
+				$this->msg_error_usr = "No se guardo Tutor.";
+				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			}
 			else
-			$res = $this->db->insert('cns_registro_civil', $dat);
-			$companiaT=$this->companiaT;
-			if($companiaT=="")$companiaT=NULL;
-			$data0 = array(
-				// tutor
-				'nombre' => $this->nombreT,
-				'apellido_paterno' => $this->paternoT,
-				'apellido_materno' => $this->maternoT,
-				'curp' => $this->curpT,
-				'sexo' => $this->sexoT,
-				
-				'telefono' => $this->telefonoT,
-				'id_operadora_celular' => $companiaT,
-				'celular' => $this->celularT,
-				);
-			//
-			if($this->idtutor=="")
 			{
-				$unico_idtutor=md5(uniqid());
-				$data0['id']=$unico_idtutor;
-				$result0 = $this->db->insert('cns_tutor', $data0);
-				if (!$result0)
-				{
-					$this->msg_error_usr = "No se guardo Tutor.";
-					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-				}
-				else
-				{
-					$this->setidtutor($unico_idtutor);
-					$this->idtutor=$unico_idtutor;
-				}
+				$this->setidtutor($unico_idtutor);
+				$this->idtutor=$unico_idtutor;
 			}
-			else
-			{	
-				$this->db->where('id' , $this->idtutor);
-				$result0 = $this->db->update('cns_tutor', $data0);
-				if (!$result0)
-				{
-					$this->msg_error_usr = "No se actualizo Tutor.";
-					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-				}
+		}
+		else
+		{	
+			$this->db->where('id' , $this->idtutor);
+			$result0 = $this->db->update('cns_tutor', $data0);
+			if (!$result0)
+			{
+				$this->msg_error_usr = "No se actualizo Tutor.";
+				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			}
-			// relacion tutor paciente
-			$data01 = array(
+		}
+	
+		// relacion tutor paciente
+		$data01 = array(
+			'id_persona' => $this->id,
+			'id_tutor' => $this->idtutor,						
+			);
+		if ($this->db->delete('cns_persona_x_tutor', array('id_persona' => $this->id)))
+		{
+			$result01 = $this->db->insert('cns_persona_x_tutor', $data01);
+			if (!$result01)
+			{
+				$this->msg_error_usr = "Error actualizando Tutor.";
+				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			}
+		}
+	}
+	/**
+	 * actualiza las alergias del paciente
+	 *
+	 */
+	public function update_alergia()
+	{
+		$id_asu_um=$this->umt;
+		if ($this->db->delete('cns_persona_x_alergia', array('id_persona' => $this->id)))
+		for($i=0;$i<sizeof($this->alergias);$i++)
+		{
+			$data1 = array(
+				// alergias
 				'id_persona' => $this->id,
-				'id_tutor' => $this->idtutor,						
-				);
-			if ($this->db->delete('cns_persona_x_tutor', array('id_persona' => $this->id)))
+				'id_alergia' => $this->alergias[$i],
+				
+			);
+			if($this->alergias[$i]!="")
 			{
-				$result01 = $this->db->insert('cns_persona_x_tutor', $data01);
-				if (!$result01)
+				$result1 = $this->db->insert('cns_persona_x_alergia', $data1);
+				if (!$result1)
 				{
-					$this->msg_error_usr = "Error actualizando Tutor.";
+					$this->msg_error_usr = "Error actualizando Alergias.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-				}
-			}
-			
-			
-			$id_asu_um=$this->umt;
-			if ($this->db->delete('cns_persona_x_alergia', array('id_persona' => $this->id)))
-			for($i=0;$i<sizeof($this->alergias);$i++)
-			{
-				$data1 = array(
-					// alergias
-					'id_persona' => $this->id,
-					'id_alergia' => $this->alergias[$i],
-					
-				);
-				if($this->alergias[$i]!="")
-				{
-					$result1 = $this->db->insert('cns_persona_x_alergia', $data1);
-					if (!$result1)
-					{
-						$this->msg_error_usr = "Error actualizando Alergias.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					}
-				}
-			}
-			if ($this->db->delete('cns_control_vacuna', array('id_persona' => $this->id)))
-			for($i=0;$i<sizeof($this->vacuna);$i++)
-			{
-				$data2 = array(
-					// vacuna
-					'id_persona' => $this->id,
-					'id_vacuna' => $this->vacuna[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
-					'id_asu_um' => $id_asu_um,
-					
-				);
-				if($this->vacuna[$i]!="")
-				{
-					$result2 = $this->db->insert('cns_control_vacuna', $data2);
-					if (!$result2)
-					{
-						$this->msg_error_usr = "Error actualizando vacunas.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					}
-				}
-			}
-			
-			if ($this->db->delete('cns_control_ira', array('id_persona' => $this->id)))
-			for($i=0;$i<sizeof($this->ira);$i++)
-			{
-				$data3 = array(
-					// ira
-					'id_persona' => $this->id,
-					'id_ira' => $this->ira[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
-					'id_asu_um' => $id_asu_um,
-					
-				);
-				if($this->ira[$i]!="")
-				{
-					$result3 = $this->db->insert('cns_control_ira', $data3);
-					if (!$result3)
-					{
-						$this->msg_error_usr = "Error  actualizando IRA.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					}
-				}
-			}
-			
-			if ($this->db->delete('cns_control_eda', array('id_persona' => $this->id)))
-			for($i=0;$i<sizeof($this->eda);$i++)
-			{
-				$data4 = array(
-					// eda
-					'id_persona' => $this->id,
-					'id_eda' => $this->eda[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
-					'id_asu_um' => $id_asu_um,
-					
-				);
-				if($this->eda[$i]!="")
-				{
-					$result4 = $this->db->insert('cns_control_eda', $data4);
-					if (!$result4)
-					{
-						$this->msg_error_usr = "Error actualizando EDA.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					}
-				}
-			}
-			
-			if ($this->db->delete('cns_control_consulta', array('id_persona' => $this->id)))
-			for($i=0;$i<sizeof($this->consulta);$i++)
-			{
-				$data5 = array(
-					// consulta
-					'id_persona' => $this->id,
-					'id_consulta' => $this->consulta[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
-					'id_asu_um' => $id_asu_um,
-					
-				);
-				if($this->consulta[$i]!="")
-				{
-					$result5 = $this->db->insert('cns_control_consulta', $data5);
-					if (!$result5)
-					{
-						$this->msg_error_usr = "Error actualizando Consulta.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					}
-				}
-			}
-			
-			if ($this->db->delete('cns_control_accion_nutricional', array('id_persona' => $this->id)))
-			for($i=0;$i<sizeof($this->accion_nutricional);$i++)
-			{
-				$data6 = array(
-					// accion nutricional
-					'id_persona' => $this->id,
-					'id_accion_nutricional' => $this->accion_nutricional[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->faccion_nutricional[$i])),
-					'id_asu_um' => $id_asu_um,
-					
-				);
-				if($this->accion_nutricional[$i]!="")
-				{
-					$result6 = $this->db->insert('cns_control_accion_nutricional', $data6);
-					if (!$result6)
-					{
-						$this->msg_error_usr = "Error actualizando Accion nutricional.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					}
-				}
-			}
-			
-			if ($this->db->delete('cns_control_nutricional', array('id_persona' => $this->id)))
-			for($i=0;$i<sizeof($this->peso);$i++)
-			{
-				$data7 = array(
-					// nutricion
-					'id_persona' => $this->id,
-					'peso' => $this->peso[$i],
-					'altura' => $this->altura[$i],
-					'talla' => $this->talla[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
-					'id_asu_um' => $id_asu_um,
-					
-				);
-				if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!="")
-				{
-					$result7 = $this->db->insert('cns_control_nutricional', $data7);
-					if (!$result7)
-					{
-						$this->msg_error_usr = "Error actualizando Nutricion.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					}
-				}
-			}
-			
-			if ($this->db->delete('cns_persona_x_afiliacion', array('id_persona' => $this->id)))
-			for($i=0;$i<sizeof($this->afiliacion);$i++)
-			{
-				$data8 = array(
-					// afiliacion
-					'id_persona' => $this->id,
-					'id_afiliacion' => $this->afiliacion[$i],
-					
-				);
-				if($this->afiliacion[$i]!="")
-				{
-					$result8 = $this->db->insert('cns_persona_x_afiliacion', $data8);
-					if (!$result8)
-					{
-						$this->msg_error_usr = "Error actualizando Afiliacion.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					}
 				}
 			}
 		}
-		return $this->id;
+	}
+	/**
+	 * actualiza las vacunas del paciente
+	 *
+	 */
+	public function update_vacuna()
+	{
+		$id_asu_um=$this->umt;
+		if ($this->db->delete('cns_control_vacuna', array('id_persona' => $this->id)))
+		for($i=0;$i<sizeof($this->vacuna);$i++)
+		{
+			$data2 = array(
+				// vacuna
+				'id_persona' => $this->id,
+				'id_vacuna' => $this->vacuna[$i],
+				'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
+				'id_asu_um' => $id_asu_um,
+				
+			);
+			if($this->vacuna[$i]!="")
+			{
+				$result2 = $this->db->insert('cns_control_vacuna', $data2);
+				if (!$result2)
+				{
+					$this->msg_error_usr = "Error actualizando vacunas.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+			}
+		}
+	}
+	/**
+	 * actualiza las iras del paciente
+	 *
+	 */
+	public function update_ira()
+	{
+		$id_asu_um=$this->umt;
+		if ($this->db->delete('cns_control_ira', array('id_persona' => $this->id)))
+		for($i=0;$i<sizeof($this->ira);$i++)
+		{
+			$data3 = array(
+				// ira
+				'id_persona' => $this->id,
+				'id_ira' => $this->ira[$i],
+				'fecha' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
+				'id_asu_um' => $id_asu_um,
+				
+			);
+			if($this->ira[$i]!="")
+			{
+				$result3 = $this->db->insert('cns_control_ira', $data3);
+				if (!$result3)
+				{
+					$this->msg_error_usr = "Error  actualizando IRA.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+			}
+		}
+	}
+	/**
+	 * actualiza las edas del paciente
+	 *
+	 */
+	public function update_eda()
+	{
+		$id_asu_um=$this->umt;
+		if ($this->db->delete('cns_control_eda', array('id_persona' => $this->id)))
+		for($i=0;$i<sizeof($this->eda);$i++)
+		{
+			$data4 = array(
+				// eda
+				'id_persona' => $this->id,
+				'id_eda' => $this->eda[$i],
+				'fecha' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
+				'id_asu_um' => $id_asu_um,
+				
+			);
+			if($this->eda[$i]!="")
+			{
+				$result4 = $this->db->insert('cns_control_eda', $data4);
+				if (!$result4)
+				{
+					$this->msg_error_usr = "Error actualizando EDA.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+			}
+		}
+	}
+	/**
+	 * actualiza las consulta del paciente
+	 *
+	 */
+	public function update_consulta()
+	{
+		$id_asu_um=$this->umt;
+		if ($this->db->delete('cns_control_consulta', array('id_persona' => $this->id)))
+		for($i=0;$i<sizeof($this->consulta);$i++)
+		{
+			$data5 = array(
+				// consulta
+				'id_persona' => $this->id,
+				'id_consulta' => $this->consulta[$i],
+				'fecha' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
+				'id_asu_um' => $id_asu_um,
+				
+			);
+			if($this->consulta[$i]!="")
+			{
+				$result5 = $this->db->insert('cns_control_consulta', $data5);
+				if (!$result5)
+				{
+					$this->msg_error_usr = "Error actualizando Consulta.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+			}
+		}
+	}
+	/**
+	 * actualiza las acciones del paciente
+	 *
+	 */
+	public function update_accion()
+	{
+		$id_asu_um=$this->umt;
+		if ($this->db->delete('cns_control_accion_nutricional', array('id_persona' => $this->id)))
+		for($i=0;$i<sizeof($this->accion_nutricional);$i++)
+		{
+			$data6 = array(
+				// accion nutricional
+				'id_persona' => $this->id,
+				'id_accion_nutricional' => $this->accion_nutricional[$i],
+				'fecha' => date('Y-m-d H:i:s', strtotime($this->faccion_nutricional[$i])),
+				'id_asu_um' => $id_asu_um,
+				
+			);
+			if($this->accion_nutricional[$i]!="")
+			{
+				$result6 = $this->db->insert('cns_control_accion_nutricional', $data6);
+				if (!$result6)
+				{
+					$this->msg_error_usr = "Error actualizando Accion nutricional.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+			}
+		}
+	}
+	/**
+	 * actualiza las nutricion del paciente
+	 *
+	 */	
+	public function update_nutricion()
+	{
+		$id_asu_um=$this->umt;	
+		if ($this->db->delete('cns_control_nutricional', array('id_persona' => $this->id)))
+		for($i=0;$i<sizeof($this->peso);$i++)
+		{
+			$data7 = array(
+				// nutricion
+				'id_persona' => $this->id,
+				'peso' => $this->peso[$i],
+				'altura' => $this->altura[$i],
+				'talla' => $this->talla[$i],
+				'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
+				'id_asu_um' => $id_asu_um,
+				
+			);
+			if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!="")
+			{
+				$result7 = $this->db->insert('cns_control_nutricional', $data7);
+				if (!$result7)
+				{
+					$this->msg_error_usr = "Error actualizando Nutricion.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+			}
+		}
+	}
+	/**
+	 * actualiza las afiliaciones del paciente
+	 *
+	 */
+	public function update_beneficiario()
+	{
+		$id_asu_um=$this->umt;
+			
+		if ($this->db->delete('cns_persona_x_afiliacion', array('id_persona' => $this->id)))
+		for($i=0;$i<sizeof($this->afiliacion);$i++)
+		{
+			$data8 = array(
+				// afiliacion
+				'id_persona' => $this->id,
+				'id_afiliacion' => $this->afiliacion[$i],
+				
+			);
+			if($this->afiliacion[$i]!="")
+			{
+				$result8 = $this->db->insert('cns_persona_x_afiliacion', $data8);
+				if (!$result8)
+				{
+					$this->msg_error_usr = "Error actualizando Afiliacion.";
+					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				}
+			}
+		}
 	}
 	/**
 	 *Hace update de la tableta que este sincronizando dependiendo del resultado
@@ -1545,6 +1653,8 @@ class Enrolamiento_model extends CI_Model
 			$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
 		else if($catalog=="asu_arbol_segmentacion")
 			$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');
+		else if($catalog=="tes_pendientes_tarjeta")
+			$this->db->select('fecha, id_persona, tabla, registro_json,');
 		else
 			$this->db->select('*');
 		$this->db->from($catalog);
@@ -1554,7 +1664,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->where($campo2, $id2);
 		if($l2!="")
 		$this->db->limit($l2, $l1);
-		$query = $this->db->get(); 
+		$query = $this->db->get(); //echo $this->db->last_query();
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";

@@ -4,6 +4,20 @@
 <?php 
 if($enrolado)
 {
+$cn_basico = Menubuilder::isGranted(DIR_TES.'::enrolamiento::basico_edit');
+$cn_beneficiario = Menubuilder::isGranted(DIR_TES.'::enrolamiento::beneficiario_edit');
+$cn_tutor = Menubuilder::isGranted(DIR_TES.'::enrolamiento::tutor_edit');
+$cn_umt = Menubuilder::isGranted(DIR_TES.'::enrolamiento::umt_edit');
+$cn_regcivil = Menubuilder::isGranted(DIR_TES.'::enrolamiento::regcivil_edit');
+$cn_direccion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::direccion_edit');
+
+$cn_alergia = Menubuilder::isGranted(DIR_TES.'::enrolamiento::alergia_edit');
+$cn_vacuna = Menubuilder::isGranted(DIR_TES.'::enrolamiento::vacuna_edit');
+$cn_ira = Menubuilder::isGranted(DIR_TES.'::enrolamiento::ira_edit');
+$cn_eda = Menubuilder::isGranted(DIR_TES.'::enrolamiento::eda_edit');
+$cn_consulta = Menubuilder::isGranted(DIR_TES.'::enrolamiento::consulta_edit');
+$cn_accion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::accion_edit');
+$cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit');
 ?>    
     <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
 	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
@@ -11,7 +25,13 @@ if($enrolado)
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-    
+    <style>
+	td p
+	{
+		color:#000;
+		font-weight:bold;
+	}
+	</style>
    
     <script>
 	var g=new Date();
@@ -34,6 +54,7 @@ if($enrolado)
 
 	$(document).ready(function()
 	{
+		<?php if($cn_tutor) {?>
 		$("#buscar").autocomplete({
 				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/",
 				select: function (a, b) 
@@ -42,7 +63,7 @@ if($enrolado)
 					buscarTutor(valor.substr(0,valor.indexOf(" ")));
 				}
 		})
-		
+		<?php }?>
 		$("#fnacimiento").datepicker(optionsFecha );
 		$("#fechacivil").datepicker();
 		$("a#fba1").fancybox({
@@ -58,7 +79,7 @@ if($enrolado)
 				var array=document.getElementById(uri.substr(0,uri.search("/"))).value;
 				if(array!="")
 				{
-					var des=1;
+					var des=5;
 					if(uri.substr(uri.search("/")+1,uri.length)=="umt")des=5;
 					$.ajax({
 					type: "POST",
@@ -91,7 +112,8 @@ if($enrolado)
 					});
 				}
 			}						
-		}); 
+		});
+		<?php if($cn_basico) {?> 
 		$.ajax({
 		type: "POST",
 		data: {
@@ -108,7 +130,9 @@ if($enrolado)
 				document.getElementById("lnacimientoT").value=obj[0]["descripcion"];
 			}
 		});
+		<?php }?>
 		
+		<?php if($cn_umt) {?>
 		$.ajax({
 		type: "POST",
 		data: {
@@ -125,7 +149,8 @@ if($enrolado)
 				document.getElementById("umt").value=obj[0]["descripcion"];
 			}
 		});
-		
+		<?php }?>
+		<?php if($cn_regcivil) {?>
 		$.ajax({
 		type: "POST",
 		data: {
@@ -142,7 +167,8 @@ if($enrolado)
 				document.getElementById("lugarcivilT").value=obj[0]["descripcion"];
 			}
 		});
-		
+		<?php }?>
+		<?php if($cn_direccion) {?>
 		$.ajax({
 		type: "POST",
 		data: {
@@ -160,6 +186,7 @@ if($enrolado)
 			}
 		});
 		<?php
+		}
 		$alerg="";
 		$afili="";
 		foreach ($alergias as $alergia)
@@ -181,7 +208,7 @@ if($enrolado)
 		{       
 			getcurp();
 		});	
-		
+		<?php if($cn_tutor) {?>
 		$("#captura").click(function(e) {
             habilitarTutor();
         });
@@ -192,9 +219,11 @@ if($enrolado)
 		$("#curpT").blur(function(e) {
             buscarTutor(this.value);
         });
-		habilitarTutor();
 		
+		habilitarTutor();
+		<?php }?>
 	});
+	<?php if($cn_tutor) {?>
 	function habilitarTutor()
 	{
 		if(document.getElementById("captura").checked)
@@ -295,6 +324,7 @@ if($enrolado)
 			}
 		});
 	}
+	<?php }?>
 	function limpiar_direccion()
 	{
 		$('#ladireccion').data('old-state', $('#ladireccion').html());
@@ -353,7 +383,8 @@ if($enrolado)
 		var no=omitirAcentos($("#nombre").val());
 		var se=$("input[name='sexo']:checked").val();
 		var fn=$("#fnacimiento").val();
-		var ed=$("#lnacimientoT").val().substr($("#lnacimientoT").val().search(",")+1,$("#lnacimientoT").val().length);
+		var ed=$("#lnacimientoT").val().split(",");
+		ed=ed[ed.length-1];
 		ed=$.trim(ed);
 		var d=fn.substr(0,2);
 		var m=fn.substr(3,2);
@@ -460,6 +491,7 @@ if($enrolado)
                   <div id="Accordion1" class="Accordion" tabindex="0" style="margin-left:-20px;" >
                   
                   <!-- Datos basicos -->
+                  <?php if($cn_basico){ ?>
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Datos Basicos</div>
                       <div class="AccordionPanelContent" >
@@ -468,7 +500,8 @@ if($enrolado)
                           <tr>
                             <td width="19%" height="50"><p align="right">Nombre</p></td>
                             <td width="31%"><input name="nombre" type="text" title='requiere' required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->nombre; ?>" maxlength="35">
-                            <input name="id" type="hidden" id="id" value="<?php echo $id;?>"  /></td>
+                            <input name="id" type="hidden" id="id" value="<?php echo $id;?>"  />
+                            <input name="id_cns_basico" type="hidden" id="id_cns_basico" value="<?php echo $id;?>"  /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                             
@@ -517,21 +550,64 @@ if($enrolado)
                       
                       </div>
                     </div>
-                    
+                    <?php } else { ?>
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Datos Basicos</div>
+                      <div class="AccordionPanelContent" >
+                      	<input name="id" type="hidden" id="id" value="<?php echo $id;?>"  />
+                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
+                          <tr>
+                            <td width="19%"><p align="right">Nombre</p></td>
+                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->nombre;?></div></td>
+                            <td width="25%"><p align="right">Sexo</p></td>
+                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->sexo;?></div></td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Apellido Paterno</p></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->apellido_paterno;?></div></td>
+                            <td><p align="right">Tipo de Sangre</p></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->tsangre;?></div></td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Apellido Materno</p></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->apellido_materno;?></div></td>
+                            <td><p align="right">Fecha de Nacimiento</p></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->fecha_nacimiento;?></div></td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Lugar de Nacimiento</p></td>
+                            <td colspan="3"><div id="lnacimientoT" style="width:100%; margin-left:20px;"></div></td>
+                            </tr>
+                          <tr>
+                            <td><p align="right">CURP</p></td>
+                            <td ><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->curp;?></div></td>
+                            <td><p align="right">Nacionalidad</p></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->nacionalidad;?></div></td>
+                          </tr>
+                        </table>
+                        <br />
+                      
+                      </div>
+                    </div>
+                    <?php }?>
                     
                     <!-- Tipo de Beneficiario:  -->
-                    <div class="AccordionPanel">
+                    <?php if($cn_beneficiario){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Tipo de Beneficiario</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                        	<div id="tbenef" style="margin-left:10px;">
                             
                             </div>
+                            <input name="id_cns_beneficiario" type="hidden" id="id_cns_beneficiario" value="<?php echo $id;?>"  />
                       	</div>
                       </div>
                     </div>
+                    <?php }?>
+                    
                     <!-- Tutor -->
-                  
+                  	<?php if($cn_tutor){ ?>
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Datos de la Madre o Tutor</div>
                       <div class="AccordionPanelContent" >
@@ -542,6 +618,7 @@ if($enrolado)
                             <td colspan="2"><div class="input-append">
                               <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" value="<?php echo set_value('buscar', '') ?>" class="spa10" placeholder="Buscar"/>
                               <input type="submit" name="buscarCurp" id="buscarCurp" value="Buscar" class="btn btn-primary"/>
+                              <input name="id_cns_tutor" type="hidden" id="id_cns_tutor" value="<?php echo $id;?>"  />
                               
                             </td>
                           </tr>
@@ -592,15 +669,19 @@ if($enrolado)
                       
                       </div>
                     </div>
+                    <?php }?>
                     
                     <!--  Unidad Medica Tratante -->
-                    <div class="AccordionPanel">
+                    <?php if($cn_umt){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Unidad Medica Tratante</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                       
                           <tr>
-                            <td width="19%" height="50"><p align="right">Lugar</p></td>
+                            <td width="19%" height="50"><p align="right">
+                              <input name="id_cns_umt" type="hidden" id="id_cns_umt" value="<?php echo $id;?>"  />
+                            Lugar</p></td>
                             <td width="81%" colspan="3"><div class="input-append" style="width:100%"><input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
                               <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/" id="fba1" class="btn btn-primary">Seleccionar</a></div>
@@ -610,16 +691,20 @@ if($enrolado)
                       
                       </div>
                     </div>
+                    <?php }?>
                     
                     <!--  Registro civil -->
-                    <div class="AccordionPanel">
+                    <?php if($cn_regcivil){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Registro Civil</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Fecha</p></td>
                             <td width="31%"><input name="fechacivil" type="text" id="fechacivil" style="width:75%; margin-left:10px;"  value="<?php echo date("d-m-Y",strtotime($enrolado->fecha_registro)); ?>" placeholder="dd-mm-yyyy"></td>
-                            <td width="25%"><p align="right">&nbsp;</p></td>
+                            <td width="25%"><p align="right">
+                              <input name="id_cns_regcivil" type="hidden" id="id_cns_regcivil" value="<?php echo $id;?>"  />
+                            </p></td>
                             <td width="25%">&nbsp;</td>
                           </tr>
                           <tr>
@@ -633,9 +718,11 @@ if($enrolado)
                       
                       </div>
                     </div>
+                    <?php }?>
                     
                     <!-- Direccion  -->
-                    <div class="AccordionPanel">
+                    <?php if($cn_direccion){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Dirección</div>
                       <div class="AccordionPanelContent">
                       <div id="compartetutor" style="width:94.7%" > </div>
@@ -644,7 +731,9 @@ if($enrolado)
                           <tr>
                             <td width="19%" height="50"><p align="right">Calle</p></td>
                             <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;" title='requiere' required value="<?php echo $enrolado->calle_domicilio; ?>"></td>
-                            <td width="25%"><p align="right">Número</p></td>
+                            <td width="25%"><p align="right">
+                              <input name="id_cns_direccion" type="hidden" id="id_cns_direccion" value="<?php echo $id;?>"  />
+                            Número</p></td>
                             <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->numero_domicilio; ?>"></td>
                           </tr>
                           <tr>
@@ -664,9 +753,9 @@ if($enrolado)
                                   <td width="19%" align="right">Ageb</td>
                                   <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo $enrolado->ageb; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
                                   <td  align="right">Sector</td>
-                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->sector; ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->sector; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
                                   <td  align="right">Manzana</td>
-                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo $enrolado->manzana; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo $enrolado->manzana; ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
                                 </tr>
                               </table>
                           </td>
@@ -695,23 +784,27 @@ if($enrolado)
                         <br />
                       </div>
                     </div>
+                    <?php }?>
                     
                     <!-- alergias y reacciones:  -->
-                    <div class="AccordionPanel">
+                    <?php if($cn_alergia){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Historial de Alergias y Reacciones Febriles</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         	<div id="alergias" style="margin-left:10px;">
                             
                             </div>
+                            <input name="id_cns_alergia" type="hidden" id="id_cns_alergia" value="<?php echo $id;?>"  />
                         </div>
                       </div>
                     </div>
+                    <?php }?>
                     
-                    
-                    <!-- vacunacion  -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Vacunación</div>
+                  <!-- vacunacion  -->
+                    <?php if($cn_vacuna){ ?>
+                  <div class="AccordionPanel">
+                    <div class="AccordionPanelTab">Control de Vacunación</div>
                       <div class="AccordionPanelContent"><br />                      
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -735,12 +828,15 @@ if($enrolado)
                                    <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('vacuna','vn');" style="height:40px; width:80px;"/></td>
                               </tr>                     
                           </table>
+                        <input name="id_cns_vacuna" type="hidden" id="id_cns_vacuna" value="<?php echo $id;?>"  />
                         </div>
                       </div>
                     </div>
+                    <?php }?>
                     
                     <!-- ira  -->
-                    <div class="AccordionPanel">
+                    <?php if($cn_ira){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de IRA</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
@@ -765,12 +861,15 @@ if($enrolado)
                                    <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('ira','in');" style="height:40px; width:80px;"/></td>
                               </tr>                     
                           </table>
+                        <input name="id_cns_ira" type="hidden" id="id_cns_ira" value="<?php echo $id;?>"  />
                         </div>
                       </div>
                     </div>
+                    <?php }?>
                     
                     <!-- eda  -->
-                    <div class="AccordionPanel">
+                    <?php if($cn_eda){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de EDA</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
@@ -795,12 +894,15 @@ if($enrolado)
                                    <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('eda','en');" style="height:40px; width:80px;"/></td>
                               </tr>                     
                           </table>
+                        <input name="id_cns_eda" type="hidden" id="id_cns_beneficiario2" value="<?php echo $id;?>"  />
                         </div>
                       </div>
                     </div>
+                    <?php }?>
                     
                     <!-- consulta  -->
-                    <div class="AccordionPanel">
+                    <?php if($cn_consulta){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Consulta</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
@@ -827,12 +929,15 @@ if($enrolado)
                                   </td>
                               </tr>                     
                           </table>
+                        <input name="id_cns_consulta" type="hidden" id="id_cns_consulta" value="<?php echo $id;?>"  />
                         </div>
                       </div>
                     </div>
+                    <?php }?>
                     
                     <!-- accion nutricional  -->
-                    <div class="AccordionPanel">
+                    <?php if($cn_accion){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Acción Nutricional</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
@@ -857,11 +962,15 @@ if($enrolado)
                                    <input type="button" class="btn btn-primary" value="Quitar"  onclick="rem('accion_nutricional','nac');" style="height:40px; width:80px;"/></td>
                               </tr>                     
                           </table>
+                        <input name="id_cns_accion" type="hidden" id="id_cns_accion" value="<?php echo $id;?>"  />
                         </div>
                       </div>
                     </div>
-                    <!-- nutricion  -->
-                    <div class="AccordionPanel">
+                    <?php }?>
+                    
+                  <!-- nutricion  -->
+                    <?php if($cn_nutricion){ ?>
+                  <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control Nutricional</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
@@ -926,8 +1035,10 @@ if($enrolado)
                                   </td>
                               </tr>                     
                           </table>
+                        <input name="id_cns_nutricion" type="hidden" id="id_cns_nutricion" value="<?php echo $id;?>"  />
                         </div>
                       </div>
+                      <?php }?>
                     </div>                                        
                     
                     </td>

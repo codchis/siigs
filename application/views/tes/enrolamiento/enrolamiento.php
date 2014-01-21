@@ -54,7 +54,7 @@
 				var array=document.getElementById(uri.substr(0,uri.search("/"))).value;
 				if(array!="")
 				{
-					var des=1;
+					var des=5;
 					if(uri.substr(uri.search("/")+1,uri.length)=="umt")des=5;
 					$.ajax({
 					type: "POST",
@@ -312,7 +312,9 @@
 		var no=omitirAcentos($("#nombre").val());
 		var se=$("input[name='sexo']:checked").val();
 		var fn=$("#fnacimiento").val();
-		var ed=$("#lnacimientoT").val().substr($("#lnacimientoT").val().search(",")+1,$("#lnacimientoT").val().length);
+		var ed=$("#lnacimientoT").val().split(",");
+		ed=ed[ed.length-1];
+		
 		ed=$.trim(ed);
 		var d=fn.substr(0,2);
 		var m=fn.substr(3,2);
@@ -621,9 +623,9 @@
                                   <td width="19%" align="right">Ageb</td>
                                   <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo set_value('ageb', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
                                   <td  align="right">Sector</td>
-                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo set_value('sector', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo set_value('sector', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
                                   <td  align="right">Manzana</td>
-                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
                                 </tr>
                               </table>
                           </td>
