@@ -168,4 +168,31 @@ class ControladorAccion_model extends CI_Model {
 				return $query->row()->id;
 		}
 	}
+    
+    /**
+	 * Establece el mensaje de ayuda
+	 *
+	 * @access public
+	 * @return int
+	 * @param  int $id
+     * @param  string $textAyuda
+	 * @throws Exception En caso de algun error al guardar el texto de ayuda
+	 */
+	public function setHelp($id, $textAyuda)
+	{
+		$result = false;
+
+        $data['ayuda'] = $textAyuda;
+        
+        $result = $this->db->update('sis_controlador_x_accion', $data, array('id' => $id));
+        
+        if( $this->db->_error_number() ) {
+            $this->error = true;
+            $this->msg_error_usr = 'No se puede actualizar el registro';
+            $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+            throw new Exception('('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message());
+        }
+
+        return $result;
+	}
 }
