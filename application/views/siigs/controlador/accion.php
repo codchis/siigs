@@ -33,7 +33,15 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <?php foreach ($controlador_acciones as $controlador_accion): ?>
 	<tr>
 		<td><input type="checkbox" name="acciones[]" value="<?php echo $controlador_accion->id; ?>" <?php if ($controlador_accion->activo) echo "checked"; ?>><?php echo $controlador_accion->accion; ?></td>
-        <td><a id="detalles"  href="<?php echo site_url().DIR_SIIGS; ?>/controlador/help/<?php echo $controlador_accion->id;?>" class="btn btn-primary">Ayuda</a></td>
+        <td>
+            <?php 
+                $idConAcc = $this->ControladorAccion_model->getId($id_controlador , $controlador_accion->id);
+                
+                if($idConAcc) {
+                    echo '<a id="detalles" href="'.site_url().DIR_SIIGS.'/controlador/help/'.$idConAcc.'" class="btn btn-primary">Ayuda</a>';
+                }
+            ?>
+        </td>
 	</tr>
 <?php endforeach ?>
 <tr>

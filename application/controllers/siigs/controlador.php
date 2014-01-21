@@ -302,8 +302,9 @@ class Controlador extends CI_Controller {
                 if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
                 
-		$this->load->helper('form');
+		$this->load->helper(array('form','url'));
 		$this->load->library('form_validation');
+        $this->load->model('siigs/ControladorAccion_model');
 
 		$data['title'] = 'Acciones asignadas al controlador';
 		$data['id_controlador'] = $id;
@@ -328,7 +329,6 @@ class Controlador extends CI_Controller {
 		{
 			try
 			{
-				$this->load->helper('url');
 				$error = false;
 
                                 $this->session->set_flashdata('clsResult', 'success');
