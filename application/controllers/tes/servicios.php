@@ -382,7 +382,7 @@ class Servicios extends CI_Controller {
 				//************ fin notificacion ************
 				
 				//************ inicio tes_pendientes_tarjeta ************
-				$pendiente=$this->Enrolamiento_model->get_catalog2("tes_pendientes_tarjeta");
+				$pendiente=$this->Enrolamiento_model->get_catalog2("tes_pendientes_tarjeta","resuelto","0");
 				if($pendiente)
 				{
 					echo ",";
@@ -607,6 +607,14 @@ class Servicios extends CI_Controller {
 		}
 		if($bien==0)
 		{
+			if(array_key_exists("tes_pendientes_tarjeta",$datos))
+			foreach($datos["tes_pendientes_tarjeta"] as  $midato)
+			{
+				if($this->Enrolamiento_model->get_catalog2("tes_pendientes_tarjeta","fecha",$midato->fecha,"id_persona",$midato->id_persona))
+					$this->Enrolamiento_model->cns_update("tes_pendientes_tarjeta",$midato,$midato->fecha,"id_persona",$midato->id_persona);
+				else
+					$this->Enrolamiento_model->cns_insert("tes_pendientes_tarjeta",$midato);
+			}	
 			$this->session->set_userdata( 'paso', "5" );
 			$mi_version = $this->Enrolamiento_model->get_version();
 			foreach($mi_version as $dato)

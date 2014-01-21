@@ -54,7 +54,7 @@
 				var array=document.getElementById(uri.substr(0,uri.search("/"))).value;
 				if(array!="")
 				{
-					var des=1;
+					var des=5;
 					if(uri.substr(uri.search("/")+1,uri.length)=="umt")des=5;
 					$.ajax({
 					type: "POST",
@@ -312,7 +312,9 @@
 		var no=omitirAcentos($("#nombre").val());
 		var se=$("input[name='sexo']:checked").val();
 		var fn=$("#fnacimiento").val();
-		var ed=$("#lnacimientoT").val().substr($("#lnacimientoT").val().search(",")+1,$("#lnacimientoT").val().length);
+		var ed=$("#lnacimientoT").val().split(",");
+		ed=ed[ed.length-1];
+		
 		ed=$.trim(ed);
 		var d=fn.substr(0,2);
 		var m=fn.substr(3,2);

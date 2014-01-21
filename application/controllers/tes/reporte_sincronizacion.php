@@ -67,7 +67,7 @@ class Reporte_sincronizacion extends CI_Controller
 			$array[8] = (array("atributo"=>"Total de tabletas desincronizadas","valor"=>$ttd,"lista"=>"8"));
 			
 			$tpn=$this->Reporte_sincronizacion_model->getCount("","select distinct(id_persona)  from tes_pendientes_tarjeta ");
-			$array[9] = (array("atributo"=>"Total de pacientes que no llevan su tes sincrinizada con la plataforma","valor"=>$tpn,"lista"=>"9"));
+			$array[9] = (array("atributo"=>"Total de pacientes que no llevan su tes sincronizada con la plataforma","valor"=>$tpn,"lista"=>"9"));
 			
 			$tpt=$this->Reporte_sincronizacion_model->getCount("tes_pendientes_tarjeta");
 			$array[10] = (array("atributo"=>"Total de controles no registrados en la tes","valor"=>$tpt,"lista"=>"10"));
