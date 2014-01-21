@@ -32,12 +32,28 @@ class Accion extends CI_Controller {
 	 *
 	 *@return void
 	 */
-	public function index()
+	public function index($pag = 0)
 	{
 		if (empty($this->Accion_model))
 			return false;
                 if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 		show_error('', 403, 'Acceso denegado');
+                
+                $this->load->library('pagination');
+                $this->load->helper('form');
+
+                //Configuracion para la paginacion
+                $configPag['base_url']   ='/'. DIR_SIIGS.'/accion/index/';
+                $configPag['first_link'] = 'Primero';
+                $configPag['last_link']  = '&Uacute;ltimo';
+                $configPag['total_rows'] = $this->Accion_model->getNumRows();
+                $configPag['uri_segment'] = '4';
+                $configPag['per_page']   = 20;
+
+                $this->pagination->initialize($configPag);
+                $this->Accion_model->setOffset($pag);
+                $this->Accion_model->setRows($configPag['per_page']); 
+                
 		try
 		{
 
@@ -45,6 +61,7 @@ class Accion extends CI_Controller {
 			$data['acciones'] = $this->Accion_model->getAll();
 			$data['msgResult'] = $this->session->flashdata('msgResult');
                         $data['clsResult'] = $this->session->flashdata('clsResult');
+                        $data['pag'] = $pag;
 		}
 		catch (Exception $e)
 		{
