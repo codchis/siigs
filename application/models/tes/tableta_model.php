@@ -290,7 +290,7 @@ class Tableta_model extends CI_Model
      * @return int     false Si no se eliminó el registro, true si se ejecutó la eliminación
      */
     public function delete($id = null)
-    {
+    {        
         $result = false;
         
         $id = is_null($id) ? $this->id : $id;
@@ -416,14 +416,77 @@ class Tableta_model extends CI_Model
      * @param  int $row_count Establece la cantidad de registros a devolver
      * @return array object   Devuelve un arreglo de objetos obtenidos de la base de datos
      */
-    public function getAll($offset = null, $row_count = null)
+    public function getAll($offset=null, $row_count=null, $filtro)
     {
         $result = 0;
+        $idsAsuUM = array();
+        
+        /* *********************************************/
+        if(!empty($filtro['um'])) {
+            $idsAsuUM = array($filtro['um']);
+        /* *********************************************/
+        } else if(!empty($filtro['locali'])) {
+            $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['locali']);
+            $resultIdsAsu = $queryIdsAsu->result();
+
+            if (!$resultIdsAsu){
+                return null;
+            }
+
+            foreach ($resultIdsAsu as $tempAsu) {
+                $idsAsuUM[] = $tempAsu->id;
+            }
+        /* *********************************************/
+        } else if(!empty($filtro['muni'])) {
+            $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
+                                                (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['muni'].')');
+            $resultIdsAsu = $queryIdsAsu->result();
+
+            if (!$resultIdsAsu){
+                return null;
+            }
+
+            foreach ($resultIdsAsu as $tempAsu) {
+                $idsAsuUM[] = $tempAsu->id;
+            }
+        /* *********************************************/
+        } else if(!empty($filtro['juris'])) {
+            $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
+                                                (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
+                                                    (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['juris'].'))');
+            $resultIdsAsu = $queryIdsAsu->result();
+
+            if (!$resultIdsAsu){
+                return null;
+            }
+
+            foreach ($resultIdsAsu as $tempAsu) {
+                $idsAsuUM[] = $tempAsu->id;
+            }
+        /* *********************************************/
+        } else if(!empty($filtro['edo'])) {
+            $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
+                                                (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
+                                                    (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
+                                                        (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['edo'].')))');
+            $resultIdsAsu = $queryIdsAsu->result();
+
+            if (!$resultIdsAsu){
+                return null;
+            }
+
+            foreach ($resultIdsAsu as $tempAsu) {
+                $idsAsuUM[] = $tempAsu->id;
+            }
+        }
         
         $this->db->select('tes_tableta.*, sis_estado_tableta.descripcion AS status, tes_tipo_censo.descripcion AS tipo_censo');
         $this->db->from('tes_tableta');
         $this->db->join('sis_estado_tableta', 'tes_tableta.id_tes_estado_tableta = sis_estado_tableta.id', 'left');
         $this->db->join('tes_tipo_censo', 'tes_tableta.id_tipo_censo = tes_tipo_censo.id', 'left');
+        
+        if(!empty($idsAsuUM))
+            $this->db->where('tes_tableta.id_asu_um IN ('.implode(',', $idsAsuUM).')');
         
         if(!empty($offset) && !empty($row_count))
             $this->db->limit($offset, $row_count);

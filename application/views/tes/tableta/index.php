@@ -25,15 +25,43 @@
     $showUpdate = Menubuilder::isGranted(DIR_TES.'::tableta::update');
     $showDelete = Menubuilder::isGranted(DIR_TES.'::tableta::delete');
     $showView   = Menubuilder::isGranted(DIR_TES.'::tableta::view');
-?>
+    
+    $estad[''] = 'Seleccione una opción';
+    foreach($estados as $row) {
+        $estad[$row->id] = $row->descripcion;
+    }
+    
+    echo form_open(site_url().DIR_TES.'/tableta/index/'); ?>
+<div class="table table-striped">
+<table>
+    <tr>
+        <td>Estado:</td>
+        <td><?php echo form_dropdown('estados', $estad); ?></td>
+        <td>Jurisdicción:</td>
+        <td><?php echo form_dropdown('juris', $jurisdicciones); ?></td>
+    </tr>
+    <tr>
+        <td>Municipio:</td>
+        <td><?php echo form_dropdown('municipios', $municipios); ?></td>
+        <td>Localidad:</td>
+        <td><?php echo form_dropdown('localidades', $localidades); ?></td>
+    </tr>
+    <tr>
+        <td>UM:</td>
+        <td><?php echo form_dropdown('ums', $unidades); ?></td>
+        <td></td>
+        <td><button type="submit" name="filtrar" class="btn btn-primary">Filtrar <i class="icon-search"></i> </button></td>
+    </tr>
+</table>
+</div>
+</form>
 
 <?php 
-if($showInsert) {
-    ?>
+if($showInsert) { ?>
     <label>Registrar direcciones MAC desde un archivo de texto</label>
     <?php echo form_open_multipart(site_url().DIR_TES.'/tableta/uploadFile');?>
         <input type="file" name="archivo" size="60" class="btn btn-primary" />
-        <input type="submit" value="Subir Archivo" class="btn btn-primary" />
+        <button type="submit" class="btn btn-primary" >Subir Archivo <i class="icon-upload"></i></button>
     </form>
     <?php 
 }
@@ -41,11 +69,14 @@ if($showInsert) {
 echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
 
 <?php 
-    if($showInsert) echo '<input type="button" name="registrarTableta" id="registrarTableta" value="Registrar nuevo" class="btn btn-primary" /> &nbsp; ';
+    if($showInsert) 
+        echo '<button type="button" name="registrarTableta" id="registrarTableta" class="btn btn-primary">
+            Registrar nuevo <i class="icon-plus"></i></button> ';
 
-    if($showDelete) echo '<input type="submit" value="Eliminar Seleccionados" class="btn btn-primary" />'; 
+    if($showDelete) 
+        echo '<button type="submit" class="btn btn-primary">Eliminar Seleccionados <i class="icon-remove"></i></button>'; 
 ?>
-
+<br /><br />
 <div class="table table-striped">
 <table>
     <thead>
@@ -81,14 +112,14 @@ echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm
                         'class="agregarUM '.($fila->id_asu_um==0 ? 'btn btn-small btn-primary' : '').'" '
                         . 'data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'" data-periodo="'.$fila->periodo_esq_inc.'">'.
                         ($fila->id_asu_um==0 ? 'Asignar' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'" class="btn btn-small btn-primary">'.($fila->usuarios_asignados==0 ? 'Asignar' : 'Ver').'</a></td>';
+                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'" class="btn btn-small btn-primary">'.($fila->usuarios_asignados==0 ? 'Asignar' : 'Ver').' <i class="icon-user"></i></a></td>';
                     
-                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles</a></td>';
+                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles <i class="icon-eye-open"></i></a></td>';
                     
-                    if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'" class="btn btn-small btn-primary">Modificar</a></td>';
+                    if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'" class="btn btn-small btn-primary">Modificar <i class="icon-pencil"></i></a></td>';
                     
                     if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary">Eliminar</a></td>';
+                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary">Eliminar <i class="icon-remove"></i></a></td>';
                 echo '</tr>';
             }
         } else {
@@ -240,6 +271,141 @@ $(function() {
 		'transitionOut'	: 'elastic',
 		'type'			: 'iframe',									
 	}); 
+    
+    $('select[name="estados"]').change(function(e){
+    	$('select[name="juris"]')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="">Seleccione una opcion</option>')
+        .val('')
+	;
+       	$('select[name="municipios"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+    	;
+    	$('select[name="localidades"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+		;
+    	$('select[name="ums"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+		;
+        $.ajax({
+            type: 'POST',
+            url:  '/'+DIR_SIIGS+'/raiz/getDataKeyValue/1/2/'+$('select[name="estados"]').val(),
+            dataType: 'json'
+        }).done(function(juris){
+            $.each(juris, function(index) {
+                option = $('<option />');
+                option.val(juris[index].id);
+                option.text(juris[index].descripcion);
+
+                $('select[name="juris"]').append(option);
+            });
+        });
+    });
+    
+    $('select[name="juris"]').change(function(e){
+    	$('select[name="municipios"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+    	;
+    	$('select[name="localidades"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+		;
+    	$('select[name="ums"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+		;
+        $.ajax({
+            type: 'POST',
+            url:  '/'+DIR_SIIGS+'/raiz/getDataKeyValue/1/3/'+$('select[name="juris"]').val(),
+            dataType: 'json'
+        }).done(function(municipios){
+            $.each(municipios, function(index) {
+                option = $('<option />');
+                option.val(municipios[index].id);
+                option.text(municipios[index].descripcion);
+
+                $('select[name="municipios"]').append(option);
+            });
+        });
+    });
+    
+    $('select[name="municipios"]').change(function(e){
+	   	$('select[name="localidades"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+		;
+		$('select[name="ums"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+		;
+    	$.ajax({
+            type: 'POST',
+            url:  '/'+DIR_SIIGS+'/raiz/getDataKeyValue/1/4/'+$('select[name="municipios"]').val(),
+            dataType: 'json'
+        }).done(function(localidades){
+            $.each(localidades, function(index) {
+                option = $('<option />');
+                option.val(localidades[index].id);
+                option.text(localidades[index].descripcion);
+
+                $('select[name="localidades"]').append(option);
+            });
+        });
+    });
+    
+    $('select[name="localidades"]').change(function(e){
+		$('select[name="ums"]')
+	        .find('option')
+	        .remove()
+	        .end()
+	        .append('<option value="">Seleccione una opcion</option>')
+	        .val('')
+		;
+    	$.ajax({
+            type: 'POST',
+            url:  '/'+DIR_SIIGS+'/raiz/getDataKeyValue/1/5/'+$('select[name="localidades"]').val(),
+            dataType: 'json'
+        }).done(function(ums){
+            $.each(ums, function(index) {
+                option = $('<option />');
+                option.val(ums[index].id);
+                option.text(ums[index].descripcion);
+
+                $('select[name="ums"]').append(option);
+            });
+        });
+    });
+    
 });
 </script>
   

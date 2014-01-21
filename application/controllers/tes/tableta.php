@@ -52,11 +52,16 @@ class Tableta extends CI_Controller {
             $data['pag'] = $pag;
             $data['msgResult'] = $this->session->flashdata('msgResult');
             $data['clsResult'] = $this->session->flashdata('clsResult');
+            $data['estados'] = (array)$this->ArbolSegmentacion_model->getDataKeyValue(1, 1);
+            $data['jurisdicciones'] = array(0=>'Seleccione una opción');
+            $data['municipios'] = array(0=>'Seleccione una opción');
+            $data['localidades'] = array(0=>'Seleccione una opción');
+            $data['unidades'] = array(0=>'Seleccione una opción');
             $data['title'] = 'Tableta';
             $data['tipos_censo'] = $this->Tipo_censo_model->getAll();
             $data['unidades_medicas'] = array();
             
-            $registroEliminar = $this->input->post('registroEliminar');
+            $registroEliminar = @$_POST['registroEliminar'];
 
             if( !empty($registroEliminar) ) {
                 $this->Tableta_model->delete($registroEliminar);
@@ -73,8 +78,60 @@ class Tableta extends CI_Controller {
             $configPag['per_page']    = 20;
 
             $this->pagination->initialize($configPag);
+            
+            $filtro = array(
+                'edo'    => $this->input->post('estados'),
+                'juris'  => $this->input->post('juris'),
+                'muni'   => $this->input->post('municipios'),
+                'locali' => $this->input->post('localidades'),
+                'um'     => $this->input->post('ums'),
+            );
+            
+            if(!empty($filtro['edo'])) {
+                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['edo'].' ORDER BY descripcion');
+                $result = $query->result();
 
-            $data['registros'] = $this->Tableta_model->getAll($configPag['per_page'], $pag);
+                if ($result){
+                    foreach ($result as $temp) {
+                        $data['jurisdicciones'][$temp->id] = $temp->descripcion;
+                    }
+                }
+            }
+            
+            if(!empty($filtro['juris'])) {
+                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['juris'].' ORDER BY descripcion');
+                $result = $query->result();
+
+                if ($result){
+                    foreach ($result as $temp) {
+                        $data['municipios'][$temp->id] = $temp->descripcion;
+                    }
+                }
+            }
+            
+            if(!empty($filtro['muni'])) {
+                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['muni'].' ORDER BY descripcion');
+                $result = $query->result();
+
+                if ($result){
+                    foreach ($result as $temp) {
+                        $data['localidades'][$temp->id] = $temp->descripcion;
+                    }
+                }
+            }
+            
+            if(!empty($filtro['locali'])) {
+                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['locali'].' ORDER BY descripcion');
+                $result = $query->result();
+
+                if ($result){
+                    foreach ($result as $temp) {
+                        $data['unidades'][$temp->id] = $temp->descripcion;
+                    }
+                }
+            }
+
+            $data['registros'] = $this->Tableta_model->getAll($configPag['per_page'], $pag, $filtro);
             
             // Obtener la descripcion de cada unidad medica
             foreach ($data['registros'] as $registro) {
@@ -84,7 +141,7 @@ class Tableta extends CI_Controller {
                 }
             }
         } catch (Exception $e) {
-            $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+            $data['msgResult'] = Errorlog_model::save($this->Tableta_model->getMsgError(), __METHOD__);
             $data['clsResult'] = 'error';
         }
         
@@ -265,7 +322,7 @@ class Tableta extends CI_Controller {
             show_error('', 403, 'Acceso denegado');
             return false;
         }
-
+        
         if(!isset($this->Tableta_model))
             return false;
         
@@ -274,11 +331,11 @@ class Tableta extends CI_Controller {
             $this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
             $this->session->set_flashdata('clsResult', 'success');
         } catch (Exception $e) {
-            $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+            $this->session->set_flashdata('msgResult', Errorlog_model::save($this->Tableta_model->getMsgError(), __METHOD__));
             $this->session->set_flashdata('clsResult', 'error');
         }
 
-        Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro eliminado: '.$id);
+        Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro eliminado: '.implode(',',$id));
 
         redirect(DIR_TES.'/tableta/', 'refresh');
         die();

@@ -81,7 +81,7 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
             <?php  if(isset($controladores)) echo  form_dropdown('controlador', $controladores);?>
         Acción:
             <?php  if(isset($acciones)) echo  form_dropdown('accion', $acciones);?></p>
-        <input type="button" name="btnFiltrar" id="btnFiltrar" value="Filtrar" class="btn btn-primary" />
+        <button type="button" name="btnFiltrar" id="btnFiltrar" class="btn btn-primary">Filtrar <i class="icon-search"></i></button>
     </form>
 
 <?php
@@ -122,7 +122,7 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
                     <td>'.htmlentities($fila->entorno).'</td>
                     <td>'.htmlentities($fila->controlador).'</td>
                     <td>'.htmlentities($fila->accion).'</td>';
-                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles</a></td>';
+                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles <i class="icon-eye-open"></i></a></td>';
                 echo '</tr>';
             }
         } else {
