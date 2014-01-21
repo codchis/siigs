@@ -1,9 +1,4 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-<script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-<link type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
-
 <style type="text/css">
     label, input { display:block; }
     input.text { margin-bottom:12px; width:95%; padding: .4em; }

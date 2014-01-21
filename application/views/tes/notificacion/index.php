@@ -1,9 +1,5 @@
 <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 <script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
-	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/> 
 <script type="text/javascript">
 
 $(document).ready(function(){
