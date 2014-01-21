@@ -625,4 +625,10 @@ class Raiz extends CI_Controller {
             
             echo json_encode($this->ArbolSegmentacion_model->getDataKeyValue($idarbol,$nivel,$filtro));
         }
+        
+        public function prueba ()
+        {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel(1,1,array(),array()),JSON_UNESCAPED_UNICODE);
+        }
 }
