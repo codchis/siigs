@@ -1,8 +1,3 @@
-<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
-<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-<script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-<link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/> 
-
 <link   href="/resources/src/skin/ui.dynatree.css" rel="stylesheet" type="text/css" id="skinSheet">
 <script src="/resources/src/jquery.dynatree.js" type="text/javascript"></script>
 
