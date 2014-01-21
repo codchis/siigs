@@ -975,8 +975,6 @@ class Enrolamiento_model extends CI_Model
 	public function update_basico()
 	{
 		//date_default_timezone_set('UTC');
-		$compania=$this->compania;
-		if($compania=="")$compania=NULL;
 		$data = array(
 			// basico
 			'id_nacionalidad' => $this->nacionalidad,
@@ -987,12 +985,46 @@ class Enrolamiento_model extends CI_Model
 			'curp' => $this->curp,
 			'sexo' => $this->sexo,
 			'id_tipo_sanguineo' => $this->sangre,
-			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)),
-			
+			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)));
+		$this->db->where('id' , $this->id);
+		$result = $this->db->update('cns_persona', $data); 
+		if (!$result)
+		{
+			$this->msg_error_usr = "Actualizacion Fallida.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+	}
+	/**
+	 * actualiza el registro de umt del paciente
+	 *
+	 */
+	public function update_umt()
+	{
+		//date_default_timezone_set('UTC');
+		$data = array(
 			// civil
 			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
-			'id_asu_um_tratante' => $this->umt,
-			
+			'id_asu_um_tratante' => $this->umt);
+		$this->db->where('id' , $this->id);
+		$result = $this->db->update('cns_persona', $data); 
+		if (!$result)
+		{
+			$this->msg_error_usr = "Actualizacion Fallida.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+	}
+	/**
+	 * actualiza el registro de direccion del paciente
+	 *
+	 */
+	public function update_direccion()
+	{
+		//date_default_timezone_set('UTC');
+		$compania=$this->compania;
+		if($compania=="")$compania=NULL;
+		$data = array(
 			// direccion 
 			'calle_domicilio' => $this->calle,
 			'referencia_domicilio' => $this->referencia,
@@ -1025,7 +1057,7 @@ class Enrolamiento_model extends CI_Model
 	public function update_regcivil()
 	{
 		
-		$dat = array(
+		$data = array(
 			'id_persona' => $this->id,
 			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
 			'id_localidad_registro_civil' => $this->lugarcivil,
@@ -1037,7 +1069,7 @@ class Enrolamiento_model extends CI_Model
 			$result = $this->db->update('cns_registro_civil', $data);
 		}
 		else
-			$res = $this->db->insert('cns_registro_civil', $dat);
+			$res = $this->db->insert('cns_registro_civil', $data);
 	}
 	/**
 	 * actualiza los tutores del paciente
