@@ -13,6 +13,7 @@ class Usuario extends CI_Controller {
 		try{
 			$this->load->helper('url');
 			$this->load->library('Correo');
+			$this->load->library('session');
 		}
 		catch(Exception $e)
 		{
@@ -760,4 +761,112 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 			echo $e->getMessage();
 		}
 	}
+	/**
+	 *Acción para hacer autologin en otro sistema
+	 *
+	 * 
+	 * @return redirect
+	 */
+	public $mas="";
+	public function automatic_access()
+	{
+		if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+				show_error('', 403, 'Acceso denegado');
+		$user="admin";
+		$pass="adminSM2015";
+		if($this->session->userdata('session_etab')=="iniciado")
+		{
+			$this->session->unset_userdata('session_etab');
+			echo '<script>
+			  	document.location.href="http://etab.sm2015.com.mx/admin/";
+			  </script>';
+		}
+		$token=$this->get_token('http://etab.sm2015.com.mx/admin/login',true);
+		$this->session->set_userdata( 'session_etab', "iniciado" );
+		echo '<script src="/resources/js/jquery.js"></script>
+
+		<form action="http://etab.sm2015.com.mx/admin/login_check" method="post" >
+				<input type="hidden" name="_csrf_token" value="'.$token.'" />
+				<input type="hidden" id="username" name="_username" value="'.$user.'" />
+				<input type="hidden" id="password" name="_password"  value="'.$pass.'" />
+				<input type="submit" class="btn btn-primary" id="_submit" name="_submit" value="" style="width:0px; height:0px; margin-left:-50px;" />
+			  </form>
+			  <script>
+			    document.getElementById("_submit").click();
+			  </script>';
+	}
+	/**
+	 *Acción para cerrar el login en otro sistema
+	 *
+	 * 
+	 * @return redirect
+	 */
+	function cerrar_etab()
+	{
+		$token=$this->get_token('http://etab.sm2015.com.mx/admin/logout',false);
+		$this->session->unset_userdata('session_etab');
+		redirect($_SERVER['HTTP_REFERER'],"refresh");
+	}
+	/**
+	 *Acción para obtener el token oculto en el login
+	 *
+	 * 
+	 * @return token
+	 */
+	function get_token($url,$var)
+	{
+		global $mas;
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_COOKIEJAR, str_replace('/','/',dirname(__FILE__)).'/fb_cookies'.$mas.'.txt');
+		curl_setopt($ch, CURLOPT_COOKIEFILE, str_replace('/','/',dirname(__FILE__)).'/fb_cookies'.$mas.'.txt');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
+		curl_setopt($ch, CURLOPT_COOKIESESSION, str_replace('/','/',dirname(__FILE__)).'/fb_cookies'.$mas.'.txt'); 
+		if($var)
+		{
+			$galleta=$this->get_galleta();
+			curl_setopt($ch, CURLOPT_POSTFIELDS,'PHPSESSID='.$galleta.'&_submit=Entrar');
+		}
+		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)");
+		$html = curl_exec($ch);
+		$token=substr($html,stripos($html,'name="_csrf_token" value="')+26,40);
+		
+		$err = 0;
+		$err = curl_errno($ch); 
+		curl_close($ch);
+		if ($err != 0)
+		{
+			echo 'error='.$err."\n";
+			return $err;
+		} 
+		else 
+		{
+			return $token;
+		}
+	}
+	/**
+	 *Obtiene las cookies que se generan en la session 
+	 *
+	 * 
+	 * @return cookies
+	 */
+	function get_galleta()
+	{
+		global $mas; $variable="";
+		$file = fopen(str_replace('/','/',dirname(__FILE__)).'/fb_cookies'.$mas.'.txt', "r") or exit("No se puedo abri!");
+		while(!feof($file))
+		{
+			$variable.=fgets($file);
+		}
+		fclose($file);
+		return substr($variable,stripos($variable,"PHPSESSID")+10,26);
+	}
 }
+	

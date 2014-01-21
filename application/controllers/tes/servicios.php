@@ -588,7 +588,10 @@ class Servicios extends CI_Controller {
 						{
 							$b_campo="id_persona";
 							$b_valor=$midato->id_persona;
-							$f_campo='fecha';
+							if($catalog->descripcion=="cns_antiguo_domicilio")
+								$f_campo='fecha_cambio';
+							else
+								$f_campo='fecha';
 							$f_valor=$midato->fecha;
 						}
 						
@@ -711,27 +714,48 @@ class Servicios extends CI_Controller {
 									catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
 								}
 							}
-							array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$vacunas));
+							
 							$xy++;
 						}
-						$rv=array();
-						for($x=0;$x<count($regla_vacuna);$x++)
-							for($y=0;$y<count($regla_vacuna[$x]);$y++)
-							$rv[]=array("id_persona"=>$regla_vacuna[$x][$y]["id_persona"],
-									  "id_vacuna"=> $regla_vacuna[$x][$y]["id_vacuna"],
-									  "prioridad"=> $regla_vacuna[$x][$y]["prioridad"]);
-						$cadena["esquema_incompleto"]=$rv;
-						$micadena=json_encode($cadena);
-						echo ",".(substr($micadena,1,strlen($micadena)-2));
-						$micadena="";
-						ob_flush();
-						unset($cadena);
-						$cadena=array();
 						//************ fin control catalogos X persona ************
 					}
 					
 					$i++;
 				}
+				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
+				foreach($asu_um as $id)
+				{
+					$personas=$this->Enrolamiento_model->get_catalog2("cns_persona", "id_asu_um_tratante", $id);
+					if($personas)
+					{
+						$cadena["cns_persona"]= $personas;						
+						$regla_vacuna=array();
+						foreach($personas as $persona)
+						{
+							$array=$this->Enrolamiento_model->get_catalog2("cns_control_vacuna", "id_persona", $persona->id);
+							if($array)
+							{
+								foreach($array as $dato)
+								{
+									array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$array));
+								}
+							}
+						}
+					}
+				}
+				$rv=array();
+				for($x=0;$x<count($regla_vacuna);$x++)
+					for($y=0;$y<count($regla_vacuna[$x]);$y++)
+					$rv[]=array("id_persona"=>$regla_vacuna[$x][$y]["id_persona"],
+							  "id_vacuna"=> $regla_vacuna[$x][$y]["id_vacuna"],
+							  "prioridad"=> $regla_vacuna[$x][$y]["prioridad"]);
+				$cadena["esquema_incompleto"]=$rv;
+				$micadena=json_encode($cadena);
+				echo ",".(substr($micadena,1,strlen($micadena)-2));
+				$micadena="";
+				ob_flush();
+				unset($cadena);
+				$cadena=array();
 				// regresa el json con los datos necesarios	
 				$this->session->set_userdata( 'paso', "6" );
 				

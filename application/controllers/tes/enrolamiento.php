@@ -828,33 +828,37 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 	public function ifCurpExists($curp) 
 	{
 		$id=$this->input->post('id');
-		$curp = $this->input->post('curp').$this->input->post('curp2');
-		if (empty($this->Enrolamiento_model))
-			return false;
-		$is_exist = null;
-		try {
-			$is_exist = $this->Enrolamiento_model->getByCurp($curp,'cns_persona',$id);
-		}
-		catch(Exception $e){
-		}
-		if ($is_exist) 
+		if($id!="")
 		{
-			$this->form_validation->set_message(
-					'ifCurpExists', 'El curp del paciente ya existe.'
-			);
-			return false;
-		} 
-		else 
-		{
-			if (!$this->Enrolamiento_model->getMsgError())
-				return true;
-			else{
+			$curp = $this->input->post('curp').$this->input->post('curp2');
+			if (empty($this->Enrolamiento_model))
+				return false;
+			$is_exist = null;
+			try {
+				$is_exist = $this->Enrolamiento_model->getByCurp($curp,'cns_persona',$id);
+			}
+			catch(Exception $e){
+			}
+			if ($is_exist) 
+			{
 				$this->form_validation->set_message(
-						'ifCurpExists', $this->Enrolamiento_model->getMsgError()
+						'ifCurpExists', 'El curp del paciente ya existe.'
 				);
 				return false;
+			} 
+			else 
+			{
+				if (!$this->Enrolamiento_model->getMsgError())
+					return true;
+				else
+				{
+					$this->form_validation->set_message(
+							'ifCurpExists', $this->Enrolamiento_model->getMsgError()
+					);
+					return false;
+				}
 			}
-		}
+		}else return true;
 	}
 	// valida el curp del padre o tutor
 	public function ifCurpTExists($curp) 
