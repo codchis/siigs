@@ -663,20 +663,20 @@ class Servicios extends CI_Controller {
 				$this->is_step_2($id_sesion,"","si");
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
-				$i=0; $xy=0;
+				$i=0; $xy=0; $cadena=array();
 				foreach($asu_um as $id)
 				{//checar fecha en tipo de dato time stamp
-					$personas=$this->Enrolamiento_model->get_catalog2("cns_persona", "id_asu_um_tratante", $id,"ultima_sincronizacion >=", $fecha);
+				
+					$personas=$this->Enrolamiento_model->get_catalog2("cns_persona", "id_asu_um_tratante", $id,"ultima_actualizacion >=", $fecha);
+					
 					if($personas)
 					{
-						$cadena["cns_persona"]= $personas;	
-						$regla_vacuna=array();
-						$micadena=json_encode($cadena);
-						echo ",".substr($micadena,1,strlen($micadena)-2);
-						$micadena="";
-						ob_flush();
-						unset($cadena);
-						$cadena=array();
+						if(array_key_exists("cns_persona",$cadena))
+							array_push($cadena["cns_persona"], $personas);
+						else
+							$cadena["cns_persona"]=$personas;
+							
+						$regla_vacuna=array();						
 						//************ inicio control catalogos X persona ************
 						foreach($personas as $persona)
 						{
@@ -690,30 +690,28 @@ class Servicios extends CI_Controller {
 									try
 									{
 										$campo=$catalog->columna_validar;
-										$array=$this->Enrolamiento_model->get_catalog2($catalog->descripcion, "id_persona", $persona->id, 
-										"$campo >="	,$fecha);
-										if($catalog->descripcion=="cns_control_vacuna")$vacunas=$array;
+										$array=$this->Enrolamiento_model->get_catalog2($catalog->descripcion, "id_persona", $persona->id);
+										
+										if($catalog->descripcion=="cns_control_vacuna")
+										{
+											$vacunas=$array;
+										}
 										if($array)
 										{
-											$cadena[$catalog->descripcion]= $array;
-											$micadena=json_encode($cadena);
-											echo ",".substr($micadena,1,strlen($micadena)-2);
-											$micadena="";
-											ob_flush();
-											unset($cadena);
-											$cadena=array();
+											if(array_key_exists($catalog->descripcion,$cadena))
+												array_push($cadena[$catalog->descripcion], $array);
+											else
+												$cadena[$catalog->descripcion]=$array;
+												
 											if($catalog->descripcion=="cns_persona_x_tutor")
 											{
 												foreach($array as $dato)
 												{
 													$array2=$this->Enrolamiento_model->get_catalog2("cns_tutor", "id", $dato->id_tutor);
-													$cadena["cns_tutor"]= $array2;	
-													$micadena=json_encode($cadena);
-													echo ",".substr($micadena,1,strlen($micadena)-2);
-													$micadena="";
-													ob_flush();
-													unset($cadena);
-													$cadena=array();												
+													if(array_key_exists("cns_tutor",$cadena))
+														array_push($cadena["cns_tutor"], $array2);
+													else
+														$cadena["cns_tutor"]=$array2;
 												}
 											}									
 											
@@ -732,6 +730,14 @@ class Servicios extends CI_Controller {
 					
 					$i++;
 				}
+				
+				$micadena=json_encode($cadena);
+				echo ",".substr($micadena,1,strlen($micadena)-2);
+				$micadena="";
+				ob_flush();
+				unset($cadena);
+				$cadena=array();
+															
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
 				foreach($asu_um as $id)
 				{

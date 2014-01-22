@@ -21,7 +21,7 @@ $(document).ready(function(){
             seleccionado = $("#menuTree").dynatree("getActiveNode");
             
             if(seleccionado == null) {
-                alert('Debe seleccionar un elemento del menu');
+                showAlerta({mensaje: 'Debe seleccionar un elemento del menu', alert: '#alert'});
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 event.stopPropagation();
@@ -40,7 +40,7 @@ $(document).ready(function(){
         seleccionado = $("#menuTree").dynatree("getActiveNode");
 
         if(seleccionado == null) {
-            alert('Debe seleccionar un elemento del menu');
+            showAlerta({mensaje: 'Debe seleccionar un elemento del menu', alert: '#alert'});
             event.preventDefault();
             event.stopImmediatePropagation();
             event.stopPropagation();
@@ -52,7 +52,7 @@ $(document).ready(function(){
         seleccionado = $("#menuTree").dynatree("getActiveNode");
 
         if(seleccionado == null) {
-            alert('Debe seleccionar un elemento del menu');
+            showAlerta({mensaje: 'Debe seleccionar un elemento del menu', alert: '#alert'});
             event.preventDefault();
             event.stopImmediatePropagation();
             event.stopPropagation();
@@ -89,6 +89,8 @@ $(document).ready(function(){
     if(!empty($msgResult))
         echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 ?>
+
+<div id="alert" class="warning" style="display: none;"></div>
 
 <div id="menuTree">
     <?php echo $menuTree; ?>

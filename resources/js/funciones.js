@@ -22,9 +22,6 @@ var optionsFecha = {
 
 $(document).ready(function() {
     $("#ayuda")
-        .click(function(){
-            
-        })
         .fancybox({
             'width'         : '50%',
             'height'        : '60%',				
@@ -33,3 +30,9 @@ $(document).ready(function() {
             'type'			: 'iframe',	
         });
 });
+
+function showAlerta(parametros) {
+    alert = (parametros.alert) ? parametros.alert : '#alert';
+    $("html,body").animate({ scrollTop: $(alert).offset().top+50}, 1000 );
+    $(alert).html(parametros.mensaje).fadeIn(2000, function(){ setTimeout(function(){ $(alert).fadeOut(2000); }, 1000); });
+}
