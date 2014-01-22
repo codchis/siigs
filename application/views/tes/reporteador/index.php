@@ -253,7 +253,7 @@ if (!$opcion_rpt5) unset($datos[4]);
 <table>
 <tr>
 <td>Fecha corte:</td>
-<td><input type="text" id="fecha_corte" name="fecha_corte" value="<?php echo set_value('fecha_corte', ''); ?>" /></td>
+<td><input type="text" style="width:58%;" id="fecha_corte" name="fecha_corte" value="<?php echo set_value('fecha_corte', ''); ?>" /></td>
 <td>Estado:</td>
 <td> <?php  echo form_dropdown('estados', $estad); ?></td>
 </tr>
