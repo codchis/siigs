@@ -28,8 +28,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
     <style>
 	td p
 	{
-		color:#000;
-		font-weight:bold;
+		font-family:Open Sans Condensed ,sans-serif; font-size: 18px; font-weight: bold; text-shadow: 0 0px 0 #FFFFFF;
 	}
 	</style>
    

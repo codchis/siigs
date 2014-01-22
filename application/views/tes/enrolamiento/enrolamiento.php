@@ -11,8 +11,7 @@
 	<style>
 	td p
 	{
-		color:#000;
-		font-weight:bold;
+		font-family:Open Sans Condensed ,sans-serif; font-size: 18px; font-weight: bold; text-shadow: 0 0px 0 #FFFFFF;
 	}
 	</style>
     <script>
@@ -936,38 +935,7 @@
                 <span id="enviandoof" style="margin-left:-20px;">
                 <button type="submit" name="guardar" id="guardar" class="btn btn-primary" onclick="return validarFormulario('enrolar')" >Guardar <i class="icon-hdd"></i></button>
                 <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-arrow-left"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-glass"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-music"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-envelope"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-heart"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-star"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-user"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-film"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-th"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-th-list"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-ok"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-zoom-in"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-off"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-signal"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-cog"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-trash"></i></button>
-                
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-home"></i></button>
+               
                 </span>
     			
                 </td>

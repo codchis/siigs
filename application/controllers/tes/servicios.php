@@ -661,6 +661,7 @@ class Servicios extends CI_Controller {
 			if ($tableta->usuarios_asignados == 1 && $tableta->id_tipo_censo != null && $tableta->id_asu_um != null)
 			{
 				$this->is_step_2($id_sesion,"","si");
+				
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
 				$i=0; $xy=0; $cadena=array();
@@ -732,7 +733,7 @@ class Servicios extends CI_Controller {
 				}
 				
 				$micadena=json_encode($cadena);
-				echo ",".substr($micadena,1,strlen($micadena)-2);
+				echo substr($micadena,1,strlen($micadena)-2);
 				$micadena="";
 				ob_flush();
 				unset($cadena);

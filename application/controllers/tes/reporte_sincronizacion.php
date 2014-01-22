@@ -81,6 +81,7 @@ class Reporte_sincronizacion extends CI_Controller
 		catch(Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['infoclass']="warning";
 		}
 		//$this->load->view('usuario/index', $data);
  		$this->template->write_view('content',DIR_TES.'/reporteador/sincronizacion', $data);
@@ -125,7 +126,7 @@ class Reporte_sincronizacion extends CI_Controller
 			$array=$this->Reporte_sincronizacion_model->getListado("SELECT $campos FROM tes_tableta t $join WHERE id_tes_estado_tableta NOT IN (3,2)");	
 			
 			if($op==9)
-			$array=$this->Reporte_sincronizacion_model->getListado("SELECT distinct(*) FROM tes_pendientes_tarjeta");
+			$array=$this->Reporte_sincronizacion_model->getListado("SELECT distinct * FROM tes_pendientes_tarjeta");
 			
 			if($op==10)
 			$array=$this->Reporte_sincronizacion_model->getListado("SELECT * FROM tes_pendientes_tarjeta");
@@ -141,6 +142,7 @@ class Reporte_sincronizacion extends CI_Controller
 		catch(Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['infoclass']="warning";
 		}
 		//$this->load->view('usuario/index', $data);
 		$this->template->write('header','',true);
@@ -275,6 +277,7 @@ class Reporte_sincronizacion extends CI_Controller
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['infoclass']="warning";
 		}
  		$this->template->write_view('content',DIR_TES.'/reporteador/lote', $data);
  		$this->template->render();
@@ -414,6 +417,7 @@ class Reporte_sincronizacion extends CI_Controller
 		catch(Exception $e)
 		{
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+			$data['infoclass']="warning";
 		}
 		//$this->load->view('usuario/index', $data);
 		$this->template->write('header','',true);
