@@ -8,7 +8,13 @@
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-	
+	<style>
+	td p
+	{
+		color:#000;
+		font-weight:bold;
+	}
+	</style>
     <script>
 	var g=new Date();
 		var option = 
@@ -620,11 +626,11 @@
                           <td colspan="4" width="100%">
                               <table width="97%" border="0">
                                 <tr>
-                                  <td width="19%" align="right">Ageb</td>
+                                  <td width="19%" align="right"><p>Ageb</p></td>
                                   <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo set_value('ageb', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
-                                  <td  align="right">Sector</td>
+                                  <td  align="right"><p>Sector</p></td>
                                   <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo set_value('sector', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
-                                  <td  align="right">Manzana</td>
+                                  <td  align="right"><p>Manzana</p></td>
                                   <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
                                 </tr>
                               </table>
@@ -928,8 +934,40 @@
                 <td>
                 <br />
                 <span id="enviandoof" style="margin-left:-20px;">
-                <button type="submit" name="guardar" id="guardar" class="btn btn-primary" onclick="return validarFormulario('enrolar')" >Guardar <i class="icon-floppy-disk"></i></button>
-                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-left"></i></button>
+                <button type="submit" name="guardar" id="guardar" class="btn btn-primary" onclick="return validarFormulario('enrolar')" >Guardar <i class="icon-hdd"></i></button>
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-arrow-left"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-glass"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-music"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-envelope"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-heart"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-star"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-user"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-film"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-th"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-th-list"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-ok"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-zoom-in"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-off"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-signal"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-cog"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-trash"></i></button>
+                
+                <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-home"></i></button>
                 </span>
     			
                 </td>

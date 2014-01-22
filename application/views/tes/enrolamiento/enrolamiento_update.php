@@ -750,11 +750,11 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                           <td colspan="4" width="100%">
                               <table width="97%" border="0">
                                 <tr>
-                                  <td width="19%" align="right">Ageb</td>
+                                  <td width="19%" align="right"><p>Ageb</p></td>
                                   <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo $enrolado->ageb; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
-                                  <td  align="right">Sector</td>
+                                  <td  align="right"><p>Sector</p></td>
                                   <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->sector; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
-                                  <td  align="right">Manzana</td>
+                                  <td  align="right"><p>Manzana</p></td>
                                   <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo $enrolado->manzana; ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
                                 </tr>
                               </table>
@@ -1047,8 +1047,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                 <td>
                 <br />
                 <span id="enviandoof" style="margin-left:-20px;">
-                <input class="btn btn-primary" type="submit" name="guardar" id="guardar" value="Guardar" onclick="return validarFormulario('enrolar')"/>
-                <input class="btn btn-primary" type="button" value="Cancelar" onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" />
+                <button class="btn btn-primary" type="submit" name="guardar" id="guardar" onclick="return validarFormulario('enrolar')">Guardar <i class="icon-hdd"></i></button>
+                <button class="btn btn-primary" type="button" onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" >Cancelar <i class="icon-arrow-left"></i></button>
                 </span>
     			
                 </td>
