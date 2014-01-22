@@ -45,7 +45,7 @@
         <td>UM:</td>
         <td><?php echo form_dropdown('ums', $unidades); ?></td>
         <td></td>
-        <td><button type="submit" name="filtrar" class="btn btn-primary">Filtrar <i class="icon-search"></i> </button></td>
+        <td><button type="submit" name="filtrar" class="btn btn-primary">Buscar <i class="icon-search"></i> </button></td>
     </tr>
 </table>
 </div>
