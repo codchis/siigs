@@ -181,7 +181,7 @@ if (!$opcion_rpt3) unset($reports[3]);
 </tr>
 <tr>
 <td colspan='4'>
-<button type="submit" name="btnProcesar" id="btnProcesar"  class="btn btn-primary" >Procesar <i class="icon-search"></i></button></td>
+<button type="submit" name="btnProcesar" id="btnProcesar"  class="btn btn-primary" >Buscar <i class="icon-search"></i></button></td>
 </tr>
 </table>
 </form>
