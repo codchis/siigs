@@ -22,10 +22,12 @@ $(document).ready(function()
        	download(data, "tesexcel.xls", "application/vnd.ms-excel");
 		return false;
     });
+    <?php if (empty($lugar)) $lugar = "Chiapas"; 
+    	  if (empty($zoom)) $zoom = "8"; ?>
 	$.ajax({
 	type: "POST",
 	data: {
-		'datos'   :<?php echo json_encode($array);?> ,
+		'datos'   :<?php if (!empty($array)) echo json_encode($array); else echo '[{"localidad":"","lat":"","lon":"","descripcion":"","imagen":"","icono":""}]'; ?> ,
 		'lugar'   :"Chiapas",
 		'zoom'    :6,
 		'rewrite' :0 },

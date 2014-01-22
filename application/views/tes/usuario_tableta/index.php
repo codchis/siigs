@@ -68,7 +68,7 @@ echo '<center><strong>Datos generales de la tableta</strong></center>
                     <td>'.htmlentities(($fila['grupo'])).'</td>';
                 
                 if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/usuario_tableta/delete/'.$fila['id'].'/'.$tableta->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
+                        class="btn btn-primary" onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
                 '</tr>';
             }
         } else {
