@@ -335,8 +335,10 @@ class Tableta extends CI_Controller {
             $this->session->set_flashdata('clsResult', 'error');
         }
 
-        Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro eliminado: '.implode(',',$id));
-
+        if (count($id) > 1)
+        	Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro eliminado: '.implode(',',$id));
+        else
+        	Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Registro eliminado: '.$id);
         redirect(DIR_TES.'/tableta/', 'refresh');
         die();
     }

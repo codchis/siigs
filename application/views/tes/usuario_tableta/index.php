@@ -1,6 +1,4 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-<!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
 
 <style type="text/css">
     label, input { display:block; }
@@ -68,7 +66,7 @@ echo '<center><strong>Datos generales de la tableta</strong></center>
                     <td>'.htmlentities(($fila['grupo'])).'</td>';
                 
                 if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/usuario_tableta/delete/'.$fila['id'].'/'.$tableta->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
+                        class="btn btn-primary" onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
                 '</tr>';
             }
         } else {

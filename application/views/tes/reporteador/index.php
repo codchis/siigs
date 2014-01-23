@@ -1,7 +1,3 @@
-	<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
-	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 <script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
 <script type="text/javascript">
@@ -257,7 +253,7 @@ if (!$opcion_rpt5) unset($datos[4]);
 <table>
 <tr>
 <td>Fecha corte:</td>
-<td><input type="text" id="fecha_corte" name="fecha_corte" value="<?php echo set_value('fecha_corte', ''); ?>" /></td>
+<td><input type="text" style="width:58%;" id="fecha_corte" name="fecha_corte" value="<?php echo set_value('fecha_corte', ''); ?>" /></td>
 <td>Estado:</td>
 <td> <?php  echo form_dropdown('estados', $estad); ?></td>
 </tr>

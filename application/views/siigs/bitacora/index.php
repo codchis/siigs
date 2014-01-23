@@ -1,9 +1,5 @@
 <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-<script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
-	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>    
+<script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	  
 <script type="text/javascript">
 DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
 
@@ -71,8 +67,8 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
         <p><input type="hidden" name="filtrar" value="true" />
         Usuario:
         <?php  if(isset($usuarios)) echo form_dropdown('usuario', $usuarios); ?>
-        Fecha: <input type="text" name="fechaIni" id="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" size="8" placeholder="desde" />
-               <input type="text" name="fechaFin" id="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" size="8" placeholder="hasta" /> 
+        Desde: <input type="text" name="fechaIni" id="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" style="width: 90px;" />
+        Hasta: <input type="text" name="fechaFin" id="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" style="width: 90px;" /> 
                <input type="button" value="Limpiar Fechas" id="limpiaFecha" class="btn btn-mini btn-primary" />
         </p>
         <p>Entorno:
@@ -81,7 +77,7 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
             <?php  if(isset($controladores)) echo  form_dropdown('controlador', $controladores);?>
         Acción:
             <?php  if(isset($acciones)) echo  form_dropdown('accion', $acciones);?></p>
-        <button type="button" name="btnFiltrar" id="btnFiltrar" class="btn btn-primary">Filtrar <i class="icon-search"></i></button>
+        <button type="button" name="btnFiltrar" id="btnFiltrar" class="btn btn-primary">Buscar <i class="icon-search"></i></button>
     </form>
 
 <?php

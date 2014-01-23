@@ -90,8 +90,7 @@ function vacunacion(id,tiene,fecha,prioridad)
     <style>
 	td p
 	{
-		color:#000;
-		font-weight:bold;
+		font-family:Open Sans Condensed ,sans-serif; font-size: 18px; font-weight: bold; text-shadow: 0 0px 0 #FFFFFF;
 	}
 	</style>
 	<table align="center" width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
