@@ -72,7 +72,7 @@ class Catalogo_x_raiz extends CI_Controller {
 		$data['title'] = 'Agregar un nuevo catálogo al arbol';
 		$this->form_validation->set_rules('tabla_catalogo', 'Catálogo', 'trim|xss_clean|required|');
 		$this->form_validation->set_rules('columna_llave', 'Columna llave', 'trim|xss_clean|required');
-		$this->form_validation->set_rules('columnas_descripcion', 'Descripción', 'trim|xss_clean|required');
+		$this->form_validation->set_rules('columna_descripcion', 'Columna descripcion', 'trim|xss_clean|required');
 		$this->form_validation->set_rules('grado', 'Grado de segmentación', 'trim|xss_clean|required');
 
 		if ($this->form_validation->run() === FALSE && $id >0)
@@ -116,7 +116,7 @@ class Catalogo_x_raiz extends CI_Controller {
 				$this->Catalogo_x_raiz_model->setGrado($this->input->post('grado'));
 				$this->Catalogo_x_raiz_model->setTablaCatalogo($this->input->post('tabla_catalogo'));
 				$this->Catalogo_x_raiz_model->setColumnaLlave($this->input->post('columna_llave'));
-				$this->Catalogo_x_raiz_model->setColumnaDescripcion($this->input->post('columnas_descripcion'));
+				$this->Catalogo_x_raiz_model->setColumnaDescripcion($this->input->post('columna_descripcion'));
 				$this->Catalogo_x_raiz_model->setIdRaiz($this->input->post('id_raiz'));
 
 				$relaciones = $this->input->post('relaciones');
