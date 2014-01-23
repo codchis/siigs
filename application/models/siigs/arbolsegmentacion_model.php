@@ -249,8 +249,14 @@ class ArbolSegmentacion_model extends CI_Model {
                 if (count($datos->result()) == 0)
                     return array();
                 
+                //var_dump($datos->result()[0]->id_raiz);
+                //var_dump($datos->result()[0]->grado_segmentacion);
+                //var_dump($omitidos);
+                
                 $arregloparcial = $this->getChildrenFromLevel($datos->result()[0]->id_raiz, $datos->result()[0]->grado_segmentacion,$omitidos);
                 $resultado = array();
+                //var_dump($arregloparcial);
+                
                 foreach ($arregloparcial as $arreglo)
                 {
                     if ($arreglo["key"] == $id)
@@ -313,7 +319,8 @@ class ArbolSegmentacion_model extends CI_Model {
                     {
                         return array();
                     }
-                    if ($nivel<=$arbol['niveles'])
+                    
+                    if ($nivel<=$arbol['niveles'] || true)
                     {
                         $resultado = array();
                         $niveltemp = array();
