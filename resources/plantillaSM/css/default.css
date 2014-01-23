@@ -979,4 +979,14 @@ width: 100% ;
 /********Botones agregar, detalles, ver/lista, modificar y eliminar***********/
 
 .btn-small [class^="icon-"], .btn-small [class*=" icon-"] {
-    margin-left: 5px;}
+    margin-left: 5px;
+}
+
+.btn-icon {
+    /*width: calc(100%+14px);*/
+    display: inline-flex;
+}
+
+.btn-primary [class^="icon-"], .btn-small [class*=" icon-"] {
+    margin-left: 5px;
+}

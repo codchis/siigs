@@ -73,7 +73,7 @@ echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm
 ?>
 <br /><br />
 <div class="table table-striped">
-<table>
+<table width="100%" border="0" id="tabla">
     <thead>
         <tr>
             <?php if($showDelete) echo '<th></th>'; ?>
@@ -103,18 +103,18 @@ echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm
                     <td>'.htmlentities($fila->status).'</td>
                     <td>'.htmlentities($fila->tipo_censo).'</td>
                     <td><a href="/'.DIR_TES.'/tree/create/TES/Unidad Médica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/'.
-                        urlencode(json_encode(array(null))).'/'.urlencode(json_encode(array(($fila->id_asu_um==0 ? null : $fila->id_asu_um)))).'" '.
+                        urlencode(json_encode(array(NULL))).'/'.urlencode(json_encode(array(1,2,3,4,5))).'" '.
                         'class="agregarUM '.($fila->id_asu_um==0 ? 'btn btn-small btn-primary' : '').'" '
                         . 'data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'" data-periodo="'.$fila->periodo_esq_inc.'">'.
                         ($fila->id_asu_um==0 ? 'Asignar' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
                     <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'" class="btn btn-small btn-primary">'.($fila->usuarios_asignados==0 ? 'Asignar' : 'Ver').' <i class="icon-user"></i></a></td>';
                     
-                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles <i class="icon-eye-open"></i></a></td>';
+                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary btn-icon">Detalles <i class="icon-eye-open"></i></a></td>';
                     
-                    if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'" class="btn btn-small btn-primary">Modificar <i class="icon-pencil"></i></a></td>';
+                    if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'" class="btn btn-small btn-primary btn-icon">Modificar <i class="icon-pencil"></i></a></td>';
                     
                     if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary">Eliminar <i class="icon-remove"></i></a></td>';
+                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary btn-icon">Eliminar <i class="icon-remove"></i></a></td>';
                 echo '</tr>';
             }
         } else {
@@ -421,7 +421,7 @@ $(function() {
             <label for="nombre_unidad_medica">Unidad Médica</label>
             <input type="text" name="nombre_unidad_medica" id="nombre_unidad_medica" size="60" value="" readonly />
             <a href='/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/
-                <?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(array(1020)));?>' 
+                <?php echo urlencode(json_encode(array(NULL)));?>/<?php echo urlencode(json_encode(array(1,2,3,4,5)));?>' 
                id="show_um">Seleccionar Unidad Médica</a>
             <input type="hidden" name="id_unidad_medica" id="id_unidad_medica" /><br />
             <label for="periodo_esq_inc">Periodo de esquema incompleto</label>

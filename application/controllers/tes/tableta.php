@@ -145,6 +145,7 @@ class Tableta extends CI_Controller {
             $data['clsResult'] = 'error';
         }
         
+        $this->template->write('ajustaAncho', 1, true);
         $this->template->write_view('content',DIR_TES.'/tableta/index', $data);
 		$this->template->render();
     }
