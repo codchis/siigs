@@ -53,7 +53,7 @@ $(document).ready(function(){
 		<td><label for="id_arr_asu">Reportar a tabletas</label></td>
 		<td><input type="text" name="id_arr_asuT" title='requiere' id="id_arr_asuT" readonly="true" value="<?php echo implode(', ', $notificacion_item->tabletas) ?>" />
 		<input type="hidden" name="id_arr_asu" id="id_arr_asu" readonly="true" value="<?php echo $notificacion_item->id_arr_asu ?>" />
-		<a href='/<?php echo DIR_TES?>/tree/create/TES/Tabletas a notificar/2/check/0/id_arr_asu/id_arr_asuT/1/1/<?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(explode(', ', $notificacion_item->id_arr_asu)));?>' id="tabletas"  class="btn btn-primary">Seleccionar</a>
+		<a href='/<?php echo DIR_TES?>/tree/create/TES/Tabletas a notificar/2/check/0/id_arr_asu/id_arr_asuT/1/1/<?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(array(1,2,3,4,5)));?>' id="tabletas"  class="btn btn-primary">Seleccionar</a>
 	</tr>
 	<tr>
 		<td colspan="2">
