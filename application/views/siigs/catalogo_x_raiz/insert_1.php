@@ -47,50 +47,19 @@
 	 	                	});
 
 	 	           	    	$td2 = $('<td></td>');
-	 	           	    	$descselect = $('<select name="columna_descripcion"></select><br/><input type="text" name="columnas_descripcion" value=""/>');
+	 	           	    	$descselect = $('<select name="columna_descripcion"></select>');
 	 	           	    	$td2.append($descselect);
-                                        
-                                        $td3 = $('<td></td>');
-                                        $botonagregar = $('<input type="button" class="btn btn-small btn-primary" value="Agregar">');
-                                        $br = $('<br/><br/>');
-                                        $botonlimpiar = $('<input type="button" class="btn btn-small btn-primary" value="Limpiar">');
-                                        $td3.append($botonagregar);
-                                        $td3.append($br);
-                                        $td3.append($botonlimpiar);
-                                        
-                                        $botonagregar.click(function(){
-                                            $('input[name=columnas_descripcion]').val(
-                                                    $('input[name=columnas_descripcion]').val() + 
-                                                    (($('input[name=columnas_descripcion]').val().length == 0) ? '' : "+") + 
-                                                    $('select[name=columna_descripcion]').val());
-                                        });
-                                        
-                                        $botonlimpiar.click(function(){
-                                            $('input[name=columnas_descripcion]').val('');
-                                        });
-                                        
-                                        //Agrega las columnas llaves al combo
-                                        $campos = dato.llave.split('||');
+
+		 	           	    $campos = dato.campos.split('||');
 
 	 	                	$.each($campos, function(i, item) {
 
 		 	                	datos = item.split('|');
 		 	                	$descselect.append('<option value="'+datos[0]+'">'+datos[0]+'</option>');
 	 	                	});
-
-		 	           	//Agrega las columnas que no son llaves al combo
-                                        $campos = dato.campos.split('||');
-
-	 	                	$.each($campos, function(i, item) {
-
-		 	                	datos = item.split('|');
-		 	                	$descselect.append('<option value="'+datos[0]+'">'+datos[0]+'</option>');
-	 	                	});
-                                        
 
 	 	                	$('#tdllave').html($td1);
 	 	                	$('#tddesc').html($td2);
-                                        $('#tddesc_boton').html($td3);
 
 	 	                	//Limpiar las relaciones y cargar de nuevo los datos para relaciones
 
@@ -243,7 +212,6 @@ echo form_open(DIR_SIIGS.'/catalogo_x_raiz/insert/'.$id_raiz , $atributos)
 		</td>
 		<td id="tdllave"></td>
 		<td id="tddesc"></td>
-                <td id="tddesc_boton"></td>
 	</tr>
 	<tr>
 		<td colspan=4>
