@@ -319,11 +319,22 @@ class Raiz extends CI_Controller {
                                 $nivel = $item->grado_segmentacion;
                                 $llave = $item->nombre_columna_llave;
                                 $descripcion = $item->nombre_columna_descripcion;
-
+                                
+                                $descripcion = explode('+', $descripcion);
+                                foreach ($descripcion as $item => $valor)
+                                    $descripcion[$item] = $tabla.".".$valor;
+                                                                
+                                if (count($descripcion)>1)
+                                    $descripcion = implode(",' ',",$descripcion);
+                                else
+                                    $descripcion = $descripcion[0];
+                                
+                                $descripcion = 'concat('.$descripcion.')';
+                                
                                 if ($nivel > 1)
                                 {
                                         $consulta = "select ".$tabla.".".$llave." as llave, ";
-                                        $consulta .= $tabla.".".$descripcion." as descripcion, ";
+                                        $consulta .= /*$tabla.".".*/$descripcion." as descripcion, ";
                                         $consulta .= "asu_arbol_segmentacion.id as padre ";
                                         $consulta .= " from ".$tabla;
 
@@ -416,6 +427,17 @@ class Raiz extends CI_Controller {
 				$nivel = $item->grado_segmentacion;
 				$llave = $item->nombre_columna_llave;
 				$descripcion = $item->nombre_columna_descripcion;
+                                
+                                $descripcion = explode('+', $descripcion);
+                                foreach ($descripcion as $item => $valor)
+                                    $descripcion[$item] = "a.".$valor;
+                                                                
+                                if (count($descripcion)>1)
+                                    $descripcion = implode(",' ',",$descripcion);
+                                else
+                                    $descripcion = $descripcion[0];
+                                
+                                $descripcion = 'concat('.$descripcion.')';
 
                                 //obtener todos los ID que ya estan agregados al ASU correspondiente al nivel actual
                                 $filas = $this->db->query("select concat('\'',id_tabla_original,'\'') as llave from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion=".$nivel);
@@ -431,7 +453,7 @@ class Raiz extends CI_Controller {
                                     $padre = $this->Catalogo_x_raiz_model->getByNivel($id,$nivel-1);
                                     $relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
                                     //crear la consulta basica
-                                    $consulta_base = "select a.".$llave." as llave, a.".$descripcion." as descripcion, ";
+                                    $consulta_base = "select a.".$llave." as llave, ".$descripcion." as descripcion, ";
                                     $consulta_base .= $padre->nombre.".".$padre->llave." as padre  from ".$tabla." a";
                                     //crear las relaciones
                                     $consulta_base .= " join ".$padre->nombre." on 1=1";
@@ -442,7 +464,7 @@ class Raiz extends CI_Controller {
                                 }
                                 else
                                 {
-                                    $consulta_base = "select  a.".$llave." as llave, a.".$descripcion." as descripcion , 0 as padre";
+                                    $consulta_base = "select  a.".$llave." as llave, ".$descripcion." as descripcion , 0 as padre";
                                     $consulta_base .= " from ".$tabla." a";
                                 }
                                         
@@ -466,7 +488,7 @@ class Raiz extends CI_Controller {
                                     $padre = $this->Catalogo_x_raiz_model->getByNivel($id,$nivel-1);
                                     $relaciones = $this->Catalogo_x_raiz_model->getRelations($iditem);
                                     //crear la consulta basica
-                                    $consulta_base = "select b.id as id, a.".$llave." as llave, a.".$descripcion." as descripcion, ";
+                                    $consulta_base = "select b.id as id, a.".$llave." as llave, ".$descripcion." as descripcion, ";
                                     $consulta_base .= "(select id from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion = ".($nivel-1)." and id_tabla_original = ".$padre->nombre.".".$padre->llave.") as padre  from ".$tabla." a";
                                     //crear las relaciones
                                     $consulta_base .= " join ".$padre->nombre." on 1=1";
@@ -475,13 +497,13 @@ class Raiz extends CI_Controller {
                                             $consulta_base .= " and a.".$relacion->columna_hijo." = ".$padre->nombre.".".$relacion->columna_padre;
                                     }
 
-                                    $consulta_modificaciones = $consulta_base." join asu_arbol_segmentacion b on b.id_raiz=".$id." and b.grado_segmentacion=".$nivel." and b.id_tabla_original = a.".$llave." where ( b.descripcion <> a.".$descripcion." or b.id_padre <> (select id from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion = ".($nivel-1)." and id_tabla_original = ".$padre->nombre.".".$padre->llave.") )";
+                                    $consulta_modificaciones = $consulta_base." join asu_arbol_segmentacion b on b.id_raiz=".$id." and b.grado_segmentacion=".$nivel." and b.id_tabla_original = a.".$llave." where ( b.descripcion <> ".$descripcion." or b.id_padre <> (select id from asu_arbol_segmentacion where id_raiz=".$id." and grado_segmentacion = ".($nivel-1)." and id_tabla_original = ".$padre->nombre.".".$padre->llave.") )";
                                 }
                                 else
                                 {
-                                    $consulta_base = "select b.id as id,  a.".$llave." as llave, a.".$descripcion." as descripcion , 0 as padre";
+                                    $consulta_base = "select b.id as id,  a.".$llave." as llave, ".$descripcion." as descripcion , 0 as padre";
                                     $consulta_base .= " from ".$tabla." a";
-                                    $consulta_modificaciones = $consulta_base." join asu_arbol_segmentacion b on b.id_raiz=".$id." and b.grado_segmentacion=".$nivel." and b.id_tabla_original = a.".$llave." and ( b.descripcion <> a.".$descripcion.")";
+                                    $consulta_modificaciones = $consulta_base." join asu_arbol_segmentacion b on b.id_raiz=".$id." and b.grado_segmentacion=".$nivel." and b.id_tabla_original = a.".$llave." and ( b.descripcion <> ".$descripcion.")";
                                 }
                                         
                                 //Nuevos registros en los catalogos para agregar al ASU
@@ -597,7 +619,9 @@ class Raiz extends CI_Controller {
 //                    $omitidos = array(null);
 //                    $seleccionados = array(775,776);
                     if ($idarbol && $nivel && $omitidos && $seleccionados)
-                        echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos,$seleccionados,$seleccionables));
+                    {
+                        echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel($idarbol,$nivel,$omitidos,$seleccionados,$seleccionables),JSON_UNESCAPED_UNICODE);
+                    }
                     else
                         echo "Parámetros incorrectos";
 		}
@@ -626,9 +650,10 @@ class Raiz extends CI_Controller {
             echo json_encode($this->ArbolSegmentacion_model->getDataKeyValue($idarbol,$nivel,$filtro));
         }
         
-        public function prueba ()
+        public function prueba ($id)
         {
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel(1,1,array(),array()),JSON_UNESCAPED_UNICODE);
+            header('Content-type: application/json; charset=utf-8');
+            //echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel($id,1,array(null),array(null)),JSON_UNESCAPED_UNICODE);
+            echo json_encode($this->ArbolSegmentacion_model->getCluesFromId(7));
         }
 }

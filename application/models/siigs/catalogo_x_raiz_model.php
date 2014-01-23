@@ -398,34 +398,6 @@ class Catalogo_x_raiz_model extends CI_Model {
 	}
 
 	/**
-	 *Actualiza el objeto actual en la base de datos
-	 *
-	 *@access  public
-	 *@return  boolean (Si no hubo errores al actualizar)
-	 * @throws Exception En caso de algun error al consultar la base de datos
-	 */
-	public function update()
-	{
-		$data = array(
-				'nombre' => $this->nombre,
-				'descripcion' => $this->descripcion,
-				'metodo' => $this->metodo
-		);
-
-		$this->db->where('id' , $this->getId());
-		$query = $this->db->update('sis_accion', $data);
-
-		if (!$query)
-		{
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			$this->msg_error_usr = "Ocurrió un error al actualizar los datos del catálogo";
-			throw new Exception(__CLASS__);
-		}
-		else
-			return true;
-	}
-
-	/**
 	 * Elimina el registro actual de la base de datos
 	 *
 	 * @access public

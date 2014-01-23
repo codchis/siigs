@@ -119,7 +119,7 @@ class ArbolSegmentacion_model extends CI_Model {
             $consultavalues = " select distinct ";
             $consultafrom = " from ";
             //consulta todos los catalogos que forman el arbol de segmentacion requerido
-            $query = $this->db->query('select * from asu_raiz_x_catalogo where id_raiz_arbol = ' . $idarbol . ' order by grado_segmentacion');
+            $query = $this->db->query('select * from asu_raiz_x_catalogo where id_raiz_arbol = ' . $idarbol . ' and grado_segmentacion >= '.$nivel.' order by grado_segmentacion');
                 if (!$query)
                 {
                     $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -168,7 +168,7 @@ class ArbolSegmentacion_model extends CI_Model {
                         $padreactivo = $fila->grado_segmentacion;
                         }
                         
-                        if ($fila->grado_segmentacion == 1)
+                        if ($fila->grado_segmentacion == $nivel)
                         {
                             $consultafrom .= " asu_arbol_segmentacion tabla".$fila->grado_segmentacion;
                         }
@@ -179,7 +179,11 @@ class ArbolSegmentacion_model extends CI_Model {
                         }
                     }
                     $consultavalues = substr($consultavalues, 0, count($consultavalues)-3);
-                    $consulta = $consultavalues.$consultafrom. " where tabla1.grado_segmentacion = ".$nivel;
+                    $consulta = $consultavalues.$consultafrom. " where tabla".$nivel.".grado_segmentacion = ".$nivel. " and tabla".$nivel.".id_raiz=".$idarbol;
+                    
+                    //var_dump($consulta);
+                    //die();
+                    
                     $resultado = $this->db->query($consulta);
 
                     if (!$resultado)
@@ -299,6 +303,12 @@ class ArbolSegmentacion_model extends CI_Model {
                     ini_set('max_execution_time',1000);
 
                     $arbol = $this->getTree($idarbol, $nivel, $omitidos);
+                    
+                    //var_dump($omitidos);
+                    //echo $nivel."<br/><br/>";
+                    //var_dump(json_encode($arbol));
+                    //die();
+                    
                     if (count($arbol) == 0)
                     {
                         return array();
