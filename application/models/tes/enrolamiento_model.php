@@ -1691,7 +1691,67 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	 
+	
+	public function get_cns_persona($array,$fecha="")
+	{
+		$this->db->select('*');
+		$this->db->from("cns_persona");
+		if($fecha!="")
+		$this->db->where("ultima_actualizacion >=", $fecha);
+		$this->db->where_in("id_asu_um_tratante", $array);
+		
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+	
+	public function get_cns_cat_persona($catalog,$array)
+	{
+		if($catalog=="tes_notificacion")
+			$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
+		else if($catalog=="asu_arbol_segmentacion")
+			$this->db->select('id,grado_segmentacion,id_padre,orden, visible, descripcion');
+		else if($catalog=="tes_pendientes_tarjeta")
+			$this->db->select('fecha, id_persona, tabla, registro_json,');
+		else
+			$this->db->select('*');
+		$this->db->from($catalog);
+		$this->db->where_in("id_persona", $array);
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+	
+	public function get_persona_x_tutor($array)
+	{
+		$this->db->distinct('*');
+		$this->db->from("cns_tutor");
+		$this->db->where_in("id", $array);
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
 	/**
 	 *obtiene catalogos relevante x entorno para la sincronizacion
 	 *
@@ -1832,6 +1892,37 @@ class Enrolamiento_model extends CI_Model
 		if ($value == 'log')
 			return $this->msg_error_log;
 		return $this->msg_error_usr;
-	}	
+	}
+	/*
+	public function get_um($nivel,$padre)
+	{
+		$sql="SELECT id FROM asu_arbol_segmentacion ";
+		if($nivel==1)
+			$sql.="WHERE id IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='$padre'))))";
+			
+		if($nivel==2)
+			$sql.="WHERE id IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='$padre')))";		
+		
+		if($nivel==3)
+			$sql.="WHERE id IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='$padre'))";
+
+		if($nivel==4)
+			$sql.="WHERE id IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='$padre')";
+			
+		if($nivel==5)
+			$sql.="WHERE id IN ('$padre')";
+		
+		
+		$query = $this->db->query($sql); 
+	
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return;
+	}*/
 }
 ?>

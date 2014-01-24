@@ -350,10 +350,18 @@ class Servicios extends CI_Controller {
 				
 				//************ inicio notificacion ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
-				$i=0;$array=array();$tem="";
-				foreach($asu_um as $id)
+				if($tableta->id_tipo_censo!=5)
 				{
-					$result=$this->Enrolamiento_model->get_notificacion($id);
+					$asu_um = array_reverse($asu_um);
+					$asu_um = $this->ArbolSegmentacion_model->getCluesFromId($asu_um[$tableta->id_tipo_censo-1]);
+				}
+				else
+					$asu_um['children'][0]=array("key"=>$tableta->id_asu_um);
+				
+				$i=0;$array=array();$tem="";
+				foreach($asu_um['children'] as $id)
+				{
+					$result=$this->Enrolamiento_model->get_notificacion($id["key"]);
 					if($result)
 					{
 						if($tem!=$result[0]->id)
@@ -396,8 +404,6 @@ class Servicios extends CI_Controller {
 					unset($cadena);
 					$cadena=array();
 				}
-				//else 
-				//	$cadena["tes_pendientes_tarjeta"]= 'Error recuperando tes_pendientes_tarjeta';
 				//************ fin tes_pendientes_tarjeta ************
 				
 				// regresa el json con los datos necesarios	
@@ -422,18 +428,17 @@ class Servicios extends CI_Controller {
 	public function is_step_3($id_sesion,$datos)
 	{
 		$fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a");
-		fputs($fp, "JSON recibido: ".($datos)."\r\n");
+		fputs($fp, "FECHA: ".date("d/m/Y H:i:s")." => MAC:"
+			.$this->session->userdata('mac')." => VERSION:"
+			.$this->session->userdata('id_version')." => PASO:"
+			.$this->session->userdata('paso')." JSON recibido: ".($datos)."\r\n");
 		
 		$datos=(array)json_decode($datos);
 		$paso=$this->session->userdata('paso');
 		$sinc=$this->session->userdata('sinc');
 		if($datos["id_resultado"]=="error")
 		{
-			fputs($fp, "FECHA: ".date("d/m/Y H:i:s")." => MAC:"
-			.$this->session->userdata('mac')." => VERSION:"
-			.$this->session->userdata('id_version')." => PASO:"
-			.$this->session->userdata('paso')." => DESCRIPCION:"
-			.$datos["descripcion"]."\r\n");
+			fputs($fp, "ERROR: ".$datos["descripcion"]."\r\n");
 			ob_flush();
 		}
 		if($datos["id_resultado"]=="ok"&&$this->session->userdata('paso')=="4")
@@ -453,6 +458,7 @@ class Servicios extends CI_Controller {
 	public function is_step_4($id_sesion)
 	{
 		ini_set("max_execution_time", 999999999);
+		ini_set("memory_limit","200M");
 		if ($id_sesion == $this->session->userdata('session')) // valida el token de entrada es el token que solicito el servicio
 		{
 			// se obtiene el dispositivo por token
@@ -462,72 +468,107 @@ class Servicios extends CI_Controller {
 			{
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
-				$i=0; 
-				foreach($asu_um as $id)
+				if($tableta->id_tipo_censo!=5)
 				{
-					$personas=$this->Enrolamiento_model->get_catalog2("cns_persona", "id_asu_um_tratante", $id);
-					
-					if($personas)
+					$asu_um = array_reverse($asu_um);
+					$asu_um = $this->ArbolSegmentacion_model->getCluesFromId($asu_um[$tableta->id_tipo_censo-1]);
+				}
+				else
+					$asu_um['children'][0]=array("key"=>$tableta->id_asu_um);
+				$i=0; 
+				$miasu=array();
+				foreach($asu_um["children"] as $id)
+				{
+					$miasu[]=$id["key"];
+				}
+				$personas=$this->Enrolamiento_model->get_cns_persona($miasu);
+				
+				if($personas)
+				{
+					$cadena["cns_persona"]= $personas;	
+					$micadena=json_encode($cadena);
+					echo "{".substr($micadena,1,strlen($micadena)-2);
+					$micadena="";	
+					ob_flush();	
+					unset($cadena);
+					$cadena=array();				
+					//************ inicio control catalogos X persona ************
+					$regla_vacuna=array();
+					$mipersona=array();
+					foreach($personas as $persona)
 					{
-						$cadena["cns_persona"]= $personas;						
-						//************ inicio control catalogos X persona ************
-						$regla_vacuna=array();
-						foreach($personas as $persona)
+						$vacunas=$array=$this->Enrolamiento_model->get_catalog2("cns_control_vacuna", "id_persona", $persona->id);
+						array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$vacunas));
+						$mipersona[]=$persona->id;
+					}
+						
+					$catalog_relevante = $this->Enrolamiento_model->get_transaction_relevante();
+					foreach($catalog_relevante as $catalog)
+					{
+						if($catalog->descripcion!="cns_persona"&&$catalog->descripcion!="cns_tutor")
 						{
-							$vacunas="";
-							$catalog_relevante = $this->Enrolamiento_model->get_transaction_relevante();
-							foreach($catalog_relevante as $catalog)
+							try
 							{
-								if($catalog->descripcion!="cns_persona"&&$catalog->descripcion!="cns_tutor")
+								$array=$this->Enrolamiento_model->get_cns_cat_persona($catalog->descripcion, $mipersona);
+								if($array)
 								{
-									try
+									echo ",";
+									$cadena[$catalog->descripcion]= $array;	
+									$micadena=json_encode($cadena);
+									echo substr($micadena,1,strlen($micadena)-2);
+									$micadena="";	
+									ob_flush();	
+									unset($cadena);
+									$cadena=array();
+
+									if($catalog->descripcion=="cns_persona_x_tutor")
 									{
-										$array=$this->Enrolamiento_model->get_catalog2($catalog->descripcion, "id_persona", $persona->id);
-										if($array)
+										$mitutor=array();
+										foreach($array as $dato)
 										{
-											if(array_key_exists($catalog->descripcion,$cadena))
-												array_push($cadena[$catalog->descripcion], $array[0]);
-											else
-												$cadena[$catalog->descripcion]=$array;
-											if($catalog->descripcion=="cns_control_vacuna")$vacunas=$array;
-											if($catalog->descripcion=="cns_persona_x_tutor")
-											{
-												foreach($array as $dato)
-												{
-													$array2=$this->Enrolamiento_model->get_catalog2("cns_tutor", "id", $dato->id_tutor);
-													if(array_key_exists("cns_tutor",$cadena))
-														array_push($cadena["cns_tutor"], $array2[0]);
-													else
-														$cadena["cns_tutor"]= $array2;
-												}
-											}
+											$mitutor[]=$dato->id_tutor;
 										}
-										//else 
-										//	$cadena[$catalog->descripcion]= 'Error recuperando '.$catalog->descripcion;
+										$array2=$this->Enrolamiento_model->get_persona_x_tutor($mitutor);
+										
+										echo ",";
+										$cadena["cns_tutor"]= $array2;	
+										$micadena=json_encode($cadena);
+										echo substr($micadena,1,strlen($micadena)-2);
+										$micadena="";	
+										ob_flush();	
+										unset($cadena);
+										$cadena=array();	
 									}
-									catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
 								}
 							}
-							array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$vacunas));
+							catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
 						}
-						$rv=array();
-						for($x=0;$x<count($regla_vacuna);$x++)
-							for($y=0;$y<count($regla_vacuna[$x]);$y++)
-							$rv[]=array("id_persona"=>$regla_vacuna[$x][$y]["id_persona"],
-									  "id_vacuna"=> $regla_vacuna[$x][$y]["id_vacuna"],
-									  "prioridad"=> $regla_vacuna[$x][$y]["prioridad"]);
-						$cadena["esquema_incompleto"]=$rv;
-						//************ fin control catalogos X persona ************
 					}
+						
 					
-					$i++;
+					$rv=array();
+					for($x=0;$x<count($regla_vacuna);$x++)
+						for($y=0;$y<count($regla_vacuna[$x]);$y++)
+						$rv[]=array("id_persona"=>$regla_vacuna[$x][$y]["id_persona"],
+								  "id_vacuna"=> $regla_vacuna[$x][$y]["id_vacuna"],
+								  "prioridad"=> $regla_vacuna[$x][$y]["prioridad"]);
+					$cadena["esquema_incompleto"]=$rv;
+					//************ fin control catalogos X persona ************
 				}
-				
+					
 				// regresa el json con los datos necesarios	
 				$this->session->set_userdata( 'paso', "4" );
 				if($cadena!="")
-				echo json_encode($cadena);	
-				ob_flush();
+				{
+					echo ",";
+					$micadena=json_encode($cadena);
+					echo substr($micadena,1,strlen($micadena)-1);
+					$micadena="";	
+					ob_flush();	
+					unset($cadena);
+					$cadena=array();
+				}
+				
 				//************ fin persona ************
 			}
 			else
@@ -547,7 +588,8 @@ class Servicios extends CI_Controller {
 	public function ss_step_5($id_sesion, $datos)
 	{
 		header('Content-Type: text/html; charset=UTF-8');
-		$bien=0;
+		$bien=
+		0;
 		$datos=(array)json_decode($datos);
 		try
 		{
@@ -643,6 +685,7 @@ class Servicios extends CI_Controller {
 	public function ss_step_6($id_sesion)
 	{
 		ini_set("max_execution_time", 999999999);
+		ini_set("memory_limit","200M");
 		$fecha=$this->session->userdata('fecha');
 		$mi_version = $this->Enrolamiento_model->get_version();
 		foreach($mi_version as $dato)
@@ -664,102 +707,105 @@ class Servicios extends CI_Controller {
 				
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
+				if($tableta->id_tipo_censo!=5)
+				{
+					$asu_um = array_reverse($asu_um);
+					$asu_um = $this->ArbolSegmentacion_model->getCluesFromId($asu_um[$tableta->id_tipo_censo-1]);
+				}
+				else
+					$asu_um['children'][0]=array("key"=>$tableta->id_asu_um);
 				$i=0; $xy=0; $cadena=array();
-				foreach($asu_um as $id)
-				{//checar fecha en tipo de dato time stamp
 				
-					$personas=$this->Enrolamiento_model->get_catalog2("cns_persona", "id_asu_um_tratante", $id,"ultima_actualizacion >=", $fecha);
-					
-					if($personas)
+				$miasu=array();
+				foreach($asu_um["children"] as $id)
+				{
+					$miasu[]=$id["key"];
+				}
+				$personas=$this->Enrolamiento_model->get_cns_persona($miasu,$fecha);
+				
+				if($personas)
+				{
+					$cadena["cns_persona"]= $personas;	
+					$micadena=json_encode($cadena);
+					echo ",".substr($micadena,1,strlen($micadena)-2);
+					$micadena="";	
+					ob_flush();	
+					unset($cadena);
+					$cadena=array();				
+					//************ inicio control catalogos X persona ************
+					$mipersona=array();
+					foreach($personas as $persona)
 					{
-						if(array_key_exists("cns_persona",$cadena))
-							array_push($cadena["cns_persona"], $personas);
-						else
-							$cadena["cns_persona"]=$personas;
-							
-						$regla_vacuna=array();						
-						//************ inicio control catalogos X persona ************
-						foreach($personas as $persona)
+						$mipersona[]=$persona->id;
+					}
+					//************ inicio control catalogos X persona ************
+					$catalog_relevante = $this->Enrolamiento_model->get_transaction_relevante();
+					foreach($catalog_relevante as $catalog)
+					{
+						if($catalog->descripcion!="cns_persona"&&$catalog->descripcion!="cns_tutor")
 						{
-							$yx=0;
-							$catalog_relevante = $this->Enrolamiento_model->get_transaction_relevante();
-							
-							foreach($catalog_relevante as $catalog)
+							try
 							{
-								if($catalog->descripcion!="cns_persona"&&$catalog->descripcion!="cns_tutor")
+								$array=$this->Enrolamiento_model->get_cns_cat_persona($catalog->descripcion, $mipersona);
+								if($array)
 								{
-									try
+									echo ",";
+									$cadena[$catalog->descripcion]= $array;	
+									$micadena=json_encode($cadena);
+									echo substr($micadena,1,strlen($micadena)-2);
+									$micadena="";	
+									ob_flush();	
+									unset($cadena);
+									$cadena=array();
+
+									if($catalog->descripcion=="cns_persona_x_tutor")
 									{
-										$campo=$catalog->columna_validar;
-										$array=$this->Enrolamiento_model->get_catalog2($catalog->descripcion, "id_persona", $persona->id);
+										$mitutor=array();
+										foreach($array as $dato)
+										{
+											$mitutor[]=$dato->id_tutor;
+										}
+										$array2=$this->Enrolamiento_model->get_persona_x_tutor($mitutor);
 										
-										if($catalog->descripcion=="cns_control_vacuna")
-										{
-											$vacunas=$array;
-										}
-										if($array)
-										{
-											if(array_key_exists($catalog->descripcion,$cadena))
-												array_push($cadena[$catalog->descripcion], $array);
-											else
-												$cadena[$catalog->descripcion]=$array;
-												
-											if($catalog->descripcion=="cns_persona_x_tutor")
-											{
-												foreach($array as $dato)
-												{
-													$array2=$this->Enrolamiento_model->get_catalog2("cns_tutor", "id", $dato->id_tutor);
-													if(array_key_exists("cns_tutor",$cadena))
-														array_push($cadena["cns_tutor"], $array2);
-													else
-														$cadena["cns_tutor"]=$array2;
-												}
-											}									
-											
-										}
-										//else 
-										//	$cadena[$catalog->descripcion]= 'Error recuperando '.$catalog->descripcion;
+										echo ",";
+										$cadena["cns_tutor"]= $array2;	
+										$micadena=json_encode($cadena);
+										echo substr($micadena,1,strlen($micadena)-2);
+										$micadena="";	
+										ob_flush();	
+										unset($cadena);
+										$cadena=array();	
 									}
-									catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
 								}
 							}
-							
-							$xy++;
+							catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
 						}
-						//************ fin control catalogos X persona ************
 					}
 					
-					$i++;
+					$xy++;
 				}
-				
+				//************ fin control catalogos X persona ************
+					
+				echo ",";
 				$micadena=json_encode($cadena);
 				echo substr($micadena,1,strlen($micadena)-2);
 				$micadena="";
 				ob_flush();
 				unset($cadena);
 				$cadena=array();
-															
-				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
-				foreach($asu_um as $id)
+					
+				$regla_vacuna=array();
+				$personas=$this->Enrolamiento_model->get_cns_persona($miasu);										
+				if($personas)
 				{
-					$personas=$this->Enrolamiento_model->get_catalog2("cns_persona", "id_asu_um_tratante", $id);
-					if($personas)
+					$regla_vacuna=array();
+					foreach($personas as $persona)
 					{
-						$cadena["cns_persona"]= $personas;						
-						$regla_vacuna=array();
-						foreach($personas as $persona)
-						{
-							$array=$this->Enrolamiento_model->get_catalog2("cns_control_vacuna", "id_persona", $persona->id);
-							if($array)
-							{
-								foreach($array as $dato)
-								{
-									array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$array));
-								}
-							}
-						}
+						$vacunas=$array=$this->Enrolamiento_model->get_catalog2("cns_control_vacuna", "id_persona", $persona->id);
+						array_push($regla_vacuna,$this->esquema_incompleto($persona->id,$persona->fecha_nacimiento,$vacunas));
 					}
 				}
+				
 				$rv=array();
 				for($x=0;$x<count($regla_vacuna);$x++)
 					for($y=0;$y<count($regla_vacuna[$x]);$y++)
@@ -767,8 +813,9 @@ class Servicios extends CI_Controller {
 							  "id_vacuna"=> $regla_vacuna[$x][$y]["id_vacuna"],
 							  "prioridad"=> $regla_vacuna[$x][$y]["prioridad"]);
 				$cadena["esquema_incompleto"]=$rv;
+				
 				$micadena=json_encode($cadena);
-				echo ",".(substr($micadena,1,strlen($micadena)-2));
+				echo (substr($micadena,1,strlen($micadena)-2));
 				$micadena="";
 				ob_flush();
 				unset($cadena);
