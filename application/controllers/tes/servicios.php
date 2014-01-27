@@ -458,7 +458,13 @@ class Servicios extends CI_Controller {
 	public function is_step_4($id_sesion)
 	{
 		ini_set("max_execution_time", 999999999);
-		ini_set("memory_limit","200M");
+		$tableta = $this->Tableta_model->getByMac($this->session->userdata('mac'));
+		if($tableta->id_tipo_censo==1)
+			ini_set("memory_limit","300M");
+		if($tableta->id_tipo_censo==2)
+			ini_set("memory_limit","200M");
+		if($tableta->id_tipo_censo==3)
+			ini_set("memory_limit","100M");
 		if ($id_sesion == $this->session->userdata('session')) // valida el token de entrada es el token que solicito el servicio
 		{
 			// se obtiene el dispositivo por token
