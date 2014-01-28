@@ -1,4 +1,13 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * Controlador Objeto
+ *
+ * @package		Librería
+ * @subpackage	Controlador
+ * @author     	Eliecer
+ * @created		2013-12-10
+ */ 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Tree extends CI_Controller 
 {
 	public function __construct()

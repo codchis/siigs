@@ -35,7 +35,7 @@ $(document).ready(function(){
 		'transitionIn'	: 'elastic',
 		'transitionOut'	: 'elastic',
 		'type'			: 'iframe',	
-		onComplete: function(){
+		onComplete      : function(){
             $('#fancybox-frame').load(function(){
                 $.fancybox.hideActivity();
             });

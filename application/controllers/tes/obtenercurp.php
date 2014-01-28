@@ -1,4 +1,13 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php 
+/**
+ * Controlador Objeto
+ *
+ * @package		Librería
+ * @subpackage	Controlador
+ * @author     	Eliecer
+ * @created		2013-12-10
+ */ 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Obtenercurp extends CI_Controller 
 {
 	public function __construct()
@@ -6,6 +15,12 @@ class Obtenercurp extends CI_Controller
 		parent::__construct();
 		$this->load->helper('url');
 	}
+	/**
+	 *Este es el metodo consulta la curp del una persona en la base de datos federal 
+	 *se recibe la informacion de la persona a consultar
+	 *return json con datos
+	 *
+	 */
 	public function curp($paterno,$materno,$nombre,$dia,$mes,$year,$sexo,$estado,$regresar)
 	{
 		$ap=strtoupper($paterno);

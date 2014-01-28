@@ -1075,41 +1075,4 @@ else
  echo '<a href="" class="btn btn-primary" onclick="window.location.href=\'/'.DIR_TES.'/enrolamiento/\';return false;">Regresar</a></div>';
 }
 
-function getArray($array,$id,$nu)
-{
-	$i=0; $grid="";
-	foreach($array as $dato)
-	{
-		$i++;
-		$dato=(array)$dato;
-		$descripcion=$dato["descripcion"];
-		$fecha=$dato["fecha"];
-		$x=$dato["id"];
-		$clase="row2";
-		if($i%2)$clase="row1";
-		$num=$i;
-		if($i<10)$num="0".$i;
-		$grid.= '<span id="r'.$id.$num.'" ><div class="'.$clase.'" >
-				<table width="100%" >
-				<tr>
-					<th width="10%" >'.$num.'</th>
-					<th width="50%" align="left"><select name="'.$id.'[]" id="'.$id.$num.'" class="requiere" title="requiere" required style="width:95%;"></select>
-					<script>$("#'.$id.$num.'").load("/tes/enrolamiento/catalog_select/'.$id.'/'.$x.'");</script>
-					</th>
-					<th width="40%" align="left"><input name="f'.$id.'[]" type="text" id="f'.$id.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'"></th>
-				</tr>
-				</table> 
-			  </div></span>
-			  <script>
-	$(document).ready(function()
-	{
-		$("#f'.$id.$num.'").datepicker();
-	});</script>';
-			  
-		 
-	 }
-	
-	$grid.='<input type="hidden" id="'.$nu.'" value="'.$i.'" />';
-	return $grid;
-}
 ?>

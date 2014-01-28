@@ -17,6 +17,7 @@ class Enrolamiento extends CI_Controller
 		{
 			$this->load->helper('url');
 			$this->load->helper('date');
+			$this->load->helper('formatFecha');
 		}
 		catch(Exception $e)
 		{
@@ -67,6 +68,12 @@ class Enrolamiento extends CI_Controller
  		$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_list', $data);
  		$this->template->render();
 	}
+	/**
+	 *Este metodo estrae la informacion del paciente que sera impreso en la tarjeta
+	 *se recibe el parametro $id que es el identificador del paciente
+	 *imprime en un echo los datos del paciente separados por |
+	 *
+	 */
 	public function print_card($id)
 	{
 		$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
@@ -440,6 +447,8 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 	}
 	/**
 	 *Crea el autocomplete de los datos del tutor
+	 *recibe un post del campo donde fue invocado
+	 *return el json que es procesado en la peticion ajax
 	 *
 	 */
 	public function autocomplete()
@@ -459,6 +468,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 	/**
 	 *Obtiene inofrmacion del tutor
 	 *se recibe el parametro $curp de tipo string 
+	 *return el json con la informacion solicitada
 	 *
 	 */
 	public function data_tutor($curp)
@@ -499,6 +509,12 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		
 		echo json_encode($array);
 	}
+	/**
+	 *Este metodo crea un archivo descargable el cual se necesita para el envio por nfc a la tarjeta del paciente
+	 *se recibe el parametro $id que representa el identificador de la persona
+	 *return un archivo descargable
+	 *
+	 */
 	public function file_to_card($id)
 	{
 		$archivo=date("YmdHis").".tesf";
@@ -565,7 +581,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data.=$registro["fecha_registro"];					
 		}
 		$data.="~";
-		$alergias = $this->Enrolamiento_model->getAlergia($id);
+		$alergias = $this->Enrolamiento_model->getAlergia($id,'ultima_actualizacion');
 		foreach($alergias as $x)
 		{
 			$data.=$x->id."°";
@@ -574,7 +590,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
-		$afiliaciones = $this->Enrolamiento_model->getAfiliaciones($id);
+		$afiliaciones = $this->Enrolamiento_model->getAfiliaciones($id,'ultima_actualizacion');
 		foreach($afiliaciones as $x)
 		{
 			$data.=$x->id."°";
@@ -583,7 +599,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
-		$vacunas=$this->Enrolamiento_model->get_catalog_view("vacuna",$id);
+		$vacunas=$this->Enrolamiento_model->get_catalog_view("vacuna",$id,'','fecha');
 		foreach($vacunas as $x)
 		{
 			$data.=$x->id."=";
@@ -593,7 +609,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
-		$iras=$this->Enrolamiento_model->get_catalog_view("ira",$id);
+		$iras=$this->Enrolamiento_model->get_catalog_view("ira",$id,'','fecha');
 		foreach($iras as $x)
 		{
 			$data.=$x->id."=";
@@ -603,7 +619,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
-		$edas=$this->Enrolamiento_model->get_catalog_view("eda",$id);
+		$edas=$this->Enrolamiento_model->get_catalog_view("eda",$id,'','fecha');
 		foreach($edas as $x)
 		{
 			$data.=$x->id."=";
@@ -613,7 +629,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
-		$consultas=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
+		$consultas=$this->Enrolamiento_model->get_catalog_view("consulta",$id,'','fecha');
 		foreach($consultas as $x)
 		{
 			$data.=$x->id."=";
@@ -623,7 +639,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
-		$anutricional=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
+		$anutricional=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id,'','fecha');
 		foreach($anutricional as $x)
 		{
 			$data.=$x->id."=";
@@ -633,7 +649,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
-		$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
+		$nutricion=$this->Enrolamiento_model->get_control_nutricional($id,'fecha');
 		foreach($nutricion as $x)
 		{
 			$data.=$x->peso."=";
@@ -648,13 +664,20 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		$this->update_card($id,0,'',$archivo,4);
 		echo $data;
 	}
-	
+	/**
+	 *Este metodo actualiza el estado del archivo descargado si fue escrito correctamente o no en la tarjeta
+	 *
+	 */
 	public function update_card($persona,$impreso,$fecha="",$archivo="",$entorno='4')
 	{
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
 		if($impreso==1)$fecha=date("Y-m-d H:i:s");
 		$this->Enrolamiento_model->entorno_x_persona($entorno,$persona,$fecha,$archivo,$impreso);
 	}
+	/**
+	 *Este metodo valida que un archivo sea valido para enviar a la tarjeta por nfc
+	 *
+	 */
 	public function validate_card($persona,$archivo)
 	{
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
@@ -930,6 +953,11 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			}
 		}
 	}
+	/**
+	 *Este metodo verifica si un paciente comparte un mismo tutor
+	 *return las personas con las que se comparte inofrmacion
+	 *
+	 */
 	public function brother_found($id)
 	{
 		$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
@@ -938,6 +966,13 @@ p.referencia_domicilio, p.colonia_domicilio, p.cp_domicilio, p.ageb, p.sector, p
 FROM  cns_persona p WHERE p.id='$id'");
 		echo json_encode($result);
 	}
+	/**
+	 *Este metodo extrae la informacion de las personas con las que se comparte el mismo tutor
+	 *si se selecciona una de estas importa los datos para el apartado direccion
+	 *recibe el parametro $tutor que representa el identificador del tutor
+	 *return json de los datos de la persona
+	 *
+	 */
 	public function brothers_search($tutor)
 	{
 		$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
@@ -948,6 +983,10 @@ LEFT JOIN cns_persona p ON p.id=t.id_persona
 WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 		echo json_encode($result);
 	}
+	/**
+	 *Este metodo valida que el nodo seleccionado en el arbol sea una unidad medica
+	 *
+	 */
 	public function validarisum($id)
 	{
 		$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');

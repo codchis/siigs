@@ -955,36 +955,3 @@
 <script type="text/javascript">
 var Accordion1 = new Spry.Widget.Accordion("Accordion1", { useFixedPanelHeights: false, defaultPanel: 0 });
 </script>
-<?php
-function getArray($array,$id,$nu)
-{
-	$i=0; $grid="";
-	foreach($array as $dato)
-	{
-		$i++;
-		$dato=(array)$dato;
-		$fecha=$_POST["f$id"][$i-1];
-		$x=$_POST[$id][$i-1];
-		$clase="row2";
-		if($i%2)$clase="row1";
-		$num=$i;
-		if($i<10)$num="0".$i;
-		$grid.= '<span id="r'.$id.$num.'" ><div class="'.$clase.'" >
-				<table width="100%" >
-				<tr>
-					<th width="10%" >'.$num.'</th>
-					<th width="50%" align="left"><select name="'.$id.'[]" id="'.$id.$num.'"  required title="requiere"  style="width:95%;"></select>
-					<script>$("#'.$id.$num.'").load("/tes/enrolamiento/catalog_select/'.$id.'/'.$x.'");</script>
-					</th>
-					<th width="40%" align="left"><input name="f'.$id.'[]" type="text" id="f'.$id.$num.'" value="'.date("Y-m-d",strtotime($fecha)).'"></th>
-				</tr>
-				</table> 
-			  </div></span>';
-			  
-		 
-	 }
-	
-	$grid.='<input type="hidden" id="'.$nu.'" value="'.$i.'" />';
-	return $grid;
-}
-?>

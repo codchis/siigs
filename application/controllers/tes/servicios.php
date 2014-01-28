@@ -86,7 +86,14 @@ class Servicios extends CI_Controller {
             Errorlog_model::save($e->getMessage(), __METHOD__);
         }
     }
-	// validacion de la tableta y obtencion de la session
+	/**
+	 *validacion de la tableta y obtencion de la session
+	 *valida que la tableta este dada de alta y tenga un status y tipo de censo valido para la sincronizacion
+	 *recibe el id_tableta que es la mac de la tableta
+	 *id_version es la version de la apk instalada en la tableta
+	 *return session
+	 *
+	 */
 	public function is_step_1($id_tab,$id_version)
 	{
 		$tableta = $this->Tableta_model->getByMac($id_tab);
@@ -156,7 +163,12 @@ class Servicios extends CI_Controller {
 		}
 	}
 	
-	// generacion de informacion de catalogos
+	/**
+	 *generacion de informacion de catalogos
+	 *se recibe el parametro $id_session generado en paso 1
+	 *return json de catalogos
+	 *
+	 */
 	public function is_step_2($id_sesion, $si="", $sf="")
 	{
 		ini_set("max_execution_time", 999999999);
@@ -350,18 +362,12 @@ class Servicios extends CI_Controller {
 				
 				//************ inicio notificacion ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
-				if($tableta->id_tipo_censo!=5)
-				{
-					$asu_um = array_reverse($asu_um);
-					$asu_um = $this->ArbolSegmentacion_model->getCluesFromId($asu_um[$tableta->id_tipo_censo-1]);
-				}
-				else
-					$asu_um['children'][0]=array("key"=>$tableta->id_asu_um);
+				
 				
 				$i=0;$array=array();$tem="";
-				foreach($asu_um['children'] as $id)
+				foreach($asu_um as $id)
 				{
-					$result=$this->Enrolamiento_model->get_notificacion($id["key"]);
+					$result=$this->Enrolamiento_model->get_notificacion($id);
 					if($result)
 					{
 						if($tem!=$result[0]->id)
@@ -424,7 +430,12 @@ class Servicios extends CI_Controller {
 		}
 	}
 	
-	// procesaiento de mensajes
+	/**
+	 *procesaiento de mensajes
+	 *procesa los mensajes que se cachan entre la comunicacion del servidor y la tableta durante la sincronizacion
+	 *recibe la session generada en el paso 1 y los datos que son el mensaje
+	 *
+	 */
 	public function is_step_3($id_sesion,$datos)
 	{
 		$fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a");
@@ -453,8 +464,13 @@ class Servicios extends CI_Controller {
 		}
 		fclose($fp);
 	}
-	
-	// envio de inofrmacion de personas
+	/**
+	 *envio de inofrmacion de personas
+	 *genera los datos de todas las personas que le corresponda a la tableta 
+	 *recibe la session generada en el paso 1 
+	 *return json de datos
+	 *
+	 */
 	public function is_step_4($id_sesion)
 	{
 		ini_set("max_execution_time", 999999999);
@@ -611,13 +627,17 @@ class Servicios extends CI_Controller {
 			ob_flush();
 		}
 	}
-	
-	// recibir datos de la tableta
+	/**
+	 *recibir datos de la tableta
+	 *recibe los datos que envia la tableta para ser insertados en la base de datos del servidor
+	 *recibe la session generada en el paso 1 y los datos enviados por la tableta
+	 *return json con resultado
+	 *
+	 */
 	public function ss_step_5($id_sesion, $datos)
 	{
 		header('Content-Type: text/html; charset=UTF-8');
-		$bien=
-		0;
+		$bien=0;
 		$datos=(array)json_decode($datos);
 		try
 		{
@@ -687,6 +707,16 @@ class Servicios extends CI_Controller {
 				else
 					$this->Enrolamiento_model->cns_insert("tes_pendientes_tarjeta",$midato);
 			}	
+			if(array_key_exists("sis_bitacora",$datos))
+			foreach($datos["sis_bitacora"] as  $midato)
+			{
+				$this->Enrolamiento_model->cns_insert("sis_bitacora",$midato);
+			}	
+			if(array_key_exists("sis_error",$datos))
+			foreach($datos["sis_error"] as  $midato)
+			{
+				$this->Enrolamiento_model->cns_insert("sis_error",$midato);
+			}	
 			$this->session->set_userdata( 'paso', "5" );
 			$mi_version = $this->Enrolamiento_model->get_version();
 			foreach($mi_version as $dato)
@@ -708,8 +738,12 @@ class Servicios extends CI_Controller {
 			ob_flush();
 		}
 	}
-	
-	// envio de datos de personas que se agregaron o actualizaron depues de la ultima sincronizacion de la tableta
+	/**
+	 *envio de datos de personas que se agregaron o actualizaron depues de la ultima sincronizacion de la tableta
+	 *recibe la session generada en el paso 1 
+	 *return json de datos
+	 *
+	 */
 	public function ss_step_6($id_sesion)
 	{
 		ini_set("max_execution_time", 999999999);
@@ -867,8 +901,10 @@ class Servicios extends CI_Controller {
 			ob_flush();
 		}
 	}
-	
-	// actualiza el estado de la tableta
+	/**
+	 *actualiza el estado de la tableta
+	 *
+	 */
 	public function actualiza_estado_tableta($id_sesion,$id_tes_estado_tableta="",$version="")
 	{
 		if ($id_sesion == $this->session->userdata('session')) // valida el token de entrada es el token que solicito el servicio
@@ -887,7 +923,12 @@ class Servicios extends CI_Controller {
 			}
 		}
     }
-	
+	/**
+	 *genera los esquemas incompletos de las personas que se envian en la sincronizacion
+	 *se recibe el parametro $id_persona fecha y las vacunas
+	 *return array
+	 *
+	 */
 	public function esquema_incompleto($id_persona,$fecha,$vacunas)
 	{//agregar dias a la fecha si periodo de colchon ver tabla tableta agregar bit de prioridad 1 ya le toca 0 periodo de ventana "prioridad"=>1 ó 0
 		$cadena= array();
@@ -912,30 +953,6 @@ class Servicios extends CI_Controller {
 						$x++;
 					}
 				}
-				
-				/*if(trim($r->id_vacuna_secuencial)!=""&&!empty($r->id_vacuna_secuencial)&&$r->esq_com=="1")
-				{
-					$reglase=$this->ReglaVacuna_model->getById($r->id);
-					
-					$x1=0;
-					if($vacunas!="")
-					foreach($vacunas as $v1)
-					{
-						if($reglase->id_vacuna_secuencial==$v1->id_vacuna)
-						{
-							$x1++;
-						}
-					}
-					
-					if($x1==0)
-					{
-						if($dias>=$reglase->desdese&&$dias<=$reglase->hastase||$dias>$reglase->hastase)
-							array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>1));
-						if($dias_extra>=$reglase->desdese&&$dias_extra<=$reglase->hastase)
-							array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id_vacuna_secuencial, "prioridad"=>0));	
-					}
-				}*/
-				
 				if($x==0)
 				{
 					if($dias>=$r->desde&&$dias<=$r->hasta||$dias>$r->hasta)
@@ -987,14 +1004,8 @@ class Servicios extends CI_Controller {
             "id_vacuna": "10"
         }
     ],
-    "sis_bitacora": [
-        {
-            "parametros": "paciente:c844dee37db76567e3a4e6ed64c10057, vacuna:10",
-            "fecha_hora": "2014-01-07 14:57:08",
-            "id_usuario": "6",
-            "id_controlador_accion": "104"
-        }
-    ]
+    "sis_bitacora":[{"parametros":"paciente:37648c5b456a164ca486bcaae5b16451, vacuna:6","fecha_hora":"2014-01-28 12:17:45","id_usuario":"9","id_controlador_accion":"104"}],
+	"sis_error":[{"descripcion":"Json incorrecto en pendiente de persona:002f096e99f2fcface64f406f150a60c, fecha:2014-01-22 13:28:47, tabla:cns_control_vacuna","fecha_hora":"2014-01-28 12:35:09","id_usuario":"9","id_controlador_accion":"0"},{"descripcion":"Json incorrecto en pendiente de persona:002f096e99f2fcface64f406f150a60c, fecha:2014-01-22 14:10:17, tabla:cns_control_vacuna","fecha_hora":"2014-01-28 12:35:09","id_usuario":"9","id_controlador_accion":"0"}]
 }' );
 	}    
 }
