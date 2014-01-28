@@ -757,7 +757,8 @@ class Enrolamiento_model extends CI_Model
 			}
 			$data01 = array(
 				'id_persona' => $this->id,
-				'id_tutor' => $this->idtutor,						
+				'id_tutor' => $this->idtutor,
+				'ultima_actualizacion' => date('Y-m-d H:i:s'),						
 				);
 			$result01 = $this->db->insert('cns_persona_x_tutor', $data01);
 			if (!$result01)
@@ -773,6 +774,7 @@ class Enrolamiento_model extends CI_Model
 					// alergias
 					'id_persona' => $this->id,
 					'id_alergia' => $this->alergias[$i],
+					'ultima_actualizacion' => date('Y-m-d H:i:s'),	
 					
 				);
 				if($this->alergias[$i]!="")
@@ -920,7 +922,7 @@ class Enrolamiento_model extends CI_Model
 					// afiliacion
 					'id_persona' => $this->id,
 					'id_afiliacion' => $this->afiliacion[$i],
-					
+					'ultima_actualizacion' => date('Y-m-d H:i:s'),	
 				);
 				if($this->afiliacion[$i]!="")
 				{
@@ -935,6 +937,10 @@ class Enrolamiento_model extends CI_Model
 		}
 		return $this->id;
 	}
+	/**
+	 *Este metodo actualiza o inserta los datos que permiten el envio de la informacion a la tarjeta por nfc
+	 *
+	 */
 	public function entorno_x_persona($entorno,$persona,$fecha,$archivo,$impreso)
 	{
 		$data = array(
@@ -957,11 +963,19 @@ class Enrolamiento_model extends CI_Model
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 		}	
 	}
+	/**
+	 *Este metodo valida que exista un archivo para enviar a la tarjeta por nfc
+	 *
+	 */
 	public function valid_card($persona,$archivo)
 	{
 		$query = $this->db->get_where('tes_entorno_x_persona', array('id_persona' => $persona,"nombre_archivo"=>$archivo));
 		return ($query->num_rows() >0);		
 	}
+	/**
+	 *Este metodo extrae el folio que se anexa en el envio a la tarjeta por nfc
+	 *
+	 */
 	public function getfolio($persona)
 	{
 		$query = $this->db->get_where('tes_entorno_x_persona', array('id_persona' => $persona));
@@ -1122,7 +1136,8 @@ class Enrolamiento_model extends CI_Model
 		// relacion tutor paciente
 		$data01 = array(
 			'id_persona' => $this->id,
-			'id_tutor' => $this->idtutor,						
+			'id_tutor' => $this->idtutor,	
+			'ultima_actualizacion' => date('Y-m-d H:i:s'),						
 			);
 		if ($this->db->delete('cns_persona_x_tutor', array('id_persona' => $this->id)))
 		{
@@ -1148,7 +1163,7 @@ class Enrolamiento_model extends CI_Model
 				// alergias
 				'id_persona' => $this->id,
 				'id_alergia' => $this->alergias[$i],
-				
+				'ultima_actualizacion' => date('Y-m-d H:i:s'),	
 			);
 			if($this->alergias[$i]!="")
 			{
@@ -1352,7 +1367,7 @@ class Enrolamiento_model extends CI_Model
 				// afiliacion
 				'id_persona' => $this->id,
 				'id_afiliacion' => $this->afiliacion[$i],
-				
+				'ultima_actualizacion' => date('Y-m-d H:i:s'),	
 			);
 			if($this->afiliacion[$i]!="")
 			{
@@ -1483,7 +1498,10 @@ class Enrolamiento_model extends CI_Model
 			return $query->row();
 		return;
 	}
-	
+	/**
+	 *Este metodo obtiene informacion del registro civil del paciente
+	 *
+	 */
 	public function getRegistro_civil($id)
 	{
 		
@@ -1507,12 +1525,14 @@ class Enrolamiento_model extends CI_Model
 	 *@return result
 	 *
 	 */
-	public function getAlergia($id = '')
+	public function getAlergia($id = '',$order='')
 	{
 		$this->db->select('a.id, a.descripcion');
 		$this->db->from('cns_persona_x_alergia p');
 		$this->db->join('cns_alergia a', 'a.id = p.id_alergia','left');
 		$this->db->where('p.id_persona', $id);
+		if($order!="")
+		$this->db->order_by($order, "desc"); 
 		$query = $this->db->get();
 		
 		if (!$query){
@@ -1531,12 +1551,14 @@ class Enrolamiento_model extends CI_Model
 	 *@return result
 	 *
 	 */
-	public function getAfiliaciones($id = '')
+	public function getAfiliaciones($id = '',$order="")
 	{
 		$this->db->select('a.id, a.descripcion');
 		$this->db->from('cns_persona_x_afiliacion p');
 		$this->db->join('cns_afiliacion a', 'a.id = p.id_afiliacion','left');
 		$this->db->where('p.id_persona', $id);
+		if($order!="")
+		$this->db->order_by($order, "desc");
 		$query = $this->db->get();
 		
 		if (!$query){
@@ -1554,14 +1576,16 @@ class Enrolamiento_model extends CI_Model
 	 *el parametro $id tipo int contiene el id de la persona  
 	 *@return result
 	 */
-	public function get_catalog_view($catalog,$id,$order="")
+	public function get_catalog_view($catalog,$id,$order1="",$order2="")
 	{
 		$this->db->select('a.id, a.descripcion, p.fecha');
 		$this->db->from('cns_control_'.$catalog.' p');
 		$this->db->join('cns_'.$catalog.' a', 'a.id = p.id_'.$catalog,'left');
 		$this->db->where('p.id_persona', $id);
-		if($order!="")
-		$this->db->order_by($order, "asc");
+		if($order1!="")
+		$this->db->order_by($order1, "asc");
+		if($order2!="")
+		$this->db->order_by($order2, "desc");
 		$query = $this->db->get(); 
 		if (!$query)
 		{
@@ -1579,11 +1603,14 @@ class Enrolamiento_model extends CI_Model
 	 *@return result
 	 *
 	 */
-	public function get_control_nutricional($id)
+	public function get_control_nutricional($id,$order="")
 	{
 		$this->db->select('*');
 		$this->db->from('cns_control_nutricional');
 		$this->db->where('id_persona', $id);
+		if($order!="")
+		$this->db->order_by($order, "desc");
+		else
 		$this->db->order_by("fecha", "ASC");
 		$query = $this->db->get(); 
 		if (!$query)
@@ -1675,12 +1702,17 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
+	/**
+	 *Este metodo obtiene las notificaciones que se enviaran en la sincronizacion
+	 *
+	 */
 	public function get_notificacion($id)
 	{
 		$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
 		$this->db->from("tes_notificacion");
 		$this->db->like("id_arr_asu", $id);
-		$query = $this->db->get(); 
+		$this->db->where("fecha_fin >=",date("Y-m-d"));
+		$query = $this->db->get(); //echo $this->db->last_query();
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -1691,7 +1723,10 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	
+	/**
+	 *Este metodo obtiene la perssonas que seran enviadas en la sincronizacion
+	 *
+	 */
 	public function get_cns_persona($array,$fecha="")
 	{
 		$this->db->select('*');
@@ -1711,7 +1746,10 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	
+	/**
+	 *Este metodo obtiene los controles que le corresponde a cada persona que seran incluidas en la sincronizacion
+	 *
+	 */
 	public function get_cns_cat_persona($catalog, $array, $l1="", $l2="")
 	{
 		if($catalog=="tes_notificacion")
@@ -1737,6 +1775,10 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
+	/**
+	 *Este metodo hace el count de personas que se envian en la sincronizacion
+	 *
+	 */
 	public function get_cns_cat_persona_count($catalog,$persona)
 	{
 		$this->db->select ( 'COUNT(*) AS numrows' );
@@ -1745,6 +1787,10 @@ class Enrolamiento_model extends CI_Model
 		$query = $this->db->get(); 
 		return $query->row()->numrows;
 	}
+	/**
+	 *Este metodo obtiene los tutores de las personas que se envian en la sincronizacion
+	 *
+	 */
 	public function get_persona_x_tutor($array)
 	{
 		$this->db->distinct('*');
@@ -1902,36 +1948,5 @@ class Enrolamiento_model extends CI_Model
 			return $this->msg_error_log;
 		return $this->msg_error_usr;
 	}
-	/*
-	public function get_um($nivel,$padre)
-	{
-		$sql="SELECT id FROM asu_arbol_segmentacion ";
-		if($nivel==1)
-			$sql.="WHERE id IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='$padre'))))";
-			
-		if($nivel==2)
-			$sql.="WHERE id IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='$padre')))";		
-		
-		if($nivel==3)
-			$sql.="WHERE id IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='$padre'))";
-
-		if($nivel==4)
-			$sql.="WHERE id IN (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='$padre')";
-			
-		if($nivel==5)
-			$sql.="WHERE id IN ('$padre')";
-		
-		
-		$query = $this->db->query($sql); 
-	
-		if (!$query){
-			$this->msg_error_usr = "Servicio temporalmente no disponible.";
-			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
-		}
-		else
-			return $query->result();
-		return;
-	}*/
 }
 ?>

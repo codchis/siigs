@@ -82,6 +82,9 @@ function vacunacion(id,tiene,fecha,prioridad)
 		color="#FF6FB7";
 	else
 		color='white';
+	if(tiene=="X")
+	$('#'+id).html("<span style='margin-left:-8px;'><?php echo VACUNA_APLICADA; ?></span>");
+	else
 	$('#'+id).html("<span style='margin-left:-8px;'>"+tiene+"</span>");
 	$('#'+id).attr("title",fecha);
 	$('#'+id).css({'background-color':color,'cursor':'pointer'});
@@ -408,8 +411,8 @@ $i++;
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de IRA</div>
                       <div class="AccordionPanelContent"><br />
-                      	
-                        <table>
+                      	<div style="margin-left:20px; width:90%">
+                        <table width="100%">
                             <tr>
                                 <td width="85%" valign="top">
                                 <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
@@ -422,13 +425,13 @@ $i++;
                                   </table> 
                                   </div>
                                   
-                                  	<div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArray($iras);?></div>
+                                  	<div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($iras);?></div>
                                        
                               </td>
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
                           </table>
-                        
+                        </div>
                       </div>
                     </div>
                     
@@ -436,8 +439,8 @@ $i++;
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de EDA</div>
                       <div class="AccordionPanelContent"><br />
-                      	
-                        <table>
+                      	<div style="margin-left:20px; width:90%">
+                        <table width="100%">
                             <tr>
                                 <td width="85%" valign="top">
                                 <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
@@ -449,12 +452,12 @@ $i++;
                                     </tr>
                                   </table> 
                                   </div>
-                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArray($edas);?></div>                           
+                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($edas);?></div>                           
                               </td>
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
                           </table>
-                        
+                        </div>
                       </div>
                     </div>
                     
@@ -462,8 +465,8 @@ $i++;
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Consulta</div>
                       <div class="AccordionPanelContent"><br />
-                      	
-                        <table>
+                      	<div style="margin-left:20px; width:90%">
+                        <table width="100%">
                             <tr>
                                 <td width="85%" valign="top">
                                 <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
@@ -475,12 +478,12 @@ $i++;
                                     </tr>
                                   </table> 
                                   </div>
-                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArray($consultas);?></div>                           
+                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($consultas);?></div>                           
                               </td>
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
                           </table>
-                        
+                        </div>
                       </div>
                     </div>
                     
@@ -488,8 +491,8 @@ $i++;
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Acción Nutricional</div>
                       <div class="AccordionPanelContent"><br />
-                      	
-                        <table>
+                      	<div style="margin-left:20px; width:90%">
+                        <table width="100%">
                             <tr>
                                 <td width="85%" valign="top">
                                 <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
@@ -501,12 +504,12 @@ $i++;
                                     </tr>
                                   </table> 
                                   </div>
-                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArray($nutricionales);?></div>                          
+                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($nutricionales);?></div>                          
                               </td>
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
                           </table>
-                        
+                        </div>
                       </div>
                     </div>
                     <!-- nutricion PESO -->
@@ -540,40 +543,5 @@ else
 {
  echo "<div class='$infoclass'>".$msgResult."</div><div><br>";
  echo '<a href="" class="btn btn-primary" onclick="window.location.href=\'/'.DIR_TES.'/enrolamiento/\';return false;">Regresar</a></div>';
-}
-
-function getArray($array)
-{
-	$id=0; $grid="";
-	foreach($array as $dato)
-	{
-		$id++;
-		$descripcion=$dato->descripcion;
-		$fecha=$dato->fecha;
-		$clase="row2";
-		if($id%2)$clase="row1";
-	
-		$grid.= '<div class="'.$clase.'" style="height:30px">
-				<table width="100%" >
-				<tr>
-					<th width="10%" >'.$id.'</th>
-					<th width="50%" align="left">'.$descripcion.'</th>
-					<th width="40%" align="left">'.$fecha.'</th>
-				</tr>
-				</table> 
-			  </div>';
-		 
-	 }
-	if($id==0)
-	{
-		$grid= '<div class="row1" style="height:30px">
-				<table width="100%" >
-					<tr>
-						<th colspan=3 >No hay Datos</th>
-					</tr>
-				</table> 
-			  </div>';
-	}
-	return $grid;
 }
 ?>
