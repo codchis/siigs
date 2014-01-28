@@ -7,7 +7,7 @@
 	<title>Class ArbolSegmentacion_model | </title>
 
 	<script type="text/javascript" src="resources/combined.js?2175304063"></script>
-	<script type="text/javascript" src="elementlist.js?2074150803"></script>
+	<script type="text/javascript" src="elementlist.js?4274560930"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -67,14 +67,19 @@
 				<li><a href="class-Bitacora_model.html">Bitacora_model</a></li>
 				<li><a href="class-Catalogo_model.html">Catalogo_model</a></li>
 				<li><a href="class-Catalogo_x_raiz_model.html">Catalogo_x_raiz_model</a></li>
+				<li><a href="class-CatalogoCsv_model.html">CatalogoCsv_model</a></li>
+				<li><a href="class-Cie10_model.html">Cie10_model</a></li>
 				<li><a href="class-Controlador_model.html">Controlador_model</a></li>
 				<li><a href="class-ControladorAccion_model.html">ControladorAccion_model</a></li>
 				<li><a href="class-Entorno_model.html">Entorno_model</a></li>
 				<li><a href="class-Errorlog_model.html">Errorlog_model</a></li>
+				<li><a href="class-Georeferencia_model.html">Georeferencia_model</a></li>
 				<li><a href="class-Grupo_model.html">Grupo_model</a></li>
 				<li><a href="class-Menu_model.html">Menu_model</a></li>
 				<li><a href="class-Permiso_model.html">Permiso_model</a></li>
+				<li><a href="class-Poblacion_model.html">Poblacion_model</a></li>
 				<li><a href="class-Raiz_model.html">Raiz_model</a></li>
+				<li><a href="class-ReglaVacuna_model.html">ReglaVacuna_model</a></li>
 			</ul>
 
 
@@ -416,7 +421,7 @@ log de errores</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_getChildrenFromLevel">#</a>
-		<code>getChildrenFromLevel( <span>Int <var>$idarbol</var></span>, <span>Int <var>$nivel</var></span>, <span>Array <var>$omitidos</var> = <span class="php-keyword1">array</span>() </span>, <span>Array <var>$seleccionados</var> = <span class="php-keyword1">array</span>()</span> )</code>
+		<code>getChildrenFromLevel( <span>Int <var>$idarbol</var></span>, <span>Int <var>$nivel</var></span>, <span>Array <var>$omitidos</var> = <span class="php-keyword1">array</span>() </span>, <span>Array <var>$seleccionados</var> = <span class="php-keyword1">array</span>()</span>, <span>mixed <var>$seleccionables</var> = <span class="php-keyword1">array</span>()</span> )</code>
 
 		<div class="description short">
 			
@@ -442,6 +447,8 @@ especificado, niveles omitidos y elementos preseleccionados</p>
 					<dd><code>Array</code><br>int $omitidos</dd>
 					<dt><var>$seleccionados</var></dt>
 					<dd><code>Array</code><br>int $seleccionados</dd>
+					<dt><var>$seleccionables</var></dt>
+					<dd></dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -466,7 +473,7 @@ especificado, niveles omitidos y elementos preseleccionados</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#__addSelectedItems">#</a>
-		<code>_addSelectedItems( <span>mixed <var>$datos</var></span>, <span>mixed <var>$seleccionados</var></span> )</code>
+		<code>_addSelectedItems( <span>mixed <var>$datos</var></span>, <span>mixed <var>$seleccionados</var></span>, <span>mixed <var>$nivel</var></span>, <span>mixed <var>$omitidos</var></span>, <span>mixed <var>$seleccionables</var></span> )</code>
 
 		<div class="description short">
 			
@@ -517,6 +524,108 @@ el ASU</p>
 					<dd><code>Array</code><br>int $claves arreglo de valores a recuperar</dd>
 					<dt><var>$desglose</var></dt>
 					<dd><code>Int</code><br>$desglose Nivel de desglose de información requerida</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Object</code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-Exception.html">Exception</a></code></code><br>Si ocurre error al recuperar datos de la base de datos<br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isChild" id="_isChild">
+
+		<td class="attributes"><code>
+			 public 
+			Object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isChild">#</a>
+		<code>isChild( <span>Array <var>$claves</var></span>, <span>Int <var>$desglose</var> = <span class="php-num">0</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Accion para obtener la descripcion e información adicional del elemento en
+el ASU</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Accion para obtener la descripcion e información adicional del elemento en
+el ASU</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$claves</var></dt>
+					<dd><code>Array</code><br>int $claves arreglo de valores a recuperar</dd>
+					<dt><var>$desglose</var></dt>
+					<dd><code>Int</code><br>$desglose Nivel de desglose de información requerida</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Object</code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-Exception.html">Exception</a></code></code><br>Si ocurre error al recuperar datos de la base de datos<br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getDataKeyValue" id="_getDataKeyValue">
+
+		<td class="attributes"><code>
+			 public 
+			Object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getDataKeyValue">#</a>
+		<code>getDataKeyValue( <span>integer <var>$idarbol</var></span>, <span>Int <var>$nivel</var></span>, <span>Int <var>$filtro</var> = <span class="php-num">0</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Accion para obtener los registros de un ASU determinado en cierto nivel y con
+un ID de filtro</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Accion para obtener los registros de un ASU determinado en cierto nivel y con
+un ID de filtro</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$idarbol</var></dt>
+					<dd><code>integer</code><br>$idarbol</dd>
+					<dt><var>$nivel</var></dt>
+					<dd><code>Int</code><br>$nivel Nivel de desglose de información requerida</dd>
+					<dt><var>$filtro</var></dt>
+					<dd><code>Int</code><br>$filtro (Opcional) filtrar por un valor determinado</dd>
 				</dl></div>
 
 				<h4>Returns</h4>

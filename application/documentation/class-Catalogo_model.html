@@ -7,7 +7,7 @@
 	<title>Class Catalogo_model | </title>
 
 	<script type="text/javascript" src="resources/combined.js?2175304063"></script>
-	<script type="text/javascript" src="elementlist.js?2074150803"></script>
+	<script type="text/javascript" src="elementlist.js?4274560930"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -67,14 +67,19 @@
 				<li><a href="class-Bitacora_model.html">Bitacora_model</a></li>
 				<li class="active"><a href="class-Catalogo_model.html">Catalogo_model</a></li>
 				<li><a href="class-Catalogo_x_raiz_model.html">Catalogo_x_raiz_model</a></li>
+				<li><a href="class-CatalogoCsv_model.html">CatalogoCsv_model</a></li>
+				<li><a href="class-Cie10_model.html">Cie10_model</a></li>
 				<li><a href="class-Controlador_model.html">Controlador_model</a></li>
 				<li><a href="class-ControladorAccion_model.html">ControladorAccion_model</a></li>
 				<li><a href="class-Entorno_model.html">Entorno_model</a></li>
 				<li><a href="class-Errorlog_model.html">Errorlog_model</a></li>
+				<li><a href="class-Georeferencia_model.html">Georeferencia_model</a></li>
 				<li><a href="class-Grupo_model.html">Grupo_model</a></li>
 				<li><a href="class-Menu_model.html">Menu_model</a></li>
 				<li><a href="class-Permiso_model.html">Permiso_model</a></li>
+				<li><a href="class-Poblacion_model.html">Poblacion_model</a></li>
 				<li><a href="class-Raiz_model.html">Raiz_model</a></li>
+				<li><a href="class-ReglaVacuna_model.html">ReglaVacuna_model</a></li>
 			</ul>
 
 
@@ -397,6 +402,64 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="setOffset" id="_setOffset">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setOffset">#</a>
+		<code>setOffset( <span>mixed <var>$value</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setRows" id="_setRows">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setRows">#</a>
+		<code>setRows( <span>mixed <var>$value</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="getMsgError" id="_getMsgError">
 
 		<td class="attributes"><code>
@@ -507,6 +570,52 @@ log de errores</p>
 				<h4>Returns</h4>
 				<div class="list">
 					<code><code><a href="class-ArrayObject.html">ArrayObject</a></code></code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-Exception.html">Exception</a></code></code><br>En caso de algun error al consultar la base de datos<br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getNumRows" id="_getNumRows">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getNumRows">#</a>
+		<code>getNumRows( <span>string <var>$nombre</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Devuelve el numero de registros</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Devuelve el numero de registros</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$nombre</var></dt>
+					<dd><code>string</code><br>$nombre Nombre del catalogo</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br />
 				</div>
 
 				<h4>Throws</h4>
@@ -654,6 +763,56 @@ parametro</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="checkTypeData" id="_checkTypeData">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_checkTypeData">#</a>
+		<code>checkTypeData( <span>string <var>$campo</var></span>, <span>mixed <var>$type</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Revisa en la base de datos por registros que no coincidan con el tipo de dato
+pasado como parametro en el campo indicado</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Revisa en la base de datos por registros que no coincidan con el tipo de dato
+pasado como parametro en el campo indicado</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$campo</var></dt>
+					<dd><code>string</code><br>$campo (varios campos delimitados por | )</dd>
+					<dt><var>$type</var></dt>
+					<dd></dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>(Si no hubo errores al eliminar)<br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-Exception.html">Exception</a></code></code><br>En caso de algun error al consultar la base de datos<br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="insert" id="_insert">
 
 		<td class="attributes"><code>
@@ -687,6 +846,54 @@ temporal</p>
 					<dd><code>string</code><br>$create (la consulta para crear el catalogo)</dd>
 					<dt><var>$select</var></dt>
 					<dd><code>string</code><br>$select (la consulta para extraer datos de la tabla tmp_catalogo)</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br>(si la insercion es correcta)<br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-Exception.html">Exception</a></code></code><br>En caso de algun error al consultar la base de datos<br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="updateComentario" id="_updateComentario">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_updateComentario">#</a>
+		<code>updateComentario( <span>string <var>$nombre</var></span>, <span>string <var>$comentario</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Cambia el comentario de la tabla indicada</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Cambia el comentario de la tabla indicada</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$nombre</var></dt>
+					<dd><code>string</code><br>$nombre</dd>
+					<dt><var>$comentario</var></dt>
+					<dd><code>string</code><br>$comentario</dd>
 				</dl></div>
 
 				<h4>Returns</h4>
@@ -845,6 +1052,50 @@ temporal</p>
 		<td class="value"><code></code></td>
 		<td class="description"><div>
 			<a href="#$llave" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="offset" id="$offset">
+		<td class="attributes"><code>
+			private  
+			integer
+		</code></td>
+
+		<td class="name">
+<var>$offset</var>		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$offset" class="anchor">#</a>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="rows" id="$rows">
+		<td class="attributes"><code>
+			private  
+			integer
+		</code></td>
+
+		<td class="name">
+<var>$rows</var>		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$rows" class="anchor">#</a>
 
 			<div class="description short">
 				

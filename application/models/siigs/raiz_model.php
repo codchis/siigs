@@ -217,8 +217,9 @@ class Raiz_model extends CI_Model {
 	{
 
 		$query = $this->db->delete('asu_raiz', array('id' => $this->getId()));
+                $asu = $this->db->delete('asu_arbol_segmentacion', array('id_raiz' => $this->getId()));
 
-		if (!$query)
+		if (!$query || !$asu)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			$this->msg_error_usr = "Ocurrió un error al eliminar la raiz";

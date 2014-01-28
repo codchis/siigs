@@ -4,10 +4,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="generator" content="ApiGen 2.8.0" />
 
-	<title>Class Servicios2 | </title>
+	<title>Class Reporte_sincronizacion | </title>
 
 	<script type="text/javascript" src="resources/combined.js?2175304063"></script>
-	<script type="text/javascript" src="elementlist.js?2074150803"></script>
+	<script type="text/javascript" src="elementlist.js?4274560930"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -48,7 +48,7 @@
 							</ul></li>
 				<li class="active"><a href="package-TES.html">TES<span></span></a>
 						<ul>
-				<li><a href="package-TES.Controlador.html">Controlador</a>
+				<li class="active"><a href="package-TES.Controlador.html">Controlador</a>
 						</li>
 				<li><a href="package-TES.Modelo.html">Modelo</a>
 						</li>
@@ -62,7 +62,12 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li class="active"><a href="class-Servicios2.html">Servicios2</a></li>
+				<li><a href="class-Enrolamiento.html">Enrolamiento</a></li>
+				<li><a href="class-Notificacion.html">Notificacion</a></li>
+				<li class="active"><a href="class-Reporte_sincronizacion.html">Reporte_sincronizacion</a></li>
+				<li><a href="class-Reporteador.html">Reporteador</a></li>
+				<li><a href="class-Tableta.html">Tableta</a></li>
+				<li><a href="class-Usuario_tableta.html">Usuario_tableta</a></li>
 			</ul>
 
 
@@ -90,7 +95,7 @@
 				<a href="index.html" title="Overview"><span>Overview</span></a>
 			</li>
 			<li>
-				<a href="package-TES.html" title="Summary of TES"><span>Package</span></a>
+				<a href="package-TES.Controlador.html" title="Summary of TES\Controlador"><span>Package</span></a>
 			</li>
 			<li class="active">
 <span>Class</span>			</li>
@@ -105,12 +110,12 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class Servicios2</h1>
+	<h1>Class Reporte_sincronizacion</h1>
 
 
 	<div class="description">
 	
-<p>Controlador Servicios</p>
+<p>Controller Usuario</p>
 
 	</div>
 
@@ -123,7 +128,7 @@
 		</dd>
 		<dd style="padding-left:30px">
 			<img src="resources/inherit.png" alt="Extended by" />
-<b><span>Servicios2</span></b>			
+<b><span>Reporte_sincronizacion</span></b>			
 			
 			
 		</dd>
@@ -140,15 +145,13 @@
 		
 		
 		
-		<b>Package:</b> <a href="package-TES.html">TES</a><br />
+		<b>Package:</b> <a href="package-TES.html">TES</a>\<a href="package-TES.Controlador.html">Controlador</a><br />
 
 				<b>Author:</b>
 				Eliecer<br />
 				<b>Created:</b>
-				2013-11-27<br />
-				<b>Subpakage:</b>
-				Controlador<br />
-		<b>Located at</b> application/controllers/tes/servicios.php<br />
+				2013-12-17<br />
+		<b>Located at</b> application/controllers/tes/reporte_sincronizacion.php<br />
 	</div>
 
 
@@ -190,7 +193,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="Synchronization" id="_Synchronization">
+	<tr data-order="index" id="_index">
 
 		<td class="attributes"><code>
 			 public 
@@ -200,45 +203,32 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_Synchronization">#</a>
-		<code>Synchronization( <span>id_accion=tipo <var>$id_accion</var></span>, <span>mixed <var>$id_tab</var> = <span class="php-keyword1">null</span></span>, <span>mixed <var>$id_sesion</var> = <span class="php-keyword1">null</span></span>, <span>mixed <var>$id_version</var> = <span class="php-keyword1">null</span></span>, <span>mixed <var>$datos</var> = <span class="php-keyword1">null</span></span> )</code>
+		<a class="anchor" href="#_index">#</a>
+		<code>index( )</code>
 
 		<div class="description short">
 			
+<p>Este es el metodo por default, obtiene el listado de las perosnas se recibe
+el parametro $pag de tipo int que representa la paginacion</p>
+
 		</div>
 
 		<div class="description detailed hidden">
 			
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$id_accion</var></dt>
-					<dd><code>id_accion=tipo</code><br>de solicitud, id_tab=mac de la tableta, id_session=valor de la sessiuon activa,
-id_version= version de la tableta y datos=inofrmacion adicional puede contener
-un error descriptivo, datos de personas o algun otro mensaje</dd>
-					<dt><var>$id_tab</var></dt>
-					<dd></dd>
-					<dt><var>$id_sesion</var></dt>
-					<dd></dd>
-					<dt><var>$id_version</var></dt>
-					<dd></dd>
-					<dt><var>$datos</var></dt>
-					<dd></dd>
-				</dl></div>
+<p>Este es el metodo por default, obtiene el listado de las perosnas se recibe
+el parametro $pag de tipo int que representa la paginacion</p>
 
 
 
-				<h4>Echo</h4>
-				<div class="list">
-						void<br />
-				</div>
+
+
+
 
 
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="is_step_1" id="_is_step_1">
+	<tr data-order="view" id="_view">
 
 		<td class="attributes"><code>
 			 public 
@@ -248,8 +238,8 @@ un error descriptivo, datos de personas o algun otro mensaje</dd>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_is_step_1">#</a>
-		<code>is_step_1( <span>mixed <var>$id_tab</var></span>, <span>mixed <var>$id_version</var></span> )</code>
+		<a class="anchor" href="#_view">#</a>
+		<code>view( <span>mixed <var>$op</var></span>, <span>mixed <var>$title</var></span> )</code>
 
 		<div class="description short">
 			
@@ -267,7 +257,7 @@ un error descriptivo, datos de personas o algun otro mensaje</dd>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="is_step_2" id="_is_step_2">
+	<tr data-order="lote" id="_lote">
 
 		<td class="attributes"><code>
 			 public 
@@ -277,8 +267,8 @@ un error descriptivo, datos de personas o algun otro mensaje</dd>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_is_step_2">#</a>
-		<code>is_step_2( <span>mixed <var>$id_sesion</var></span>, <span>mixed <var>$si</var> = <span class="php-quote">&quot;&quot;</span></span> )</code>
+		<a class="anchor" href="#_lote">#</a>
+		<code>lote( )</code>
 
 		<div class="description short">
 			
@@ -296,7 +286,7 @@ un error descriptivo, datos de personas o algun otro mensaje</dd>
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="is_step_3" id="_is_step_3">
+	<tr data-order="lote_view" id="_lote_view">
 
 		<td class="attributes"><code>
 			 public 
@@ -306,153 +296,8 @@ un error descriptivo, datos de personas o algun otro mensaje</dd>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_is_step_3">#</a>
-		<code>is_step_3( <span>mixed <var>$id_sesion</var></span>, <span>mixed <var>$datos</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is_step_4" id="_is_step_4">
-
-		<td class="attributes"><code>
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_is_step_4">#</a>
-		<code>is_step_4( <span>mixed <var>$id_sesion</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="ss_step_5" id="_ss_step_5">
-
-		<td class="attributes"><code>
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_ss_step_5">#</a>
-		<code>ss_step_5( <span>mixed <var>$id_sesion</var></span>, <span>mixed <var>$datos</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="ss_step_6" id="_ss_step_6">
-
-		<td class="attributes"><code>
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_ss_step_6">#</a>
-		<code>ss_step_6( <span>mixed <var>$id_sesion</var></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="actualiza_estado_tableta" id="_actualiza_estado_tableta">
-
-		<td class="attributes"><code>
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_actualiza_estado_tableta">#</a>
-		<code>actualiza_estado_tableta( <span>mixed <var>$id_sesion</var></span>, <span>mixed <var>$id_tes_estado_tableta</var> = <span class="php-quote">&quot;&quot;</span></span>, <span>mixed <var>$version</var> = <span class="php-quote">&quot;&quot;</span></span> )</code>
-
-		<div class="description short">
-			
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="prueba" id="_prueba">
-
-		<td class="attributes"><code>
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_prueba">#</a>
-		<code>prueba( )</code>
+		<a class="anchor" href="#_lote_view">#</a>
+		<code>lote_view( <span>mixed <var>$lote</var></span>, <span>mixed <var>$title</var></span>, <span>mixed <var>$op</var></span>, <span>mixed <var>$lugar</var> = <span class="php-quote">&quot;Chiapas&quot;</span></span> )</code>
 
 		<div class="description short">
 			
