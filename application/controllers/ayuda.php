@@ -1,4 +1,12 @@
 <?php
+/**
+ * Controlador Ayuda
+ * 
+ * @package    Librerías
+ * @subpackage Controlador
+ * @author     Pascual
+ * @created    2013-09-26
+ */
 
 class Ayuda extends CI_Controller {
 
@@ -7,6 +15,13 @@ class Ayuda extends CI_Controller {
 		parent::__construct();
 	}
 
+    /**
+     * Función que renderiza el contenido de la ayuda dependiendo de la sección donde se encuentre
+     *
+     * @access public
+     * @param  int $id_controlador_accion Id del controlador accion, es opcional
+     * @return void
+     */
 	public function index($id_controlador_accion=null)
 	{
         $data['contenido_ayuda'] = 'No se encontró ayuda para esta sección';

@@ -1,5 +1,21 @@
 <?php
+/**
+ * Controlador Reporteador
+ *
+ * @package		Libería
+ * @subpackage	Helper
+ * @author     	Pascual
+ * @created		2013-12-10
+ */
 
+/**
+ * Devuelve la fecha en cadena con el formato especificado
+ *
+ * @access public
+ * @param  date   $objFecha Objeto fecha
+ * @param  string $formato  Formato de la fecha
+ * @return string Cadena de la fecha
+ */
 function formatFecha($objFecha, $formato="d-m-Y H:m:s") {
 	/*if($objFecha instanceof DateTime)
 		return $objFecha->format($formato);

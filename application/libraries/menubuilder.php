@@ -1,5 +1,14 @@
 <?php if ( ! defined('BASEPATH')) exit('No se permite acceso directo al script');
 
+/**
+ * Menu Builder
+ * 
+ * @package    Librería
+ * @subpackage Clase
+ * @author     Pascual
+ * @created    2013-01-14
+ */
+
 class Menubuilder
 {
     /**
@@ -17,9 +26,10 @@ class Menubuilder
     }
 
     /**
-     * contruye el menu
+     * Construye el menu basandose en los permisos del usuario logeado
      *
      * @access public
+     * @param  boolean $todos Establece si se debe devolver todos los elementos del menu
      * @return string
      */
     public static function build($todos=false)

@@ -60,6 +60,17 @@ class Reporteador extends CI_Controller {
 
 	}
 	
+    /**
+	 * Renderiza la vista del reporte
+	 *
+	 * @access	public
+     * @param   int    $op
+     * @param   string $title
+     * @param   int    $nivel
+     * @param   int    $id
+     * @param   date   $fecha
+	 * @return 	void
+	 */
 	public function view($op, $title, $nivel, $id, $fecha = '')
 	{
 		try{
