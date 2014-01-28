@@ -28,7 +28,14 @@ $(document).ready(function() {
             'transitionIn'	: 'elastic',
             'transitionOut'	: 'elastic',
             'type'			: 'iframe',	
+            onComplete: function(){
+                $('#fancybox-frame').load(function(){
+                    $.fancybox.hideActivity();
+                });
+            }
         });
+        
+    $("#ayuda").click(function(e) { $.fancybox.showActivity(); });
 });
 
 function showAlerta(parametros) {
