@@ -7,7 +7,7 @@
 	<title>Class Raiz | </title>
 
 	<script type="text/javascript" src="resources/combined.js?2175304063"></script>
-	<script type="text/javascript" src="elementlist.js?2074150803"></script>
+	<script type="text/javascript" src="elementlist.js?4274560930"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -65,7 +65,8 @@
 				<li><a href="class-Accion.html">Accion</a></li>
 				<li><a href="class-Bitacora.html">Bitacora</a></li>
 				<li><a href="class-Catalogo.html">Catalogo</a></li>
-				<li><a href="class-Catalogo_x_raiz.html">Catalogo_x_raiz</a></li>
+				<li><a href="class-CatalogoCsv.html">CatalogoCsv</a></li>
+				<li><a href="class-Cie10.html">Cie10</a></li>
 				<li><a href="class-Controlador.html">Controlador</a></li>
 				<li><a href="class-Entorno.html">Entorno</a></li>
 				<li><a href="class-Errorlog.html">Errorlog</a></li>
@@ -73,7 +74,7 @@
 				<li><a href="class-Menu.html">Menu</a></li>
 				<li><a href="class-Permiso.html">Permiso</a></li>
 				<li class="active"><a href="class-Raiz.html">Raiz</a></li>
-				<li><a href="class-Usuario.html">Usuario</a></li>
+				<li><a href="class-ReglaVacuna.html">ReglaVacuna</a></li>
 			</ul>
 
 
@@ -199,7 +200,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="prueba" id="_prueba">
+	<tr data-order="iniciarasu" id="_iniciarasu">
 
 		<td class="attributes"><code>
 			 public 
@@ -209,8 +210,8 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_prueba">#</a>
-		<code>prueba( )</code>
+		<a class="anchor" href="#_iniciarasu">#</a>
+		<code>iniciarasu( <span>mixed <var>$id</var></span> )</code>
 
 		<div class="description short">
 			
@@ -557,6 +558,87 @@ AJAX</p>
 					<code>Object</code><br>JSON con la información requerida<br />
 					<code>&#039;Acceso</code><br>denegado si la petición no es de tipo AJAX' *<br />
 				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getDataKeyValue" id="_getDataKeyValue">
+
+		<td class="attributes"><code>
+			 public 
+			Object
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getDataKeyValue">#</a>
+		<code>getDataKeyValue( <span>integer <var>$idarbol</var></span>, <span>Int <var>$nivel</var></span>, <span>Int <var>$filtro</var> = <span class="php-num">0</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Accion para obtener los registros de un ASU determinado en cierto nivel y con
+un ID de filtro</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Accion para obtener los registros de un ASU determinado en cierto nivel y con
+un ID de filtro</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$idarbol</var></dt>
+					<dd><code>integer</code><br>$idarbol</dd>
+					<dt><var>$nivel</var></dt>
+					<dd><code>Int</code><br>$nivel Nivel de desglose de información requerida</dd>
+					<dt><var>$filtro</var></dt>
+					<dd><code>Int</code><br>$filtro (Opcional) filtrar por un valor determinado</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Object</code><br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><code><a href="class-Exception.html">Exception</a></code></code><br>Si ocurre error al recuperar datos de la base de datos<br />
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="prueba" id="_prueba">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_prueba">#</a>
+		<code>prueba( <span>mixed <var>$id</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
 
 
 

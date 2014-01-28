@@ -653,7 +653,7 @@ class Raiz extends CI_Controller {
         public function prueba ($id)
         {
             header('Content-type: application/json; charset=utf-8');
-            //echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel($id,1,array(null),array(null)),JSON_UNESCAPED_UNICODE);
-            echo json_encode($this->ArbolSegmentacion_model->getCluesFromId(2497));
+            echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel($id,1,array(null),array(null)),JSON_UNESCAPED_UNICODE);
+            //echo json_encode($this->ArbolSegmentacion_model->getCluesFromId(20063));
         }
 }

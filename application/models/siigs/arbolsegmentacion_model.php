@@ -289,7 +289,7 @@ class ArbolSegmentacion_model extends CI_Model {
                 $fecha_update_asu = $fecha_update_asu->result()[0]->fecha;
                 $ruta = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'json'.DIRECTORY_SEPARATOR;
                 $archivo = 'asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($fecha_update_asu).'.json';
-
+                $ruta_temp = $ruta;
                 if (!is_dir($ruta))
                    mkdir($ruta, 0777, true);
 
@@ -302,6 +302,7 @@ class ArbolSegmentacion_model extends CI_Model {
                     //if (count($seleccionados)>0)
                     $datos = $this->_addSelectedItems($datos,$seleccionados, $nivel , $omitidos, $seleccionables);
                     //var_dump($datos);
+                                        
                     return $datos;
                 }
                 else
@@ -314,6 +315,7 @@ class ArbolSegmentacion_model extends CI_Model {
                     //echo $nivel."<br/><br/>";
                     //var_dump(json_encode($arbol));
                     //die();
+                    
                     
                     if (count($arbol) == 0)
                     {
@@ -379,11 +381,29 @@ class ArbolSegmentacion_model extends CI_Model {
 
                         try
                         {
-                        $fh = fopen($ruta, 'c')
-                        or die("Error al abrir fichero para el asu");
+                            $fh = fopen($ruta, 'c')
+                            or die("Error al abrir fichero para el asu");
 
-                        fwrite($fh, json_encode($resultado[1],JSON_UNESCAPED_UNICODE));
-                        fclose($fh);
+                            fwrite($fh, json_encode($resultado[1],JSON_UNESCAPED_UNICODE));
+                            fclose($fh);
+
+                            $fechas = $this->db->query("select distinct fecha_update as fecha from asu_arbol_segmentacion where id_raiz=".$idarbol);
+                            if (!$fechas)
+                            {
+                                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                                $this->msg_error_usr = "Ocurrió un error al obtener el registro de actualizaciones del asu";
+                                return "false";
+                            }
+                            else
+                            {
+                                foreach ($fechas->result() as $item)
+                                {
+                                    $archivotemp = 'asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($item->fecha).'.json';
+                                    if ($archivo != $archivotemp)
+                                        if (file_exists($ruta_temp.$archivotemp))
+                                            unlink($ruta_temp.$archivotemp);                            
+                                }
+                            }               
                         }
                         catch(Exception $e)
                         {

@@ -7,7 +7,7 @@
 	<title>Class Enrolamiento | </title>
 
 	<script type="text/javascript" src="resources/combined.js?2175304063"></script>
-	<script type="text/javascript" src="elementlist.js?2074150803"></script>
+	<script type="text/javascript" src="elementlist.js?4274560930"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
 
 </head>
@@ -62,11 +62,10 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li><a href="class-CatalogoCsv.html">CatalogoCsv</a></li>
-				<li><a href="class-Cie10.html">Cie10</a></li>
 				<li class="active"><a href="class-Enrolamiento.html">Enrolamiento</a></li>
 				<li><a href="class-Notificacion.html">Notificacion</a></li>
-				<li><a href="class-ReglaVacuna.html">ReglaVacuna</a></li>
+				<li><a href="class-Reporte_sincronizacion.html">Reporte_sincronizacion</a></li>
+				<li><a href="class-Reporteador.html">Reporteador</a></li>
 				<li><a href="class-Tableta.html">Tableta</a></li>
 				<li><a href="class-Usuario_tableta.html">Usuario_tableta</a></li>
 			</ul>
@@ -205,7 +204,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_index">#</a>
-		<code>index( <span>mixed <var>$pag</var> = <span class="php-num">0</span></span> )</code>
+		<code>index( <span>mixed <var>$pag</var> = <span class="php-num">0</span></span>, <span>mixed <var>$id</var> = <span class="php-quote">&quot;&quot;</span></span> )</code>
 
 		<div class="description short">
 			
@@ -219,6 +218,35 @@ el parametro $pag de tipo int que representa la paginacion</p>
 <p>Este es el metodo por default, obtiene el listado de las perosnas se recibe
 el parametro $pag de tipo int que representa la paginacion</p>
 
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="print_card" id="_print_card">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_print_card">#</a>
+		<code>print_card( <span>mixed <var>$id</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
 
 
 
@@ -310,7 +338,7 @@ parametro $id de tipo int que representa el idientificador de la persona</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_catalog_select">#</a>
-		<code>catalog_select( <span>mixed <var>$catalog</var></span>, <span>mixed <var>$sel</var> = <span class="php-quote">&quot;&quot;</span></span> )</code>
+		<code>catalog_select( <span>mixed <var>$catalog</var></span>, <span>mixed <var>$sel</var> = <span class="php-quote">&quot;&quot;</span></span>, <span>mixed <var>$orden</var> = <span class="php-quote">&quot;&quot;</span></span> )</code>
 
 		<div class="description short">
 			
@@ -443,6 +471,93 @@ $orden determina el orden de la visualizacion</p>
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="file_to_card" id="_file_to_card">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_file_to_card">#</a>
+		<code>file_to_card( <span>mixed <var>$id</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="update_card" id="_update_card">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_update_card">#</a>
+		<code>update_card( <span>mixed <var>$persona</var></span>, <span>mixed <var>$impreso</var></span>, <span>mixed <var>$fecha</var> = <span class="php-quote">&quot;&quot;</span></span>, <span>mixed <var>$archivo</var> = <span class="php-quote">&quot;&quot;</span></span>, <span>mixed <var>$entorno</var> = <span class="php-quote">'4'</span></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="validate_card" id="_validate_card">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_validate_card">#</a>
+		<code>validate_card( <span>mixed <var>$persona</var></span>, <span>mixed <var>$archivo</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="insert" id="_insert">
 
 		<td class="attributes"><code>
@@ -487,7 +602,7 @@ $orden determina el orden de la visualizacion</p>
 
 		<td class="name"><div>
 		<a class="anchor" href="#_validarForm">#</a>
-		<code>validarForm( )</code>
+		<code>validarForm( <span>mixed <var>$op</var> = <span class="php-quote">&quot;&quot;</span></span> )</code>
 
 		<div class="description short">
 			
@@ -583,6 +698,93 @@ $orden determina el orden de la visualizacion</p>
 		<td class="name"><div>
 		<a class="anchor" href="#_ifCurpTExists">#</a>
 		<code>ifCurpTExists( <span>mixed <var>$curp</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="brother_found" id="_brother_found">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_brother_found">#</a>
+		<code>brother_found( <span>mixed <var>$id</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="brothers_search" id="_brothers_search">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_brothers_search">#</a>
+		<code>brothers_search( <span>mixed <var>$tutor</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="validarisum" id="_validarisum">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_validarisum">#</a>
+		<code>validarisum( <span>mixed <var>$id</var></span> )</code>
 
 		<div class="description short">
 			
