@@ -3,6 +3,8 @@ if(!empty($msgResult))
 echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <h2><?php echo $title; ?></h2>
+<a href="<?php echo site_url().DIR_SIIGS; ?>/catalogocsv/" class="btn btn-primary">Regresar al listado<i class="icon-arrow-left"></i></a>
+<br/>
 <?php
 if (!empty($catalogo_item))
 {
@@ -31,7 +33,16 @@ if (!empty($datos_cat))
 {
     if (count($datos_cat)>0)
     {
-        echo "<div class='table table-striped'><table><thead><tr><th colspan = ".count($datos[0]).">Datos del catalogo</td></tr></thead>";
+        echo "<div class='table table-striped'><table><thead><tr><th colspan = ".count((array)$datos_cat[0]).">Datos del catalogo</td></tr>";
+        ?>
+        <tr>
+        <?php foreach(array_keys((array)$datos_cat[0]) as $claves) {
+            if ($claves != 'activo') {?>
+            <td><h2><?php echo $claves;?></h2></td>
+            <?php } } ?>
+        </tr>
+        <?php
+        echo"</thead>";
         foreach ($datos_cat as $dato)
         {
             echo "<tr>";

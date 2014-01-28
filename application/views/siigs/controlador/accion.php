@@ -38,7 +38,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
                 $idConAcc = $this->ControladorAccion_model->getId($id_controlador , $controlador_accion->id);
                 
                 if($idConAcc) {
-                    echo '<a id="detalles" href="'.site_url().DIR_SIIGS.'/controlador/help/'.$idConAcc.'" class="btn btn-primary">Ayuda</a>';
+                    echo '<a id="detalles" href="'.site_url().DIR_SIIGS.'/controlador/help/'.$idConAcc.'" class="btn btn-primary">Ayuda<i class="icon-info-sign"></i></a>';
                 }
             ?>
         </td>
@@ -47,8 +47,8 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <tr>
 		<td colspan=2>
 		<input type="hidden" name="id" value="<?php echo $id_controlador;?>" />
-		<input type="submit" name="submit" onclick="if (confirm('Esta acci&oacute;n podr&iacute;a afectar los permisos a los grupos, desea continuar?')) {return true ;} else {return false;}" value="Guardar" class="btn btn-primary"/>
-                <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/controlador'" class="btn btn-primary" />
+                <button type="submit" name="submit" onclick="if (confirm('Esta acci&oacute;n podr&iacute;a afectar los permisos a los grupos, desea continuar?')) {return true ;} else {return false;}" value="Guardar" class="btn btn-primary">Guardar<i class="icon-hdd"></i></button>
+                    <button type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/controlador'" class="btn btn-primary" >Cancelar<i class="icon-arrow-left"></i></button>
 		<td>
 	</tr>
 </table>
