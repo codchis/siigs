@@ -67,17 +67,23 @@ $(document).ready(function(){
 		    			}
 		    		}
 		    	}
+                
 		    	$(this).attr("href", path);
 		    	// se agrega el parámetro fecha cuando aplique
 		    	if ($(this).attr("id") == 'rpt0' || $(this).attr("id") == 'rpt1' || $(this).attr("id") == 'rpt2')
 		    		$(this).attr("href", path + '/'+ $('#fecha_corte').val());
 		        $.fancybox({
-		    		'width'             : '90%',
-		    		'height'            : '90%',				
+		    		'width'         : '90%',
+		    		'height'        : '90%',				
 		    		'transitionIn'	: 'elastic',
 		    		'transitionOut'	: 'elastic',
 		    		'type'			: 'iframe',	
-		    		'href'			: this.href,							
+		    		'href'			: this.href,
+                    onComplete: function(){
+                        $('#fancybox-frame').load(function(){
+                            $.fancybox.hideActivity();
+                        });
+                    }
 		    	});
 		        event.preventDefault();
 		        document.getElementById("alert").className="";
@@ -287,7 +293,12 @@ if (!$opcion_rpt5) unset($datos[4]);
 		<td><a href="/<?php echo DIR_TES?>/reporteador/view/<?php echo $dato["lista"] ?>/<?php echo $dato["atributo"] ?>" id="rpt<?php echo $cont ?>"><img src="/resources/images/listar.png" style="border:none; width:30px; height:30px;" title="ver detalle" /></a></td>
 		
 	</tr>
-	<?php $cont++; endforeach ?>
+    
+	<?php echo '<script>$(document).ready(function(){'
+    . '$("#rpt'.$cont.'").click(function(e) { if($("#fecha_corte").val() != "" && $("select[name=estados]").val() != "") $.fancybox.showActivity(); });});'
+    . '</script>';
+    
+    $cont++; endforeach ?>
 </table>
 </div>
 </form>

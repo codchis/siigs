@@ -66,7 +66,7 @@ echo '<center><strong>Datos generales de la tableta</strong></center>
                     <td>'.htmlentities(($fila['grupo'])).'</td>';
                 
                 if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/usuario_tableta/delete/'.$fila['id'].'/'.$tableta->id.'"
-                        class="btn btn-primary" onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar</a></td>';
+                        class="btn btn-primary" onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar <i class="icon-remove"></i></a></td>';
                 '</tr>';
             }
         } else {
@@ -79,10 +79,10 @@ echo '<center><strong>Datos generales de la tableta</strong></center>
 
 <?php 
     if($showDelete)
-        echo '<input type="submit" value="Eliminar Seleccionados" class="btn btn-primary" /> &nbsp; ';
+        echo '<button type="submit" class="btn btn-primary" >Eliminar Seleccionados <i class="icon-remove"></i></button>&nbsp; ';
     
     if($showInsert)
-        echo '<button id="agregarUsuario" class="btn btn-primary">Asignar nuevo usuario a la Tableta</button>';
+        echo '<button id="agregarUsuario" class="btn btn-primary">Asignar nuevo usuario a la Tableta <i class="icon-plus"></i></button>';
 ?>
 
 </form>
@@ -191,4 +191,4 @@ $(function() {
 </div>
 
 <br />
-<input type="button" name="registrarTableta" id="registrarTableta" class="btn btn-primary" value="Regresar al listado de tabletas" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta'" />
+<button type="button" name="registrarTableta" id="registrarTableta" class="btn btn-primary" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta'" >Regresar al listado de tabletas <i class="icon-arrow-left"></i></button>
