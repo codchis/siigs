@@ -28,7 +28,6 @@ function generaUrl(param, path){
 
 $(document).ready(function(){
 	$("#fecha_corte").datepicker(optionsFecha);
-	
     $("a").click(function(event){
     	if ($(this).attr("id").indexOf("rpt") != -1) { // solo valida clicks de anchors de reportes
     		document.getElementById("alert");
@@ -38,6 +37,7 @@ $(document).ready(function(){
 	        if (($(this).attr("id") == 'rpt0' || $(this).attr("id") == 'rpt1' || $(this).attr("id") == 'rpt2') && $('#fecha_corte').val() == '')
 	        {
 	        	document.getElementById("alert").innerHTML='<div>Capture la fecha de corte</div>';
+	        	$('input#valido').val('0');
 				event.preventDefault();
 	        }
 	        else // al menos un filtro de búsqueda debe estar seleccionado
@@ -61,13 +61,14 @@ $(document).ready(function(){
 		                    	if (path == ''){
 		            				document.getElementById("alert").innerHTML='<div>No hay parámetros para realizar la búsqueda</div>';
 			        				event.preventDefault();
+			        				$('input#valido').val('0');
 			        				return;
 		                    	}
 		    				}
 		    			}
 		    		}
 		    	}
-                
+		        $('input#valido').val('1');
 		    	$(this).attr("href", path);
 		    	// se agrega el parámetro fecha cuando aplique
 		    	if ($(this).attr("id") == 'rpt0' || $(this).attr("id") == 'rpt1' || $(this).attr("id") == 'rpt2')
@@ -258,7 +259,7 @@ if (!$opcion_rpt5) unset($datos[4]);
 <div class="table table-striped">
 <table>
 <tr>
-<td>Fecha corte:</td>
+<td>Fecha corte:</td><input type="hidden" id="valido" name="valido" value="0" />
 <td><input type="text" style="width:58%;" id="fecha_corte" name="fecha_corte" value="<?php echo set_value('fecha_corte', ''); ?>" /></td>
 <td>Estado:</td>
 <td> <?php  echo form_dropdown('estados', $estad); ?></td>
@@ -295,7 +296,7 @@ if (!$opcion_rpt5) unset($datos[4]);
 	</tr>
     
 	<?php echo '<script>$(document).ready(function(){'
-    . '$("#rpt'.$cont.'").click(function(e) { if($("#fecha_corte").val() != "" && $("select[name=estados]").val() != "") $.fancybox.showActivity(); });});'
+    . '$("#rpt'.$cont.'").click(function(e) { if($("input#valido").val() == "1") $.fancybox.showActivity(); });});'
     . '</script>';
     
     $cont++; endforeach ?>
