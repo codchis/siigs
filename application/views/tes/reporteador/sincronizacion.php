@@ -12,8 +12,17 @@ $(document).ready(function()
 		'height'            : '90%',				
 		'transitionIn'	: 'elastic',
 		'transitionOut'	: 'elastic',
-		'type'			: 'iframe',								
-	}); 
+		'type'			: 'iframe',	
+		onComplete: function(){
+            $('#fancybox-frame').load(function(){
+                $.fancybox.hideActivity();
+            });
+        }
+	});
+	$("a#fba1").click(function(e) {
+        $.fancybox.showActivity();
+    });							
+
 	$("#pdf").click(function(e) {
         mandarimprimir(document,"popimpr","");
 		return false;

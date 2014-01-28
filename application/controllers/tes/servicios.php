@@ -515,37 +515,59 @@ class Servicios extends CI_Controller {
 						{
 							try
 							{
-								$array=$this->Enrolamiento_model->get_cns_cat_persona($catalog->descripcion, $mipersona);
-								if($array)
+								
+								if($catalog->descripcion=="cns_persona_x_tutor")
 								{
+									$array=$this->Enrolamiento_model->get_cns_cat_persona($catalog->descripcion, $mipersona);
+									$mitutor=array();
+									foreach($array as $dato)
+									{
+										$mitutor[]=$dato->id_tutor;
+									}
+									$array2=$this->Enrolamiento_model->get_persona_x_tutor($mitutor);
+									
 									echo ",";
-									$cadena[$catalog->descripcion]= $array;	
+									$cadena["cns_tutor"]= $array2;	
 									$micadena=json_encode($cadena);
 									echo substr($micadena,1,strlen($micadena)-2);
 									$micadena="";	
 									ob_flush();	
 									unset($cadena);
-									$cadena=array();
-
-									if($catalog->descripcion=="cns_persona_x_tutor")
+									$cadena=array();	
+								}
+								$count=$this->Enrolamiento_model->get_cns_cat_persona_count($catalog->descripcion, $mipersona);
+								$mas=$count%15000;
+								$contador=$count/15000;
+								if($mas>0)(int)$contador++;
+								if($count>0)
+								{
+									$cadena[$catalog->descripcion]=array();
+									$micadena=json_encode($cadena);
+									echo ",".substr($micadena,1,strlen($micadena)-3);
+									$micadena="";
+									ob_flush();
+								}
+								unset($cadena);
+								$cadena=array();
+								$array=array();
+								for($i=0;$i<$contador;$i++)
+								{ 
+									$array=$this->Enrolamiento_model->get_cns_cat_persona($catalog->descripcion, $mipersona, ($i*15000),15000);
+									if($array)
 									{
-										$mitutor=array();
-										foreach($array as $dato)
-										{
-											$mitutor[]=$dato->id_tutor;
-										}
-										$array2=$this->Enrolamiento_model->get_persona_x_tutor($mitutor);
-										
-										echo ",";
-										$cadena["cns_tutor"]= $array2;	
-										$micadena=json_encode($cadena);
+										$micadena=json_encode($array);
+										if($i>0)echo ",";
 										echo substr($micadena,1,strlen($micadena)-2);
-										$micadena="";	
-										ob_flush();	
-										unset($cadena);
-										$cadena=array();	
+										
+										$micadena="";
+										ob_flush();									
 									}
 								}
+								if($count>0)
+								{
+									echo "]";
+									ob_flush();
+								}								
 							}
 							catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
 						}

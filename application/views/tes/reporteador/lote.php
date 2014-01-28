@@ -30,14 +30,21 @@ $(document).ready(function(){
 	$("#hasta").datepicker(optionsFecha);
 	
 	$("a#fba1").fancybox({
-		'width'             : '90%',
-		'height'            : '90%',				
+		'width'         : '90%',
+		'height'        : '90%',				
 		'transitionIn'	: 'elastic',
 		'transitionOut'	: 'elastic',
-		'type'			: 'iframe',								
-	}); 
+		'type'			: 'iframe',	
+		onComplete: function(){
+            $('#fancybox-frame').load(function(){
+                $.fancybox.hideActivity();
+            });
+        }
+	});
+	$("a#fba1").click(function(e) {
+        $.fancybox.showActivity();
+    });
 	
-		
     $('select[name="juris"]').change(function(e){
     	$('select[name="municipios"]')
 	        .find('option')

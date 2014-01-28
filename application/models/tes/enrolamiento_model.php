@@ -1712,7 +1712,7 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	
-	public function get_cns_cat_persona($catalog,$array)
+	public function get_cns_cat_persona($catalog, $array, $l1="", $l2="")
 	{
 		if($catalog=="tes_notificacion")
 			$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
@@ -1724,7 +1724,9 @@ class Enrolamiento_model extends CI_Model
 			$this->db->select('*');
 		$this->db->from($catalog);
 		$this->db->where_in("id_persona", $array);
-		$query = $this->db->get(); 
+		if($l1!=""||$l2!="")
+		$this->db->limit($l2, $l1);
+		$query = $this->db->get();// echo $this->db->last_query();
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -1735,7 +1737,14 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	
+	public function get_cns_cat_persona_count($catalog,$persona)
+	{
+		$this->db->select ( 'COUNT(*) AS numrows' );
+		$this->db->from($catalog);
+		$this->db->where_in("id_persona", $persona);
+		$query = $this->db->get(); 
+		return $query->row()->numrows;
+	}
 	public function get_persona_x_tutor($array)
 	{
 		$this->db->distinct('*');

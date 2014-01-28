@@ -91,8 +91,17 @@
 						getcurp();
 					});
 				}
-			}						
-		}); 
+			},
+			onComplete: function(){
+            $('#fancybox-frame').load(function(){
+                $.fancybox.hideActivity();
+            });
+        }
+	});
+	$("a#fba1").click(function(e) {
+        $.fancybox.showActivity();
+    });						
+		 
 		<?php if($session!=""){?>
 		$.ajax({
 		type: "POST",

@@ -110,8 +110,17 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 						getcurp();
 					});
 				}
-			}						
-		});
+			},
+			onComplete: function(){
+            $('#fancybox-frame').load(function(){
+                $.fancybox.hideActivity();
+            });
+        }
+	});
+	$("a#fba1").click(function(e) {
+        $.fancybox.showActivity();
+    });						
+
 		<?php if($cn_basico) {?> 
 		$.ajax({
 		type: "POST",
