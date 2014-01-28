@@ -71,8 +71,8 @@
 <div id="acciones" style="overflow: auto"></div>
 <input type="hidden" name="id_grupo" id="id_grupo" value="<?php echo $id_grupo;?>" />
 <input type="hidden" name="numAcciones" id="numAcciones" value="<?php echo count($actions);?>" />
-<input type="submit" name="btnGuardar" id="btnGuardar" value="Guardar" class="btn btn-primary"  />
-<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/grupo/'" class="btn btn-primary" />
+		<button type="submit" name="submit" id="guardar" class="btn btn-small btn-primary btn-icon" >Guardar <i class="icon-hdd"></i></button>
+		<button type="button"  onclick="window.location.href='/<?php echo DIR_SIIGS?>/grupo/'" class="btn btn-small btn-primary btn-icon">Cancelar <i class="icon-arrow-left"></i></button>
 </form>
 <?php } else {?>
 <table>

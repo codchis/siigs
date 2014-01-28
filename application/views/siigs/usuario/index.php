@@ -37,10 +37,10 @@ $opcion_delete = Menubuilder::isGranted(DIR_SIIGS.'::usuario::delete');
 <?php echo form_open(DIR_SIIGS.'/usuario/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
 Buscar usuario
 <input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" /> 
-<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" class="btn btn-primary"/>
+<button id="btnFiltrar" class="btn btn-small btn-primary btn-icon">Buscar <i class="icon-search"></i></button>
 </form>
 </fieldset>
-<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS?>/usuario/insert" class="btn btn-primary">Crear nuevo</a><?php } ?>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS?>/usuario/insert" class="btn btn-small btn-primary btn-icon">Crear nuevo <i class="icon-plus"></i></a><?php } ?>
 <div class="table table-striped">
 <table>
 <thead>
@@ -61,9 +61,9 @@ Buscar usuario
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
 		<td><?php echo $user_item->apellido_materno ?></td>
-		<?php if($opcion_view) { ?><td><a id='detalles' href="/<?php echo DIR_SIIGS?>/usuario/view/<?php echo $user_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/update/<?php echo $user_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/delete/<?php echo $user_item->id ?>"  class="btn btn-primary" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a id='detalles' href="/<?php echo DIR_SIIGS?>/usuario/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon">Detalles <i class="icon-eye-open"></a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon">Modificar <i class="icon-pencil"></a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/delete/<?php echo $user_item->id ?>"  class="btn btn-small btn-primary btn-icon" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar <i class="icon-remove"></a></td><?php } ?>
 	</tr>
 </tbody>
 	<?php endforeach ?>

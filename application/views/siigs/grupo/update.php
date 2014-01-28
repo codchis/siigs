@@ -16,8 +16,8 @@
 	<tr>
 		<td colspan="2">
 		<input type="hidden" name="id" value="<?php echo $group_item->id; ?>"/>
-		<input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
-		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/grupo/'" class="btn btn-primary" />
+		<button type="submit" name="submit" id="guardar" class="btn btn-small btn-primary btn-icon" >Guardar <i class="icon-hdd"></i></button>
+		<button type="button"  onclick="window.location.href='/<?php echo DIR_SIIGS?>/grupo/'" class="btn btn-small btn-primary btn-icon">Cancelar <i class="icon-arrow-left"></i></button>
 		<td>
 	</tr>
 </table>

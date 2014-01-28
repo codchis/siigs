@@ -3,10 +3,6 @@
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
 <script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
-	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
 <script type="text/javascript">
 $(document).ready(function(){ 
 	$("a#tabletas").fancybox({
@@ -51,12 +47,14 @@ $(document).ready(function(){
 		<td><label for="id_arr_asu">Reportar a tabletas</label></td>
 		<td><input type="text" name="id_arr_asuT" title='requiere' id="id_arr_asuT" readonly="true" value="<?php if(isset($_POST['id_arr_asuT'])) echo $_POST['id_arr_asuT']; ?>" />
 		<input type="hidden" name="id_arr_asu" id="id_arr_asu" readonly="true" value="<?php echo set_value('id_arr_asu', ''); ?>" />
-		<a href='/<?php echo DIR_TES?>/tree/create/TES/Tabletas a notificar/2/check/0/id_arr_asu/id_arr_asuT/1/1/<?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(array(1,2,3,4,5)));?>' id="tabletas"  class="btn btn-primary">Seleccionar</a>
+		<a href='/<?php echo DIR_TES?>/tree/create/TES/Tabletas a notificar/2/check/0/id_arr_asu/id_arr_asuT/1/1/<?php echo urlencode(json_encode(array(null)));?>/<?php echo urlencode(json_encode(array(1,2,3,4,5)));?>' id="tabletas" class="btn btn-small btn-primary btn-icon">Seleccionar</a>
 		</td>
 	</tr>
 	<tr>
-		<td colspan=2><input type="submit" name="submit" value="Guardar" class="btn btn-primary" onclick="return validarFormulario('notificacion')" />
-		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_TES; ?>/notificacion/'" class="btn btn-primary" /><td>
+		<td colspan=2>
+		<button type="submit" name="submit" id="guardar" class="btn btn-small btn-primary btn-icon" onclick="return validarFormulario('notificacion')" >Guardar <i class="icon-hdd"></i></button>
+		<button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/notificacion/'" class="btn btn-small btn-primary btn-icon">Cancelar <i class="icon-arrow-left"></i></button>
+		</td>
 	</tr>
 </table>
 </div>

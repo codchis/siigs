@@ -45,12 +45,12 @@ Buscar<input type="text" name="busqueda" value="<?php echo set_value('busqueda',
 <br>Desde:<input type="text" id="fechaIni" name="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" size="8" placeholder="desde" />
 <br>Hasta:<input type="text" id="fechaFin" name="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" size="8" placeholder="hasta" />
 <p>
-<input type="submit" name="btnFiltrar" id="btnFiltrar" value="Buscar" class="btn btn-primary" />
-<input type="button" value="Limpiar Fechas" id="limpiaFecha" class="btn btn-primary" />
+<button id="btnFiltrar" class="btn btn-small btn-primary btn-icon">Buscar <i class="icon-search"></i></button>
+<input type="button" value="Limpiar Fechas" id="limpiaFecha" class="btn btn-mini btn-primary" />
 </p>
 </form>
 </fieldset>
-<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/notificacion/insert" class="btn btn-primary">Crear nuevo</a><?php } ?>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/notificacion/insert" class="btn btn-small btn-primary btn-icon">Crear nuevo <i class="icon-plus"></i></a><?php } ?>
 <div class="table table-striped">
 <table>
 <thead>
@@ -79,9 +79,9 @@ Buscar<input type="text" name="busqueda" value="<?php echo set_value('busqueda',
 		<td><?php $time = strtotime($notification_item->fecha_fin);
 			echo date('d/m/Y', $time);
 			 ?></td>
-		<?php if($opcion_view) { ?><td><a id="detalles" href="/<?php echo DIR_TES?>/notificacion/view/<?php echo $notification_item->id ?>" class="btn btn-primary">Detalles</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/update/<?php echo $notification_item->id ?>" class="btn btn-primary">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/delete/<?php echo $notification_item->id ?>"  class="btn btn-primary"onclick="if (confirm('Realmente desea eliminar esta notificaci�n?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a id="detalles" href="/<?php echo DIR_TES?>/notificacion/view/<?php echo $notification_item->id ?>" class="btn btn-small btn-primary btn-icon">Detalles <i class="icon-eye-open"></a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/update/<?php echo $notification_item->id ?>" class="btn btn-small btn-primary btn-icon">Modificar <i class="icon-pencil"></a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_TES?>/notificacion/delete/<?php echo $notification_item->id ?>"  class="btn btn-small btn-primary btn-icon" onclick="if (confirm('Realmente desea eliminar esta notificación?')) { return true; } else {return false;}">Eliminar <i class="icon-remove"></a></td><?php } ?>
 	</tr>
 </tbody>
 	<?php endforeach ?>

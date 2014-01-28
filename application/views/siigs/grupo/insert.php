@@ -22,8 +22,10 @@ $(document).ready(function()
 		<td><textarea name="descripcion"><?php echo set_value('descripcion', ''); ?></textarea></td>
 	</tr>
 	<tr>
-		<td colspan=2><input type="submit" name="submit" value="Guardar" class="btn btn-primary" onclick="return validarFormulario('grupo')"/>
-		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/grupo/'" class="btn btn-primary" /><td>
+		<td colspan=2>
+		<button type="submit" name="submit" id="guardar" class="btn btn-small btn-primary btn-icon" onclick="return validarFormulario('grupo')" >Guardar <i class="icon-hdd"></i></button>
+		<button type="button"  onclick="window.location.href='/<?php echo DIR_SIIGS?>/grupo/'" class="btn btn-small btn-primary btn-icon">Cancelar <i class="icon-arrow-left"></i></button>
+		</td>
 	</tr>
 </table>
 </div>
