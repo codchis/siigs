@@ -40,7 +40,7 @@ class Ayuda extends CI_Controller {
         }
         
         $this->template->write('header','',true);
-		$this->template->write('menu','',true);
+		$this->template->write('menu','<h2 style="font-size: 25px;"> &nbsp; <img src="/resources/images/icons28x28-09.png" align="absmiddle" > Ayuda</h2>',true);
         $this->template->write('sala_prensa','',true);
         $this->template->write('seccion_ayuda','',true);
 		$this->template->write_view('content', 'ayuda', $data);
