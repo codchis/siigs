@@ -2,7 +2,7 @@
 /**
  * Controlador Reporteador
  *
- * @package		Libería
+ * @package		Librería
  * @subpackage	Helper
  * @author     	Pascual
  * @created		2013-12-10
