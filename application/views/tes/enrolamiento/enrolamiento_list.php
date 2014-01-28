@@ -35,7 +35,15 @@ $(document).ready(function()
 		'transitionIn'	: 'elastic',
 		'transitionOut'	: 'elastic',
 		'type'			: 'iframe',								
-	}); 
+		onComplete      : function(){
+            $('#fancybox-frame').load(function(){
+                $.fancybox.hideActivity();
+            });
+        }
+	});
+	$("a#detalles").click(function(e) {
+        $.fancybox.showActivity();
+    });
 });
 </script>
 <?php 

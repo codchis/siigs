@@ -1,4 +1,13 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * Controlador Objetos
+ *
+ * @package		Librería
+ * @subpackage	Controlador
+ * @author     	Eliecer
+ * @created		2013-12-10
+ */ 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Graph extends CI_Controller 
 {
 	public function __construct()
@@ -11,6 +20,11 @@ class Graph extends CI_Controller
 	// crea grafica solicitud por url array con urlencode()
 	
 	// crea grafica pasando un array 
+	/**
+	 *Genera un objeto grafico
+	 *@return view del mapa
+	 *
+	 */
 	public function graph_init($title,$titulo,$array,$label,$grafica="",$nacimiento="")
 	{
 		if($grafica=="todos")
@@ -55,6 +69,11 @@ class Graph extends CI_Controller
 		$data["etiqueta"]=json_decode(urldecode($label));
 		$this->load->view(DIR_TES.$url,$data);
 	}
+	/**
+	 *crea un objeto mapa de la api de google
+	 *@return view del mapa
+	 *
+	 */
 	public function map($lugar="Chiapas",$zoom=6,$rewrite=0,$datos="")
 	{
 		if($datos=="")$datos=$this->input->post('datos');
