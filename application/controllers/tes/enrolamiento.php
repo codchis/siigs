@@ -435,7 +435,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 				if(stripos(".".$sel,$id))$che="checked";
 				if($a==$col&&$catalog!="alergia"){$opcion.="</tr><tr>"; $a=0;}
 				
-				$opcion.="<td width='33%' valign='top'><label><input name='".$catalog."[]' id='$catalog$i' type='$tipo' value='$id' $che> $descripcion</label></td>";
+				$opcion.="<td width='33%' valign='top'><label><input name='".$catalog."[]' id='$catalog$i' type='$tipo' value='$id' $che style='margin-top:-2px;'> $descripcion</label></td>";
 				$i++;$a++;
 			}
 			$opcion.='</tr></table>';

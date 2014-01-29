@@ -403,6 +403,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		{
 			if(x.length>3)
 			{
+				$("#nocurp").html('<span style="color:blue">Buscando Curp... Espere</span>');
 				$("#curp").val("");
 				$("#curpl").html("");		
 				$("#curp2").val("");
@@ -411,13 +412,19 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 					type: "POST",
 					data: "json",
 					success:function(data){
-						var obj = jQuery.parseJSON( data );
 						if(data)
 						{
+							var obj = jQuery.parseJSON( data );
 							var curp=obj[0]["curp"];
 							$("#curp").val(curp.substr(0,curp.length-5));
 							$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
 							$("#curp2").val(curp.substr(curp.length-5,5));		
+							$("#nocurp").html('<span style="color:green">Curp encontrada en la CONDUSEF</span>');		
+						}
+						else
+						{
+							$("#nocurp").html('<span style="color:red">Curp no encontrada en la CONDUSEF calculando manual... Espere</span>');	
+							calcular_curp(ap,am,no,d,m,a,se,ed);
 						}
 					}
 				});
@@ -426,7 +433,27 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		}
 	 	return false;
 	}
-	
+	function calcular_curp(ap,am,no,d,m,a,se,ed)
+	{
+		$.ajax({
+			url: "/<?php echo DIR_TES?>/obtenercurp/calcular_curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
+			type: "POST",
+			data: "json",
+			success:function(data){
+				if(data)
+				{
+					var obj = jQuery.parseJSON( data );
+					var curp=obj[0]["curp"];
+					$("#curp").val(curp.substr(0,curp.length-5));
+					$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
+					$("#curp2").val(curp.substr(curp.length-5,5));		
+					$("#nocurp").html('<span style="color:green">Curp calculada correctamente</span>');			
+				}
+				else
+					$("#nocurp").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');	
+			}
+		});
+	}
 	function add(id,n,a)
 	{	
 		num=document.getElementById(n).value*1;	
@@ -514,10 +541,10 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td width="25%">
                             
                               <label style=" margin-left:10px; float:left">
-                                <input type="radio" name="sexo" value="M" <?php if($enrolado->sexo=="M") echo "checked"; ?> id="sexo_1" onclick="getcurp();" title='requiere' required >
+                                <input type="radio" name="sexo" value="M" <?php if($enrolado->sexo=="M") echo "checked"; ?> id="sexo_1" onclick="getcurp();" title='requiere' required style="margin-top:-3px;">
                                 Masculino</label>
                               <label style=" float:left">
-                                <input type="radio" name="sexo" value="F" <?php if($enrolado->sexo=="F") echo "checked"; ?> id="sexo_2" onclick="getcurp();">
+                                <input type="radio" name="sexo" value="F" <?php if($enrolado->sexo=="F") echo "checked"; ?> id="sexo_2" onclick="getcurp();" style="margin-top:-3px;">
                                 Femenino</label>
                              </td>
                           </tr>
@@ -552,6 +579,10 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required">
                             </select></td>
+                          </tr>
+                          <tr>
+                            <td>&nbsp;</td>
+                            <td colspan="3" ><span id="nocurp" style="letter-spacing:1px; width:100%;margin-left:10px;"></span></td>
                           </tr>
                         </table>
                         <br />
@@ -634,7 +665,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td colspan="2"><p align="right" id="tutoredit">Capturar Nueva Madre o Tutor</p>                              
                             <label for="captura"></label></td>
                             <td colspan="2" align="left">
-                              <input type="checkbox" name="captura" id="captura" style="margin-left:10px;" value="1"  />
+                              <input type="checkbox" name="captura" id="captura" style="margin-left:10px; margin-top:-10px;" value="1"  />
                               <input name="idtutor" type="hidden" id="idtutor"  />
                               &nbsp;
                               <span id="buscarError" style="color:#F00"></span>
@@ -646,10 +677,10 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px; float:left">
-                                <input type="radio" name="sexoT" value="M" <?php if( $enrolado->sexoT=="M") echo "checked"; ?> id="sexoT_1" >
+                                <input type="radio" name="sexoT" value="M" <?php if( $enrolado->sexoT=="M") echo "checked"; ?> id="sexoT_1" style="margin-top:-3px;">
                                 Masculino</label>
                               <label style=" float:left">
-                                <input type="radio" name="sexoT" value="F" <?php if( $enrolado->sexoT=="F") echo "checked"; ?> id="sexoT_2"  >
+                                <input type="radio" name="sexoT" value="F" <?php if( $enrolado->sexoT=="F") echo "checked"; ?> id="sexoT_2" style="margin-top:-3px;">
                                 Femenino</label>
                              </td>
                           </tr>

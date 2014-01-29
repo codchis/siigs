@@ -10,37 +10,7 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Obtenercurp extends CI_Controller 
 {
-	public function __construct()
-	{
-		parent::__construct();
-		$this->load->helper('url');
-	}
-	/**
-	 *Este es el metodo consulta la curp del una persona en la base de datos federal 
-	 *se recibe la informacion de la persona a consultar
-	 *return json con datos
-	 *
-	 */
-	public function curp($paterno,$materno,$nombre,$dia,$mes,$year,$sexo,$estado,$regresar)
-	{
-		$ap=strtoupper($paterno);
-		$am=strtoupper($materno);
-		$na=strtoupper($nombre);
-		
-		$d=$dia;
-		if($d<10) $d="0".(int)$d;
-		$m=$mes;
-		if($m<10) $m="0".(int)$m;
-		
-		$y=$year;
-		$se=$sexo;
-		$se=strtoupper($se);
-		if($se=="HOMBRE"||$se=="MASCULINO"||$se=="M")
-			$se="H";
-		if($se=="MUJER"||$se=="FEMENINO"||$se=="F")
-			$se="M";
-		$estado=strtoupper($estado); 
-		$estados=
+	public $estados=
 		array(
 			array(
 				"AGUASCALIENTES"=>"AS",
@@ -80,6 +50,38 @@ class Obtenercurp extends CI_Controller
 				"NACIDO EN EL EXTRANJERO "=>"NE"
 			)
 		);
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->helper('url');
+	}
+	/**
+	 *Este es el metodo consulta la curp del una persona en la base de datos de la condusef
+	 *se recibe la informacion de la persona a consultar
+	 *return json con datos
+	 *
+	 */
+	public function curp($paterno,$materno,$nombre,$dia,$mes,$year,$sexo,$estado,$regresar="")
+	{
+		$estados=$this->estados;
+		$ap=strtoupper($paterno);
+		$am=strtoupper($materno);
+		$na=strtoupper($nombre);
+		
+		$d=$dia;
+		if($d<10) $d="0".(int)$d;
+		$m=$mes;
+		if($m<10) $m="0".(int)$m;
+		
+		$y=$year;
+		$se=$sexo;
+		$se=strtoupper($se);
+		if($se=="HOMBRE"||$se=="MASCULINO"||$se=="M")
+			$se="H";
+		if($se=="MUJER"||$se=="FEMENINO"||$se=="F")
+			$se="M";
+		$estado=strtoupper($estado); 
+		
 		$edo=$estados[0][$estado];
 		if ($ap!=""&&$am!=""&&$na!=""&&$d!=""&&$m!=""&&$y!=""&&$se!=""&&$edo!="")
 		{
@@ -157,6 +159,66 @@ class Obtenercurp extends CI_Controller
 					echo json_encode($array);
 			}
 			
+		}
+	}
+	/**
+	 *Este es el metodo calcula el curp de la persona que no se haya encontrado en la consulta echa a la condusef 
+	 *se recibe la informacion de la persona a consultar
+	 *return json con datos
+	 *
+	 */
+	public function calcular_curp($paterno,$materno,$nombre,$dia,$mes,$year,$sexo,$estado,$regresar="")
+	{
+		$estados=$this->estados;
+		$ap=strtoupper($paterno);
+		$am=strtoupper($materno);
+		$na=strtoupper($nombre);
+		
+		$d=$dia;
+		if($d<10) $d="0".(int)$d;
+		$m=$mes;
+		if($m<10) $m="0".(int)$m;
+		
+		$y=$year;
+		$se=$sexo;
+		$se=strtoupper($se);
+		if($se=="HOMBRE"||$se=="MASCULINO"||$se=="M")
+			$se="H";
+		if($se=="MUJER"||$se=="FEMENINO"||$se=="F")
+			$se="M";
+		$estado=strtoupper($estado); 
+		
+		$edo=$estados[0][$estado];
+		if ($ap!=""&&$am!=""&&$na!=""&&$d!=""&&$m!=""&&$y!=""&&$se!=""&&$edo!="")
+		{
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, "http://www.consisa.com.mx/calcula.php");
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS,"PATERNO=$ap&MATERNO=$am&NOMBRES=$na&DIA=$d&MES=$m&ANIO=$y&SEXO=$se&ESTADO=$edo");
+			curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)");
+			$html = curl_exec($ch);
+			curl_close($ch);
+			$cur=substr($html,stripos($html,'CURP</span>')+(140),18);
+			$rfc=substr($html,stripos($html,'RFC</span>')+(139),13);
+			$array=
+			array(
+				array(
+					"curp"=>$cur,
+					"rfc"=>$rfc,
+				)
+			);
+			if(strlen($cur)>10)
+			{
+				if($regresar==1)
+					return $array;
+				else
+					echo json_encode($array);
+			}			
 		}
 	}
 }
