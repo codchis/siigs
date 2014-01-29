@@ -350,7 +350,10 @@ class ArbolSegmentacion_model extends CI_Model {
                                             $arraytemp["select"] = true;
                                     
                                     if (!$esseleccionable)
+                                    {
                                             $arraytemp["unselectable"] = true;
+                                            $arraytemp["hideCheckbox"] = true;
+                                    }
 
                                     if (!isset($resultado[$i]))
                                         $resultado[$i] = array();
@@ -446,6 +449,7 @@ class ArbolSegmentacion_model extends CI_Model {
                    // var_dump($seleccionables);
                    // echo "<br/><br/><br/>";
                     $datos[$clave]["unselectable"] = true;
+                    $datos[$clave]["hideCheckbox"] = true;
                 }
             }
             return $datos;
