@@ -56,10 +56,21 @@ class Obtenercurp extends CI_Controller
 		$this->load->helper('url');
 	}
 	/**
-	 *Este es el metodo consulta la curp del una persona en la base de datos de la condusef
-	 *se recibe la informacion de la persona a consultar
-	 *return json con datos
+	 * @access public
 	 *
+	 * Consulta si la curp existe en la base de datos de la condusef
+	 * 
+	 * @param		string 		$paterno        Apellido paterno de la persona 
+	 * @param		string 		$materno        Apellido materno
+	 * @param		string 		$nombre         Nombre o nombres
+	 * @param		int 		$dia            Dia de nacimiento
+	 * @param		int 		$mes            Mes de nacimiento
+	 * @param		int 		$year           Año de nacimiento
+	 * @param		string 		$sexo           Sexo
+	 * @param		string 		$estado         Lugar de nacimiento
+	 * @param		string 		$regresar       Tipo de retorno =1 return array !=1 json
+	 *
+	 * @return 		echo
 	 */
 	public function curp($paterno,$materno,$nombre,$dia,$mes,$year,$sexo,$estado,$regresar="")
 	{
@@ -162,10 +173,21 @@ class Obtenercurp extends CI_Controller
 		}
 	}
 	/**
-	 *Este es el metodo calcula el curp de la persona que no se haya encontrado en la consulta echa a la condusef 
-	 *se recibe la informacion de la persona a consultar
-	 *return json con datos
+	 * @access public
 	 *
+	 * Calcula la curp y el rfc con los datos proporcionados
+	 * 
+	 * @param		string 		$paterno        Apellido paterno de la persona 
+	 * @param		string 		$materno        Apellido materno
+	 * @param		string 		$nombre         Nombre o nombres
+	 * @param		int 		$dia            Dia de nacimiento
+	 * @param		int 		$mes            Mes de nacimiento
+	 * @param		int 		$year           Año de nacimiento
+	 * @param		string 		$sexo           Sexo
+	 * @param		string 		$estado         Lugar de nacimiento
+	 * @param		string 		$regresar       Tipo de retorno =1 return array !=1 json
+	 *
+	 * @return 		echo
 	 */
 	public function calcular_curp($paterno,$materno,$nombre,$dia,$mes,$year,$sexo,$estado,$regresar="")
 	{

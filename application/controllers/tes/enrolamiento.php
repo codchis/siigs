@@ -27,9 +27,19 @@ class Enrolamiento extends CI_Controller
 	}
 	
 	/**
-	 *Este es el metodo por default, obtiene el listado de las perosnas
+	 *
 	 *se recibe el parametro $pag de tipo int que representa la paginacion
 	 *
+	 */
+	 /**
+	 * @access public
+	 *
+	 * Este es el metodo por default, obtiene el listado de las perosnas
+	 * 
+	 * @param		string 		$pag        numero de pagina para la posicion
+	 * @param		string 		$id         id de una persona
+	 *
+	 * @return 		echo
 	 */
 	public function index($pag = 0, $id="")
 	{
@@ -68,11 +78,14 @@ class Enrolamiento extends CI_Controller
  		$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_list', $data);
  		$this->template->render();
 	}
-	/**
-	 *Este metodo estrae la informacion del paciente que sera impreso en la tarjeta
-	 *se recibe el parametro $id que es el identificador del paciente
-	 *imprime en un echo los datos del paciente separados por |
+	 /**
+	 * @access public
 	 *
+	 * Este metodo estrae la informacion del paciente que sera impreso en la tarjeta
+	 * 
+	 * @param		string 		$id        identificador de la persona 
+	 *
+	 * @return 		echo
 	 */
 	public function print_card($id)
 	{
@@ -107,10 +120,14 @@ class Enrolamiento extends CI_Controller
 		
 		echo implode("|",$datos);
 	}
-	/**
-	 *Crea la pagina para ver la infromacion de la persona
-	 *se recibe el parametro $id de tipo int que representa el identificador de la persona
+	  /**
+	 * @access public
 	 *
+	 * Crea la pagina para ver la infromacion de la persona
+	 * 
+	 * @param		string 		$id        identificador de la persona 
+	 *
+	 * @return 		echo
 	 */
 	public function view($id)
 	{
@@ -223,12 +240,15 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
  		$this->template->render();
 	}
 	
-	/**
-	 *Crea el fromulario para editar la informacion de la persona
-	 *se recibe el parametro $id de tipo int que representa el idientificador de la persona
+	 /**
+	 * @access public
 	 *
+	 * Crea el fromulario para editar la informacion de la persona
+	 * 
+	 * @param		string 		$id        identificador de la persona 
+	 *
+	 * @return 		echo
 	 */
-	
 	public function update($id)
 	{
 		try 
@@ -366,10 +386,15 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
  		
 	}
 	/**
-	 *Genera los options de un campo tipo select 
-	 *se recibe el parametro $catalog de tipo String que representa la tabla
-	 *parametro sel para decidir si hay un valor preseleccionado
+	 * @access public
 	 *
+	 * Genera los options de un campo tipo select 
+	 * 
+	 * @param		string 		$catalog    tabla de donde se extrae la informacion
+	 * @param		string 		$sel        identifica si un valor ya esta seleccionado 
+	 * @param		string 		$orden      columna para hacer el ordenamiento
+	 *
+	 * @return 		echo
 	 */
 	public function catalog_select($catalog,$sel="",$orden="")
 	{
@@ -391,15 +416,19 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		}
 		else
 		echo "<option>No hay Datos</option>";
-	}
+	}	 
 	/**
-	 *Crea un grupo de radio o check con la informacion de los catalogos
-	 *se recibe el parametro $catalog de tipo String que representa la tabla
-	 *$tipo representa el tipo de control radio o check
-	 *$col es el numero de columnas por las que estara dividido la distribucion
-	 *$sel para determinar si hay un dato preseleccionado
-	 *$orden determina el orden de la visualizacion
+	 * @access public
 	 *
+	 * Crea un grupo de radio o check con la informacion de los catalogos
+	 * 
+	 * @param		string 		$catalog    tabla de donde se extrae la informacion
+	 * @param		string 		$tipo       tipo de control radio o check
+	 * @param		int 		$col        numero de columnas en la tabla
+	 * @param		string 		$sel        identifica si un valor ya esta seleccionado 
+	 * @param		string 		$orden      columna para hacer el ordenamiento
+	 *
+	 * @return 		echo
 	 */
 	public function catalog_check($catalog,$tipo,$col=1,$sel="",$orden="")
 	{
@@ -445,11 +474,12 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		else
 		echo "No hay Datos";
 	}
-	/**
-	 *Crea el autocomplete de los datos del tutor
-	 *recibe un post del campo donde fue invocado
-	 *return el json que es procesado en la peticion ajax
+	 /**
+	 * @access public
 	 *
+	 * Crea el autocomplete para facilitar la busqueda de un tutor
+	 * 
+	 * @return 		echo
 	 */
 	public function autocomplete()
 	{
@@ -465,11 +495,14 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		}
 		echo json_encode($array);
 	}
-	/**
-	 *Obtiene inofrmacion del tutor
-	 *se recibe el parametro $curp de tipo string 
-	 *return el json con la informacion solicitada
+	 /**
+	 * @access public
 	 *
+	 * Obtiene inofrmacion del tutor
+	 * 
+	 * @param		string 		$curp    curp del tutor
+	 *
+	 * @return 		echo
 	 */
 	public function data_tutor($curp)
 	{
@@ -509,11 +542,14 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		
 		echo json_encode($array);
 	}
-	/**
-	 *Este metodo crea un archivo descargable el cual se necesita para el envio por nfc a la tarjeta del paciente
-	 *se recibe el parametro $id que representa el identificador de la persona
-	 *return un archivo descargable
+	 /**
+	 * @access public
 	 *
+	 *  crea un archivo descargable el cual se necesita para el envio por nfc a la tarjeta del paciente
+	 * 
+	 * @param		string 		$id    identificador de la persona
+	 *
+	 * @return 		echo
 	 */
 	public function file_to_card($id)
 	{
@@ -664,9 +700,18 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		$this->update_card($id,0,'',$archivo,4);
 		echo $data;
 	}
-	/**
-	 *Este metodo actualiza el estado del archivo descargado si fue escrito correctamente o no en la tarjeta
+	 /**
+	 * @access public
 	 *
+	 * Este metodo actualiza el estado del archivo descargado si fue escrito correctamente o no en la tarjeta
+	 * 
+	 * @param		string 		$persona      id de la persona
+	 * @param		boolean		$impreso      identifica si el proceso de impresion fue correcto o no
+	 * @param		int 		$fecha        fecha del evento
+	 * @param		string 		$archivo      archivo generado
+	 * @param		string 		$entorno      tipo de entorno
+	 *
+	 * @return 		echo
 	 */
 	public function update_card($persona,$impreso,$fecha="",$archivo="",$entorno='4')
 	{
@@ -674,18 +719,28 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		if($impreso==1)$fecha=date("Y-m-d H:i:s");
 		$this->Enrolamiento_model->entorno_x_persona($entorno,$persona,$fecha,$archivo,$impreso);
 	}
-	/**
-	 *Este metodo valida que un archivo sea valido para enviar a la tarjeta por nfc
+	 
+	 /**
+	 * @access public
 	 *
+	 * valida que un archivo sea valido para enviar a la tarjeta por nfc
+	 * 
+	 * @param		string 		$persona      id de la persona
+	 * @param		string 		$archivo      archivo generado
+	 *
+	 * @return 		echo
 	 */
 	public function validate_card($persona,$archivo)
 	{
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
 		echo $this->Enrolamiento_model->valid_card($persona,$archivo);
 	}
-	/**
-	 *prepara los datos para insertarlos
+	 /**
+	 * @access public
 	 *
+	 * prepara los datos para insertarlos
+	 *
+	 * @return 		echo
 	 */
 	public  function insert()
 	{
@@ -744,11 +799,15 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 	}
-	
-	
-	/**
-	 *valida los datos de entrada en el formulario
+	 
+	 /**
+	 * @access public
 	 *
+	 * valida los datos de entrada en el formulario
+	 * 
+	 * @param		string 		$op      bandera que identifica si una seccion entra en validacion
+	 *
+	 * @return 		echo
 	 */
 	public function validarForm($op="")
 	{
@@ -818,9 +877,12 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		return $this->form_validation->run();
 	}
 	
-	/**
-	 *Pase de parametros para la insercion o actualizacion
+	 /**
+	 * @access public
 	 *
+	 * Pase de parametros para la insercion o actualizacion
+	 *
+	 * @return 		echo
 	 */
 	public function addForm()
 	{
@@ -886,7 +948,15 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		$this->Enrolamiento_model->setfnutricion($this->input->post('fCNu'));
 	}
 	
-	// valida el curp del paciente
+	/**
+	 * @access public
+	 *
+	 * Valida que la curp del paciente no exista
+	 * 
+	 * @param		string 		$curp      curp de la persona
+	 *
+	 * @return 		echo
+	 */
 	public function ifCurpExists($curp) 
 	{
 		$id=$this->input->post('id');
@@ -922,7 +992,15 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			}
 		}else return true;
 	}
-	// valida el curp del padre o tutor
+	/**
+	 * @access public
+	 *
+	 * valida que la curp del tutor no exista
+	 * 
+	 * @param		string 		$curp      curp de la persona
+	 *
+	 * @return 		echo
+	 */
 	public function ifCurpTExists($curp) 
 	{
 		$id=$this->input->post('idtutor');
@@ -953,10 +1031,14 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			}
 		}
 	}
-	/**
-	 *Este metodo verifica si un paciente comparte un mismo tutor
-	 *return las personas con las que se comparte inofrmacion
+	 /**
+	 * @access public
 	 *
+	 * Este metodo verifica si un paciente comparte un mismo tutor
+	 * 
+	 * @param		string 		$id      id de la persona
+	 *
+	 * @return 		echo
 	 */
 	public function brother_found($id)
 	{
@@ -966,12 +1048,15 @@ p.referencia_domicilio, p.colonia_domicilio, p.cp_domicilio, p.ageb, p.sector, p
 FROM  cns_persona p WHERE p.id='$id'");
 		echo json_encode($result);
 	}
-	/**
-	 *Este metodo extrae la informacion de las personas con las que se comparte el mismo tutor
-	 *si se selecciona una de estas importa los datos para el apartado direccion
-	 *recibe el parametro $tutor que representa el identificador del tutor
-	 *return json de los datos de la persona
+	 
+	 /**
+	 * @access public
 	 *
+	 * Este metodo extrae la informacion de las personas con las que se comparte el mismo tutor si se selecciona una de estas importa los datos para el apartado direccion
+	 * 
+	 * @param		string 		$tutor      id del tutor compartido
+	 *
+	 * @return 		echo
 	 */
 	public function brothers_search($tutor)
 	{
@@ -983,9 +1068,14 @@ LEFT JOIN cns_persona p ON p.id=t.id_persona
 WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 		echo json_encode($result);
 	}
-	/**
-	 *Este metodo valida que el nodo seleccionado en el arbol sea una unidad medica
+	 /**
+	 * @access public
 	 *
+	 * valida que el nodo seleccionado en el arbol sea una unidad medica
+	 * 
+	 * @param		string 		$id      id de arbbol de segmentacion
+	 *
+	 * @return 		echo
 	 */
 	public function validarisum($id)
 	{

@@ -731,7 +731,9 @@ class Servicios extends CI_Controller {
 					$this->Enrolamiento_model->cns_update("tes_pendientes_tarjeta",$midato,$midato->fecha,"id_persona",$midato->id_persona);
 				else
 					$this->Enrolamiento_model->cns_insert("tes_pendientes_tarjeta",$midato);
-			}	
+			}
+			$this->Enrolamiento_model->tes_pendientes_tarjeta_delete();	
+			
 			if(array_key_exists("sis_bitacora",$datos))
 			foreach($datos["sis_bitacora"] as  $midato)
 			{
