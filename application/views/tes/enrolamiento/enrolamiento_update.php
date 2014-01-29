@@ -211,7 +211,11 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		$("#sangre").load("/tes/enrolamiento/catalog_select/tipo_sanguineo/<?php echo $enrolado->sangre; ?>");	
 		$("#nacionalidad").load("/tes/enrolamiento/catalog_select/nacionalidad/<?php echo $enrolado->nacionalidadid; ?>/descripcion");
 		$("#compania").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraid; ?>");
-		$("#companiaT").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraTid; ?>");
+		
+		$("#companiaT").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraTid; ?>", function() {
+			$("#guardar").attr("disabled",false);		
+		});
+		
 		$("#nombre,#paterno,#materno,#fnacimiento,#lnaciminetoT").blur(function()
 		{       
 			getcurp();
@@ -1086,7 +1090,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                 <td>
                 <br />
                 <span id="enviandoof" style="margin-left:-20px;">
-                <button class="btn btn-primary" type="submit" name="guardar" id="guardar" onclick="return validarFormulario('enrolar')">Guardar <i class="icon-hdd"></i></button>
+                <button class="btn btn-primary" type="submit" name="guardar" id="guardar" onclick="return validarFormulario('enrolar')" disabled="disabled">Guardar <i class="icon-hdd"></i></button>
                 <button class="btn btn-primary" type="button" onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" >Cancelar <i class="icon-arrow-left"></i></button>
                 </span>
     			
