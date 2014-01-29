@@ -114,6 +114,8 @@ $(document).ready(function(){
 if(!empty($msgResult))
 echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
+<a href="<?php echo site_url().DIR_SIIGS; ?>/catalogocsv/" class="btn btn-primary">Regresar al listado<i class="icon-arrow-left"></i></a>
+<br/>
 <h2><?php echo $title; ?></h2>
 <?php
 if (!empty($catalogo_item))
@@ -125,12 +127,12 @@ if (!empty($catalogo_item))
 <tr>
 <td>[Archivo csv separado por comas]<input type="file" name="archivocsv" class="btn btn-primary" id="btncsv"/></td>
 <td>
-    <input type="button" name="btnload" id="btnload" value="Cargar Datos" class="btn btn-primary" />
+    <button type="button" name="btnload" id="btnload" class="btn btn-primary">Cargar Datos<i class="icon-upload"></i></button>
 </td>
 </tr>
 <tr>
     <td colspan="2">
-        <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogocsv'" class="btn btn-primary" />
+        <!--input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php //echo site_url().DIR_SIIGS; ?>/catalogocsv'" class="btn btn-primary" /-->
     </td>
 </tr>
 </table>
@@ -144,13 +146,12 @@ if (!empty($datos))
 <div class='table table-striped'>
 <table>
     <thead>
-        <thead><tr><th colspan ="<?php echo count($datos[0]);?>">Datos del catalogo</td></tr></thead>
+        <thead><tr><th colspan ="<?php echo count((array)$datos[0]);?>">Datos del catalogo</td></tr></thead>
         <tr>
         <?php foreach(array_keys((array)$datos[0]) as $claves) {
             if ($claves != 'activo') {?>
             <td><h2><?php echo $claves;?></h2></td>
             <?php } } ?>
-            <td></td>
         </tr>
     </thead>
     <?php foreach($datos as $dato) { ?>

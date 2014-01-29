@@ -26,8 +26,11 @@ class Reporte_sincronizacion extends CI_Controller
 	}
 	
 	/**
-	 *Este es el metodo por default, obtiene el listado de las perosnas
-	 *se recibe el parametro $pag de tipo int que representa la paginacion
+	 * @access public
+	 *
+	 * Este es el metodo por default, crea el listado del reporte de sincronizacion
+	 *
+	 * @return 		void
 	 *
 	 */
 	public function index()
@@ -88,6 +91,17 @@ class Reporte_sincronizacion extends CI_Controller
  		$this->template->render();
 	}
 	
+	/**
+	 * @access public
+	 *
+	 * Muestra detallada por cada list del reporte de sincronizacion
+	 * 
+	 * @param		string 		$op         Especifica el reporte a mostrar
+	 * @param		string 		$title      Especifica el titulo a mostrar en el reporte
+	 *
+	 * @return 		void
+	 *
+	 */
 	public function view($op,$title)
 	{
 		try{
@@ -152,6 +166,15 @@ class Reporte_sincronizacion extends CI_Controller
 		$this->template->write_view('content',DIR_TES.'/reporteador/reporte_view', $data);
  		$this->template->render();
 	}
+	
+	/**
+	 * @access public
+	 *
+	 * Genera el item del reporte de lote de vacunacion
+	 *
+	 * @return 		void
+	 *
+	 */
 	public function lote()
 	{
 		try{
@@ -283,6 +306,19 @@ class Reporte_sincronizacion extends CI_Controller
  		$this->template->render();
 	}
 	
+	/**
+	 * @access public
+	 *
+	 * Muestra detallada por cada list del reporte de lote de vacunacion
+	 * 
+	 * @param		string 		$lote       Valor del lote del que se esta generando el reporte
+	 * @param		string 		$title      Especifica el titulo a mostrar en el reporte
+	 * @param		string 		$op         Especifica el reporte a mostrar
+	 * @param		string 		$lugar      Especifica el lugar donde se centrara el mapa
+	 *
+	 * @return 		void
+	 *
+	 */
 	public function lote_view($lote,$title,$op,$lugar="Chiapas")
 	{
 		try{

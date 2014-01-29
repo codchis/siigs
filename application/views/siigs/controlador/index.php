@@ -57,14 +57,14 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  }
 
 </script>
-<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS; ?>/controlador/insert/<?php echo $id_entorno;?>" class="btn btn-primary">Crear Nuevo</a><?php } ?>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS; ?>/controlador/insert/<?php echo $id_entorno;?>" class="btn btn-primary">Crear Nuevo<i class="icon-plus"></i></a><?php } ?>
 
 <fieldset>
     <legend><strong>Opciones de filtrado</strong></legend>
  		<?php echo form_open(DIR_SIIGS.'/controlador/index/'.$pag, array('name'=>'form_filter_controlador', 'id'=>'form_filter_controlador')); ?>
 	         Entorno:
 	        <?php  echo  form_dropdown('id_entorno', $entornos, $id_entorno); ?>
-	        <input type="submit" name="btnFiltrar" id="btnFiltrar" value="Filtrar" onclick="return buscar();" class="btn btn-primary"/>
+                 <button type="submit" name="btnFiltrar" id="btnFiltrar" onclick="return buscar();" class="btn btn-primary">Buscar<i class="icon-search"></i></button>
    		</form>
 </fieldset>
 <div class="table table-striped">
@@ -88,11 +88,10 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $controlador_item->nombre ?></td>
 		<td><?php echo $controlador_item->descripcion ?></td>
 		<td><?php echo $controlador_item->clase ?></td>
-		<?php if($opcion_view) { ?><td><a id="detalles" href="/<?php echo DIR_SIIGS; ?>/controlador/view/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary">Detalles</a></td><?php } ?>
-		<?php if($opcion_accion) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/accion/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary">Acciones</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/update/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/delete/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary" onclick="if (confirm('Realmente desea eliminar este controlador?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
-		<td></td>
+		<?php if($opcion_view) { ?><td><a id="detalles" href="/<?php echo DIR_SIIGS; ?>/controlador/view/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary btn-icon">Detalles<i class="icon-eye-open"></i></a></td><?php } ?>
+		<?php if($opcion_accion) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/accion/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary btn-icon">Acciones<i class="icon-tasks"></i></a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/update/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary btn-icon">Modificar<i class="icon-pencil"></i></a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/controlador/delete/<?php echo $controlador_item->id ?>" class="btn btn-small btn-primary btn-icon" onclick="if (confirm('Realmente desea eliminar este controlador?')) { return true; } else {return false;}">Eliminar<i class="icon-remove"></i></a></td><?php } ?>
 	</tr>
 <?php endforeach ?>
 <tfoot>

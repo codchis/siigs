@@ -22,7 +22,7 @@ if(!empty($msgResult))
 echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
 <br/>
-<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS; ?>/accion/insert" class="btn btn-primary">Crear Nuevo</a><?php } ?>
+<?php if($opcion_insert) { ?><a href="/<?php echo DIR_SIIGS; ?>/accion/insert" class="btn btn-primary">Crear Nuevo<i class="icon-plus"></i></a><br/><br/><?php } ?>
 <div class="table table-striped">
 <table>
 <thead>
@@ -42,9 +42,9 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $accion_item->nombre ?></td>
 		<td><?php echo $accion_item->descripcion ?></td>
 		<td><?php echo $accion_item->metodo ?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/view/<?php echo $accion_item->id ?>" id="detalles" class="btn btn-small btn-primary">Detalles</a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/update/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary">Modificar</a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/delete/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary" onclick="if (confirm('Realmente desea eliminar esta acción?')) { return true; } else {return false;}">Eliminar</a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/view/<?php echo $accion_item->id ?>" id="detalles" class="btn btn-small btn-primary btn-icon">Detalles<i class="icon-eye-open"></i></a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/update/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary btn-icon">Modificar<i class="icon-pencil"></i></a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/accion/delete/<?php echo $accion_item->id ?>"  class="btn btn-small btn-primary btn-icon" onclick="if (confirm('Realmente desea eliminar esta acción?')) { return true; } else {return false;}">Eliminar<i class="icon-remove"></i></a></td><?php } ?>
 	</tr>
 <?php endforeach ?>
 

@@ -128,19 +128,13 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<th><h2>Descripción</h2></th>
         <th></th>
 	<th>
-            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/eda" class="btn btn-primary">
-            Catálogo EDA
-            </a>
+            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/eda" class="btn btn-primary btn-small btn-icon">Catálogo&nbsp;EDA<i class="icon-list-alt"></i></a>
         </th>
 	<th>
-            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/ira" class="btn btn-primary">
-            Catálogo IRA
-            </a>
+            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/ira" class="btn btn-primary btn-small btn-icon">Catálogo&nbsp;IRA<i class="icon-list-alt"></i></a>
         </th>
         <th>
-            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/consulta" class="btn btn-primary">
-            Consultas
-            </a>
+            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/consulta" class="btn btn-primary btn-small btn-icon">Consultas<i class="icon-list-alt"></i></a>
         </th>
 	</tr>
 </thead>
@@ -148,7 +142,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<tr>
 		<td><?php echo $item->cie10 ?></td>
 		<td><?php echo $item->descripcion ?></td>
-                <td><a href="/<?php echo DIR_SIIGS; ?>/cie10/update/<?php echo $item->id ?>" class="btn btn-primary">Modificar</a></td>
+                <td><a href="/<?php echo DIR_SIIGS; ?>/cie10/update/<?php echo $item->id ?>" class="btn btn-primary btn-small btn-icon">Modificar<i class="icon-pencil"></i></a></td>
                 <td>
                     <input class="check_catalogo" type="checkbox" id="eda<?php echo $item->id;?>" valor="<?php echo $item->id;?>" catalogo="eda" <?php echo ($item->eda == false) ? "" : "checked" ; ?> >
                     <label for="eda<?php echo $item->id;?>"><?php echo ($item->eda == false) ? "Agregar" : "Quitar" ; ?></label>
@@ -175,7 +169,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
             <table>
             <tr>
             <td><input type="file" name="archivocsv" id="btncsv" class="btn btn-primary"/></td>
-            <td><input type="button" name="btnload" id="btnload" class="btn btn-primary" value="Cargar Datos"/></td>
+            <td><button type="button" name="btnload" id="btnload" class="btn btn-primary">Cargar Datos<i class="icon-upload"></i></button></td>
             </tr>
             </table>
             </form>
@@ -197,7 +191,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
             <table>
             <tr>
             <td>[Archivo csv separado por comas]<input type="file" name="archivocsv" class="btn btn-primary" id="btncsv"/></td>
-            <td><input type="button" name="btnload" id="btnload" class="btn btn-primary" value="Cargar Datos"/></td>
+            <td><button type="button" name="btnload" id="btnload" class="btn btn-primary">Cargar Datos<i class="icon-upload"></i></button></td>
             </tr>
             </table>
             </form>

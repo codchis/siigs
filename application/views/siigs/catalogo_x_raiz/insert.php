@@ -51,9 +51,9 @@
 	 	           	    	$td2.append($descselect);
                                         
                                         $td3 = $('<td></td>');
-                                        $botonagregar = $('<input type="button" class="btn btn-small btn-primary" value="Agregar">');
+                                        $botonagregar = $('<button type="button" class="btn btn-small btn-primary">Agregar<i class="icon-plus"></i></button>');
                                         $br = $('<br/><br/>');
-                                        $botonlimpiar = $('<input type="button" class="btn btn-small btn-primary" value="Limpiar">');
+                                        $botonlimpiar = $('<button type="button" class="btn btn-small btn-primary">Limpiar<i class="icon-remove-circle"></i></button>');
                                         $td3.append($botonagregar);
                                         $td3.append($br);
                                         $td3.append($botonlimpiar);
@@ -98,7 +98,7 @@
 		 	                	return;
 	 	                	$('#relaciones_tablas').html('<thead><tr><th>Relaciones padre-hijo</th></tr></thead>');
 	 	                	$td = $('<td colspan="2"></td>');
-	 	                	$boton = $('<input type="button" value="Agregar" class="btn btn-small btn-primary"/>');
+	 	                	$boton = $('<button type="button" class="btn btn-small btn-primary">Agregar<i class="icon-plus"></i></button>');
 	 	                	$td.append($boton);
 
 	 	                	$boton.click(function(){
@@ -129,7 +129,7 @@
              	$td.append($selectpadre);
              	$tr.append($td);
 				
-				$boton = $('<input type="button" value="Quitar" class="btn btn-small btn-primary">');
+				$boton = $('<button type="button" class="btn btn-small btn-primary">Quitar<i class="icon-remove"></i></button>');
              	$td = $('<td></td>');
              	$td.append($boton);
              	$tr.append($td);
@@ -253,8 +253,8 @@ echo form_open(DIR_SIIGS.'/catalogo_x_raiz/insert/'.$id_raiz , $atributos)
 	</tr>
 	<tr>
 		<td colspan=2>
-                    <input type="submit" name="submit" value="Guardar" class="btn btn-primary" />
-                    <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/raiz/update/<?php echo $id_raiz;?>'" class="btn btn-primary" />
+                    <button type="submit" name="submit" value="Guardar" class="btn btn-primary">Guardar<i class="icon-hdd"></i></button>
+                    <button type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/raiz/update/<?php echo $id_raiz;?>'" class="btn btn-primary">Cancelar<i class="icon-arrow-left"></i></button>
                 <td>
 	</tr>
 </table>

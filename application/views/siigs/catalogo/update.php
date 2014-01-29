@@ -88,7 +88,7 @@ if (!empty($catalogo_item))
 <table>
 <tr>
 <td><input type="file" name="archivocsv" id="btncsv"/></td>
-<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" class="btn btn-primary"/></td>
+<td><button type="button" name="btnload" id="btnload" class="btn btn-primary">Cargar Datos<i class="icon-upload"></i></button></td>
 </tr>
 </table>
 </form>
@@ -96,18 +96,16 @@ if (!empty($catalogo_item))
 </table>
     <?php echo form_open(DIR_SIIGS.'/catalogo/update/'.$catalogo_item->nombre) ?>
     Comentarios: <textarea name="comentario"><?php echo $catalogo_item->comentario; ?></textarea><br/><br/>
-        <input type="submit" name="submit" value="Guardar" class="btn btn-primary"/>
-        <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary" />
+    <button type="submit" name="submit" class="btn btn-primary">Guardar<i class="icon-hdd"></i></button>
+    <button type="button" name="cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary" >Cancelar<i class="icon-arrow-left"></i></button>
     </form> 
-</div>
 <?php 
 if (!empty($datos))
 {
 ?>
-<div class='table table-striped'>
-<table>
+    <table id="tabla">
     <thead>
-         <thead><tr><th colspan = >Datos del catalogo</td></tr>
+    <thead><tr><th colspan="<?php echo count((array)$datos[0]);?>">Datos del catalogo</td></tr>
        </thead>
         <tr>
         <?php foreach(array_keys((array)$datos[0]) as $claves) { ?>
@@ -123,13 +121,11 @@ if (!empty($datos))
     </tr>
     <?php } ?>
 <tfoot>
-        <tr><td colspan="7">
+        <tr><td>
             <div id="paginador" align="center"><?php echo $this->pagination->create_links(); ?></div>
         </td></tr>
 </tfoot>
 </table>
-</div>
-</div>
 <?php
 }
 }
@@ -137,3 +133,5 @@ else
 {
 	echo '<div class="error">Registro no encontrado</div>';
 }
+?>
+</div>

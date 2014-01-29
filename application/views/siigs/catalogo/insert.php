@@ -244,7 +244,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <table>
 <tr>
 <td>[Archivo csv separado por comas]<input type="file" name="archivocsv" id="btncsv"/></td>
-<td><input type="button" name="btnload" id="btnload" value="Cargar Datos" onclick="$('#loadcsv').submit();" class="btn btn-primary"/></td>
+<td><button type="button" name="btnload" id="btnload" onclick="$('#loadcsv').submit();" class="btn btn-primary">Cargar Datos<i class="icon-upload"></i></button></td>
 </tr>
 </table>
 </form>
@@ -280,8 +280,8 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<tr>
 		<td colspan=2>
 			<input type="hidden" name="llaves" id="llaves" value="1" />
-			<input type="submit" name="submit" id="submit" value="Guardar"  class="btn btn-primary" onclick="return validarFormulario('enviardatos')"/>
-                        <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary" />
+                        <button type="submit" name="submit" id="submit" class="btn btn-primary" onclick="return validarFormulario('enviardatos')">Guardar<i class="icon-hdd"></i></button>
+                        <button type="button" name="cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary">Cancelar<i class="icon-arrow-left"></i></button>
 		<td>
 	</tr>
 </table>

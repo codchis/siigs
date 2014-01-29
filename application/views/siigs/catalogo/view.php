@@ -2,6 +2,8 @@
 if(!empty($msgResult))
 echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
  ?>
+<a href="<?php echo site_url().DIR_SIIGS; ?>/catalogo/" class="btn btn-primary">Regresar al listado<i class="icon-arrow-left"></i></a>
+<br/>
 <h2><?php echo $title; ?></h2>
 <?php
 if (!empty($catalogo_item))
@@ -33,7 +35,7 @@ if (!empty($datos_cat))
 {
     if (count($datos_cat)>0)
     {
-        echo "<div class='table table-striped' style='overflow:auto'><table><thead><tr><th colspan = ".count($datos_cat[0]).">Datos del catalogo</td></tr></thead>";
+        echo "<div class='table table-striped' style='overflow:auto'><table><thead><tr><th colspan = ".count((array)$datos_cat[0]).">Datos del catalogo</td></tr></thead>";
         foreach ($datos_cat as $dato)
         {
             echo "<tr>";
@@ -54,4 +56,3 @@ else
 	echo '<div class="error">Registro no encontrado</div>';
 }
 ?>
-<a href="<?php echo site_url().DIR_SIIGS; ?>/catalogo/" class="btn btn-primary">Regresar al listado</a>

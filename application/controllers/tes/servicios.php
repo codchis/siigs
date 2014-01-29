@@ -28,8 +28,40 @@ class Servicios extends CI_Controller {
 		$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
 		$this->load->model(DIR_SIIGS.'/ReglaVacuna_model');
     }
+	/**
+	 * @access public
+	 *
+	 * Metodo principal al que se le hacen las peticiones y es el que se encarga de distribuir la informacion
+	 * recibe parametros por POST
+	 * @param		int 		$id_accion     Representa el tipo de accion que se ejecutara
+	 * @param		int 		$id_tab        Representa a la MAC de la tableta
+	 * @param		int 		$id_session    Representa la session activa para la peticion
+	 * @param		int 		$version_apk   Representa la version de la apk instalada en la tableta
+	 * @param		json 		$datos         Representa el json que contiene el contenido para la comunicacion tableta - servidor
+	 *
+	 * @return 		void
+	 */
+	public function Synchronization()
+	{
+		$id_accion=$this->input->post('id_accion');
+		$id_tab = $this->input->post('id_tab'); 
+		$id_sesion = $this->input->post('id_sesion');
+		$version_apk = $this->input->post('version_apk');
+		$datos = $this->input->post('msg');
+		if($datos=="")
+		$datos = $this->input->post('datos');
+		
+		$this->is_step_0(
+		json_encode(array("id_accion"=>$id_accion)), 
+		json_encode(array("id_tab"=>$id_tab)) , 
+		json_encode(array("id_sesion"=>$id_sesion)), 
+		$version_apk,$datos );
+	}	
 
     /**
+	 * @access public
+	 *
+	 * Paso 0 se procesa las peticiones segun la accion:
      * Si la acción es 1: Valida la disponibilidad del dispositivo especificado y genera una session que se mantiene activa en toda la sincronizacion
      * Si la acción es 2: Regresa la informacion de todos los catalogos
 	 * Si la acción es 3: Recibe un mensaje si es ok actualiza el estado de la tableta si es error se crea un archivo log con la descripcion
@@ -37,17 +69,17 @@ class Servicios extends CI_Controller {
 	 * Si la acción es 5: Recibe la informacion que envia la tableta y la almacena en sus respectivas tablas
 	 * Si la acción es 6: Regresa la informacion de los catalogos y personas que se actuailzaron o agregaron depues de la ultima sincronizacion de la tableta
      *
-     * @access public
-     * @param  id_accion=tipo de solicitud, id_tab=mac de la tableta, id_session=valor de la sessiuon activa,
-	 * id_version= version de la tableta y datos=inofrmacion adicional puede contener un error descriptivo, datos de personas o algun otro mensaje
-     * @echo void
+	 * @param		int 		$id_accion     Representa el tipo de accion que se ejecutara
+	 * @param		int 		$id_tab        Representa a la MAC de la tableta
+	 * @param		int 		$id_session    Representa la session activa para la peticion
+	 * @param		int 		$version_apk   Representa la version de la apk instalada en la tableta
+	 * @param		json 		$datos         Representa el json que contiene el contenido para la comunicacion tableta - servidor
+	 *
+	 * @return 		void
+     * 
      */
-    public function Synchronization($id_accion, $id_tab = null, $id_sesion = null, $id_version = null, $datos = null)
+    public function is_step_0($id_accion, $id_tab = null, $id_sesion = null, $id_version = null, $datos = null)
     {
-//         if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
-//             show_error('', 403, 'Acceso denegado');
-//             echo false;
-//         }
         if(!isset($this->Tableta_model))
             echo json_encode(array("id_resultado" => 'No hay conexión')); 
         try 
@@ -87,12 +119,14 @@ class Servicios extends CI_Controller {
         }
     }
 	/**
-	 *validacion de la tableta y obtencion de la session
-	 *valida que la tableta este dada de alta y tenga un status y tipo de censo valido para la sincronizacion
-	 *recibe el id_tableta que es la mac de la tableta
-	 *id_version es la version de la apk instalada en la tableta
-	 *return session
+	 * @access public
 	 *
+	 * valida que la tableta este asignada a una unidad medica y que tenga un status valido para la sincronizacion
+	 * recibe parametros por POST
+	 * @param		int 		$id_tab        Representa a la MAC de la tableta
+	 * @param		int 		$version_apk   Representa la version de la apk instalada en la tableta
+	 *
+	 * @return 		session
 	 */
 	public function is_step_1($id_tab,$id_version)
 	{
@@ -164,10 +198,15 @@ class Servicios extends CI_Controller {
 	}
 	
 	/**
-	 *generacion de informacion de catalogos
-	 *se recibe el parametro $id_session generado en paso 1
-	 *return json de catalogos
+	 * @access public
 	 *
+	 * Valida que la session este activa, genera los catalogos a enviar en la sincronizacion por primera vez
+	 * 
+	 * @param		int 		$id_session    Representa la session activa para la peticion
+	 * @param		int 		$si            Bandera que especifica si este paso es llamado por otro paso
+	 * @param		json 		$sf            Bandera que especifica el comportamiento del armado del json
+	 *
+	 * @return 		echo
 	 */
 	public function is_step_2($id_sesion, $si="", $sf="")
 	{
@@ -214,18 +253,7 @@ class Servicios extends CI_Controller {
 					foreach($usuariosXtableta as $dato)	
 					array_push($inusuario,$dato->id_usuario);
 					
-					/*$cadena= array("tes_usuario_x_tableta"=> $usuariosXtableta);
-					$micadena=json_encode($cadena);
-					echo substr($micadena,1,strlen($micadena)-2).",";
-					$micadena="";
-					ob_flush();
-					unset($cadena);
-					$cadena=array();*/
 				}
-				//else 
-				//	$cadena= array("tes_usuario_x_tableta" => 'Error recuperando usuarios');
-				
-				// obtiene permisos que pertenescan al entorno
 				$permisos = $this->Usuario_model->get_permiso_entorno("TES Movil");
 				if($permisos)
 				{
@@ -237,10 +265,6 @@ class Servicios extends CI_Controller {
 					unset($cadena);
 					$cadena=array();
 				}
-				//else 
-				//	$cadena["sis_permiso"]= 'Error recuperando sis_permiso';
-					
-				// obtiene grupos que pertenescan al entorno
 				$grupos = $this->Usuario_model->get_grupo_entorno("TES Movil");
 				if($grupos)
 				{
@@ -252,10 +276,6 @@ class Servicios extends CI_Controller {
 					unset($cadena);
 					$cadena=array();
 				}
-				//else 
-				//	$cadena["sis_grupo"]= 'Error recuperando sis_grupo';
-					
-				// obtiene usuarios que pertenescan al entorno
 				if(sizeof($inusuario)==0)array_push($inusuario,0);
 				$usuarios = $this->Usuario_model->get_usuario_entorno("TES Movil",$inusuario);
 				if($usuarios)
@@ -268,8 +288,6 @@ class Servicios extends CI_Controller {
 					unset($cadena);
 					$cadena=array();
 				}
-				//else 
-				//	$cadena["sis_usuario"]= 'Error recuperando sis_usuario';
 				
 				//************ fin usuario ************
 				
@@ -305,8 +323,6 @@ class Servicios extends CI_Controller {
 						unset($cadena);
 						$cadena=array();
 					}
-					//else 
-					//	$cadena[$catalog->descripcion]= 'Error recuperando '.$catalog->descripcion;
 				}	
 				//************ fin catalogos ************
 				
@@ -431,10 +447,14 @@ class Servicios extends CI_Controller {
 	}
 	
 	/**
-	 *procesaiento de mensajes
-	 *procesa los mensajes que se cachan entre la comunicacion del servidor y la tableta durante la sincronizacion
-	 *recibe la session generada en el paso 1 y los datos que son el mensaje
+	 * @access public
 	 *
+	 * Guarda en la base de datos el estado de la sincronizacion
+	 * 
+	 * @param		int 		$id_session    Representa la session activa para la peticion
+	 * @param		json 		$datos         Representa el json que contiene el contenido para la comunicacion tableta - servidor
+	 *
+	 * @return 		void
 	 */
 	public function is_step_3($id_sesion,$datos)
 	{
@@ -465,11 +485,13 @@ class Servicios extends CI_Controller {
 		fclose($fp);
 	}
 	/**
-	 *envio de inofrmacion de personas
-	 *genera los datos de todas las personas que le corresponda a la tableta 
-	 *recibe la session generada en el paso 1 
-	 *return json de datos
+	 * @access public
 	 *
+	 * Prepara la informacion de perssonas con su catalogos transaccionales de cada una
+	 * 
+	 * @param		int 		$id_session    Representa la session activa para la peticion
+	 *
+	 * @return 		echo
 	 */
 	public function is_step_4($id_sesion)
 	{
@@ -628,11 +650,14 @@ class Servicios extends CI_Controller {
 		}
 	}
 	/**
-	 *recibir datos de la tableta
-	 *recibe los datos que envia la tableta para ser insertados en la base de datos del servidor
-	 *recibe la session generada en el paso 1 y los datos enviados por la tableta
-	 *return json con resultado
+	 * @access public
 	 *
+	 * Recibe los datos que genero la tableta para ser almacenados en la base de datos del servidor
+	 * 
+	 * @param		int 		$id_session    Representa la session activa para la peticion
+	 * @param		json 		$datos         Representa el json que contiene el contenido para la comunicacion tableta - servidor
+	 *
+	 * @return 		echo
 	 */
 	public function ss_step_5($id_sesion, $datos)
 	{
@@ -706,7 +731,9 @@ class Servicios extends CI_Controller {
 					$this->Enrolamiento_model->cns_update("tes_pendientes_tarjeta",$midato,$midato->fecha,"id_persona",$midato->id_persona);
 				else
 					$this->Enrolamiento_model->cns_insert("tes_pendientes_tarjeta",$midato);
-			}	
+			}
+			$this->Enrolamiento_model->tes_pendientes_tarjeta_delete();	
+			
 			if(array_key_exists("sis_bitacora",$datos))
 			foreach($datos["sis_bitacora"] as  $midato)
 			{
@@ -739,10 +766,13 @@ class Servicios extends CI_Controller {
 		}
 	}
 	/**
-	 *envio de datos de personas que se agregaron o actualizaron depues de la ultima sincronizacion de la tableta
-	 *recibe la session generada en el paso 1 
-	 *return json de datos
+	 * @access public
 	 *
+	 * prepara los datos para la sincronizacion secuencia, envia unicamente aquellos datos modificados despues de la ultima sincronizacion de la tableta
+	 * 
+	 * @param		int 		$id_session    Representa la session activa para la peticion
+	 *
+	 * @return 		void
 	 */
 	public function ss_step_6($id_sesion)
 	{
@@ -902,8 +932,15 @@ class Servicios extends CI_Controller {
 		}
 	}
 	/**
-	 *actualiza el estado de la tableta
+	 * @access public
 	 *
+	 * Actualiza el estatus de la tableta
+	 * 
+	 * @param		int 		$id_session            Representa la session activa para la peticion
+	 * @param		json 		$id_tes_estado_tableta Representa el status que tomara la tableta
+	 * @param		int 		$version               Representa la version de la apk instalada en la tableta
+	 *
+	 * @return 		echo
 	 */
 	public function actualiza_estado_tableta($id_sesion,$id_tes_estado_tableta="",$version="")
 	{
@@ -924,10 +961,15 @@ class Servicios extends CI_Controller {
 		}
     }
 	/**
-	 *genera los esquemas incompletos de las personas que se envian en la sincronizacion
-	 *se recibe el parametro $id_persona fecha y las vacunas
-	 *return array
+	 * @access public
 	 *
+	 * Genera los esquemas incompletos de las personas que correspondan a la unidad medica de la tableta
+	 * 
+	 * @param		int 		$id_persona            Representa la persona a la que se le calculara su esquema
+	 * @param		string 		$fecha                 Representa la fecha de nacimiento de la persona
+	 * @param		array 		$vacunas               Representa las vacunas aplicadas a la persona
+	 *
+	 * @return 		echo
 	 */
 	public function esquema_incompleto($id_persona,$fecha,$vacunas)
 	{//agregar dias a la fecha si periodo de colchon ver tabla tableta agregar bit de prioridad 1 ya le toca 0 periodo de ventana "prioridad"=>1 ó 0
@@ -965,48 +1007,5 @@ class Servicios extends CI_Controller {
 		
 		return $cadena;
 	}
-		
-	//// prueba tableta
-	public function prueba()
-	{
-		$id_accion=$this->input->post('id_accion');
-		$id_tab = $this->input->post('id_tab'); 
-		$id_sesion = $this->input->post('id_sesion');
-		$version_apk = $this->input->post('version_apk');
-		$datos = $this->input->post('msg');
-		if($datos=="")
-		$datos = $this->input->post('datos');
-		
-		$this->Synchronization(
-		json_encode(array("id_accion"=>$id_accion)), 
-		json_encode(array("id_tab"=>$id_tab)) , 
-		json_encode(array("id_sesion"=>$id_sesion)), 
-		$version_apk,$datos );
-	}	
-	
-	
-	//// prueba web
-	public function prueba2($id_accion,$id_tab=null,$id_sesion=null, $version=null)
-	{
-		 $this->Synchronization(
-		 json_encode(array("id_accion"=>$id_accion)), 
-		 json_encode(array("id_tab"=>$id_tab)) , 
-		 json_encode(array("id_sesion"=>$id_sesion)), 
-		 $version,
-		 '{
-			  "id_resultado": "ok",
-    "cns_control_vacuna": [
-        {
-            "id_persona": "c844dee37db76567e3a4e6ed64c10057",
-            "codigo_barras": "duplicada",
-            "fecha": "2014-01-07 14:57:08",
-            "id_asu_um": "1019",
-            "id_vacuna": "10"
-        }
-    ],
-    "sis_bitacora":[{"parametros":"paciente:37648c5b456a164ca486bcaae5b16451, vacuna:6","fecha_hora":"2014-01-28 12:17:45","id_usuario":"9","id_controlador_accion":"104"}],
-	"sis_error":[{"descripcion":"Json incorrecto en pendiente de persona:002f096e99f2fcface64f406f150a60c, fecha:2014-01-22 13:28:47, tabla:cns_control_vacuna","fecha_hora":"2014-01-28 12:35:09","id_usuario":"9","id_controlador_accion":"0"},{"descripcion":"Json incorrecto en pendiente de persona:002f096e99f2fcface64f406f150a60c, fecha:2014-01-22 14:10:17, tabla:cns_control_vacuna","fecha_hora":"2014-01-28 12:35:09","id_usuario":"9","id_controlador_accion":"0"}]
-}' );
-	}    
 }
 ?>

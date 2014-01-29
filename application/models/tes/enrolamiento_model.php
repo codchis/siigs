@@ -617,10 +617,15 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->nacionalidad = $value;
 	}
-	/**
-	 *Hace insert de las tablas cns_control_x que se reciben en la sincronizacion secuencial
-	 *se recibe el parametro $tabla de tipo String que representa la tabla a la que se le hara la insercion
-	 *el parametro $array tipo array() contiene los datos  
+	 /**
+	 * @access public
+	 *
+	 * Hace insert de las tablas cns_control_x que se reciben en la sincronizacion secuencial
+	 * 
+	 * @param		string 		$tabla       Nombre de la tabla a la que se afectara
+	 * @param		array 		$array       Datos que se guardaran en la tabla
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function cns_insert($tabla,$array)
@@ -635,9 +640,17 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 *Este metodo trabaja hace update de la sincronizacion de los datos que se repitan el id
-	 *se recibe el parametro $tabla de tipo String que representa la tabla a la que se le hara la insercion
-	 *el parametro $array tipo array() contiene los datos  
+	 * @access public
+	 *
+	 * Actualiza la tabla especificada 
+	 * 
+	 * @param		string 		$tabla      Nombre de la tabla afectada
+	 * @param		array 		$array      Datos a actualizar
+	 * @param		string 		$id         identificador para el where
+	 * @param		string 		$campo      campo si se necesitarar un segundo where
+	 * @param		string 		$valor      valor del campo a comparar
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function cns_update($tabla,$array,$id,$campo="", $valor="")
@@ -655,8 +668,11 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 *Hace insert de la persona capturada o enrolada en la parte web
-	 *@return el resultado de la consulta
+	 * @access public
+	 *
+	 * Guarda la persona capturada mediante el formulario web 
+	 * 
+	 * @return 		result()
 	 *
 	 */
 	public function insert()
@@ -937,8 +953,18 @@ class Enrolamiento_model extends CI_Model
 		}
 		return $this->id;
 	}
-	/**
-	 *Este metodo actualiza o inserta los datos que permiten el envio de la informacion a la tarjeta por nfc
+	 /**
+	 * @access public
+	 *
+	 * Este metodo actualiza o inserta los datos que permiten el envio de la informacion a la tarjeta por nfc
+	 * 
+	 * @param		string 		$entorno      id del entorno 
+	 * @param		strin 		$persona      id de la persona a la que se le asigna una tarjeta
+	 * @param		string 		$fecha        fecha en que se genera el evento
+	 * @param		string 		$archivo      nombre del archivo que se genero
+	 * @param		boolena		$impreso      determina si el archivo fue escrita en la tarjeta o no
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function entorno_x_persona($entorno,$persona,$fecha,$archivo,$impreso)
@@ -963,8 +989,16 @@ class Enrolamiento_model extends CI_Model
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 		}	
 	}
+	
 	/**
-	 *Este metodo valida que exista un archivo para enviar a la tarjeta por nfc
+	 * @access public
+	 *
+	 * Este metodo valida que exista un archivo para enviar a la tarjeta por nfc
+	 * 
+	 * @param		strin 		$persona      id de la persona a la que se le asigna una tarjeta
+	 * @param		string 		$archivo      nombre del archivo que se genero
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function valid_card($persona,$archivo)
@@ -972,8 +1006,14 @@ class Enrolamiento_model extends CI_Model
 		$query = $this->db->get_where('tes_entorno_x_persona', array('id_persona' => $persona,"nombre_archivo"=>$archivo));
 		return ($query->num_rows() >0);		
 	}
-	/**
-	 *Este metodo extrae el folio que se anexa en el envio a la tarjeta por nfc
+	 /**
+	 * @access public
+	 *
+	 * Extrae el folio que se anexa en el envio para la tarjeta 
+	 * 
+	 * @param		strin 		$persona      id de la persona a la que se le asigna una tarjeta
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function getfolio($persona)
@@ -983,8 +1023,12 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 *Actualiza la informacion del paciente enrolado
-	 *@return el resulatdo de la consulta
+	 * @access public
+	 *
+	 * Actualiza los datos basicos del paciente
+	 *
+	 * @return 		result()
+	 *
 	 */
 	public function update_basico()
 	{
@@ -1010,7 +1054,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza el registro de umt del paciente
+	 * @access public
+	 *
+	 * Actualiza la unidad medica tratante del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_umt()
@@ -1030,7 +1078,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza el registro de direccion del paciente
+	 * @access public
+	 *
+	 * actualiza la direccion del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_direccion()
@@ -1065,7 +1117,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
+	 * @access public
+	 *
 	 * actualiza el registro civil del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_regcivil()
@@ -1086,7 +1142,11 @@ class Enrolamiento_model extends CI_Model
 			$res = $this->db->insert('cns_registro_civil', $data);
 	}
 	/**
-	 * actualiza los tutores del paciente
+	 * @access public
+	 *
+	 * Actualiza los datos del tutor del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_tutor()
@@ -1150,7 +1210,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza las alergias del paciente
+	 * @access public
+	 *
+	 * Actualiza los datos de las alergias del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_alergia()
@@ -1177,7 +1241,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza las vacunas del paciente
+	 * @access public
+	 *
+	 * Actualiza las vacunas del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_vacuna()
@@ -1206,7 +1274,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza las iras del paciente
+	 * @access public
+	 *
+	 * Actualiza el control de ira del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_ira()
@@ -1235,7 +1307,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza las edas del paciente
+	 * @access public
+	 *
+	 * Actualiza el control eda del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_eda()
@@ -1264,7 +1340,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza las consulta del paciente
+	 * @access public
+	 *
+	 * Actualiza el control consulta del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_consulta()
@@ -1293,7 +1373,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza las acciones del paciente
+	 * @access public
+	 *
+	 * Actualiza el control accion nutricional del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_accion()
@@ -1322,7 +1406,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza las nutricion del paciente
+	 * @access public
+	 *
+	 * Actualiza el control nutricional del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */	
 	public function update_nutricion()
@@ -1353,7 +1441,11 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * actualiza las afiliaciones del paciente
+	 * @access public
+	 *
+	 * Actualiza el tipo de beneficiario del paciente
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_beneficiario()
@@ -1380,12 +1472,18 @@ class Enrolamiento_model extends CI_Model
 			}
 		}
 	}
-	/**
-	 *Hace update de la tableta que este sincronizando dependiendo del resultado
-	 *se recibe el parametro $mac de tipo String que representa la tableta 
-	 *parametro $status String que recibe en ese momento la tableta
-	 *$version String version de la tableta
-	 *$fecha datetime fecha del vento
+	
+	 /**
+	 * @access public
+	 *
+	 * Hace update de la tableta que este sincronizando dependiendo del resultado
+	 * 
+	 * @param		string 		$mac         Mac de la tableta
+	 * @param		strin 		$status      nuevo status
+	 * @param		string 		$version     version de la apk de la tableta
+	 * @param		string 		$fecha       fecha del evento
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function update_status_tableta($mac,$status,$version,$fecha)
@@ -1404,10 +1502,16 @@ class Enrolamiento_model extends CI_Model
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 		}
 	}
-	/**
-	 *Este metodo retorna el ist de las personas enroladas
-	 *se recibe el parametro $keywords de tipo String que representa la busqueda
-	 *@return el resultado de la consulta 
+	 /**
+	 * @access public
+	 *
+	 * Este metodo retorna el list de las personas enroladas
+	 * 
+	 * @param		string 		$keywords    palabras claves para hacer el filtro
+	 * @param		strin 		$offset      inicio del registro
+	 * @param		string 		$row_count   numero de filas a mostrar por pagina
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function getListEnrolamiento($keywords = '', $offset = null, $row_count = null)
@@ -1441,10 +1545,14 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return;
 	}
-	/**
-	 *Devuelve el numero de filas en la tabla cns_persona
-	 *se recibe el parametro $keywords de tipo String que representa la busqueda
-	 *@return numero de filas
+	 /**
+	 * @access public
+	 *
+	 * Devuelve el numero de filas en la tabla cns_persona
+	 * 
+	 * @param		string 		$keywords      palabras clave para hacer el filtro
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function getNumRows($keywords = '')
@@ -1469,10 +1577,15 @@ class Enrolamiento_model extends CI_Model
 		}
 		return $query->num_rows;
 	}
-	/**
-	 *Hace un select de las tablas cns_persona para general el view
-	 *se recibe el parametro $id de tipo int que representa el id de la persona
-	 *@return los datos de la persona
+	
+	 /**
+	 * @access public
+	 *
+	 * Obtiene la informacion de la persona
+	 * 
+	 * @param		string 		$id      identificado de la persona
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function getById($id)
@@ -1499,7 +1612,13 @@ class Enrolamiento_model extends CI_Model
 		return;
 	}
 	/**
-	 *Este metodo obtiene informacion del registro civil del paciente
+	 * @access public
+	 *
+	 * obtiene informacion del registro civil
+	 * 
+	 * @param		string 		$id      identificador de la persona
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function getRegistro_civil($id)
@@ -1520,9 +1639,14 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 *Hace select de las alergias asociadas a una perssona
-	 *se recibe el parametro $id de tipo int que representa el id de la persona
-	 *@return result
+	 * @access public
+	 *
+	 * Obtiene las alergias asociadas a una persona
+	 * 
+	 * @param		string 		$id      identificador de la persona
+	 * @param		strin 		$order   nombre del campo para hacer el order by
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function getAlergia($id = '',$order='')
@@ -1545,12 +1669,18 @@ class Enrolamiento_model extends CI_Model
 		return;
 	}
 	
-	/**
-	 *Hace select  las afiliaciones asociadas a una persona
-	 *se recibe el parametro $id de tipo int que representa el identificado de la persona
-	 *@return result
+		/**
+	 * @access public
+	 *
+	 * Obtiene las afiliaciones asociadas a una persona
+	 * 
+	 * @param		string 		$id      identificador de la persona
+	 * @param		strin 		$order   nombre del campo para hacer el order by
+	 *
+	 * @return 		result()
 	 *
 	 */
+
 	public function getAfiliaciones($id = '',$order="")
 	{
 		$this->db->select('a.id, a.descripcion');
@@ -1570,12 +1700,20 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return;
 	}
-	/**
-	 *Hace select de los catalogos que tengan relacion con una persona para mostrarlos en el view
-	 *se recibe el parametro $catalog de tipo String que representa la tabla 
-	 *el parametro $id tipo int contiene el id de la persona  
-	 *@return result
+	 /**
+	 * @access public
+	 *
+	 * Hace select de los catalogos que tengan relacion con una persona para mostrarlos en el view
+	 * 
+	 * @param		string 		$catalog  Nombre de la tabla 
+	 * @param		string 		$id       identificador de la persona
+	 * @param		strin 		$order1   nombre del campo para hacer el order by
+	 * @param		strin 		$order2   nombre del campo para hacer el order by
+	 *
+	 * @return 		result()
+	 *
 	 */
+
 	public function get_catalog_view($catalog,$id,$order1="",$order2="")
 	{
 		$this->db->select('a.id, a.descripcion, p.fecha');
@@ -1598,9 +1736,14 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	/**
-	 *Hace select de las tabla
-	 *se recibe el parametro $id de tipo int 
-	 *@return result
+	 * @access public
+	 *
+	 * Obtiene los datos del control nutricional asociados a una persona
+	 * 
+	 * @param		string 		$id       identificador de la persona
+	 * @param		strin 		$order    nombre del campo para hacer el order by
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function get_control_nutricional($id,$order="")
@@ -1623,13 +1766,18 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	/**
-	 *Hace select de las tablas cns_x que representa a los catalogos
-	 *se recibe el parametro $catalog de tipo String que representa la tabla 
-	 *el parametro $campo tipo string contiene un campo para el where si haci se requiere
-	 *el parametro $id tipo string contiene el valor para hacer el where
-	 * y el parametro orden para incluir un ordenamiento representa un campo de la tabla
-	 *@return result
+	 /**
+	 * @access public
+	 *
+	 * Hace select de las tablas cns_x que representa a los catalogos
+	 * 
+	 * @param		string 		$catalog  Nombre de la tabla 
+	 * @param		strin 		$campo    nombre del campo para hacer el where
+	 * @param		string 		$id       valor del campo para el where
+	 * @param		strin 		$order    nombre del campo para hacer el order by
+	 *
+	 * @return 		result()
+	 *
 	 */
 	public function get_catalog($catalog,$campo="",$id="",$orden="")
 	{
@@ -1656,9 +1804,13 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 *obtiene el count de una tabla
-	 *se recibe el parametro $catalog de tipo String que representa la tabla 
-	 *@return un entero
+	 * @access public
+	 *
+	 * Obtiene el numero de resultados de una tabla
+	 * 
+	 * @param		string 		$catalog  Nombre de la tabla 	 
+	 *
+	 * @return 		count
 	 *
 	 */
 	public function get_catalog_count($catalog)
@@ -1667,12 +1819,20 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 *Hace select de las tablas que se le pasen como parametro
-	 *se recibe el parametro $catalog de tipo String que representa la tabla 
-	 *el parametro $campo1 y $campo2 tipo string son campos dentro de esa tabla para hacer el where
-	 *el parametro id1 y id2 son el valor para hacer el where
-	 *y el los parametros l1 y l2 son para hacer el limite de una consulta
-	 *@return result
+	 * @access public
+	 *
+	 * Obtiene los datos de una tabla
+	 * 
+	 * @param		string 		$catalog  Nombre de la tabla 
+	 * @param		strin 		$campo1   nombre del campo para hacer el where
+	 * @param		string 		$id1      valor del campo para el where
+	 * @param		strin 		$campo2   nombre del campo para hacer el where
+	 * @param		string 		$id2      valor del campo para el where
+	 * @param		strin 		$l1       nombre del campo para hacer el limit offset
+	 * @param		strin 		$l2       nombre del campo para hacer el limit count
+	 *
+	 * @return 		result()
+	 *
 	 */
 	public function get_catalog2($catalog,$campo1="",$id1="",$campo2="",$id2="",$l1="",$l2="")
 	{
@@ -1703,7 +1863,14 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	/**
-	 *Este metodo obtiene las notificaciones que se enviaran en la sincronizacion
+	 * @access public
+	 *
+	 * Este metodo obtiene las notificaciones que se enviaran en la sincronizacion
+	 * 
+	 * @param		string 		$id       id del arbol de segmentacion
+	 
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function get_notificacion($id)
@@ -1724,7 +1891,14 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	/**
-	 *Este metodo obtiene la perssonas que seran enviadas en la sincronizacion
+	 * @access public
+	 *
+	 * Este metodo obtiene las personas que seran enviadas en la sincronizacion
+	 * 
+	 * @param		string 		$array    arreglo con los ids de las personas que cumplen con los requisitos del envio
+	 * @param		strin 		$fecha    fecha que determina si se envia o no una persona
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function get_cns_persona($array,$fecha="")
@@ -1746,8 +1920,19 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	/**
-	 *Este metodo obtiene los controles que le corresponde a cada persona que seran incluidas en la sincronizacion
+
+	 /**
+	 * @access public
+	 *
+	 * Este metodo obtiene los controles que le corresponde a cada persona y que seran incluidas en la sincronizacion
+	 * 
+	 * @param		string 		$catalog  Nombre de la tabla 
+	 * @param		strin 		$array    ids de personas
+	 * @param		string 		$l1       ofsset para el limit
+	 * @param		strin 		$l2       count para el limit
+	 
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function get_cns_cat_persona($catalog, $array, $l1="", $l2="")
@@ -1775,8 +1960,15 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	/**
-	 *Este metodo hace el count de personas que se envian en la sincronizacion
+	 /**
+	 * @access public
+	 *
+	 * Hace el count de personas que se envian en la sincronizacion
+	 * 
+	 * @param		string 		$catalog  Nombre de la tabla 
+	 * @param		strin 		$personas personas que cumplen el requisito	 
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function get_cns_cat_persona_count($catalog,$persona)
@@ -1787,8 +1979,15 @@ class Enrolamiento_model extends CI_Model
 		$query = $this->db->get(); 
 		return $query->row()->numrows;
 	}
-	/**
-	 *Este metodo obtiene los tutores de las personas que se envian en la sincronizacion
+
+	 /**
+	 * @access public
+	 *
+	 * obtiene los tutores de las personas que se envian en la sincronizacion
+	 * 
+	 * @param		string 		$array   tutores que tienen asignado un paciente 
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function get_persona_x_tutor($array)
@@ -1807,10 +2006,12 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	/**
-	 *obtiene catalogos relevante x entorno para la sincronizacion
+	 /**
+	 * @access public
 	 *
-	 *@return result
+	 * obtiene los catalogos relevante x entorno para la sincronizacion	 
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function get_catalog_relevante()
@@ -1829,11 +2030,14 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	
-	/**
-	 *Obtiene las transacciones relevante spara la sincronizacion
+
+	 /**
+	 * @access public
 	 *
-	 *@return result
+	 * Obtiene las transacciones relevante para la sincronizacion
+	 * 
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function get_transaction_relevante()
@@ -1853,10 +2057,12 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	
-	/**
-	 *obtiene cual es la ultima version de apk de la tableta
+	 /**
+	 * @access public
 	 *
-	 *@retun result 
+	 * obtiene cual es la ultima version de apk de la tableta
+	 * 
+	 * @return 		result()
 	 *
 	 */
 	public function get_version()
@@ -1876,10 +2082,14 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 
-	/**
-	 *obtiene informacion del tutor
-	 *se recibe el parametro $curp de tipo String 
-	 *@retun result
+	 /**
+	 * @access public
+	 *
+	 * obtiene informacion del tutor
+	 * 
+	 * @param		string 		$curp     Curp del tutor
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function data_tutor($curp)
@@ -1895,10 +2105,14 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	/**
-	 *obtiene informacion del tutor para genberar el autocomplete
-	 *se recibe el parametro $keywords de tipo String para hacer la busqueda
-	 *@return result
+	 /**
+	 * @access public
+	 *
+	 * obtiene informacion del tutor para genberar el autocomplete
+	 * 
+	 * @param		string 		$keywords  palabras claves para hacer el filtro 
+	 *
+	 * @return 		result()
 	 *
 	 */
 	public function autocomplete_tutor($keywords)
@@ -1921,11 +2135,17 @@ class Enrolamiento_model extends CI_Model
 			return $query->result();
 		return null;
 	}
-	/**
-	 *valida que no se repita la curp en personas y tutor
-	 *se recibe el parametro $tabla de tipo String que representa la tabla 
-	 *el parametro $curp tipo string para el where y el id de la persona
-	 *@return result
+	 /**
+	 * @access public
+	 *
+	 * valida que no se repita la curp en personas y tutor
+	 * 
+	 * @param		string 		$curp     Curp a validar
+	 * @param		strin 		$tabla    Tabla en la que se debe hacer la validacion
+	 * @param		string 		$id       id de la persona o tutor para excluirse
+	 *
+	 * @return 		result()
+	 *
 	 */
 	public function getByCurp($curp,$tabla,$id)
 	{
@@ -1942,6 +2162,25 @@ class Enrolamiento_model extends CI_Model
 			return $query->row();
 		return;
 	}
+	/**
+	 * @access public
+	 *
+	 * Elimina los pendientes de las personas que no tengan asignado una tarjeta
+	 * 
+	 * @return 		result()
+	 *
+	 */
+	public function tes_pendientes_tarjeta_delete()
+	{
+		$query = $this->db->query("DELETE FROM tes_pendientes_tarjeta WHERE id_persona NOT IN(SELECT id_persona FROM tes_entorno_x_persona)"); 
+	
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+	}
+	
 	public function getMsgError($value = 'usr')
 	{
 		if ($value == 'log')
