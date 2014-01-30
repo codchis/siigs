@@ -28,7 +28,8 @@ class Cie10 extends CI_Controller {
         /**
 	 *Acción por default del controlador, carga la lista
 	 *de datos disponibles en el cie10 y una lista de opciones
-	 *No recibe parámetros
+         * 
+         * @param int $pag Numero de registro para el paginador
 	 *
 	 *@return void
 	 */
@@ -73,13 +74,11 @@ class Cie10 extends CI_Controller {
 		$this->template->render();
 	}
         
-                 /***
-         * Accion para agregar elementos del catalogo cie10 a los catalogos de EDA, IRA y Consultas dependiendo de los
-         * parametros pasados
-         * @param Int $id Es el id del registro en el catalogo de CIE10
-         * @param String $catalogo para determinar a que catalogo se va a agregar o quitar el registro
-         * @param Boolean $activo False para quitar del catalogo, true para agregarlo
-         * @return Boolean En caso de error, o errores de referencia, etc.
+         /***
+         * Accion para mostrar información de los catalogos IDE , ERA y Consultas
+         * 
+         * @param string $cat Nombre del catalogo a mostrar
+         * @return void
          */
         
         public function view($cat){
@@ -110,10 +109,12 @@ class Cie10 extends CI_Controller {
 
          /***
          * Accion para agregar elementos del catalogo cie10 a los catalogos de EDA, IRA y Consultas dependiendo de los
-         * parametros pasados
+         * Solo se permite su acceso por medio de peticiones AJAX
+         * 
          * @param Int $id Es el id del registro en el catalogo de CIE10
          * @param String $catalogo para determinar a que catalogo se va a agregar o quitar el registro
          * @param Boolean $activo False para quitar del catalogo, true para agregarlo
+         * 
          * @return Boolean En caso de error, o errores de referencia, etc.
          */
         
@@ -153,10 +154,12 @@ class Cie10 extends CI_Controller {
         
          /***
          * Accion para activar o desactivar elementos en los catalogos IRA EDA Consultas
-         * parametros pasados
+         * Solo se permite su acceso por medio de peticiones AJAX
+         * 
          * @param Int $id Es el id del registro en el catalogo
          * @param String $catalogo para determinar a que catalogo se va a agregar o quitar el registro
          * @param Boolean $activo False para quitar del catalogo, true para agregarlo
+         * 
          * @return Boolean En caso de error, o errores de referencia, etc.
          */
         
@@ -195,10 +198,12 @@ class Cie10 extends CI_Controller {
         }
         
         /**
-	 *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
-	 *Guarda en la tabla tmp_catalogos toda la estructura del CSV e imprime las columnas del
-	 *archivo
+	 * Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
+	 * Guarda en la tabla tmp_catalogos toda la estructura del CSV e imprime las columnas del
+	 * archivo
+         * Solo se permite su acceso por medio de peticiones AJAX
 	 *
+         * @param $_FILES[] archivocsv Variable pasada por POST con el archivo csv para cargar datos
 	 * @return void
 	 */
 	public function load()
@@ -242,12 +247,12 @@ class Cie10 extends CI_Controller {
 
 
 	/**
-	 *Acción para preparar la actualizacion de un catálogo ya existente,
-	 *recibe un string para obtener los valores del catalogo y mostrarlos
-	 *en la vista update , realiza la validacion del formulario del lado
+	 *Acción para preparar la actualización de un registro del CIE10,
+	 *recibe un id para obtener los valores del catálogo y mostrarlos
+	 *en la vista update , realiza la validación del formulario del lado
 	 *del cliente y servidor
 	 *
-	 * @param  string $nombre
+	 * @param int $id
 	 * @return void
 	 */
 	public function update($id)
@@ -319,13 +324,17 @@ class Cie10 extends CI_Controller {
 		}		
 	}
 
-                /**
-	 *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
-	 *compara los datos recibidos con los datos que contiene actualmente el catálogo, regresa como 
-	 *resultado las filas nuevas y las filas a modificar 
-	 *
-	 * @return void
-	 */
+          /**
+	  *Acción para cargar datos desde un archivo CSV, recibe el stream desde las variables PHP
+	  *compara los datos recibidos con los datos que contiene actualmente el catálogo, regresa como 
+	  *resultado las filas nuevas y las filas a modificar 
+          *
+          *Solo se permite su acceso por medio de peticiones AJAX 
+          * 
+	  * @param $_FILES[] archivocsv Variable pasada por POST con el archivo csv para cargar datos
+          * @param boolean $update Indica si se modifica la base de datos o solo una revisión de campos
+	  * @return void
+	  */
 	public function insert($update = false)
 	{
             if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))

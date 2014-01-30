@@ -130,7 +130,7 @@ if (!empty($raiz_item))
 			<table id="raizcatalogo">
 				<thead>
 					<tr>
-						<th><a href="<?php echo '/'.DIR_SIIGS.'/catalogo_x_raiz/insert/'.$raiz_item->id;?>"><input type="button" id="btnagregar" value="Agregar" class="btn btn-primary"></a></th>
+                                            <th><a href="<?php echo '/'.DIR_SIIGS.'/catalogo_x_raiz/insert/'.$raiz_item->id;?>"><button type="button" id="btnagregar" value="Agregar" class="btn btn-primary">Agregar<i class="icon-plus"></i></button></a></th>
 						<th colspan=6><h2>Catálogos de la raiz</h2></th>
 					</tr>
 					<tr>
@@ -149,16 +149,16 @@ if (!empty($raiz_item))
 							<td><?php echo $item->tabla_catalogo ?></td>
 							<td><?php echo $item->nombre_columna_llave ?></td>
 							<td><?php echo $item->nombre_columna_descripcion ?></td>
-							<td><a class="btn btn-primary" onclick="revisarCatalogo('<?php echo '/'.DIR_SIIGS.'/catalogo_x_raiz/check/'.$item->id?>'); return false;">Validar</a></td>
-							<td><a href="<?php echo '/'.DIR_SIIGS.'/catalogo_x_raiz/delete/'.$item->id;?>" class="btn btn-primary" onclick="if (!confirm('Al eliminar este catálogo de la raiz, podría causar inestabilidad al arbol de segmentación, desea continuar?')) {return false;}">Eliminar</a></td>
+							<td><a class="btn btn-primary" onclick="revisarCatalogo('<?php echo '/'.DIR_SIIGS.'/catalogo_x_raiz/check/'.$item->id?>'); return false;">Validar<i class="icon-ok-circle"></i></a></td>
+							<td><a href="<?php echo '/'.DIR_SIIGS.'/catalogo_x_raiz/delete/'.$item->id;?>" class="btn btn-primary" onclick="if (!confirm('Al eliminar este catálogo de la raiz, podría causar inestabilidad al arbol de segmentación, desea continuar?')) {return false;}">Eliminar<i class="icon-remove"></i></a></td>
 						</tr>
 					<?php endforeach ?>
 				<tr>
 					<td>
 					<?php if ($existe != true) {?>
-						<input type="button" value="Crear ASU"  class="btn btn-primary" onclick="generarAsu('<?php echo $raiz_item->id;?>');" />
+                                            <button type="button" value="Crear ASU"  class="btn btn-primary" onclick="generarAsu('<?php echo $raiz_item->id;?>');">Crear ASU<i class="icon-leaf"></i></button>
 					<?php } else{?>
-					<input type="button" value="Actualizar ASU"  class="btn btn-primary" onclick="modificarAsu('<?php echo $raiz_item->id;?>');" />
+                                            <button type="button" value="Actualizar ASU"  class="btn btn-primary" onclick="modificarAsu('<?php echo $raiz_item->id;?>');">Actualizar ASU<i class="icon-refresh"></i></button>
 					<?php }?>
 					</td>
 					<td colspan=6>
@@ -167,7 +167,7 @@ if (!empty($raiz_item))
 				</tr>				
 				<tr id="tr_json" style="visibility:hidden">
 					<td>
-					<input type="button" value="Crear JSON"  class="btn btn-primary" onclick="CrearPrimerAsu('<?php echo $raiz_item->id;?>');" />
+                                            <button type="button" value="Crear JSON"  class="btn btn-primary" onclick="CrearPrimerAsu('<?php echo $raiz_item->id;?>');">Crear JSON<i class="icon-refresh"></i></button>
 					</td>
 					<td colspan=6>
 					<div id="resultados_json"></div>
@@ -180,8 +180,8 @@ if (!empty($raiz_item))
 	<tr>
 		<td colspan=2>
 		<input type="hidden" name="id" value="<?php echo $raiz_item->id; ?>"/>
-		<input type="submit" name="submit" value="Guardar" class="btn btn-primary"  onclick="return validarFormulario('frm_insert')"/>
-		<input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/raiz/'" class="btn btn-primary" />
+                <button type="submit" name="submit" value="Guardar" class="btn btn-primary"  onclick="return validarFormulario('frm_insert')">Guardar<i class="icon-hdd"></i></button>
+                <button type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/raiz/'" class="btn btn-primary">Cancelar<i class="icon-arrow-left"></i></button>
 		<td>
 	</tr>
 </table>

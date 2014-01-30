@@ -175,7 +175,7 @@ class ControladorAccion_model extends CI_Model {
 	 * @access public
 	 * @return int
 	 * @param  int $id
-     * @param  string $textAyuda
+         * @param  string $textAyuda
 	 * @throws Exception En caso de algun error al guardar el texto de ayuda
 	 */
 	public function setHelp($id, $textAyuda)

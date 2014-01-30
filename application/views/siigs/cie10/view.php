@@ -45,6 +45,8 @@ if (!empty($datos))
 {
 ?>
 <div class="table table-striped">
+    <button type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/cie10/'" class="btn btn-primary" >Regresar<i class="icon-arrow-left"></i></button>
+    <br/><br/>
 <table>
 <thead>
 	<tr>

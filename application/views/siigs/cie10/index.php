@@ -85,11 +85,18 @@ $(document).ready(function(){
 	};
 
 	$('#btnload').click(function(){
+        
+            $('#alert').removeClass('warning');
+            $('#alert').html('');
+            $('#optcampos').html('');
+            
             var filename = $("#btncsv").val();
             var extension = filename.replace(/^.*\./, '');
             if (extension == filename || extension.toLowerCase() != 'csv')
             {
-                alert('Solo se aceptan archivos con extensión csv separado por comas');
+                $('#alert').addClass('warning');
+                $('#alert').html('Solo se aceptan archivos con extensión csv');
+                //alert('Solo se aceptan archivos con extensión csv separado por comas');
                 return false;
             }
 
@@ -168,8 +175,14 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
             <form method="post" enctype="application/x-www-form-urlencoded" id="loadcsv">
             <table>
             <tr>
-            <td><input type="file" name="archivocsv" id="btncsv" class="btn btn-primary"/></td>
+            <td>[Archivo csv separado por comas]<input type="file" name="archivocsv" id="btncsv" class="btn btn-primary"/></td>
             <td><button type="button" name="btnload" id="btnload" class="btn btn-primary">Cargar Datos<i class="icon-upload"></i></button></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                        <!--div class="info requiere" style="width:93%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div-->
+                        <div id="alert"></div>
+                </td>
             </tr>
             </table>
             </form>
@@ -192,6 +205,12 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
             <tr>
             <td>[Archivo csv separado por comas]<input type="file" name="archivocsv" class="btn btn-primary" id="btncsv"/></td>
             <td><button type="button" name="btnload" id="btnload" class="btn btn-primary">Cargar Datos<i class="icon-upload"></i></button></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                        <!--div class="info requiere" style="width:93%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div-->
+                        <div id="alert"></div>
+                </td>
             </tr>
             </table>
             </form>

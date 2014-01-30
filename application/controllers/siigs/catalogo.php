@@ -58,10 +58,11 @@ class Catalogo extends CI_Controller {
 	}
 
 	/**
-	 *Acción para visualizar de un catálogo específico, obtiene el objeto
-	 *catalogo por medio del nombre proporcionado
+	 *Acción para visualizar información de un catálogo específico, obtiene el objeto
+	 *catálogo por medio del nombre proporcionado
 	 *
-	 * @param  string $nombre Este parametro no puede ser nulo
+	 * @param  string $nombre Este parámetro no puede ser nulo
+         * @param int $pag Numero de registro para el paginador
 	 * @return void
 	 */
 	public function view($nombre, $pag = 0)
@@ -123,6 +124,7 @@ class Catalogo extends CI_Controller {
 	 *Guarda en la tabla tmp_catalogos toda la estructura del CSV e imprime las columnas del
 	 *archivo. Solo se permite su acceso por medio de peticiones AJAX
 	 *
+         * @param $_FILES[] archivocsv Variable pasada por POST con el archivo csv para cargar datos
 	 * @return void
 	 */
 	public function load()
@@ -221,6 +223,7 @@ class Catalogo extends CI_Controller {
 	 *resultado las filas nuevas y las filas a modificar.
          * Solo se permite su acceso por medio de peticiones AJAX
 	 *
+         * @param $_FILES[] archivocsv Variable pasada por POST con el archivo csv para cargar datos
 	 * @return void
 	 */
 	public function loadupdate($nombrecat , $update = false)
@@ -465,9 +468,9 @@ class Catalogo extends CI_Controller {
 	
 	/**
 	 * _array_unique_recursive
-	 * Revisa valores duplicados en arreglos que contienen arreglos
+	 * Revisa valores duplicados en arreglos multidimensionales
 	 * 
-	 * @param array $arr
+	 * @param array $arr Arreglo multidimensional
 	 */
 	public function _array_unique_recursive($arr)
 	{
@@ -478,7 +481,7 @@ class Catalogo extends CI_Controller {
 	}
 	
 	/**
-	 *Acción para preparar la insercion de nuevos catálogos , realiza la validacion
+	 *Acción para preparar la inserción de nuevos catálogos , realiza la validación
 	 *del formulario del lado del servidor y crea la estructura para el catálogo, crea
 	 *la tabla y obtiene los datos a partir de la tabla tmp_catalogo
 	 *
@@ -610,10 +613,11 @@ class Catalogo extends CI_Controller {
 	/**
 	 *Acción para preparar la actualizacion de un catálogo ya existente,
 	 *recibe un string para obtener los valores del catalogo y mostrarlos
-	 *en la vista update , realiza la validacion del formulario del lado
+	 *en la vista update , realiza la validación del formulario del lado
 	 *del cliente y servidor
 	 *
 	 * @param  string $nombre
+         * @param int $pag Numero de registro para el paginador
 	 * @return void
 	 */
 	public function update($nombre, $pag=0)
@@ -705,9 +709,10 @@ class Catalogo extends CI_Controller {
 	/**
 	 *
 	 *Acción para revisar si los tipos de datos coinciden con los datos contenidos en 
-         * la tabla temporal que fueron tomados del CSV
+         *la tabla temporal que fueron tomados del CSV
 	 *
-	 * @param  string $campo
+	 * @param  string $campo Nombre del campo a revisar
+         * @param string $type Define el tipo de dato del campo
 	 * @return void
 	 */
 	public function checkTypeData($campo,$type)
@@ -734,7 +739,7 @@ class Catalogo extends CI_Controller {
 
 	/**
 	 *
-	 *Acción para eliminar un catalogo, recibe el nombre del catalogo a eliminar
+	 *Acción para eliminar un catálogo, recibe el nombre del catalogo a eliminar
 	 *
 	 * @param  string $nombre
 	 * @return void

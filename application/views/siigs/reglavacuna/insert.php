@@ -128,11 +128,14 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
                 <a href="#" id="list_alergias" data-type="checklist" data-value="" data-title="Seleccione Alergias" class="editable editable-click">Seleccione Alergias</a>
             </td>
         </tr>
+        <tr>         
+            <td colspan="3"><input type="checkbox" name="forzar_aplicacion" id="forzar_aplicacion"> &nbsp;Forzar al periodo aplicaci&oacute;n</td>
+        </tr>
 	<tr>
 		<td colspan=2>
                     <input type="hidden" name="alergias" id="alergias" />
-                    <input type="submit" name="submit" value="Guardar" class="btn btn-primary" onclick="return validarFormulario('frm_insert')"/>
-                    <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/reglavacuna/'" class="btn btn-primary" />
+                    <button type="submit" name="submit" value="Guardar" class="btn btn-primary" onclick="return validarFormulario('frm_insert')">Guardar<i class="icon-hdd"></i></button>
+                    <button type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/reglavacuna/'" class="btn btn-primary">Cancelar<i class="icon-arrow-left"></i></button>
                 <td>
 	</tr>
 </table>

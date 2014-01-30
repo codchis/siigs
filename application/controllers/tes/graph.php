@@ -15,14 +15,23 @@ class Graph extends CI_Controller
 		parent::__construct();
 		$this->load->helper('url');
 	}
-	// array ejemplo array(array("d1"=>"[1,2]","d2"=>"[1,2]","d3"=>"[1,2]"..."dn"=>"[b,h]"))
-	// b= valor en el eje de las x h valor en el eje de las y
-	// crea grafica solicitud por url array con urlencode()
-	
-	// crea grafica pasando un array 
 	/**
-	 *Genera un objeto grafico
-	 *@return view del mapa
+	 * @access public
+	 *
+	 * Crea una grafica en el lugar que se llame
+	 * 
+	 * @param		string 		$title           Titulo de la pagina en el navegador
+	 * @param		string 		$titulo          titulo o nombre a mostrar en la vista al crear el grafico
+	 * @param		array 		$array           datos que se graficaran ver ejemplo
+	 * @param		array 		$label           datos con las etiquetas que se muestran en cada grafica
+	 * @param		array		$grafica         tipo de grafiva puede ser :time, basic, axis, bars, bars-h, stacked, horizontal ó pie 
+	 * @param		string 		$nacimiento      si se necesita mostrar fechas enviar la fecha inicial
+	 *
+	 * @return 		void
+	 *
+	 * array ejemplo array(array("d1"=>"[1,2]","d2"=>"[1,2]","d3"=>"[1,2]"..."dn"=>"[b,h]"))
+	 * b= valor en el eje de las x h valor en el eje de las y
+	 * crea grafica solicitud por url array con urlencode()
 	 *
 	 */
 	public function graph_init($title,$titulo,$array,$label,$grafica="",$nacimiento="")
@@ -70,8 +79,16 @@ class Graph extends CI_Controller
 		$this->load->view(DIR_TES.$url,$data);
 	}
 	/**
-	 *crea un objeto mapa de la api de google
-	 *@return view del mapa
+	 * @access public
+	 *
+	 * crea un objeto mapa con la ayuda de la api de google
+	 * 
+	 * @param		string 		$lugar         Especifica el lugar donde se centra el mapa
+	 * @param		int 		$zoom          Especifica el zoom de acercamiento en el mapa
+	 * @param		boolean		$rewrite       Si se desea que sea una pagina o estar enbebida en otra 0=embebido 1=pagina
+	 * @param		array 		$datos         datos a mostrar en el mapa
+	 *
+	 * @return 		void
 	 *
 	 */
 	public function map($lugar="Chiapas",$zoom=6,$rewrite=0,$datos="")

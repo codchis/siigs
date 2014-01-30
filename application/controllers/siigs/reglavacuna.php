@@ -87,7 +87,7 @@ class ReglaVacuna extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la insercion de nuevas reglas , realiza la validacion
+	 *Acción para preparar la insercion de nuevas reglas , realiza la validación
 	 *del formulario del lado cliente
 	 *
 	 *@return void
@@ -101,7 +101,7 @@ class ReglaVacuna extends CI_Controller {
 		$this->load->library('form_validation');
 
 		$data['title'] = 'Crear una nueva regla para vacuna';
-		$this->form_validation->set_rules('aplicacion_inicio', 'Inicio aplicación', 'trim|xss_clean|required|is_natural_no_zero');
+		$this->form_validation->set_rules('aplicacion_inicio', 'Inicio aplicación', 'trim|xss_clean|required|is_natural');
 		$this->form_validation->set_rules('aplicacion_fin', 'Fin aplicación', 'trim|xss_clean|required|is_natural_no_zero');
 		$this->form_validation->set_rules('id_vacuna', 'Vacuna', 'trim|xss_clean|required|is_natural_no_zero');
                 $this->form_validation->set_rules('id_via_vacuna', 'Vía Vacuna', 'trim|xss_clean|required|is_natural_no_zero');
@@ -160,7 +160,8 @@ class ReglaVacuna extends CI_Controller {
                                 $this->ReglaVacuna_model->setDosis($this->input->post('dosis'));
                                 $this->ReglaVacuna_model->setRegion($this->input->post('region'));
                                 $this->ReglaVacuna_model->setAlergias($this->input->post('alergias'));
-                                $this->ReglaVacuna_model->setEsqComp($this->input->post('esq_com'));
+                                $this->ReglaVacuna_model->setEsqComp(($this->input->post('esq_com') == false) ? false : true);
+                                $this->ReglaVacuna_model->setForzarAplicacion(($this->input->post('forzar_aplicacion') == false) ? false : true);
                                 
                                 if ($this->input->post('esq_com') == true)
                                 {
@@ -188,9 +189,9 @@ class ReglaVacuna extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la actualizacion de una regla ya existente,
+	 *Acción para preparar la actualización de una regla ya existente,
 	 *recibe un ID para obtener los valores de esa regla y mostrarlos
-	 *en la vista update , realiza la validacion del formulario del lado
+	 *en la vista update , realiza la validación del formulario del lado
 	 *del cliente
 	 *
 	 * @param  int $id
@@ -207,7 +208,7 @@ class ReglaVacuna extends CI_Controller {
 		$error = false;
 
 		$data['title'] = 'Modificar regla para vacuna';
-		$this->form_validation->set_rules('aplicacion_inicio', 'Inicio aplicación', 'trim|xss_clean|required|is_natural_no_zero');
+		$this->form_validation->set_rules('aplicacion_inicio', 'Inicio aplicación', 'trim|xss_clean|required|is_natural');
 		$this->form_validation->set_rules('aplicacion_fin', 'Fin aplicación', 'trim|xss_clean|required|is_natural_no_zero');
 		$this->form_validation->set_rules('id_vacuna', 'Vacuna', 'trim|xss_clean|required|is_natural_no_zero');
                 //$this->form_validation->set_rules('tipo_aplicacion', 'Tipo de aplicación', 'trim|xss_clean|required');
@@ -278,6 +279,7 @@ class ReglaVacuna extends CI_Controller {
                             $this->ReglaVacuna_model->setRegion($this->input->post('region'));
                             $this->ReglaVacuna_model->setAlergias($this->input->post('alergias'));
                             $this->ReglaVacuna_model->setEsqComp(($this->input->post('esq_com') == false) ? false : true);
+                            $this->ReglaVacuna_model->setForzarAplicacion(($this->input->post('forzar_aplicacion') == false) ? false : true);
 
                             if (!($this->input->post('esq_com') == false))
                             {

@@ -112,7 +112,7 @@ class Cie10_model extends CI_Model {
 		}
 	}
 
-        	/**
+      	/**
 	 *Devuelve el numero de registros
 	 *
 	 *@access  public
@@ -233,9 +233,9 @@ class Cie10_model extends CI_Model {
         
         /**
          * Accion para agregar registros del CIE10 a otros catalogos como el de EDA, IRA y Consultas
-         * @param type $id el id del registro en el catalogo cie10
-         * @param type $catalogo nombre del catalogo donde se realizara la operacion
-         * @param type $valor agregar o eliminar el registro del catalogo
+         * @param int $id el id del registro en el catalogo cie10
+         * @param string $catalogo nombre del catalogo donde se realizara la operacion
+         * @param boolean $valor agregar o eliminar el registro del catalogo
          * @return boolean como el resultado de la operación
          * @throws Exception Si ocurre algun error al consultar y modificar la base de datos
          */
@@ -283,9 +283,9 @@ class Cie10_model extends CI_Model {
         
         /**
          * Accion para activar o desactivar registros de catalogos como el de EDA, IRA y Consultas
-         * @param type $id el id del registro en el catalogo
-         * @param type $catalogo nombre del catalogo donde se realizara la operacion
-         * @param type $valor agregar o eliminar el registro del catalogo
+         * @param int $id el id del registro en el catalogo
+         * @param string $catalogo nombre del catalogo donde se realizara la operacion
+         * @param boolean $valor agregar o eliminar el registro del catalogo
          * @return boolean como el resultado de la operación
          * @throws Exception Si ocurre algun error al consultar y modificar la base de datos
          */
@@ -313,6 +313,7 @@ class Cie10_model extends CI_Model {
 	 *Devuelve los datos de un catalogo pasado como parametro
 	 *
 	 *@access  public
+         * @param string $nombrecat Nombre del catalogo 
 	 *@return  ArrayObject
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */

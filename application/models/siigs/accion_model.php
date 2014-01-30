@@ -166,7 +166,6 @@ class Accion_model extends CI_Model {
 	 *
 	 *@access  public
 	 *@return  int
-	 *@param   int $entorno , default 0 (Id del entorno)
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */
 	public function getNumRows()

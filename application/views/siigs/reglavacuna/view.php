@@ -23,6 +23,7 @@ if (!empty($regla_item))
             echo '<tr><td><strong>Orden Esq. Comp.</strong></td><td>'.$regla_item->orden_esq_com.'</td></tr>';
         
         echo '<tr><td><strong>Alergias</strong></td><td>'.$regla_item->alergias.'</td></tr>
+        <tr><td><strong>Forzar a periodo de aplicaci&oacute;n</strong></td><td>'.(($regla_item->forzar_aplicacion) ? "SI" : "NO" ).'</td></tr>
         </table></div>';
 }
 else

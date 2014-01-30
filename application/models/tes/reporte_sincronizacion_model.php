@@ -19,7 +19,16 @@ class Reporte_sincronizacion_model extends CI_Model
 	private static $CI;
 	
 	
-
+	/**
+	 * @access public
+	 *
+	 * Obtiene el resultado de una consulta
+	 * 
+	 * @param		string 		$sql       consulta slq a ejecutar
+	 *
+	 * @return 		result()
+	 *
+	 */
 	public function getListado($sql)
 	{
 
@@ -35,6 +44,17 @@ class Reporte_sincronizacion_model extends CI_Model
 		return;
 	}
 	
+	/**
+	 * @access public
+	 *
+	 * obtiene el numero de registros de una tabla o consulta
+	 * 
+	 * @param		string 		$tabla       nombre de una tabla en la base de datos
+	 * @param		string 		$sentencia   consulta sql
+	 *
+	 * @return 		num_rows()
+	 *
+	 */
 	public function getCount($tabla,$sentecia="")
 	{
 		if($sentecia!="")
@@ -44,6 +64,14 @@ class Reporte_sincronizacion_model extends CI_Model
 		return $query->num_rows();  
 	}
 	
+	/**
+	 * @access public
+	 *
+	 * obtiene la ultima version de la apk de las tabletas
+	 *
+	 * @return 		result()
+	 *
+	 */
 	public function get_version()
 	{
 		$this->db->select('host,fecha_liberacion');

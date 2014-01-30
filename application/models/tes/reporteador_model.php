@@ -355,7 +355,7 @@ class Reporteador_model extends CI_Model {
 			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
         
-		$sqlVacunasEsquemaCompleto = "SELECT v.id,v.descripcion FROM cns_regla_vacuna rv INNER JOIN cns_vacuna v ON rv.id_vacuna=v.id
+		$sqlVacunasEsquemaCompleto = "SELECT v.id,v.descripcion_corta as descripcion FROM cns_regla_vacuna rv INNER JOIN cns_vacuna v ON rv.id_vacuna=v.id
 											WHERE rv.esq_com=1 ORDER BY rv.orden_esq_com";
 		$queryVacunasEsquemaCompleto = $this->db->query($sqlVacunasEsquemaCompleto);
 		$resultVacunasEsquemaCompleto = $queryVacunasEsquemaCompleto->result();
@@ -446,7 +446,7 @@ class Reporteador_model extends CI_Model {
 			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
         
-		$sqlVacunasEsquemaCompleto = "SELECT v.id,v.descripcion FROM cns_regla_vacuna rv INNER JOIN cns_vacuna v ON rv.id_vacuna=v.id
+		$sqlVacunasEsquemaCompleto = "SELECT v.id,v.descripcion_corta as descripcion FROM cns_regla_vacuna rv INNER JOIN cns_vacuna v ON rv.id_vacuna=v.id
 											WHERE rv.esq_com=1 ORDER BY rv.orden_esq_com";
 		$queryVacunasEsquemaCompleto = $this->db->query($sqlVacunasEsquemaCompleto);
 		$resultVacunasEsquemaCompleto = $queryVacunasEsquemaCompleto->result();

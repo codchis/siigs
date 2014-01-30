@@ -15,24 +15,30 @@ class Tree extends CI_Controller
 		parent::__construct();
 		$this->load->helper('url');
 	}
-	/*
-	** Carga el arbol
-	** parametros
-	** title = <title></title>
-	** titulo= titulo del arbol
-	** seleccion tipo de seleccion 1=select. 2=multiselect. 3=multiselect Parcial (Marcan los padres del hijo seleccionado)
-	** tipo = tipo de control radio o check
-	** menu= 1,0 o TRUE,FALSE true crea un menu con trs botones marcartodos, desmarcar y alternar
-	** id= id del campo en el formulario donde se desea imprimir el valor del id del arbol
-	** text= id del campo donde deseamos mostrar el texto
-	** idarbol= id del arbol donde queremos que se empiece a dibujar el arbol defaul=1
-	** nivel= nivel en el que se desea empezar el despliegue hacia abajo
-	** omitidos= niveles omitidos es decir que no se mostraran en el arbol
-	** datos= valor en caso de edit
-	** ejemplo en views :
-	<a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(3,4,5)));?>/<?php echo urlencode(json_encode(array(4)));?>" id="fba1" class="cat">Seleccionar</a>
-	
-	Trae Estados ->Municipio
+	/**
+	 * @access public
+	 *
+	 * Crea el arbol y lo muestra en la view
+	 * 
+	 * @param		string 		$title           Titulo de la pagina en el navegador
+	 * @param		string 		$titulo          titulo o nombre a mostrar en la vista al crear el arbol
+	 * @param		int 		$seleccion       tipo de seleccion 1=select. 2=multiselect. 3=multiselect Parcial (Marcan los padres del hijo seleccionado
+	 * @param		string 		$tipo            tipo de control radio o check
+	 * @param		boolean		$menu            si se desea mostrar el menu
+	 * @param		string 		$id              id del campo oculto donde se guarda el id del elemento seleccionado
+	 * @param		string 		$text            id del campo donde se muestra la descripcion del elemento seleccionado
+	 * @param		string 		$idarbol         id del arbol donde comenzara la creacion
+	 * @param		string 		$nivel           nivel en el que se empezara a mostrar informacion
+	 * @param		string 		$omitidos        nodos que no se deben mostrar en la vista al crear el arbol
+	 * @param		string 		$seleccionable   determina si un nodo se puede o no seleccionar
+	 *
+	 * @return 		void
+	 *
+	 * ejemplo en views :
+	<a href="/<?php echo DIR_TES?>/Tree/tree/TES/Lugar de Nacimiento/1/radio/0/id/text/1/1/<?php echo urlencode(json_encode(array(2,3,4,5)));?>/<?php echo urlencode(json_encode(array(2)));?>" id="fba1" class="cat">Seleccionar</a>
+	<input type='hidden' id='id'>
+	<input type='text'   id='text'>
+	Trae Estados ->Municipio y solo deja seleccionar municipios
 	*/
 	public function create($title,$titulo,$seleccion,$tipo,$menu,$id,$text,$idarbol=1,$nivel=1,$omitidos=array(NULL),$seleccionable="")
 	{

@@ -52,9 +52,10 @@ class ArbolSegmentacion_model extends CI_Model {
 	}
         
         /**
-	 * Regresa el la información de los padres de una unidad medica en el ASU
+	 * Regresa la información de los padres de una unidad medica en el ASU
 	 *
 	 * @access public
+         * @param int $clave Clave de la unidad medica u elemento en el ASU
 	 * @return Object arreglo con padres de la um
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */
@@ -110,6 +111,11 @@ class ArbolSegmentacion_model extends CI_Model {
 	 * Regresa el objeto del arbol de segmentacion
 	 *
 	 * @access public
+         * 
+         * @param int $idarbol ID del arbol a crear
+         * @param int $nivel Nivel de segmentacion desde el cual se iniciará a desarrollar el arbol
+         * @param $nivelesocultos Array con los niveles que se deben ocultar 
+         * 
 	 * @return Object un arreglo con la estructura del arbol
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */
@@ -199,9 +205,15 @@ class ArbolSegmentacion_model extends CI_Model {
                 }
         }
 
-        /*
-         * Obtiene las unidades medicas correspondientes a un ID
+        /***
+         * 
+         * Obtiene las unidades medicas correspondientes a un ID de un elemento
          * independientemente su nivel en el ASU
+         * 
+         * @param int $id Id del elemento en el asu
+         *
+         * * @return Object un arreglo con la estructura del arbol
+	 * @throws Exception En caso de algun error al consultar la base de datos
          */
         
         public function getCluesFromId($id)
@@ -228,10 +240,12 @@ class ArbolSegmentacion_model extends CI_Model {
         
         /**
          * Accion para devolver los hijos de un elemento en el ASU a partir de su ID
-         * @param int $id
-         * @param Array int $omitidos
-         * @return Object
-         * @throws Exception
+         * 
+         * @param int $id Id del elemento en el ASU
+         * @param Array int $omitidos Array de niveles omitidos 
+         * 
+         * @return Object un arreglo con la estructura del arbol
+	 * @throws Exception En caso de algun error al consultar la base de datos
          */
         
         public function getChildrenFromId($id , $omitidos = array())
@@ -267,11 +281,16 @@ class ArbolSegmentacion_model extends CI_Model {
         
         /**
          * Accion para devolver el esquema completo del ASU a partir de un nivel especificado, niveles omitidos y elementos preseleccionados
-         * @param Int $idarbol
-         * @param Int $nivel
-         * @param Array int $omitidos
-         * @param Array int $seleccionados
-         * @return Object
+         * 
+         * @param Int $idarbol Id del arbol a crear
+         * @param Int $nivel Nivel de segmentacion desde la cual se desarrolla el arbol
+         * @param Array int $omitidos Array de niveles omitidos
+         * @param Array int $seleccionados Array de elementos seleccionados
+         * @param Array int $seleccionables Array de niveles que son seleccionables
+         * 
+         * @return Object un arreglo con la estructura del arbol
+	 * @throws Exception En caso de algun error al consultar la base de datos
+         * 
          */
                
         public function getChildrenFromLevel($idarbol, $nivel , $omitidos = array() , $seleccionados = array(), $seleccionables = array())
@@ -350,7 +369,10 @@ class ArbolSegmentacion_model extends CI_Model {
                                             $arraytemp["select"] = true;
                                     
                                     if (!$esseleccionable)
+                                    {
                                             $arraytemp["unselectable"] = true;
+                                            $arraytemp["hideCheckbox"] = true;
+                                    }
 
                                     if (!isset($resultado[$i]))
                                         $resultado[$i] = array();
@@ -446,36 +468,15 @@ class ArbolSegmentacion_model extends CI_Model {
                    // var_dump($seleccionables);
                    // echo "<br/><br/><br/>";
                     $datos[$clave]["unselectable"] = true;
+                    $datos[$clave]["hideCheckbox"] = true;
                 }
             }
             return $datos;
         }
         
-//        public function getChildrenFromId($id , $json = true)
-//        {
-//            $datos = array();
-//            $query = $this->db->query('select * from asu_arbol_segmentacion where id_padre = ' . $id);
-//            if (!$query)
-//            {
-//                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-//                    $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion";
-//                    throw new Exception(__CLASS__);
-//            }
-//            else
-//            {
-//                foreach ($query->result() as $dato) {
-//                    array_push($datos, array('valor' =>$dato->descripcion ,'clave' => $dato->id));
-//                }
-//                if ($json == false)
-//                    return $datos;
-//                else
-//                    echo json_encode($datos);
-//                
-//            }
-//        }
-
-                /**
+         /**
          * Accion para obtener la descripcion e información adicional del elemento en el ASU
+         * 
          * @param Array int $claves arreglo de valores a recuperar
          * @param Int $desglose Nivel de desglose de información requerida
          * @return Object
@@ -520,13 +521,13 @@ class ArbolSegmentacion_model extends CI_Model {
             }
         }
         
-        /**
+        /*
          * Accion para obtener la descripcion e información adicional del elemento en el ASU
          * @param Array int $claves arreglo de valores a recuperar
          * @param Int $desglose Nivel de desglose de información requerida
          * @return Object
          * @throws Exception Si ocurre error al recuperar datos de la base de datos
-         */
+         *
         
         public function isChild($claves,$desglose = 0)
         {
@@ -565,10 +566,13 @@ class ArbolSegmentacion_model extends CI_Model {
                 }
             }
         }
+         */
+        
             
          /**
          * Accion para obtener los registros de un ASU determinado en cierto nivel y con un ID de filtro
-         * @param int $idarbol
+         * 
+         * @param int $idarbol Id del arbol a buscar
          * @param Int $nivel Nivel de desglose de información requerida
          * @param Int $filtro (Opcional) filtrar por un valor determinado
          * @return Object

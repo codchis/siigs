@@ -143,11 +143,17 @@
 			};
     	    $('#loadcsv').submit(function() {
                 
+                $('#alert').removeClass('warning');
+                $('#alert').html('');
+                $('#optcampos').html('');
+                
                 var filename = $("#btncsv").val();
                 var extension = filename.replace(/^.*\./, '');
     	        if (extension == filename || extension.toLowerCase() != 'csv')
                 {
-                    alert('Solo se aceptan archivos con extensión csv');
+                    $('#alert').addClass('warning');
+                    $('#alert').html('Solo se aceptan archivos con extensión csv');
+                    //alert('Solo se aceptan archivos con extensión csv');
                     return false;
                 }
                 $(this).ajaxSubmit(options);
