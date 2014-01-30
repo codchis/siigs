@@ -21,7 +21,7 @@ define('DIR_SIIGS', 'siigs');
 define('DIR_TES', 'tes');
 define('CAT_POBLACION', 'cat_poblacion');
 define('CAT_GEOREFERENCIA', 'cat_georeferencia');
-define('CATALOGOSCSV', '"cns_vacuna","cns_nacionalidad","cns_accion_nutricional","cns_afiliacion","cns_operadora_celular","cns_alergia","cns_tipo_sanguineo","cns_altura_x_edad","cns_peso_x_edad","cns_imc_x_edad","'.CAT_POBLACION.'","'.CAT_GEOREFERENCIA.'"');
+define('CATALOGOSCSV', '"cns_vacuna","cns_nacionalidad","cns_accion_nutricional","cns_afiliacion","cns_operadora_celular","cns_alergia","cns_tipo_sanguineo","cns_altura_x_edad","cns_peso_x_edad","cns_imc_x_edad","cns_tratamiento","'.CAT_POBLACION.'","'.CAT_GEOREFERENCIA.'"');
 define('USERNAME', 'username');
 define('USER_LOGGED', 'user_id');
 define('GROUP_ID', 'group_id');

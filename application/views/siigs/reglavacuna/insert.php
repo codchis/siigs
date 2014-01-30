@@ -128,6 +128,9 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
                 <a href="#" id="list_alergias" data-type="checklist" data-value="" data-title="Seleccione Alergias" class="editable editable-click">Seleccione Alergias</a>
             </td>
         </tr>
+        <tr>         
+            <td colspan="3"><input type="checkbox" name="forzar_aplicacion" id="forzar_aplicacion"> &nbsp;Forzar al periodo aplicaci&oacute;n</td>
+        </tr>
 	<tr>
 		<td colspan=2>
                     <input type="hidden" name="alergias" id="alergias" />
