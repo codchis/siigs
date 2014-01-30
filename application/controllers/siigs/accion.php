@@ -28,7 +28,7 @@ class Accion extends CI_Controller {
 	/**
 	 *Acción por default del controlador, carga la lista
 	 *de acciones disponibles y una lista de opciones
-	 *No recibe parámetros
+	 *@param int $pag Numero de registro para el paginador
 	 *
 	 *@return void
 	 */
@@ -74,8 +74,8 @@ class Accion extends CI_Controller {
 	}
 
 	/**
-	 *Acción para visualizar de una accion específica, obtiene el objeto
-	 *accion por medio del id proporcionado.
+	 *Acción para visualizar información de una acción específica, obtiene el objeto
+	 *acción por medio del id proporcionado.
 	 *
 	 * @param  int $id Este parametro no puede ser nulo
 	 * @return void
@@ -104,7 +104,7 @@ class Accion extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la insercion de nuevas acciones , realiza la validacion
+	 *Acción para preparar la inserción de nuevas acciones , realiza la validación
 	 *del formulario del lado cliente
 	 *
 	 *@return void
@@ -159,12 +159,12 @@ class Accion extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la actualizacion de una accion ya existente,
-	 *recibe un ID para obtener los valores de esa accion y mostrarlos
-	 *en la vista update , realiza la validacion del formulario del lado
+	 *Acción para preparar la actualización de una acción ya existente,
+	 *recibe un ID para obtener los valores de esa acción y mostrarlos
+	 *en la vista update , realiza la validación del formulario del lado
 	 *del cliente
 	 *
-	 * @param  int $id
+	 * @param  int $id Este parámetro no puede ser nulo
 	 * @return void
 	 */
 	public function update($id)
@@ -238,9 +238,9 @@ class Accion extends CI_Controller {
 
 	/**
 	 *
-	 *Acción para eliminar una accion, recibe el id de la accion a eliminar
+	 *Acción para eliminar una acción, recibe el id de la acción a eliminar
 	 *
-	 * @param  int $id
+	 * @param  int $id Este parámetro no puede ser nulo
 	 * @return void
 	 */
 	public function delete($id)

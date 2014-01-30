@@ -27,7 +27,7 @@ class Catalogo_x_raiz extends CI_Controller {
 	}
 
 	/**
-	 *Acción para visualizar de una raiz_x_catalogo específica, obtiene el objeto
+	 *Acción para visualizar información de una raiz_x_catalogo específica, obtiene el objeto
 	 *raiz_x_catalogo por medio del id proporcionado.
 	 *
 	 * @param  int $id Este parametro no puede ser nulo
@@ -55,7 +55,7 @@ class Catalogo_x_raiz extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la insercion de nuevas raices para catálogos , realiza la validacion
+	 *Acción para preparar la inserción de nuevas raices para catálogos , realiza la validación
 	 *del formulario del lado cliente
 	 *
 	 *@return void
@@ -163,9 +163,9 @@ class Catalogo_x_raiz extends CI_Controller {
 	}
 
         /**
-         * Accion que sirve para revisar inconsistencias en el arbol de segmentacion
-         * Recibe como parametro el catalogo x raiz y revisa que todos los registros tengan
-         * un correspondiente en el catalogo padre.
+         * Acción que sirve para revisar inconsistencias en el arbol de segmentacion
+         * Recibe como parámetro el catálogo x raiz y revisa que todos los registros tengan
+         * un correspondiente en el catálogo padre.
          * Solo se permite su acceso por medio de peticiones AJAX
          * 
          * @param type $id Id del catalogo_x_raiz
@@ -218,7 +218,7 @@ class Catalogo_x_raiz extends CI_Controller {
 	
 	/**
 	 *
-	 *Acción para eliminar un catalogo en el arbol, recibe el id del catalogo en la raiz a eliminar
+	 *Acción para eliminar un catálogo en el arbol, recibe el id del catálogo en la raiz a eliminar
 	 *
 	 * @param  int $id
 	 * @return void

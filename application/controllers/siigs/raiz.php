@@ -37,7 +37,7 @@ class Raiz extends CI_Controller {
                 echo "false";
             //echo json_encode($this->ArbolSegmentacion_model->getCluesFromId(781));
         }
-//       
+        
 	/**
 	 *Acción por default del controlador, carga la lista
 	 *de Raices disponibles y una lista de opciones
@@ -112,7 +112,7 @@ class Raiz extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la insercion de nuevas acciones , realiza la validacion
+	 *Acción para preparar la inserción de nuevas acciones , realiza la validación
 	 *del formulario del lado cliente
 	 *
 	 *@return void
@@ -163,9 +163,9 @@ class Raiz extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la actualizacion de una raiz ya existente,
+	 *Acción para preparar la actualización de una raiz ya existente,
 	 *recibe un ID para obtener los valores de esa raiz y mostrarlos
-	 *en la vista update , realiza la validacion del formulario del lado
+	 *en la vista update , realiza la validación del formulario del lado
 	 *del cliente
 	 *
 	 * @param  int $id
@@ -559,8 +559,10 @@ class Raiz extends CI_Controller {
         /**
          * Accion para regresar la descripción e informacion adicional de un arreglo 
          * de ID's desde el arbol de segmentacion
+         * 
          * @param Array $claves Este parametro es pasado por POST y es la lista de valores a consultar
          * @param Int $desglose parametro pasado por POST y determina si se requiere información adicional
+         * 
          * @return Object JSON con la información requerida
          * @return 'Acceso denegado si la petición no es de tipo AJAX'
          * **/
@@ -591,11 +593,13 @@ class Raiz extends CI_Controller {
   
          /**
          * Accion para regresar el arbol de segmentacion determinado, el objeto regresado contiene
-          * estructura de arbol y es consumida solamente por peticiones AJAX
+         * estructura de arbol y es consumida solamente por peticiones AJAX
+         * 
          * @param Int $idarbol parametro pasado por POST y determina el arbol a consultar
          * @param Int $nivel parametro pasado por POST y determina el nivel superior a desglosar en el arbol
          * @param Array $claves Este parametro es pasado por POST y es la lista de niveles a omitir en el arbol
          * @param Array $claves Este parametro es pasado por POST y es la lista de valores a preseleccionar en el arbol
+         * 
          * @return Object JSON con la información requerida
          * @return 'Acceso denegado si la petición no es de tipo AJAX'
          * **/
@@ -635,9 +639,11 @@ class Raiz extends CI_Controller {
               
         /**
          * Accion para obtener los registros de un ASU determinado en cierto nivel y con un ID de filtro
+         * 
          * @param int $idarbol
          * @param Int $nivel Nivel de desglose de información requerida
          * @param Int $filtro (Opcional) filtrar por un valor determinado
+         * 
          * @return Object
          * @throws Exception Si ocurre error al recuperar datos de la base de datos
          */

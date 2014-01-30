@@ -81,11 +81,18 @@ $(document).ready(function(){
 
 	$('#btnload').click(function(){
 
+
+            $('#alert').removeClass('warning');
+            $('#alert').html('');
+            $('#optcampos').html('');
+                
             var filename = $("#btncsv").val();
             var extension = filename.replace(/^.*\./, '');
             if (extension == filename || extension.toLowerCase() != 'csv')
             {
-                alert('Solo se aceptan archivos con extensión csv');
+                $('#alert').addClass('warning');
+                $('#alert').html('Solo se aceptan archivos con extensión csv');
+                //alert('Solo se aceptan archivos con extensión csv');
                 return false;
             }
             subirupdate(false);
@@ -132,6 +139,8 @@ if (!empty($catalogo_item))
 </tr>
 <tr>
     <td colspan="2">
+    <!--div class="info requiere" style="width:93%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div-->
+    <div id="alert"></div>
         <!--input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php //echo site_url().DIR_SIIGS; ?>/catalogocsv'" class="btn btn-primary" /-->
     </td>
 </tr>

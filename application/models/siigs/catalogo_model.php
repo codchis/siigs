@@ -179,6 +179,7 @@ class Catalogo_model extends CI_Model {
 	 *Devuelve los datos de un catalogo pasado como parametro
 	 *
 	 *@access  public
+         * @param string $nombrecat Nombre del catalogo 
 	 *@return  ArrayObject
 	 * @throws Exception En caso de algun error al consultar la base de datos
 	 */

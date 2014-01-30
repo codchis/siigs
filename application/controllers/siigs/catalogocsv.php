@@ -58,10 +58,11 @@ class CatalogoCsv extends CI_Controller {
 	}
 
 	/**
-	 *Acción para visualizar de un catálogo específico, obtiene el objeto
+	 *Acción para visualizar información de un catálogo específico, obtiene el objeto
 	 *catalogocsv por medio del nombre proporcionado
 	 *
 	 * @param  string $nombre Este parametro no puede ser nulo
+         * @param int $pag Numero de registro para el paginador
 	 * @return void
 	 */
 	public function view($nombre, $pag = 0)
@@ -110,6 +111,9 @@ class CatalogoCsv extends CI_Controller {
 	 *resultado las filas nuevas y las filas a modificar 
          *Solo se permite su acceso por medio de peticiones AJAX
 	 *
+         * @param $_FILES[] archivocsv Variable pasada por POST con el archivo csv para cargar datos
+         * @param string $nombrecat Nombre del catalogo a modificarle datos
+         * @param boolean $update Define si se actualizará la DB o solo se hará la primera revisión de datos
 	 * @return void
 	 */
 	public function loadupdate($nombrecat , $update = false)
@@ -345,10 +349,12 @@ class CatalogoCsv extends CI_Controller {
 	
          /***
          * Accion para activar o desactivar elementos en los catalogos indicados en el parametro
-         * parametros pasados
+         * Solo se permite su acceso por medio de peticiones AJAX
+         * 
          * @param Int $id Es el id del registro en el catalogo
          * @param String $catalogo para determinar a que catalogo se va a agregar o quitar el registro
          * @param Boolean $activo False para quitar del catalogo, true para agregarlo
+         * 
          * @return Boolean En caso de error, o errores de referencia, etc.
          */
         
@@ -392,7 +398,8 @@ class CatalogoCsv extends CI_Controller {
 	 *en la vista update , realiza la validacion del formulario del lado
 	 *del cliente y servidor
 	 *
-	 * @param  string $nombre
+	 * @param string $nombre
+         * @param int $pag Numero de registro para el paginador
 	 * @return void
 	 */
 	public function update($nombre, $pag = 0)

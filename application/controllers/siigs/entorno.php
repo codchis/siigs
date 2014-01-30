@@ -86,7 +86,7 @@ class Entorno extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la insercion de nuevos entornos , realiza la validacion
+	 *Acción para preparar la inserción de nuevos entornos , realiza la validación
 	 *del formulario del lado cliente y del lado servidor para evitar entornos duplicados
 	 *
 	 *@return void
@@ -197,9 +197,9 @@ class Entorno extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la actualizacion de un entorno ya existente,
+	 *Acción para preparar la actualización de un entorno ya existente,
 	 *recibe un ID para obtener los valores de ese entorno y mostrarlos
-	 *en la vista update , realiza la validacion del formulario del lado
+	 *en la vista update , realiza la validación del formulario del lado
 	 *del cliente y del servidor para evitar datos duplicados
 	 *
 	 * @param  int $id

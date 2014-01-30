@@ -30,8 +30,8 @@ class Controlador extends CI_Controller {
 	 *de controladores disponibles y una lista de opciones
 	 *Recibe un parametro en caso de filtrado por entornos
 	 *
-	 *@param int $id (Id del entorno)
-	 *@return void
+	 * @param int $pag Numero de registro para el paginador
+	 * @return void
 	 */
 	public function index($pag = 0)
 	{
@@ -100,7 +100,7 @@ class Controlador extends CI_Controller {
 	}
 
 	/**
-	 *Acción para visualizar de un controlador específico, obtiene el objeto
+	 *Acción para visualizar información de un controlador específico, obtiene el objeto
 	 *controlador por medio del id proporcionado.
 	 *
 	 * @param  int $id Este parametro no puede ser nulo
@@ -194,9 +194,9 @@ class Controlador extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la actualizacion de un controlador ya existente,
+	 *Acción para preparar la actualización de un controlador ya existente,
 	 *recibe un ID para obtener los valores de ese controlador y mostrarlos
-	 *en la vista update , realiza la validacion del formulario del lado
+	 *en la vista update , realiza la validación del formulario del lado
 	 *del cliente
 	 *
 	 * @param  int $id
@@ -290,7 +290,7 @@ class Controlador extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la actualizacion de acciones asignadas a un controlador,
+	 *Acción para preparar la actualización de acciones asignadas a un controlador,
 	 *recibe un ID para obtener las acciones asignadas a ese controlador y mostrarlos
 	 *en la vista update
 	 *
@@ -414,11 +414,11 @@ class Controlador extends CI_Controller {
 	}
     
     /**
-	 * Establece el texto de ayuda para el controlador accion
-	 *
-	 * @param  int $id_controlador_accion
-	 * @return void
-	 */
+    * Establece el texto de ayuda para el controlador accion
+    *
+    * @param  int $id_controlador_accion
+    * @return void
+    */
     public function help($idControladorAccion) 
     {
         $data['id_controlador_accion'] = $idControladorAccion;

@@ -87,7 +87,7 @@ class ReglaVacuna extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la insercion de nuevas reglas , realiza la validacion
+	 *Acción para preparar la insercion de nuevas reglas , realiza la validación
 	 *del formulario del lado cliente
 	 *
 	 *@return void
@@ -188,9 +188,9 @@ class ReglaVacuna extends CI_Controller {
 	}
 
 	/**
-	 *Acción para preparar la actualizacion de una regla ya existente,
+	 *Acción para preparar la actualización de una regla ya existente,
 	 *recibe un ID para obtener los valores de esa regla y mostrarlos
-	 *en la vista update , realiza la validacion del formulario del lado
+	 *en la vista update , realiza la validación del formulario del lado
 	 *del cliente
 	 *
 	 * @param  int $id
