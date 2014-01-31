@@ -44,9 +44,9 @@ class Reporteador extends CI_Controller {
 			$data['clsResult'] = $this->session->flashdata('clsResult');
 			$data['estados'] = (array)$this->ArbolSegmentacion_model->getDataKeyValue(1, 1);
 
-			$array[0] = (array("atributo"=>"Cobertura por Tipo de Biológico","valor"=>"","lista"=>"0"));
-			$array[1] = (array("atributo"=>"Concentrado de Actividades","valor"=>"","lista"=>"1"));
-			$array[2] = (array("atributo"=>"Seguimiento RV-1 y RV-5 a menores de 1 año","valor"=>"","lista"=>"2"));
+			$array[0] = (array("atributo"=>"Cobertura y Concentrado de Actividades por Tipo de Biológico","valor"=>"","lista"=>"0"));
+			//$array[1] = (array("atributo"=>"Concentrado de Actividades","valor"=>"","lista"=>"1"));
+			//$array[2] = (array("atributo"=>"Seguimiento RV-1 y RV-5 a menores de 1 año","valor"=>"","lista"=>"2"));
 			$array[3] = (array("atributo"=>"Censo Nominal","valor"=>"","lista"=>"3"));
 			$array[4] = (array("atributo"=>"Esquemas Incompletos","valor"=>"","lista"=>"4"));
 			$data['datos']=$array;
@@ -57,7 +57,6 @@ class Reporteador extends CI_Controller {
 		}
  		$this->template->write_view('content',DIR_TES.'/reporteador/index', $data);
  		$this->template->render();
-
 	}
 	
     /**
@@ -88,49 +87,82 @@ class Reporteador extends CI_Controller {
                 $this->load->helper('formatFecha');
                 $this->load->model(DIR_TES.'/Reporte_cobertura_biologico');
 				$array = $this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
+                $vacunas = $this->Reporteador_model->getVacunas();
+                $grupo = $this->Reporteador_model->getGrupoVacunas();
+                
+                $filaTitulosGrupos = '';
+                $filaVacunas = '';
+                $contGrupos = 0;
+                $contVacunas = 0;
+                
+                foreach ($grupo as $gru) {
+                    $filaTitulosGrupos .= '<th colspan="'.($grupo->total+1).'">'.$grupo->grupo.'</th>';
+                    $contGrupos++;
+                }
+                
+                foreach ($vacunas as $vac) {
+                    $contVacunas++;
+                    $grupoVacuna = '';
+                    
+                    $filaVacunas = '<th>'.$vac->descripcion_corta.'</th>';
+                    
+                    if($grupoVacuna != $vac->grupo) {
+                        
+                    }
+                    
+                    $grupoVacuna = $vac->grupo;
+                }
+                
                 $data['headTable'] = '<thead>
                         <tr>
                             <th rowspan="3">Grupo de edad</th>
                             <th colspan="3">Población</th>
-                            <th colspan="14">Total de esquemas completos por biológico</th>
+                            <th colspan="'.($contGrupos+$contVacunas).'">Biológico</th>
                             <th rowspan="2" colspan="3">Esquemas completos</th>
                         </tr>
                         <tr>
                             <th rowspan="2">Oficial</th>
                             <th rowspan="2">Nominal</th>
                             <th rowspan="2">% Conc.</th>
-                            <th colspan="2">BCG</th>
-                            <th colspan="2">Antihepatitis B</th>
-                            <th colspan="2">DPaT + VIP + Hib</th>
-                            <th colspan="2">Antineumococica</th>
-                            <th colspan="2">Antirotavirus</th>
-                            <th colspan="2">Tripe viral SRP</th>
-                            <th colspan="2">DPT</th>
+                            '.$filaTitulosGrupos.'
                         </tr>
                         <tr>
                             <th>Total</th>
-                            <th>% Cob.</th>
+                            <th>%Cob.</th>
+                            <th>1a</th>
+                            <th>2a</th>
+                            <th>3a</th>
                             <th>Total</th>
-                            <th>% Cob.</th>
+                            <th>%Cob.</th>
+                            <th>1a</th>
+                            <th>2a</th>
+                            <th>3a</th>
+                            <th>4a</th>
                             <th>Total</th>
-                            <th>% Cob.</th>
+                            <th>%Cob.</th>
+                            <th>1a</th>
+                            <th>2a</th>
+                            <th>3a</th>
                             <th>Total</th>
-                            <th>% Cob.</th>
+                            <th>%Cob.</th>
+                            <th>1a</th>
+                            <th>2a</th>
+                            <th>3a</th>
                             <th>Total</th>
-                            <th>% Cob.</th>
+                            <th>%Cob.</th>
                             <th>Total</th>
-                            <th>% Cob.</th>
+                            <th>%Cob.</th>
                             <th>Total</th>
-                            <th>% Cob.</th>
+                            <th>%Cob.</th>
                             <th>Total</th>
-                            <th>% Of.</th>
-                            <th>% Nom.</th>
+                            <th>%Of.</th>
+                            <th>%Nom.</th>
                         </tr></thead>';
             }
 			if($op==1)
 				$array=$this->Reporteador_model->getConcentradoActividades($nivel, $id, $fecha);
-			if($op==2)
-				$array=$this->Reporteador_model->getSeguimientoRV1RV5($nivel, $id, $fecha);
+			/*if($op==2)
+				$array=$this->Reporteador_model->getSeguimientoRV1RV5($nivel, $id, $fecha);*/
 			if($op==3){
 				$this->load->model(DIR_TES.'/Reporte_censo_nominal');
 				$array = $this->Reporteador_model->getCensoNominal($nivel, $id, $th);

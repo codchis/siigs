@@ -1,5 +1,5 @@
 <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-<script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>	  
+<script src="/resources/ui/jquery-ui-1.8.17.custom.js" type="text/javascript"></script>
 <script type="text/javascript">
 DIR_SIIGS = '<?php echo DIR_SIIGS; ?>';
 
@@ -67,8 +67,8 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
         <p><input type="hidden" name="filtrar" value="true" />
         Usuario:
         <?php  if(isset($usuarios)) echo form_dropdown('usuario', $usuarios); ?>
-        Desde: <input type="text" name="fechaIni" id="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" style="width: 90px;" />
-        Hasta: <input type="text" name="fechaFin" id="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" style="width: 90px;" /> 
+        Desde: <input type="text" name="fechaIni" id="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" style="width: 90px;" placeholder="DD-MM-YYYY" />
+        Hasta: <input type="text" name="fechaFin" id="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" style="width: 90px;" placeholder="DD-MM-YYYY"/> 
                <input type="button" value="Limpiar Fechas" id="limpiaFecha" class="btn btn-mini btn-primary" />
         </p>
         <p>Entorno:
@@ -118,7 +118,7 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
                     <td>'.htmlentities($fila->entorno).'</td>
                     <td>'.htmlentities($fila->controlador).'</td>
                     <td>'.htmlentities($fila->accion).'</td>';
-                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles <i class="icon-eye-open"></i></a></td>';
+                    if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_SIIGS.'/bitacora/view/'.$fila->id.'" class="btn btn-small btn-primary btn-icon">Detalles <i class="icon-eye-open"></i></a></td>';
                 echo '</tr>';
             }
         } else {

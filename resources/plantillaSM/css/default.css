@@ -990,3 +990,8 @@ width: 100% ;
 .btn-primary [class^="icon-"], .btn-small [class*=" icon-"] {
     margin-left: 5px;
 }
+
+.errorInput {
+    background: #FEE !important;
+    border-color: #C00 !important;
+}

@@ -1,8 +1,9 @@
 var objFecha = new Date();
 
 var optionsFecha = {
-    changeMonth: true,
-    changeYear: true,
+    changeMonth: false,
+    changeYear: false,
+    navigationAsDateFormat: true,
     duration: "fast",
     dateFormat: 'dd-mm-yy',
     constrainInput: true,
@@ -18,7 +19,20 @@ var optionsFecha = {
     monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
     dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
     dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa'],
+    beforeShow: function(dateText, inst) {
+        $('#'+inst.id).mask("99-99-9999");
+        $('#'+inst.id).removeClass('errorInput');
+    },
+    onClose: function(dateText, inst) {
+        if(dateText != '__-__-____' && dateText != '') {
+            if(!isDate(dateText)) {
+                $('#'+inst.id).addClass('errorInput');
+            }
+        }
+    },
 };
+
+
 
 $(document).ready(function() {
     $("#ayuda")
@@ -39,7 +53,17 @@ $(document).ready(function() {
 });
 
 function showAlerta(parametros) {
+    if(typeof(parametros.alert) == 'undefined' || parametros.alert == null){
+        if($('#alert').length == 0) {
+            $('.contenido').prepend('<div id="alert" class="warning" style="display: none;"></div>');
+        }
+    }
+    
     alert = (parametros.alert) ? parametros.alert : '#alert';
-    $("html,body").animate({ scrollTop: $(alert).offset().top+50}, 1000 );
+    $("html,body").animate({ scrollTop: $(alert).offset().top}, 1000 );
+    
+    if(!$(alert).hasClass('warning'))
+        $(alert).addClass('warning');
+    
     $(alert).html(parametros.mensaje).fadeIn(2000, function(){ setTimeout(function(){ $(alert).fadeOut(2000); }, 1000); });
 }

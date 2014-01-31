@@ -29,6 +29,8 @@
     <script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
     <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/> 
+    <script src="/resources/js/jquery.maskedinput.min.js" type="text/javascript"></script>
+    <script src="/resources/js/valid.date.js" type="text/javascript"></script>
     
     <?= $js ?>
 </head>
