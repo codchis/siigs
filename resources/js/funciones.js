@@ -22,11 +22,15 @@ var optionsFecha = {
     beforeShow: function(dateText, inst) {
         $('#'+inst.id).mask("99-99-9999");
         $('#'+inst.id).removeClass('errorInput');
+        $('#alert').html('');
     },
     onClose: function(dateText, inst) {
         if(dateText != '__-__-____' && dateText != '') {
             if(!isDate(dateText)) {
                 $('#'+inst.id).addClass('errorInput');
+            } else {
+                $('#alert').html('');
+                $('#'+inst.id).removeClass('errorInput');
             }
         }
         
