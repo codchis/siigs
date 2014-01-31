@@ -29,10 +29,17 @@ var optionsFecha = {
                 $('#'+inst.id).addClass('errorInput');
             }
         }
+        
+        $('#'+inst.id).closest("form").submit(function(event){
+            if( $(this).find('input.errorInput').length != 0) {
+                showAlerta({mensaje: 'La fecha es incorrecta'});
+                event.preventDefault();
+                return false;
+            }
+                
+        });
     },
 };
-
-
 
 $(document).ready(function() {
     $("#ayuda")
