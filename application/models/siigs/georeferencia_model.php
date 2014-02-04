@@ -82,26 +82,25 @@ class Georeferencia_model extends CI_Model
     public function process()
     {
         $result = false;
-        $sql = 'INSERT INTO 
+        $sql = 'REPLACE INTO 
                     asu_georeferencia (id_asu, lat_dec, lon_dec, altitud)
                 SELECT 
-                    (SELECT b.id 
-                    FROM cat_localidad a 
-                    JOIN 
-                        asu_arbol_segmentacion b 
-                    ON  a.id = b.id_tabla_original AND 
-                        b.grado_segmentacion = 4 
-                    WHERE 
-                        a.id_estado = cat_georeferencia.id_estado AND 
-                        a.id_municipio = cat_georeferencia.id_municipio AND 
-                        a.id_localidad = cat_georeferencia.id_localidad) AS id_asu,
+                    b.id AS id_asu,
                     cat_georeferencia.lat_dec, 
                     cat_georeferencia.lon_dec, 
                     cat_georeferencia.altitud
                 FROM 
+                    cat_localidad a 
+                JOIN 
+                    asu_arbol_segmentacion b 
+                ON  a.id = b.id_tabla_original AND 
+                    b.grado_segmentacion = 4 
+                JOIN
                     cat_georeferencia
-                HAVING 
-                    id_asu IS NOT NULL';
+                ON
+                    a.id_estado = cat_georeferencia.id_estado AND 
+                    a.id_municipio = cat_georeferencia.id_municipio AND 
+                    a.id_localidad = cat_georeferencia.id_localidad';
 
         $result = $this->db->query($sql);
 
