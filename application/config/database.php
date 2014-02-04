@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '192.168.3.201';
-$db['default']['username'] = 'siigs';
-$db['default']['password'] = 'Alumno';
-$db['default']['database'] = 'siigstest';
+$db['default']['hostname'] = '192.168.3.202';
+$db['default']['username'] = 'basificador';
+$db['default']['password'] = '5h1n1g4m1';
+$db['default']['database'] = 'siigs';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
