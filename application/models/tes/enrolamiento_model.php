@@ -66,14 +66,17 @@ class Enrolamiento_model extends CI_Model
 	// IRA
 	private $ira= array();
 	private $fira= array();
+	private $tira= array();
 	
 	// EDA
 	private $eda= array();
 	private $feda= array();
+	private $teda= array();
 	
 	// Consulta
 	private $consulta= array();
 	private $fconsulta= array();
+	private $tconsulta= array();
 	
 	// Accion nutricional
 	private $accion_nutricional= array();
@@ -479,6 +482,16 @@ class Enrolamiento_model extends CI_Model
 		$this->fira = $value;
 	}
 	
+	public function gettira()
+	{
+	    return $this->tira;
+	}
+
+	public function settira($value) 
+	{
+		$this->tira = $value;
+	}
+	
 	public function geteda()
 	{
 	    return $this->eda;
@@ -499,6 +512,16 @@ class Enrolamiento_model extends CI_Model
 		$this->feda = $value;
 	}
 	
+	public function getteda()
+	{
+	    return $this->teda;
+	}
+
+	public function setteda($value) 
+	{
+		$this->teda = $value;
+	}
+	
 	public function getconsulta()
 	{
 	    return $this->consulta;
@@ -517,6 +540,16 @@ class Enrolamiento_model extends CI_Model
 	public function setfconsulta($value) 
 	{
 		$this->fconsulta = $value;
+	}
+	
+	public function gettconsulta()
+	{
+	    return $this->tconsulta;
+	}
+
+	public function settconsulta($value) 
+	{
+		$this->tconsulta = $value;
 	}
 	
 	public function getaccion_nutricional()
@@ -827,12 +860,16 @@ class Enrolamiento_model extends CI_Model
 			
 			for($i=0;$i<sizeof($this->ira);$i++)
 			{
+				$t=$this->tira[$i];
+				if($t=="")$t=1;
 				$data3 = array(
 					// ira
 					'id_persona' => $this->id,
 					'id_ira' => $this->ira[$i],
 					'fecha' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
 					'id_asu_um' => $id_asu_um,
+					'id_tratamiento' => $t,
+					'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
 					
 				);
 				if($this->ira[$i]!="")
@@ -848,12 +885,16 @@ class Enrolamiento_model extends CI_Model
 			
 			for($i=0;$i<sizeof($this->eda);$i++)
 			{
+				$t=$this->teda[$i];
+				if($t=="")$t=1;
 				$data4 = array(
 					// eda
 					'id_persona' => $this->id,
 					'id_eda' => $this->eda[$i],
 					'fecha' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
 					'id_asu_um' => $id_asu_um,
+					'id_tratamiento' => $t,
+					'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
 					
 				);
 				if($this->eda[$i]!="")
@@ -869,12 +910,16 @@ class Enrolamiento_model extends CI_Model
 			
 			for($i=0;$i<sizeof($this->consulta);$i++)
 			{
+				$t=$this->tconsulta[$i];
+				if($t=="")$t=1;
 				$data5 = array(
 					// consulta
 					'id_persona' => $this->id,
 					'id_consulta' => $this->consulta[$i],
 					'fecha' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
 					'id_asu_um' => $id_asu_um,
+					'id_tratamiento' => $t,
+					'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
 					
 				);
 				if($this->consulta[$i]!="")
@@ -1287,12 +1332,16 @@ class Enrolamiento_model extends CI_Model
 		if ($this->db->delete('cns_control_ira', array('id_persona' => $this->id)))
 		for($i=0;$i<sizeof($this->ira);$i++)
 		{
+			$t=$this->tira[$i];
+			if($t=="")$t=1;
 			$data3 = array(
 				// ira
 				'id_persona' => $this->id,
 				'id_ira' => $this->ira[$i],
 				'fecha' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
 				'id_asu_um' => $id_asu_um,
+				'id_tratamiento' => $t,
+				'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
 				
 			);
 			if($this->ira[$i]!="")
@@ -1320,12 +1369,16 @@ class Enrolamiento_model extends CI_Model
 		if ($this->db->delete('cns_control_eda', array('id_persona' => $this->id)))
 		for($i=0;$i<sizeof($this->eda);$i++)
 		{
+			$t=$this->teda[$i];
+			if($t=="")$t=1;
 			$data4 = array(
 				// eda
 				'id_persona' => $this->id,
 				'id_eda' => $this->eda[$i],
 				'fecha' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
 				'id_asu_um' => $id_asu_um,
+				'id_tratamiento' => $t,
+				'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
 				
 			);
 			if($this->eda[$i]!="")
@@ -1353,12 +1406,16 @@ class Enrolamiento_model extends CI_Model
 		if ($this->db->delete('cns_control_consulta', array('id_persona' => $this->id)))
 		for($i=0;$i<sizeof($this->consulta);$i++)
 		{
+			$t=$this->tconsulta[$i];
+			if($t=="")$t=1;
 			$data5 = array(
 				// consulta
 				'id_persona' => $this->id,
 				'id_consulta' => $this->consulta[$i],
 				'fecha' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
 				'id_asu_um' => $id_asu_um,
+				'id_tratamiento' => $t,
+				'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
 				
 			);
 			if($this->consulta[$i]!="")
@@ -1716,7 +1773,7 @@ class Enrolamiento_model extends CI_Model
 
 	public function get_catalog_view($catalog,$id,$order1="",$order2="")
 	{
-		$this->db->select('a.id, a.descripcion, p.fecha');
+		$this->db->select('*');
 		$this->db->from('cns_control_'.$catalog.' p');
 		$this->db->join('cns_'.$catalog.' a', 'a.id = p.id_'.$catalog,'left');
 		$this->db->where('p.id_persona', $id);
@@ -1782,7 +1839,7 @@ class Enrolamiento_model extends CI_Model
 	public function get_catalog($catalog,$campo="",$id="",$orden="")
 	{
 		 if($catalog=="cns_regla_vacuna")
-		$this->db->select('id, id_vacuna, dia_inicio_aplicacion_nacido, dia_fin_aplicacion_nacido, id_vacuna_secuencial, dia_inicio_aplicacion_secuencial, dia_fin_aplicacion_secuencial, ultima_actualizacion');
+		$this->db->select('id, id_vacuna, dia_inicio_aplicacion_nacido, dia_fin_aplicacion_nacido, id_vacuna_secuencial, dia_inicio_aplicacion_secuencial, dia_fin_aplicacion_secuencial, ultima_actualizacion, activo, id_via_vacuna,  dosis, region, esq_com, orden_esq_com, alergias, forzar_aplicacion');
 		else
 		$this->db->select('*');
 		$this->db->from($catalog);
@@ -1806,6 +1863,44 @@ class Enrolamiento_model extends CI_Model
 	/**
 	 * @access public
 	 *
+	 * Hace select de los tratamientos de las iras, edas y consulta
+	 * 
+	 * @param		string 		$catalog  Nombre de la tabla 
+	 * @param		strin 		$campo    nombre del campo para hacer el where
+	 * @param		string 		$valor    valor del campo para el where
+	 * @param		strin 		$order    nombre del campo para hacer el order by
+	 *
+	 * @return 		result()
+	 *
+	 */
+	public function get_catalog_tratamiento($catalog,$campo,$valor,$orden)
+	{
+		if($orden=="tipo"||$orden=="cc")
+			$this->db->select('distinct(tipo),id');
+		else
+			$this->db->distinct('*');
+		$this->db->from($catalog);
+		if($campo!="")
+			$this->db->where($campo, $valor);
+		if($orden!="cc"&&$campo!="tipo")
+			$this->db->group_by("tipo");
+		if($orden!=""&&$orden!="cc")
+			$this->db->order_by($orden, "asc");
+		$query = $this->db->get(); echo $this->db->last_query();
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+			return $query->result();
+		return null;
+	}
+	
+	/**
+	 * @access public
+	 *
 	 * Obtiene el numero de resultados de una tabla
 	 * 
 	 * @param		string 		$catalog  Nombre de la tabla 	 
@@ -1813,9 +1908,16 @@ class Enrolamiento_model extends CI_Model
 	 * @return 		count
 	 *
 	 */
-	public function get_catalog_count($catalog)
+	public function get_catalog_count($catalog,$campo="",$valor="")
 	{
-		return $this->db->count_all($catalog);
+		if($campo!="")
+		{
+			$this->db->where($campo, $valor);
+			$this->db->from($catalog);
+			return $this->db->count_all_results();
+		}
+		else
+			return $this->db->count_all($catalog);
 	}
 	
 	/**

@@ -47,7 +47,7 @@ class Obtenercurp extends CI_Controller
 				"VERACRUZ"=>"VZ",
 				"ZACATECAS"=>"ZS",
 				"EXTERIOR MEXICANO"=>"SM",
-				"NACIDO EN EL EXTRANJERO "=>"NE"
+				"NACIDO EN EL EXTRANJERO"=>"NE"
 			)
 		);
 	public function __construct()
@@ -144,7 +144,10 @@ class Obtenercurp extends CI_Controller
 			$if=substr($html,stripos($html,'<table'),strlen($html)-stripos($html,'</b></td>
 		    </tr>
 		    </table>')+40);
-				
+			$if=str_replace("\r","",$if);
+			$if=str_replace("\n","",$if);
+			$if=str_replace("\t","",$if);	
+			
 			$cp=substr($html,stripos($html,'>Historicas')+($t+15),18);
 			$array=
 			array(
@@ -158,11 +161,11 @@ class Obtenercurp extends CI_Controller
 					"nacionalidad"=>$nw,
 					"entidad"=>$ed,
 					"documeto"=>$dc,
-					"informacion"=>utf8_encode(trim($if)),
-					"curpo"=>$cp
+					"curpo"=>$cp,
+					"informacion"=>utf8_encode(trim($if))					
 				)
 			);
-			if(!stripos($cu,'Curp')&&!stripos($cu,'ink'))
+			if(!stripos($cu,'Curp')&&!stripos($cu,'ink')&&!stripos($cu,"<>"))
 			{
 				if($regresar==1)
 					return $array;
@@ -234,7 +237,7 @@ class Obtenercurp extends CI_Controller
 					"rfc"=>$rfc,
 				)
 			);
-			if(strlen($cur)>10)
+			if(strlen($cur)>10&&!stripos($cur,"</span>"))
 			{
 				if($regresar==1)
 					return $array;

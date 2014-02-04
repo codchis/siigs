@@ -22,7 +22,7 @@ var optionsFecha = {
     beforeShow: function(dateText, inst) {
         $('#'+inst.id).mask("99-99-9999");
         $('#'+inst.id).removeClass('errorInput');
-        $('#alert').html('');
+ 
     },
     onClose: function(dateText, inst) {
         if(dateText != '__-__-____' && dateText != '') {
@@ -30,7 +30,9 @@ var optionsFecha = {
                 $('#'+inst.id).addClass('errorInput');
             } else {
                 $('#alert').html('');
+				$('#alert').css('display','');
                 $('#'+inst.id).removeClass('errorInput');
+				$('#alert').removeClass('warning');
             }
         }
         

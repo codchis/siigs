@@ -329,9 +329,9 @@ class Servicios extends CI_Controller {
 				//************ inicio asu ************
 				if($si=="")
 				{
-					$count=$this->Enrolamiento_model->get_catalog_count("asu_arbol_segmentacion");
-					$mas=$count%1000;
-					$contador=$count/1000;
+					$count=$this->Enrolamiento_model->get_catalog_count("asu_arbol_segmentacion","id_raiz","1");
+					$mas=$count%8000;
+					$contador=$count/8000;
 					if($mas>0)(int)$contador++;
 					if($count>0)
 					$cadena["asu_arbol_segmentacion"]=array();
@@ -344,15 +344,14 @@ class Servicios extends CI_Controller {
 					for($i=0;$i<$contador;$i++)
 					{
 						if($sf=="")
-							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","","","","",($i*1000),1000);
+							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","id_raiz","1","","",($i*8000),8000);
 						else
-							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","fecha_update >=",$fecha,"","",($i*1000),1000);
+							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","fecha_update >=",$fecha,"id_raiz","1",($i*8000),8000);
 						if($asu)
 						{
 							$micadena=json_encode($asu);
 							echo substr($micadena,1,strlen($micadena)-2);
 						
-							if($sf=="")
 							if(($i+2)<$contador)echo ",";
 							$micadena="";
 							ob_flush();
@@ -696,6 +695,7 @@ class Servicios extends CI_Controller {
 					if(array_key_exists($catalog->descripcion,$datos))
 					foreach($datos[$catalog->descripcion] as  $midato)
 					{
+						$f_valor="";
 						if(array_key_exists("id",$midato))
 						{
 							$b_campo="id";
@@ -707,8 +707,14 @@ class Servicios extends CI_Controller {
 							$b_valor=$midato->id_persona;
 							if($catalog->descripcion=="cns_antiguo_domicilio")
 								$f_campo='fecha_cambio';
+							if($catalog->descripcion=="cns_persona_x_alergia")
+							{
+								$f_campo='ultima_actualizacion';
+								$f_valor=$midato->ultima_actualizacion;
+							}
 							else
 								$f_campo='fecha';
+							if($f_valor=="")	
 							$f_valor=$midato->fecha;
 						}
 						
@@ -1004,8 +1010,29 @@ class Servicios extends CI_Controller {
 				}
 			}
 		}
-		
 		return $cadena;
 	}
+	public function prueba2($id_accion,$id_tab=null,$id_sesion=null, $version=null)
+	{
+		 $this->is_step_0(
+		 json_encode(array("id_accion"=>$id_accion)), 
+		 json_encode(array("id_tab"=>$id_tab)) , 
+		 json_encode(array("id_sesion"=>$id_sesion)), 
+		 $version,
+		 '{
+			  "id_resultado": "ok",
+    "cns_control_vacuna": [
+        {
+            "id_persona": "c844dee37db76567e3a4e6ed64c10057",
+            "codigo_barras": "duplicada",
+            "fecha": "2014-01-07 14:57:08",
+            "id_asu_um": "1019",
+            "id_vacuna": "10"
+        }
+    ],
+    "sis_bitacora":[{"parametros":"paciente:37648c5b456a164ca486bcaae5b16451, vacuna:6","fecha_hora":"2014-01-28 12:17:45","id_usuario":"9","id_controlador_accion":"104"}],
+	"sis_error":[{"descripcion":"Json incorrecto en pendiente de persona:002f096e99f2fcface64f406f150a60c, fecha:2014-01-22 13:28:47, tabla:cns_control_vacuna","fecha_hora":"2014-01-28 12:35:09","id_usuario":"9","id_controlador_accion":"0"},{"descripcion":"Json incorrecto en pendiente de persona:002f096e99f2fcface64f406f150a60c, fecha:2014-01-22 14:10:17, tabla:cns_control_vacuna","fecha_hora":"2014-01-28 12:35:09","id_usuario":"9","id_controlador_accion":"0"}]
+}' );
+	}    
 }
 ?>
