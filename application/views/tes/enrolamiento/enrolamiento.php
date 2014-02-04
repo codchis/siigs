@@ -30,11 +30,18 @@
 			buttonImageOnly: true,
 			buttonText: 'Clic para seleccionar una fecha',
 			yearRange: '1900:'+g.getFullYear(),
-			showButtonPanel: false
+			showButtonPanel: false,
+			showAnim: 'slide'
 		}
 	$(document).ready(function()
 	{
 		obligatorios("enrolar");
+		$("#fecha_edo").click(function(e) {
+            if(this.checked)
+				add_fecha_edo();
+			else
+				rem_fecha_edo();
+        });
 		$("#buscar").autocomplete({
 				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/",
 				select: function (a, b) 
@@ -45,7 +52,6 @@
 		})
 		$("#fnacimiento").datepicker(optionsFecha );
 		$("#fechacivil").datepicker(optionsFecha );
-		
 		$("a#fba1").fancybox({
 			'width'             : '50%',
 			'height'            : '60%',				
@@ -73,11 +79,15 @@
 						if(dato)
 						{
 							var obj = jQuery.parseJSON( dato );
-							document.getElementById(uri.substr(uri.search("/")+1,uri.length)).value=obj[0]["descripcion"];
+							var des=obj[0]["descripcion"];
+							var ed=des.split(",");
+							ed=ed[ed.length-2];
+							des=des.replace(ed+",", "");
+							document.getElementById(uri.substr(uri.search("/")+1,uri.length)).value=des;
 							if(uri.substr(uri.search("/")+1,uri.length)=="umt")
 							{
 								$.get('/<?php echo DIR_TES.'/enrolamiento/validarisum/';?>'+document.getElementById("um").value, function(respuesta) 
-								{console.log(respuesta);
+								{
 									if(respuesta=="no")
 									{
 										alert("El nombre seleccionado no es una unidad medica \nPara continuar seleccione una unidad medica valida");
@@ -115,8 +125,12 @@
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+				var des=obj[0]["descripcion"];
+				var ed=des.split(",");
+				ed=ed[ed.length-2];
+				des=des.replace(ed+",", "");
 				document.getElementById("um").value=obj[0]["id"];
-				document.getElementById("umt").value=obj[0]["descripcion"];
+				document.getElementById("umt").value=des;
 			}
 		});
 		<?php }?>
@@ -148,10 +162,16 @@
 		{       
 			getcurp();
 		});
+		
+		$("#nombreT,#paternoT,#maternoT").blur(function()
+		{       
+			getcurpTutor();
+		});	
+		
 		$("#alergias").load("/tes/enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>/tipo/tipo");	
 		$("#tbenef").load("/tes/enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afiliaciones;?>");	
 		$("#sangre").load("/tes/enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', ''); ?>");	
-		$("#nacionalidad").load("/tes/enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', ''); ?>/descripcion/descripcion");
+		$("#nacionalidad").load("/tes/enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', '142'); ?>/descripcion/descripcion");
 		$("#compania").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo set_value('compania', ''); ?>");
 		$("#companiaT").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo set_value('companiaT', ''); ?>");
 		
@@ -302,7 +322,11 @@
 					if(dato)
 					{
 						var obj = jQuery.parseJSON( dato );
-						document.getElementById("localidadT").value=obj[0]["descripcion"];
+						var des=obj[0]["descripcion"];
+						var ed=des.split(",");
+						ed=ed[ed.length-2];
+						des=des.replace(ed+",", "");
+						document.getElementById("localidadT").value=des;
 					}
 				});
 				$("#calle").click();
@@ -359,8 +383,8 @@
 						}
 						else
 						{
-							$("#nocurp").html('<span style="color:red">Curp no encontrada en la CONDUSEF calculando manual... Espere</span>');	
-							calcular_curp(ap,am,no,d,m,a,se,ed);
+							$("#nocurp").html('<span style="color:red">Curp no encontrada en la CONDUSEF calculando manualmente... Espere</span>');	
+							calcular_curp(ap,am,no,d,m,a,se,ed,0);
 						}
 					}
 				});
@@ -369,7 +393,52 @@
 		}
 	 	return false;
 	}
-	function calcular_curp(ap,am,no,d,m,a,se,ed)
+	function getcurpTutor()
+	{
+		if(document.getElementById("fechaT"))
+		{
+			var ap=omitirAcentos($("#paternoT").val());
+			var am=omitirAcentos($("#maternoT").val());
+			var no=omitirAcentos($("#nombreT").val());
+			var se=$("input[name='sexoT']:checked").val();
+			var fn=$("#fechaT").val();
+			var ed=$("#edoT").val();
+			var d=fn.substr(0,2);
+			var m=fn.substr(3,2);
+			var a=fn.substr(6,4);
+			var x=parseInt(a)+"";
+			
+			if(ap!=""&&am!=""&&no!=""&&se!=""&&fn!=""&&ed!="")
+			{
+				if(x.length>3)
+				{
+					$("#errorcurptutor").html('<span style="color:blue">Buscando Curp... Espere</span>');
+					$("#curpT").val("");
+					$.ajax({
+						url: "/<?php echo DIR_TES?>/obtenercurp/curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
+						type: "POST",
+						data: "json",
+						success:function(data){
+							if(data)
+							{
+								var obj = jQuery.parseJSON( data );
+								var curp=obj[0]["curp"];
+								$("#curpT").val(curp);
+								$("#errorcurptutor").html('<span style="color:green">Curp encontrada en la CONDUSEF</span>');		
+							}
+							else
+							{
+								$("#errorcurptutor").html('<span style="color:red">Curp no encontrada en la CONDUSEF calculando manualmente... Espere</span>');	
+								calcular_curp(ap,am,no,d,m,a,se,ed,1);
+							}
+						}
+					});
+				}
+			}
+		}
+	 	return false;
+	}
+	function calcular_curp(ap,am,no,d,m,a,se,ed,op)
 	{
 		$.ajax({
 			url: "/<?php echo DIR_TES?>/obtenercurp/calcular_curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
@@ -380,13 +449,27 @@
 				{
 					var obj = jQuery.parseJSON( data );
 					var curp=obj[0]["curp"];
-					$("#curp").val(curp.substr(0,curp.length-5));
-					$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
-					$("#curp2").val(curp.substr(curp.length-5,5));
-					$("#nocurp").html('<span style="color:green">Curp calculada correctamente</span>');			
+					if(op==1)
+					{
+						$("#curpT").val(curp);
+						$("#errorcurptutor").html('<span style="color:green">Curp calculada correctamente</span>');	
+
+					}
+					else
+					{
+						$("#curp").val(curp.substr(0,curp.length-5));
+						$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
+						$("#curp2").val(curp.substr(curp.length-5,5));
+						$("#nocurp").html('<span style="color:green">Curp calculada correctamente</span>');	
+					}
 				}
 				else
-					$("#nocurp").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');	
+				{
+					if(op==1)
+						$("#errorcurptutor").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');
+					else
+						$("#nocurp").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');	
+				}
 			}
 		});
 	}
@@ -398,12 +481,30 @@
 		var miclase="";
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
+		var campo_mas=""; var ax="99%"; var by="80%"; var ha="50%",hb="40%";
+		if(id=="ira"||id=="eda"||id=="consulta")
+		{
+			campo_mas='<th width="20%"><select name="tratamiento'+id+'[]" id="tratamiento'+id+num+'" style="width:99%;"></select></th><th width="27%"><select name="tratamiento_des'+id+'[]" id="tratamiento_des'+id+num+'" style="width:99%;"></select></th>';
+			ax="99%"; by="70%"; ha="28%"; hb="15%";
+		}
+			
+		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="'+ha+'"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:'+ax+'"></select></th>  <th width="'+hb+'"><input name="f'+id+'[]" type="text" id="f'+id+num+'" style="width:'+by+'"></th>'+campo_mas+'</tr> </table> </div></span>';
 		
-		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:95%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
+		
 		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 		$("#f"+id+num).datepicker(optionsFecha );
 		$("#"+id+num).load("/tes/enrolamiento/catalog_select/"+id);
+		if(id=="ira"||id=="eda"||id=="consulta")
+		{
+			$("#tratamiento"+id+num).load("/tes/enrolamiento/tratamiento_select/activo/1/0/tipo");
+			$("#tratamiento"+id+num).click(function(e) 
+			{
+				num=this.id.replace(/\D/g,'');
+				$("#tratamiento_des"+id+num).load("/tes/enrolamiento/tratamiento_select/tipo/"+encodeURIComponent(this.value)+"/0/descripcion/");
+			});
+		}
+		
 	}
 	function rem(id,n)
 	{
@@ -445,12 +546,35 @@
 			document.getElementById("nNu").value = num;
 		}
 	}
+	
+	function add_fecha_edo()
+	{	
+		campo = '<span id="_fecha_edo" ><p>Fecha: <input id="fechaT" style="height:25px; width:150px; margin-top:-6px;">&nbsp; Estado: <select id="edoT"><option value="">Seleccione</option><option value="AGUASCALIENTES">AGUASCALIENTES</option><option value="BAJA CALIFORNIA NORTE">BAJA CALIFORNIA</option><option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR</option><option value="CAMPECHE">CAMPECHE</option><option value="CHIAPAS">CHIAPAS</option><option value="CHIHUAHUA">CHIHUAHUA</option><option value="COAHUILA">COAHUILA</option><option value="COLIMA">COLIMA</option><option value="DISTRITO FEDERAL">DISTRITO FEDERAL</option><option value="DURANGO">DURANGO</option><option value="GUANAJUATO">GUANAJUATO</option><option value="GUERRERO">GUERRERO</option><option value="HIDALGO">HIDALGO</option><option value="JALISCO">JALISCO</option><option value="MEXICO">MEXICO</option><option value="MORELOS">MORELOS</option><option value="MICHOACAN">MICHOACAN</option><option value="NAYARIT">NAYARIT</option><option value="NUEVO LEON">NUEVO LEON</option><option value="OAXACA">OAXACA</option><option value="PUEBLA">PUEBLA</option><option value="QT">QUERETARO</option><option value="QUINTANA ROO">QUINTANA ROO</option><option value="SAN LUIS POTOSI">SAN LUIS POTOSI</option><option value="SINALOA">SINALOA</option><option value="SONORA">SONORA</option><option value="TABASCO">TABASCO</option><option value="TAMAULIPAS">TAMAULIPAS</option><option value="TLAXCALA">TLAXCALA</option><option value="VERACRUZ">VERACRUZ</option><option value="YUCATAN">YUCATAN</option><option value="ZACATECAS">ZACATECAS</option><option value="NACIDO EN EL EXTRANJERO">EXTRANJERO</option></select></p></span>';
+		$("#tutorcurp").append(campo);
+		$("#fechaT").datepicker(optionsFecha );
+		$("#fechaT,#edoT").change(function()
+		{       
+			getcurpTutor();
+		});	
+	}
+	function rem_fecha_edo()
+	{
+		$("#_fecha_edo").remove();
+	}
+	function cleanForm()
+	{
+		var valor=$("#alert").html();
+		if(valor.search("incorrecto")<0)
+		limpiaformulario("enrolar");
+		else
+		$("#alert").css("display","")
+	}
 	</script><!-- mensaje-->
         <?php 	
 			if(!empty($msgResult))
 			echo "<div class='$infoclass'>".$msgResult."</div>";
 			echo validation_errors(); 
-			echo form_open(DIR_TES.'/enrolamiento/insert',array('onkeyup' => 'limpiaformulario(this.id)','onclick' => 'limpiaformulario(this.id)', 'id' => 'enrolar')); 
+			echo form_open(DIR_TES.'/enrolamiento/insert',array('onkeyup' => 'cleanForm()','onclick' => 'cleanForm()', 'id' => 'enrolar')); 
 		?>
         <!-- mensaje -->
     <div class="info requiere" style="width:93%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
@@ -500,7 +624,7 @@
                             <td><p align="right">Lugar de Nacimiento</p></td>
                             <td colspan="3"><div class="input-append" style="width:100%"><input name="lnacimientoT" type="text" title='requiere' required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo set_value('lnacimientoT', ''); ?>" readonly="readonly">
                             	<input name="lnacimiento" type="hidden" id="lnacimiento" value="<?php echo set_value('lnacimiento', ''); ?>">                              
-                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(2,4,5)));?>/<?php echo urlencode(json_encode(array(2,3)));?>' id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a><div id="aqui"></div></div>
+                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>' id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a><div id="aqui"></div></div>
                               </td>
                             </tr>
                           <tr>
@@ -521,22 +645,10 @@
                       </div>
                     </div>
                     
-                    
-                    <!-- Tipo de Beneficiario:  -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Tipo de Beneficiario</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
-                       	<div id="tbenef" style="margin-left:10px;">
-                            
-                            </div>
-                      	</div>
-                      </div>
-                    </div>
                     <!-- Tutor -->
                   
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Datos de la Madre o Tutor</div>
+                  <div class="AccordionPanel">
+                      <div class="AccordionPanelTab"s>Datos de la Madre o Tutor</div>
                       <div class="AccordionPanelContent" >
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
@@ -557,7 +669,7 @@
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">CURP</p></td>
-                            <td width="31%"><input name="curpT" type="text" title='requiere' required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo set_value('curpT', ''); ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)" /></td>
+                            <td width="31%"><input name="curpT" type="text"  id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo set_value('curpT', ''); ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)" /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px; float:left">
@@ -588,21 +700,108 @@
                             <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" >
                             </select></td>
                           </tr>
+                          <tr>
+                            <td>&nbsp;</td>
+                            <td colspan="3"><label><input type="checkbox" name="fecha_edo" id="fecha_edo" style="margin-left:10px; margin-top:-3px;" />
+                            No tiene la curp pero sabe su fecha y estado de nacimiento </label>
+                            <div id="tutorcurp"></div>
+                            <div id="errorcurptutor"></div>
+                            </td>
+                          </tr>
                         </table>
                         <br />
                       
                       </div>
                     </div>
                     
+                    <!-- Direccion  -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Domicilio</div>
+                      <div class="AccordionPanelContent">
+                      	<div id="compartetutor" style="width:94.7%" > </div>
+                        <div id="ladireccion">
+                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
+                          <tr>
+                            <td width="19%" height="50"><p align="right">Calle</p></td>
+                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;"  value="<?php echo set_value('calle', ''); ?>"></td>
+                            <td width="25%"><p align="right">Número</p></td>
+                            <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo set_value('numero', ''); ?>"></td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Referencia</p></td>
+                            <td colspan="3"><input name="referencia" type="text" id="referencia" style="width:68%; margin-left:10px;"  value="<?php echo set_value('referencia', ''); ?>" /></td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Colonia</p></td>
+                            <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo set_value('colonia', ''); ?>"></td>
+                            <td><p align="right">CP</p></td>
+                            <td><input name="cp" type="text"  id="cp" style="width:75%; margin-left:10px;" value="<?php echo set_value('cp', ''); ?>" maxlength="5"></td>
+                          </tr>
+                          <tr>
+                          <td colspan="4" width="100%">
+                              <table width="97%" border="0">
+                                <tr>
+                                  <td width="19%" align="right"><p>Ageb</p></td>
+                                  <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo set_value('ageb', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
+                                  <td  align="right"><p>Sector</p></td>
+                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo set_value('sector', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td  align="right"><p>Manzana</p></td>
+                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                </tr>
+                              </table>
+                          </td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Localidad</p></td>
+                            <td colspan="3">
+                            <div class="input-append" style="width:100%">
+                            <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
+                              <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Telefono de Casa</p></td>
+                            <td><input name="telefono" type="text" id="telefono" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefono', ''); ?>" /></td> 
+                            <td><p align="right">Celular</p></td> 
+                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo set_value('celular', ''); ?>" /></td>                          
+                          </tr>
+                          <tr>
+                            <td><p align="right">Compania Celular</p></td>
+                            <td><select name="compania" id="compania" style="width:85%; margin-left:10px;" >
+                            </select></td> 
+                            <td></td> 
+                            <td></td>                          
+                          </tr>
+                        </table>
+                        </div>
+                        <br />
+                      </div>
+                    </div>
+                    
+                    <!-- Tipo de Beneficiario:  -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Derechohabiencia</div>
+                      <div class="AccordionPanelContent"><br />
+                      	<div style="margin-left:20px; width:90%">
+                       	<div id="tbenef" style="margin-left:10px;">
+                            
+                            </div>
+                      	</div>
+                      </div>
+                    </div>
+                    
+                    
+                    
                     <!--  Unidad Medica Tratante -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Unidad Medica Tratante</div>
+                      <div class="AccordionPanelTab">Unidad Medica de Responsabilidad</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                       
                           <tr>
                             <td width="19%" height="50"><p align="right">Lugar</p></td>
-                            <td width="81%" colspan="3">
+                            <td width="81%" colspan="3"><span style="font-size:12px; margin-left:10px; font-style:italic;">um, localidad ,municipio, estado</span>
                             <div class="input-append" style="width:100%">
                             <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly" title="requiere">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
@@ -629,9 +828,9 @@
                             <td><p align="right">Lugar</p></td>
                             <td colspan="3">
                             <div class="input-append" style="width:100%">
-                            <input name="lugarcivilT" title="requiere" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
+                            <input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value="<?php echo set_value('lugarcivil', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(2,4,5)));?>/<?php echo urlencode(json_encode(array(2,3)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div></td>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div></td>
                           </tr>
                         </table>
                         <br />
@@ -639,70 +838,7 @@
                       </div>
                     </div>
                     
-                    <!-- Direccion  -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Dirección</div>
-                      <div class="AccordionPanelContent">
-                      	<div id="compartetutor" style="width:94.7%" > </div>
-                        <div id="ladireccion">
-                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
-                          <tr>
-                            <td width="19%" height="50"><p align="right">Calle</p></td>
-                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;" title='requiere' required value="<?php echo set_value('calle', ''); ?>"></td>
-                            <td width="25%"><p align="right">Número</p></td>
-                            <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo set_value('numero', ''); ?>"></td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Referencia</p></td>
-                            <td colspan="3"><input name="referencia" type="text" id="referencia" style="width:68%; margin-left:10px;"  value="<?php echo set_value('referencia', ''); ?>" /></td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Colonia</p></td>
-                            <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo set_value('colonia', ''); ?>"></td>
-                            <td><p align="right">CP</p></td>
-                            <td><input name="cp" type="text" title='requiere' required id="cp" style="width:75%; margin-left:10px;" value="<?php echo set_value('cp', ''); ?>" maxlength="5"></td>
-                          </tr>
-                          <tr>
-                          <td colspan="4" width="100%">
-                              <table width="97%" border="0">
-                                <tr>
-                                  <td width="19%" align="right"><p>Ageb</p></td>
-                                  <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo set_value('ageb', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
-                                  <td  align="right"><p>Sector</p></td>
-                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo set_value('sector', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
-                                  <td  align="right"><p>Manzana</p></td>
-                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
-                                </tr>
-                              </table>
-                          </td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Localidad</p></td>
-                            <td colspan="3">
-                            <div class="input-append" style="width:100%">
-                            <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
-                              <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,4,5)));?>/<?php echo urlencode(json_encode(array(2,3)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Telefono de Casa</p></td>
-                            <td><input name="telefono" type="text" id="telefono" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefono', ''); ?>" /></td> 
-                            <td><p align="right">Celular</p></td> 
-                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo set_value('celular', ''); ?>" /></td>                          
-                          </tr>
-                          <tr>
-                            <td><p align="right">Compania Celular</p></td>
-                            <td><select name="compania" id="compania" style="width:85%; margin-left:10px;" >
-                            </select></td> 
-                            <td></td> 
-                            <td></td>                          
-                          </tr>
-                        </table>
-                        </div>
-                        <br />
-                      </div>
-                    </div>
+                    
                     
                     <!-- alergias y reacciones:  -->
                     <div class="AccordionPanel">
@@ -766,8 +902,10 @@
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">IRA</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="28%" align="left">IRA</th>
+                                        <th width="15%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Tipo</th>
+                                        <th width="27%" align="left">Tratamiento</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -777,7 +915,9 @@
 									   
 									  echo getArray($array,'ira','in');
 								  ?>
-                                  <div id="ic">
+                                  <div id="ic"></div>
+                                  
+                                  <div id="icic">
                                   </div>                           
                                  </td>
                                  <td valign="top"> 
@@ -803,8 +943,10 @@
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">EDA</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="28%" align="left">EDA</th>
+                                        <th width="15%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Tipo</th>
+                                        <th width="27%" align="left">Tratamiento</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -840,8 +982,10 @@
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">Consulta</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="28%" align="left">Consulta</th>
+                                        <th width="15%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Tipo</th>
+                                        <th width="27%" align="left">Tratamiento</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -865,42 +1009,7 @@
                       </div>
                     </div>
                     
-                    <!-- accion nutricional  -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Acción Nutricional</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
-                        <table>
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="50%" align="left">A. Nutriconal</th>
-                                        <th width="40%" align="left">Fecha</th>
-                                    </tr>
-                                  </table> 
-                                  </div>
-                                  <?php
-								  	  $array=array();
-									  if(isset($_POST["accion_nutricional"])) $array= $_POST["accion_nutricional"];
-									   
-									  echo getArray($array,'accion_nutricional','nac');
-								  ?>
-                                  <div id="can">
-                                  </div>                           
-                                 </td>
-                                 <td valign="top"> 
-                                   <button type="button" class="btn btn-primary" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
-                                   <button type="button" class="btn btn-primary" onclick="rem('accion_nutricional','nac');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
-                                   
-                                  </td>
-                              </tr>                     
-                          </table>
-                        </div>
-                      </div>
-                    </div>
+                    
                     <!-- nutricion  -->
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control Nutricional</div>
@@ -915,7 +1024,7 @@
                                         <th width="10%" >No</th>
                                         <th width="18%" align="left">Peso (kg)</th>
                                         <th width="18%" align="left">Altura (cm)</th>
-                                        <th width="18%" align="left">Talla (cm)</th>
+                                        <th width="18%" align="left">Talla cintura (cm)</th>
                                         <th width="36%" align="left">Fecha</th>
                                     </tr>
                                   </table> 
@@ -968,6 +1077,43 @@
                       </div>
                     </div>                                        
                     
+                    
+                    <!-- accion nutricional  -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Control de Acción Nutricional</div>
+                      <div class="AccordionPanelContent"><br />
+                      	<div style="margin-left:20px; width:90%">
+                        <table>
+                            <tr>
+                                <td width="85%" valign="top">
+                                <div class="detalle" style="width:100%">
+                                  <table width="100%" >
+                                    <tr>
+                                        <th width="10%" >No</th>
+                                        <th width="50%" align="left">A. Nutriconal</th>
+                                        <th width="40%" align="left">Fecha</th>
+                                    </tr>
+                                  </table> 
+                                  </div>
+                                  <?php
+								  	  $array=array();
+									  if(isset($_POST["accion_nutricional"])) $array= $_POST["accion_nutricional"];
+									   
+									  echo getArray($array,'accion_nutricional','nac');
+								  ?>
+                                  <div id="can">
+                                  </div>                           
+                                 </td>
+                                 <td valign="top"> 
+                                   <button type="button" class="btn btn-primary" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('accion_nutricional','nac');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
+                                   
+                                  </td>
+                              </tr>                     
+                          </table>
+                        </div>
+                      </div>
+                    </div>
                     </td>
             </tr>
             <tr>

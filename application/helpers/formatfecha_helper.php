@@ -61,34 +61,71 @@ function formatFecha($objFecha, $formato="d-m-Y H:m:s") {
  */
 function getArray($array,$id,$nu)
 {
+	$ha="50%";$hb="40%";
+	$xa="99%"; $xb="80%";
+	$mas=""; $script="";
+	if($id=="ira"||$id=="eda"||$id=="consulta")
+	{
+		$ha="28%";$hb="15%";
+		$xb="70%";
+	}
 	$i=0; $grid="";
 	foreach($array as $dato)
 	{
 		$i++; 
 		$dato=(array)$dato;
 		if(isset($_POST["f$id"][$i-1]))
+		{
 			$fecha=$_POST["f$id"][$i-1];
+			if($id=="ira"||$id=="eda"||$id=="consulta")
+			$y=$_POST["tratamiento_des$id"][$i-1];
+		}
 		else 
+		{
 			$fecha=$dato["fecha"];
+			if($id=="ira"||$id=="eda"||$id=="consulta")
+			$y=$dato["id_tratamiento"];
+		}
+			
 		if(isset($_POST[$id][$i-1]))
 			$x=$_POST[$id][$i-1];
 		else
 			$x=$dato["id"];
+			
 		$clase="row2";
 		if($i%2)$clase="row1";
 		$num=$i;
 		if($i<10)$num="0".$i;
+		if($id=="ira"||$id=="eda"||$id=="consulta")
+		{
+			$mas='<th width="20%" align="left"><select name="tratamiento'.$id.'[]" id="tratamiento'.$id.$num.'" style="width:'.$xa.';"></select>
+					</th>
+					<th width="27%" align="left"><select name="tratamiento_des'.$id.'[]" id="tratamiento_des'.$id.$num.'" style="width:'.$xa.';"></select>
+					</th>';
+			$script='$("#tratamiento'.$id.$num.'").load("/tes/enrolamiento/tratamiento_select/activo/1/'.$y.'/cc", function() {
+				$("#tratamiento_des'.$id.$num.'").load("/tes/enrolamiento/tratamiento_select/tipo/"+encodeURIComponent($("#tratamiento'.$id.$num.'").val())+"/'.$y.'/descripcion/");
+			});
+					$("#tratamiento'.$id.$num.'").click(function(e) 
+					{
+						num=this.id.replace("/\D/g","");
+						$("#tratamiento_des'.$id.$num.'").load("/tes/enrolamiento/tratamiento_select/tipo/"+encodeURIComponent(this.value)+"/0/descripcion/");
+					});';
+		}
 		$grid.= '<span id="r'.$id.$num.'" ><div class="'.$clase.'" >
 				<table width="100%" >
 				<tr>
 					<th width="10%" >'.$num.'</th>
-					<th width="50%" align="left"><select name="'.$id.'[]" id="'.$id.$num.'"  required title="requiere"  style="width:95%;"></select>
-					<script>$("#'.$id.$num.'").load("/tes/enrolamiento/catalog_select/'.$id.'/'.$x.'");</script>
+					<th width="'.$ha.'" align="left"><select name="'.$id.'[]" id="'.$id.$num.'"  required title="requiere"  style="width:'.$xa.';"></select>					
 					</th>
-					<th width="40%" align="left"><input name="f'.$id.'[]" type="text" id="f'.$id.$num.'" value="'.date("Y-m-d",strtotime($fecha)).'"></th>
+					<th width="'.$hb.'" align="left"><input name="f'.$id.'[]" type="text" id="f'.$id.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'" style="width:'.$xb.';"></th>
+					'.$mas.'
 				</tr>
 				</table> 
-			  </div></span>';
+			  </div></span>
+			  <script>
+			  $("#'.$id.$num.'").load("/tes/enrolamiento/catalog_select/'.$id.'/'.$x.'");
+			  $("#f'.$id.$num.'").datepicker(optionsFecha );
+			  '.$script.'</script>';
 			  
 		 
 	 }
@@ -102,29 +139,52 @@ function getArray($array,$id,$nu)
  *return $grid 
  *
  */
-function getArrayView($array)
+function getArrayView($array,$id="")
 {
-	$id=0; $grid="";
+	$i=0; $grid="";
+	$ha="50%";$hb="40%";
+	$xa="98%"; $xb="80%";
+	$mas=""; $script="";
+	if($id=="ira"||$id=="eda"||$id=="consulta")
+	{
+		$ha="28%";$hb="15%";
+		$xb="70%";
+	}
+	$num=0;	
 	foreach($array as $dato)
 	{
-		$id++;
+		$i++;
+		$num++;
+		if($num<10)$num="0".$num;
 		$descripcion=$dato->descripcion;
 		$fecha=$dato->fecha;
 		$clase="row2";
 		if($id%2)$clase="row1";
-	
+		
+		if($id=="ira"||$id=="eda"||$id=="consulta")
+		{
+			$y=$dato->id_tratamiento;
+			$mas='<th width="20%" align="left"><select name="tratamiento'.$id.'[]" id="tratamiento'.$id.$num.'" style="width:'.$xa.';border:0px;" disabled ></select>
+					</th>
+					<th width="27%" align="left"><select name="tratamiento_des'.$id.'[]" id="tratamiento_des'.$id.$num.'" style="width:'.$xa.';border:0px" disabled></select>
+					</th>';
+			$script='$("#tratamiento'.$id.$num.'").load("/tes/enrolamiento/tratamiento_select/activo/1/'.$y.'/cc", function() {
+				$("#tratamiento_des'.$id.$num.'").load("/tes/enrolamiento/tratamiento_select/tipo/"+encodeURIComponent($("#tratamiento'.$id.$num.'").val())+"/'.$y.'/descripcion/");
+			});';
+		}
 		$grid.= '<div class="'.$clase.'" style="height:30px">
 				<table width="100%" >
 				<tr>
-					<th width="10%" >'.$id.'</th>
-					<th width="50%" align="left">'.$descripcion.'</th>
-					<th width="40%" align="left">'.$fecha.'</th>
+					<th width="10%" >'.$i.'</th>
+					<th width="'.$ha.'" align="left"><input style="width:'.$xa.';border:0px" value="'.$descripcion.'" readonly></th>
+					<th width="'.$hb.'" align="left">'.date("d-m-Y",strtotime($fecha)).'</th>
+					'.$mas.'
 				</tr>
 				</table> 
-			  </div>';
-		 
+			  </div><script>
+			  '.$script.'</script>';
 	 }
-	if($id==0)
+	if($i==0)
 	{
 		$grid= '<div class="row1" style="height:30px">
 				<table width="100%" >

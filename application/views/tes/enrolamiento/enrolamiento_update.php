@@ -53,6 +53,13 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 
 	$(document).ready(function()
 	{
+		$.fancybox.showActivity();
+		$("#fecha_edo").click(function(e) {
+            if(this.checked)
+				add_fecha_edo();
+			else
+				rem_fecha_edo();
+        });
 		<?php if($cn_tutor) {?>
 		$("#buscar").autocomplete({
 				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/",
@@ -92,11 +99,15 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 						if(dato)
 						{
 							var obj = jQuery.parseJSON( dato );
-							document.getElementById(uri.substr(uri.search("/")+1,uri.length)).value=obj[0]["descripcion"];
+							var des=obj[0]["descripcion"];
+							var ed=des.split(",");
+							ed=ed[ed.length-2];
+							des=des.replace(ed+",", "");
+							document.getElementById(uri.substr(uri.search("/")+1,uri.length)).value=des;
 							if(uri.substr(uri.search("/")+1,uri.length)=="umt")
 							{
 								$.get('/<?php echo DIR_TES.'/enrolamiento/validarisum/';?>'+document.getElementById("um").value, function(respuesta) 
-								{console.log(respuesta);
+								{
 									if(respuesta=="no")
 									{
 										alert("El nombre seleccionado no es una unidad medica \nPara continuar seleccione una unidad medica valida");
@@ -120,13 +131,13 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 	$("a#fba1").click(function(e) {
         $.fancybox.showActivity();
     });						
-
+	
 		<?php if($cn_basico) {?> 
 		$.ajax({
 		type: "POST",
 		data: {
 			'claves':[<?php echo $enrolado->id_asu_localidad_nacimiento;?>] ,
-			'desglose':1 },
+			'desglose':5 },
 		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
@@ -134,8 +145,13 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+				var des=obj[0]["descripcion"];
+				var ed=des.split(",");
+				ed=ed[ed.length-2];
+				des=des.replace(ed+",", "");
+				
 				document.getElementById("lnacimiento").value=obj[0]["id"];
-				document.getElementById("lnacimientoT").value=obj[0]["descripcion"];
+				document.getElementById("lnacimientoT").value=des;
 			}
 		});
 		<?php }?>
@@ -153,8 +169,13 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+				var des=obj[0]["descripcion"];
+				var ed=des.split(",");
+				ed=ed[ed.length-2];
+				des=des.replace(ed+",", "");
+				
 				document.getElementById("um").value=obj[0]["id"];
-				document.getElementById("umt").value=obj[0]["descripcion"];
+				document.getElementById("umt").value=des;
 			}
 		});
 		<?php }?>
@@ -163,7 +184,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		type: "POST",
 		data: {
 			'claves':[<?php echo $enrolado->id_localidad_registro_civil;?>] ,
-			'desglose':1 },
+			'desglose':5 },
 		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
@@ -171,8 +192,13 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+				var des=obj[0]["descripcion"];
+				var ed=des.split(",");
+				ed=ed[ed.length-2];
+				des=des.replace(ed+",", "");
+				
 				document.getElementById("lugarcivil").value=obj[0]["id"];
-				document.getElementById("lugarcivilT").value=obj[0]["descripcion"];
+				document.getElementById("lugarcivilT").value=des;
 			}
 		});
 		<?php }?>
@@ -181,7 +207,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		type: "POST",
 		data: {
 			'claves':[<?php echo $enrolado->id_asu_localidad_domicilio;?>] ,
-			'desglose':1 },
+			'desglose':5 },
 		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
@@ -189,8 +215,13 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+				var des=obj[0]["descripcion"];
+				var ed=des.split(",");
+				ed=ed[ed.length-2];
+				des=des.replace(ed+",", "");
+				
 				document.getElementById("localidad").value=obj[0]["id"];
-				document.getElementById("localidadT").value=obj[0]["descripcion"];
+				document.getElementById("localidadT").value=des;
 			}
 		});
 		<?php
@@ -213,7 +244,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		$("#compania").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraid; ?>");
 		
 		$("#companiaT").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraTid; ?>", function() {
-			$("#guardar").attr("disabled",false);		
+			$("#guardar").attr("disabled",false);	
+			$.fancybox.hideActivity();	
 		});
 		
 		$("#nombre,#paterno,#materno,#fnacimiento,#lnaciminetoT").blur(function()
@@ -371,7 +403,11 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 					if(dato)
 					{
 						var obj = jQuery.parseJSON( dato );
-						document.getElementById("localidadT").value=obj[0]["descripcion"];
+						var des=obj[0]["descripcion"];
+						var ed=des.split(",");
+						ed=ed[ed.length-2];
+						des=des.replace(ed+",", "");
+						document.getElementById("localidadT").value=des;
 					}
 				});
 				$("#calle").click();
@@ -437,7 +473,52 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		}
 	 	return false;
 	}
-	function calcular_curp(ap,am,no,d,m,a,se,ed)
+	function getcurpTutor()
+	{
+		if(document.getElementById("fechaT"))
+		{
+			var ap=omitirAcentos($("#paternoT").val());
+			var am=omitirAcentos($("#maternoT").val());
+			var no=omitirAcentos($("#nombreT").val());
+			var se=$("input[name='sexoT']:checked").val();
+			var fn=$("#fechaT").val();
+			var ed=$("#edoT").val();
+			var d=fn.substr(0,2);
+			var m=fn.substr(3,2);
+			var a=fn.substr(6,4);
+			var x=parseInt(a)+"";
+			
+			if(ap!=""&&am!=""&&no!=""&&se!=""&&fn!=""&&ed!="")
+			{
+				if(x.length>3)
+				{
+					$("#errorcurptutor").html('<span style="color:blue">Buscando Curp... Espere</span>');
+					$("#curpT").val("");
+					$.ajax({
+						url: "/<?php echo DIR_TES?>/obtenercurp/curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
+						type: "POST",
+						data: "json",
+						success:function(data){
+							if(data)
+							{
+								var obj = jQuery.parseJSON( data );
+								var curp=obj[0]["curp"];
+								$("#curpT").val(curp);
+								$("#errorcurptutor").html('<span style="color:green">Curp encontrada en la CONDUSEF</span>');		
+							}
+							else
+							{
+								$("#errorcurptutor").html('<span style="color:red">Curp no encontrada en la CONDUSEF calculando manualmente... Espere</span>');	
+								calcular_curp(ap,am,no,d,m,a,se,ed,1);
+							}
+						}
+					});
+				}
+			}
+		}
+	 	return false;
+	}
+	function calcular_curp(ap,am,no,d,m,a,se,ed,op)
 	{
 		$.ajax({
 			url: "/<?php echo DIR_TES?>/obtenercurp/calcular_curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
@@ -448,13 +529,27 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 				{
 					var obj = jQuery.parseJSON( data );
 					var curp=obj[0]["curp"];
-					$("#curp").val(curp.substr(0,curp.length-5));
-					$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
-					$("#curp2").val(curp.substr(curp.length-5,5));		
-					$("#nocurp").html('<span style="color:green">Curp calculada correctamente</span>');			
+					if(op==1)
+					{
+						$("#curpT").val(curp);
+						$("#errorcurptutor").html('<span style="color:green">Curp calculada correctamente</span>');	
+
+					}
+					else
+					{
+						$("#curp").val(curp.substr(0,curp.length-5));
+						$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
+						$("#curp2").val(curp.substr(curp.length-5,5));
+						$("#nocurp").html('<span style="color:green">Curp calculada correctamente</span>');	
+					}
 				}
 				else
-					$("#nocurp").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');	
+				{
+					if(op==1)
+						$("#errorcurptutor").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');
+					else
+						$("#nocurp").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');	
+				}
 			}
 		});
 	}
@@ -466,12 +561,28 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		var miclase="";
 		if((num%2)==0) miclase="row2"; else miclase="row1";
 		if(num<10)num="0"+num;
+		if(id=="ira"||id=="eda"||id=="consulta")
+		{
+			campo_mas='<th width="20%"><select name="tratamiento'+id+'[]" id="tratamiento'+id+num+'" style="width:99%;"></select></th><th width="27%"><select name="tratamiento_des'+id+'[]" id="tratamiento_des'+id+num+'" style="width:99%;"></select></th>';
+			ax="99%"; by="70%"; ha="28%"; hb="15%";
+		}
+			
+		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="'+ha+'"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:'+ax+'"></select></th>  <th width="'+hb+'"><input name="f'+id+'[]" type="text" id="f'+id+num+'" style="width:'+by+'"></th>'+campo_mas+'</tr> </table> </div></span>';
 		
-		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style=100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="50%"><select name="'+id+'[]" id="'+id+num+'" class="requiere" title="requiere" required style="width:98%;"></select></th>  <th width="40%"><input name="f'+id+'[]" type="text" id="f'+id+num+'" ></th> </tr> </table> </div></span>';
 		$("#"+a).append(campo);
+		
 		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
-		$("#f"+id+num).datepicker();
+		$("#f"+id+num).datepicker(optionsFecha );
 		$("#"+id+num).load("/tes/enrolamiento/catalog_select/"+id);
+		if(id=="ira"||id=="eda"||id=="consulta")
+		{
+			$("#tratamiento"+id+num).load("/tes/enrolamiento/tratamiento_select/activo/1/0/tipo");
+			$("#tratamiento"+id+num).click(function(e) 
+			{
+				num=this.id.replace(/\D/g,'');
+				$("#tratamiento_des"+id+num).load("/tes/enrolamiento/tratamiento_select/tipo/"+encodeURIComponent(this.value)+"/0/descripcion/");
+			});
+		}
 	}
 	function rem(id,n)
 	{
@@ -512,12 +623,35 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			document.getElementById("nNu").value = num;
 		}
 	}
+	
+	function add_fecha_edo()
+	{	
+		campo = '<span id="_fecha_edo" ><p>Fecha: <input id="fechaT" style="height:25px; width:150px; margin-top:-6px;">&nbsp; Estado: <select id="edoT"><option value="">Seleccione</option><option value="AGUASCALIENTES">AGUASCALIENTES</option><option value="BAJA CALIFORNIA NORTE">BAJA CALIFORNIA</option><option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR</option><option value="CAMPECHE">CAMPECHE</option><option value="CHIAPAS">CHIAPAS</option><option value="CHIHUAHUA">CHIHUAHUA</option><option value="COAHUILA">COAHUILA</option><option value="COLIMA">COLIMA</option><option value="DISTRITO FEDERAL">DISTRITO FEDERAL</option><option value="DURANGO">DURANGO</option><option value="GUANAJUATO">GUANAJUATO</option><option value="GUERRERO">GUERRERO</option><option value="HIDALGO">HIDALGO</option><option value="JALISCO">JALISCO</option><option value="MEXICO">MEXICO</option><option value="MORELOS">MORELOS</option><option value="MICHOACAN">MICHOACAN</option><option value="NAYARIT">NAYARIT</option><option value="NUEVO LEON">NUEVO LEON</option><option value="OAXACA">OAXACA</option><option value="PUEBLA">PUEBLA</option><option value="QT">QUERETARO</option><option value="QUINTANA ROO">QUINTANA ROO</option><option value="SAN LUIS POTOSI">SAN LUIS POTOSI</option><option value="SINALOA">SINALOA</option><option value="SONORA">SONORA</option><option value="TABASCO">TABASCO</option><option value="TAMAULIPAS">TAMAULIPAS</option><option value="TLAXCALA">TLAXCALA</option><option value="VERACRUZ">VERACRUZ</option><option value="YUCATAN">YUCATAN</option><option value="ZACATECAS">ZACATECAS</option><option value="NACIDO EN EL EXTRANJERO">EXTRANJERO</option></select></p></span>';
+		$("#tutorcurp").append(campo);
+		$("#fechaT").datepicker(optionsFecha );
+		$("#fechaT,#edoT").change(function()
+		{       
+			getcurpTutor();
+		});	
+	}
+	function rem_fecha_edo()
+	{
+		$("#_fecha_edo").remove();
+	}
+	function cleanForm()
+	{
+		var valor=$("#alert").html();
+		if(valor.search("incorrecto")<0)
+		limpiaformulario("enrolar");
+		else
+		$("#alert").css("display","")
+	}
 	</script><!-- mensaje-->
         <?php 	
 			if(!empty($msgResult))
 			echo "<div class='$infoclass'>".$msgResult."</div>";
 			echo validation_errors(); 
-			echo form_open(DIR_TES.'/enrolamiento/update/'.$enrolado->id,array('onkeyup' => 'limpiaformulario(\'enrolar\')','onclick' => 'limpiaformulario(\'enrolar\')', 'id' => 'enrolar')); 
+			echo form_open(DIR_TES.'/enrolamiento/update/'.$enrolado->id,array('onkeyup' => 'cleanForm()','onclick' => 'cleanForm()', 'id' => 'enrolar')); 
 		?>
       <!-- mensaje -->
       <div class="info requiere" style="width:93%"><img src="/resources/images/asterisco.png" />Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
@@ -572,7 +706,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td colspan="3">
                             <div class="input-append" style="width:100%"><input name="lnacimientoT" type="text" title='requiere' required id="lnacimientoT" style="width:68%; margin-left:10px;" value="" readonly="readonly" >
                             	<input name="lnacimiento" type="hidden" id="lnacimiento" value="">                              
-                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(2,4,5)));?>/<?php echo urlencode(json_encode(array(2,3)));?>' id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a><div id="aqui"></div>
+                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>' id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a><div id="aqui"></div>
                               </div>
                               </td>
                             </tr>
@@ -634,21 +768,6 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     </div>
                     <?php }?>
                     
-                    <!-- Tipo de Beneficiario:  -->
-                    <?php if($cn_beneficiario){ ?>
-                  <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Tipo de Beneficiario</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
-                       	<div id="tbenef" style="margin-left:10px;">
-                            
-                            </div>
-                            <input name="id_cns_beneficiario" type="hidden" id="id_cns_beneficiario" value="<?php echo $id;?>"  />
-                      	</div>
-                      </div>
-                    </div>
-                    <?php }?>
-                    
                     <!-- Tutor -->
                   	<?php if($cn_tutor){ ?>
                     <div class="AccordionPanel">
@@ -677,7 +796,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">CURP</p></td>
-                            <td width="31%"><input name="curpT" type="text" title='requiere' required id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo $enrolado->curpT; ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)"/></td>
+                            <td width="31%"><input name="curpT" type="text" id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo $enrolado->curpT; ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)"/></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px; float:left">
@@ -707,6 +826,14 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" >
                             </select></td>
                           </tr>
+                           <tr>
+                            <td>&nbsp;</td>
+                            <td colspan="3"><label><input type="checkbox" name="fecha_edo" id="fecha_edo" style="margin-left:10px; margin-top:-3px;" />
+                            No tiene la curp pero sabe su fecha y estado de nacimiento </label>
+                            <div id="tutorcurp"></div>
+                            <div id="errorcurptutor"></div>
+                            </td>
+                          </tr>
                         </table>
                         <br />
                       
@@ -714,10 +841,93 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     </div>
                     <?php }?>
                     
+                    <!-- Direccion  -->
+                    <?php if($cn_direccion){ ?>
+                  <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Domicilio</div>
+                      <div class="AccordionPanelContent">
+                      <div id="compartetutor" style="width:94.7%" > </div>
+                        <div id="ladireccion">
+                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
+                          <tr>
+                            <td width="19%" height="50"><p align="right">Calle</p></td>
+                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->calle_domicilio; ?>"></td>
+                            <td width="25%"><p align="right">
+                              <input name="id_cns_direccion" type="hidden" id="id_cns_direccion" value="<?php echo $id;?>"  />
+                            Número</p></td>
+                            <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->numero_domicilio; ?>"></td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Referencia</p></td>
+                            <td colspan="3"><input name="referencia" type="text" id="referencia" style="width:68%; margin-left:10px;"  value="<?php echo $enrolado->referencia_domicilio; ?>" /></td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Colonia</p></td>
+                            <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->colonia_domicilio; ?>"></td>
+                            <td><p align="right">CP</p></td>
+                            <td><input name="cp" type="text" id="cp" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->cp_domicilio; ?>" maxlength="5" ></td>
+                          </tr>
+                          <tr>
+                          <td colspan="4" width="100%">
+                              <table width="97%" border="0">
+                                <tr>
+                                  <td width="19%" align="right"><p>Ageb</p></td>
+                                  <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo $enrolado->ageb; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
+                                  <td  align="right"><p>Sector</p></td>
+                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->sector; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td  align="right"><p>Manzana</p></td>
+                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo $enrolado->manzana; ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                </tr>
+                              </table>
+                          </td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Localidad</p></td>
+                            <td colspan="3"><div class="input-append" style="width:100%"><input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
+                              <input name="localidad" type="hidden" id="localidad" value=""/>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Telefono de Casa</p></td>
+                            <td><input name="telefono" type="text" id="telefono" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->telefono_domicilio; ?>" /></td> 
+                            <td><p align="right">Celular</p></td> 
+                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->celular; ?>" /></td>                          
+                          </tr>
+                          <tr>
+                            <td><p align="right">Compania Celular</p></td>
+                            <td><select name="compania" id="compania" style="width:85%; margin-left:10px;" >
+                            </select></td> 
+                            <td></td> 
+                            <td></td>                          
+                          </tr>
+                        </table>
+                        </div>
+                        <br />
+                      </div>
+                    </div>
+                    <?php }?>
+                    
+                    <!-- Tipo de Beneficiario:  -->
+                    <?php if($cn_beneficiario){ ?>
+                  <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Derechohabiencia</div>
+                      <div class="AccordionPanelContent"><br />
+                      	<div style="margin-left:20px; width:90%">
+                       	<div id="tbenef" style="margin-left:10px;">
+                            
+                            </div>
+                            <input name="id_cns_beneficiario" type="hidden" id="id_cns_beneficiario" value="<?php echo $id;?>"  />
+                      	</div>
+                      </div>
+                    </div>
+                    <?php }?>
+                    
+                    
+                    
                     <!--  Unidad Medica Tratante -->
                     <?php if($cn_umt){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Unidad Medica Tratante</div>
+                      <div class="AccordionPanelTab">Unidad Medica de Responsabilidad</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                       
@@ -725,7 +935,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td width="19%" height="50"><p align="right">
                               <input name="id_cns_umt" type="hidden" id="id_cns_umt" value="<?php echo $id;?>"  />
                             Lugar</p></td>
-                            <td width="81%" colspan="3"><div class="input-append" style="width:100%"><input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
+                            <td width="81%" colspan="3">
+                            <span style="font-size:12px; margin-left:10px; font-style:italic;">um, localidad ,municipio, estado</span><div class="input-append" style="width:100%"><input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
                               <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/<?php echo urlencode(json_encode(array(5)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
                           </tr>
@@ -752,9 +963,9 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                           </tr>
                           <tr>
                             <td><p align="right">Lugar</p></td>
-                            <td colspan="3"><div class="input-append" style="width:100%"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="" readonly="readonly" title="requiere">
+                            <td colspan="3"><div class="input-append" style="width:100%"><input name="lugarcivilT" type="text" id="lugarcivilT" style="width:68%; margin-left:10px;"  value="" readonly="readonly" >
                               <input name="lugarcivil" type="hidden" id="lugarcivil"  value=""/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(2,4,5)));?>/<?php echo urlencode(json_encode(array(2,3)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Registro Civil/1/radio/0/lugarcivil/lugarcivilT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
                           </tr>
                         </table>
                         <br />
@@ -763,71 +974,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     </div>
                     <?php }?>
                     
-                    <!-- Direccion  -->
-                    <?php if($cn_direccion){ ?>
-                  <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Dirección</div>
-                      <div class="AccordionPanelContent">
-                      <div id="compartetutor" style="width:94.7%" > </div>
-                        <div id="ladireccion">
-                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
-                          <tr>
-                            <td width="19%" height="50"><p align="right">Calle</p></td>
-                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;" title='requiere' required value="<?php echo $enrolado->calle_domicilio; ?>"></td>
-                            <td width="25%"><p align="right">
-                              <input name="id_cns_direccion" type="hidden" id="id_cns_direccion" value="<?php echo $id;?>"  />
-                            Número</p></td>
-                            <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->numero_domicilio; ?>"></td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Referencia</p></td>
-                            <td colspan="3"><input name="referencia" type="text" id="referencia" style="width:68%; margin-left:10px;"  value="<?php echo $enrolado->referencia_domicilio; ?>" /></td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Colonia</p></td>
-                            <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->colonia_domicilio; ?>"></td>
-                            <td><p align="right">CP</p></td>
-                            <td><input name="cp" type="text" title='requiere' required id="cp" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->cp_domicilio; ?>" maxlength="5" ></td>
-                          </tr>
-                          <tr>
-                          <td colspan="4" width="100%">
-                              <table width="97%" border="0">
-                                <tr>
-                                  <td width="19%" align="right"><p>Ageb</p></td>
-                                  <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo $enrolado->ageb; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
-                                  <td  align="right"><p>Sector</p></td>
-                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->sector; ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
-                                  <td  align="right"><p>Manzana</p></td>
-                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo $enrolado->manzana; ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
-                                </tr>
-                              </table>
-                          </td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Localidad</p></td>
-                            <td colspan="3"><div class="input-append" style="width:100%"><input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="" readonly="readonly">
-                              <input name="localidad" type="hidden" id="localidad" value=""/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,4,5)));?>/<?php echo urlencode(json_encode(array(2,3)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Telefono de Casa</p></td>
-                            <td><input name="telefono" type="text" id="telefono" style="width:80%; margin-left:10px;" value="<?php echo $enrolado->telefono_domicilio; ?>" /></td> 
-                            <td><p align="right">Celular</p></td> 
-                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo $enrolado->celular; ?>" /></td>                          
-                          </tr>
-                          <tr>
-                            <td><p align="right">Compania Celular</p></td>
-                            <td><select name="compania" id="compania" style="width:85%; margin-left:10px;" >
-                            </select></td> 
-                            <td></td> 
-                            <td></td>                          
-                          </tr>
-                        </table>
-                        </div>
-                        <br />
-                      </div>
-                    </div>
-                    <?php }?>
+                    
                     
                     <!-- alergias y reacciones:  -->
                     <?php if($cn_alergia){ ?>
@@ -890,8 +1037,10 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">IRA</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="28%" align="left">IRA</th>
+                                        <th width="15%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Tipo</th>
+                                        <th width="27%" align="left">Tratamiento</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -923,8 +1072,10 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">EDA</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="28%" align="left">EDA</th>
+                                        <th width="15%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Tipo</th>
+                                        <th width="27%" align="left">Tratamiento</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -956,8 +1107,10 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">Consulta</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="28%" align="left">Consulta</th>
+                                        <th width="15%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Tipo</th>
+                                        <th width="27%" align="left">Tratamiento</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -978,38 +1131,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     </div>
                     <?php }?>
                     
-                    <!-- accion nutricional  -->
-                    <?php if($cn_accion){ ?>
-                  <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Acción Nutricional</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
-                        <table>
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="50%" align="left">A. Nutriconal</th>
-                                        <th width="40%" align="left">Fecha</th>
-                                    </tr>
-                                  </table> 
-                                  </div>
-                                  <?php echo getArray($nutricionales,'accion_nutricional','nac');?>
-                                  <div id="can">
-                                  </div>                           
-                                 </td>
-                                 <td valign="top"> 
-                                   <button type="button" class="btn btn-primary" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
-                                   <button type="button" class="btn btn-primary" onclick="rem('accion_nutricional','nac');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> </td>
-                              </tr>                     
-                          </table>
-                        <input name="id_cns_accion" type="hidden" id="id_cns_accion" value="<?php echo $id;?>"  />
-                        </div>
-                      </div>
-                    </div>
-                    <?php }?>
+                    
                     
                   <!-- nutricion  -->
                     <?php if($cn_nutricion){ ?>
@@ -1026,7 +1148,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                         <th width="10%" >No</th>
                                         <th width="18%" align="left">Peso (kg)</th>
                                         <th width="18%" align="left">Altura (cm)</th>
-                                        <th width="18%" align="left">Talla (cm)</th>
+                                        <th width="18%" align="left">Talla cintura (cm)</th>
                                         <th width="36%" align="left">Fecha</th>
                                     </tr>
                                   </table> 
@@ -1084,6 +1206,39 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                       <?php }?>
                     </div>                                        
                     
+                    
+                    <!-- accion nutricional  -->
+                    <?php if($cn_accion){ ?>
+                  <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Control de Acción Nutricional</div>
+                      <div class="AccordionPanelContent"><br />
+                      	<div style="margin-left:20px; width:90%">
+                        <table>
+                            <tr>
+                                <td width="85%" valign="top">
+                                <div class="detalle" style="width:100%">
+                                  <table width="100%" >
+                                    <tr>
+                                        <th width="10%" >No</th>
+                                        <th width="50%" align="left">A. Nutriconal</th>
+                                        <th width="40%" align="left">Fecha</th>
+                                    </tr>
+                                  </table> 
+                                  </div>
+                                  <?php echo getArray($nutricionales,'accion_nutricional','nac');?>
+                                  <div id="can">
+                                  </div>                           
+                                 </td>
+                                 <td valign="top"> 
+                                   <button type="button" class="btn btn-primary" onclick="add('accion_nutricional','nac','can');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
+                                   <button type="button" class="btn btn-primary" onclick="rem('accion_nutricional','nac');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> </td>
+                              </tr>                     
+                          </table>
+                        <input name="id_cns_accion" type="hidden" id="id_cns_accion" value="<?php echo $id;?>"  />
+                        </div>
+                      </div>
+                    </div>
+                    <?php }?>
                     </td>
             </tr>
             <tr>

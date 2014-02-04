@@ -393,14 +393,16 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 	 * @param		string 		$catalog    tabla de donde se extrae la informacion
 	 * @param		string 		$sel        identifica si un valor ya esta seleccionado 
 	 * @param		string 		$orden      columna para hacer el ordenamiento
+	 * @param		string 		$campo      campo de la tabla para hacer el where
+	 * @param		string 		$valor      valor a comparar en el where
 	 *
 	 * @return 		echo
 	 */
-	public function catalog_select($catalog,$sel="",$orden="")
+	public function catalog_select($catalog,$sel="",$orden="",$campo="",$valor="")
 	{
 		$opcion="";
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
-		$datos=$this->Enrolamiento_model->get_catalog("cns_".$catalog,"","",$orden);
+		$datos=$this->Enrolamiento_model->get_catalog("cns_".$catalog,$campo,$valor,$orden);
 		if(sizeof($datos)!=0)
 		{
 			$opcion.="<option value=''>Seleccione...</option>";
@@ -410,6 +412,53 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 				$che="";
 				if(stripos(".".$sel,$id))$che="selected";
 				$descripcion=$dato->descripcion;
+				$opcion.="<option value='$id' $che>$descripcion</option>";
+			}
+			echo $opcion;
+		}
+		else
+		echo "<option>No hay Datos</option>";
+	}	 
+	
+	/**
+	 * @access public
+	 *
+	 * Genera los options de un campo tipo select para los tratamientos de ira, eda y consulta
+	 * 
+	 * @param		string 		$campo      campo de la tabla para hacer el where
+	 * @param		string 		$valor      valor a comparar en el where
+	 * @param		string 		$sel        identifica si un valor ya esta seleccionado 
+	 * @param		string 		$orden      columna para hacer el ordenamiento
+	 *
+	 * @return 		echo
+	 */
+	public function tratamiento_select($campo="",$valor="",$sel="",$orden="")
+	{
+		$opcion="";
+		$valor=urldecode($valor);echo $valor;
+		$this->load->model(DIR_TES.'/Enrolamiento_model');
+		$datos=$this->Enrolamiento_model->get_catalog_tratamiento("cns_tratamiento",$campo,$valor,$orden);
+		if(sizeof($datos)!=0)
+		{
+			$opcion.="<option value=''>Seleccione...</option>";
+			foreach($datos as $dato)
+			{
+				$che="";
+				
+				if($orden=="tipo"||$orden=="cc")
+				{
+					$yd=$dato->id;
+					$id=$dato->tipo;
+					$descripcion=$dato->tipo;
+					$che="";
+					if(stripos(".".$sel,$yd))$che="selected";
+				}
+				else
+				{
+					$id=$dato->id;
+					$descripcion=$dato->descripcion;
+					if(stripos(".".$sel,$id))$che="selected";
+				}
 				$opcion.="<option value='$id' $che>$descripcion</option>";
 			}
 			echo $opcion;
@@ -649,6 +698,8 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		foreach($iras as $x)
 		{
 			$data.=$x->id."=";
+			$data.=$x->id_tratamiento;					 if($x->id_tratamiento=="")$data.="¬=";else $data.="=";
+			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬=";else $data.="=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
 		if(empty($iras))
@@ -659,6 +710,8 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		foreach($edas as $x)
 		{
 			$data.=$x->id."=";
+			$data.=$x->id_tratamiento;					 if($x->id_tratamiento=="")$data.="¬=";else $data.="=";
+			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬=";else $data.="=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
 		if(empty($edas))
@@ -669,6 +722,8 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		foreach($consultas as $x)
 		{
 			$data.=$x->id."=";
+			$data.=$x->id_tratamiento;					 if($x->id_tratamiento=="")$data.="¬=";else $data.="=";
+			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬=";else $data.="=";
 			$data.=date("Y-m-d",strtotime($x->fecha))."°";
 		}
 		if(empty($consultas))
@@ -831,8 +886,8 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		
 		if(isset($_POST["id_cns_regcivil"])||$op=="")
 		{
-			$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|required');
-			$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|required');
+			$this->form_validation->set_rules('fechacivil', 'Fecha Civil', 'trim|xss_clean');
+			$this->form_validation->set_rules('lugarcivil', 'Lugar Civil', 'trim|xss_clean');
 			$this->form_validation->set_rules('lugarcivilT', 'Lugar Civil', '');
 		}
 		
@@ -844,15 +899,15 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		
 		if(isset($_POST["id_cns_direccion"])||$op=="")
 		{
-			$this->form_validation->set_rules('calle', 'Calle', 'trim|required');
+			$this->form_validation->set_rules('calle', 'Calle', 'trim|xss_clean');
 			$this->form_validation->set_rules('numero', 'numero', '');
 			$this->form_validation->set_rules('referencia', 'referencia', '');
 			$this->form_validation->set_rules('colonia', 'colonia', '');
-			$this->form_validation->set_rules('cp', 'Codigo Postal', 'trim|required');
+			$this->form_validation->set_rules('cp', 'Codigo Postal', 'trim|xss_clean');
 			$this->form_validation->set_rules('ageb', 'ageb', 'xss_clean');
 			$this->form_validation->set_rules('sector', 'sector', 'xss_clean');
 			$this->form_validation->set_rules('manzana', 'manzana', 'xss_clean');
-			$this->form_validation->set_rules('localidad', 'Localidad', 'trim|required');
+			$this->form_validation->set_rules('localidad', 'Localidad', 'trim|xss_clean');
 			$this->form_validation->set_rules('localidadT', 'Localidad', '');
 			$this->form_validation->set_rules('celular', 'celular', '');
 			$this->form_validation->set_rules('telefono', 'telefono', '');
@@ -920,7 +975,7 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		$this->Enrolamiento_model->setcelular($this->input->post('celular'));
 		$this->Enrolamiento_model->setnumero($this->input->post('numero'));
 		$this->Enrolamiento_model->setcp($this->input->post('cp'));
-		$this->Enrolamiento_model->setageb($this->input->post('ageb'));
+		$this->Enrolamiento_model->setageb(str_pad(strtoupper($this->input->post('ageb')), 4, '0', STR_PAD_LEFT));
 		$this->Enrolamiento_model->setsector($this->input->post('sector'));
 		$this->Enrolamiento_model->setmanzana($this->input->post('manzana'));
 		
@@ -932,12 +987,15 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		
 		$this->Enrolamiento_model->setira($this->input->post('ira'));
 		$this->Enrolamiento_model->setfira($this->input->post('fira'));
+		$this->Enrolamiento_model->settira($this->input->post('tratamiento_desira'));
 		
 		$this->Enrolamiento_model->seteda($this->input->post('eda'));
 		$this->Enrolamiento_model->setfeda($this->input->post('feda'));
+		$this->Enrolamiento_model->setteda($this->input->post('tratamiento_deseda'));
 		
 		$this->Enrolamiento_model->setconsulta($this->input->post('consulta'));
 		$this->Enrolamiento_model->setfconsulta($this->input->post('fconsulta'));
+		$this->Enrolamiento_model->settconsulta($this->input->post('tratamiento_desconsulta'));
 		
 		$this->Enrolamiento_model->setaccion_nutricional($this->input->post('accion_nutricional'));
 		$this->Enrolamiento_model->setfaccion_nutricional($this->input->post('faccion_nutricional'));
@@ -1004,30 +1062,33 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 	public function ifCurpTExists($curp) 
 	{
 		$id=$this->input->post('idtutor');
-		if (empty($this->Enrolamiento_model))
-			return false;
-		$is_exist = null;
-		try {
-			$is_exist = $this->Enrolamiento_model->getByCurp($curp,'cns_tutor',$id);
-		}
-		catch(Exception $e){
-		}
-		if ($is_exist) 
+		if($id!="")
 		{
-			$this->form_validation->set_message(
-					'ifCurpTExists', 'El curp del tutor ya existe.'
-			);
-			return false;
-		} 
-		else 
-		{
-			if (!$this->Enrolamiento_model->getMsgError())
-				return true;
-			else{
+			if (empty($this->Enrolamiento_model))
+				return false;
+			$is_exist = null;
+			try {
+				$is_exist = $this->Enrolamiento_model->getByCurp($curp,'cns_tutor',$id);
+			}
+			catch(Exception $e){
+			}
+			if ($is_exist) 
+			{
 				$this->form_validation->set_message(
-						'ifCurpTExists', $this->Enrolamiento_model->getMsgError()
+						'ifCurpTExists', 'El curp del tutor ya existe.'
 				);
 				return false;
+			} 
+			else 
+			{
+				if (!$this->Enrolamiento_model->getMsgError())
+					return true;
+				else{
+					$this->form_validation->set_message(
+							'ifCurpTExists', $this->Enrolamiento_model->getMsgError()
+					);
+					return false;
+				}
 			}
 		}
 	}
