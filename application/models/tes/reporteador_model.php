@@ -60,7 +60,8 @@ class Reporteador_model extends CI_Model {
 	{
         $result = array();
         $idsAsu = array();
-		$sqlGrupoEtareo = "SELECT * FROM asu_grupo_etareo ORDER BY dia_fin";
+        // NOTA: Excluir el grupo etareo menor de ocho
+		$sqlGrupoEtareo = "SELECT * FROM asu_grupo_etareo WHERE id!=9 ORDER BY dia_fin";
         
         $queryGrupoEtareo = $this->db->query($sqlGrupoEtareo);
         $resultGrupoEtareo = $queryGrupoEtareo->result();
@@ -77,8 +78,8 @@ class Reporteador_model extends CI_Model {
         
         if (!$resultAsu){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
-			$this->msg_error_log = "No se encuentra el Identificador de ASU";
-			throw new Exception("No se encuentra el Identificador de ASU");
+			$this->msg_error_log = "No se encuentra el Identificador de ASU para el nivel de filtro seleccionado";
+			throw new Exception("No se encuentra el Identificador de ASU para el nivel de filtro seleccionado");
 		}
         
         switch ($resultAsu->grado_segmentacion) {
@@ -125,25 +126,13 @@ class Reporteador_model extends CI_Model {
                 break;
         }
         
-        $queryVacunas = $this->db->query('SELECT
-                    cns_vacuna.id,
-                    descripcion,
-                    descripcion_corta,
-                    dia_inicio_aplicacion_nacido,
-                    dia_fin_aplicacion_nacido,
-                    grupo
-                FROM cns_vacuna
-                INNER JOIN cns_regla_vacuna
-                    ON cns_vacuna.id = cns_regla_vacuna.id_vacuna
-                WHERE 
-                    cns_vacuna.activo = 1 AND
-                    esq_com = 1
-                ORDER BY orden_esq_com');
-        $vacunas = $queryVacunas->result();
+        $gruposVacuna = $this->Reporteador_model->getGrupoVacunas();
         
         foreach ($resultGrupoEtareo as $grupoEtareo) {
-            
-            $objReporte = new Reporte_cobertura_biologico();
+            // Se crea el objeto reporte del tipo clase generica
+            // dado que el reporte es dinamico no se puede conocer
+            // con anticipación las columnas que contendrá
+            $objReporte = new stdClass();
             $idGrupoEtareo = $grupoEtareo->id;
             
             // Corrige el grupo etareo menor de uno
@@ -184,95 +173,55 @@ class Reporteador_model extends CI_Model {
             
             $resultNom = $queryNom->row();
             
-            // NOTA: Revisar los ID de las vacunas si cambian el catalogo cns_vacuna
-            $queryBCG = $this->db->query('SELECT 
-                    COUNT(cns_persona.id) AS total
-                FROM 
-                    cns_persona
-                INNER JOIN
-                    cns_control_vacuna 
-                        ON cns_persona.id = cns_control_vacuna.id_persona
-                WHERE 
-                    id_vacuna=1 AND
-                    id_asu_um_tratante IN (
-                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                        )
-                    ) AND 
-                    TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
-                        BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
-            $resultBCG = $queryBCG->row();
-            
-            $queryHepB1 = $this->db->query('SELECT 
-                    COUNT(cns_persona.id) AS total
-                FROM 
-                    cns_persona
-                INNER JOIN
-                    cns_control_vacuna 
-                        ON cns_persona.id = cns_control_vacuna.id_persona
-                WHERE 
-                    cns_control_vacuna.fecha<="'.formatFecha($fecha, 'Y-m-d').'" AND
-                    id_vacuna = 2 AND
-                    id_asu_um_tratante IN (
-                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                        )
-                    ) AND 
-                    TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
-                        BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
-            $resultHepB1 = $queryHepB1->row();
-            
-            $queryHepB1 = $this->db->query('SELECT 
-                    COUNT(cns_persona.id) AS total
-                FROM 
-                    cns_persona
-                INNER JOIN
-                    cns_control_vacuna 
-                        ON cns_persona.id = cns_control_vacuna.id_persona
-                WHERE 
-                    cns_control_vacuna.fecha<="'.formatFecha($fecha, 'Y-m-d').'" AND
-                    id_vacuna = 2 AND
-                    id_asu_um_tratante IN (
-                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                        )
-                    ) AND 
-                    TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
-                        BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
-            $resultHepB1 = $queryHepB1->row();
-            
-            $queryHepB2 = $this->db->query('SELECT 
-                    COUNT(cns_persona.id) AS total
-                FROM 
-                    cns_persona
-                INNER JOIN
-                    cns_control_vacuna 
-                        ON cns_persona.id = cns_control_vacuna.id_persona
-                WHERE 
-                    cns_control_vacuna.fecha<="'.formatFecha($fecha, 'Y-m-d').'" AND
-                    id_vacuna = 3 AND
-                    id_asu_um_tratante IN (
-                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                        )
-                    ) AND 
-                    TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
-                        BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
-            $resultHepB2 = $queryHepB2->row();
-            
             $objReporte->grupo_etareo = $grupoEtareo->descripcion;
             $objReporte->pob_oficial = (int)$resultPob->poblacion;
             $objReporte->pob_nominal = (int)$resultNom->nominal;
-            $objReporte->bcg_tot = $resultBCG->total;
-            $objReporte->hepB_tot = $resultHepB1->total;
-            $objReporte->penta_tot = 9;
-            $objReporte->neumo_tot = 11;
-            $objReporte->rota_tot = 13;
-            $objReporte->srp_tot = 15;
-            $objReporte->dpt_tot = 17;
-            $objReporte->esq_comp_tot = 19;
+            $objReporte->concordancia = $objReporte->pob_oficial ? round(($objReporte->pob_nominal/$objReporte->pob_oficial)*100, 2) : 0;
             
-            $objReporte->calConcordancia();
+            foreach ($gruposVacuna as $grupo) {
+                $ultimaDosisTotal = 0;
+                $ultimaDosisDescrip = '';
+                // Obtiene las vacunas de cada grupo
+                $vacunas = $this->Reporteador_model->getVacunasByGrupo($grupo->grupo);
+                
+                foreach ($vacunas as $vac) {
+                    if( $grupoEtareo->dia_inicio >= $vac->dia_inicio_aplicacion_nacido && $vac->dia_fin_aplicacion_nacido <= ($grupoEtareo->dia_fin+1) ){
+                        $objReporte->{$vac->descripcion_corta} = $vac->descripcion_corta;
+                        
+                        $queryCob = $this->db->query('SELECT 
+                                COUNT(cns_persona.id) AS total
+                            FROM 
+                                cns_persona
+                            INNER JOIN
+                                cns_control_vacuna 
+                                    ON cns_persona.id = cns_control_vacuna.id_persona
+                            WHERE 
+                                cns_control_vacuna.fecha<="'.formatFecha($fecha, 'Y-m-d').'" AND
+                                id_vacuna = '.$vac->id.' AND
+                                id_asu_um_tratante IN (
+                                    SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+                                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
+                                    )
+                                ) AND 
+                                TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
+                                    BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
+                        $resultCob = $queryCob->row();
+                        
+                        $objReporte->{$vac->descripcion_corta} = $resultCob->total;
+                        $ultimaDosisTotal = $resultCob->total;
+                        $ultimaDosisDescrip = $vac->descripcion_corta;
+                    } else {
+                        $objReporte->{$vac->descripcion_corta} = '-';
+                    }
+                    //$objReporte->{$vac->descripcion_corta} = $grupoEtareo->dia_inicio.'-'.$grupoEtareo->dia_fin.'<br>'.$vac->dia_inicio_aplicacion_nacido.'-'.$vac->dia_fin_aplicacion_nacido;
+                }
+                
+                $objReporte->{$ultimaDosisDescrip.'_cob'} = ($objReporte->pob_oficial ? round($ultimaDosisTotal/$objReporte->pob_oficial, 2)*100 : 0).'%';
+            }
+            
+            $objReporte->esq_comp_tot = 19;
+            $objReporte->esq_comp_oficial = $objReporte->pob_oficial ? round($objReporte->esq_comp_tot/$objReporte->pob_oficial, 2) : 0;
+            $objReporte->esq_comp_nominal = $objReporte->pob_nominal ? round($objReporte->esq_comp_tot/$objReporte->pob_nominal, 2) : 0;
 
             $result[] = $objReporte;
         }
@@ -546,6 +495,33 @@ class Reporteador_model extends CI_Model {
                 WHERE 
                     cns_vacuna.activo = 1 AND
                     esq_com = 1
+                ORDER BY orden_esq_com');
+        
+        $vacunas = $queryVacunas->result();
+        
+        return $vacunas;
+    }
+    
+    /*
+     * Devuelve el listado de vacunas correspondientes a un grupo especificado
+     * 
+     * @param string $grupo
+     */
+    function getVacunasByGrupo($grupo) {
+        $queryVacunas = $this->db->query('SELECT
+                    cns_vacuna.id,
+                    descripcion,
+                    descripcion_corta,
+                    dia_inicio_aplicacion_nacido,
+                    dia_fin_aplicacion_nacido,
+                    grupo
+                FROM cns_vacuna
+                INNER JOIN cns_regla_vacuna
+                    ON cns_vacuna.id = cns_regla_vacuna.id_vacuna
+                WHERE 
+                    cns_vacuna.activo = 1 AND
+                    esq_com = 1 AND
+                    grupo = "'.$grupo.'"
                 ORDER BY orden_esq_com');
         
         $vacunas = $queryVacunas->result();
