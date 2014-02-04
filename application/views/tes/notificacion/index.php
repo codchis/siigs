@@ -40,7 +40,7 @@ $opcion_delete = Menubuilder::isGranted(DIR_TES.'::notificacion::delete');
 <fieldset style="width: 50%">
 <?php echo form_open(DIR_TES.'/notificacion/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
 <input type="hidden" name="filtrar" value="true" />
-Buscar<input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" />
+Buscar:<input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" />
 <br><u>(Rango de fechas en que inician las notificaciones a buscar)</u>
 <br>Desde:<input type="text" id="fechaIni" name="fechaIni" value="<?php echo isset($fechaIni) ? $fechaIni: ''; ?>" size="8" placeholder="desde" />
 <br>Hasta:<input type="text" id="fechaFin" name="fechaFin" value="<?php echo isset($fechaFin) ? $fechaFin: ''; ?>" size="8" placeholder="hasta" />
