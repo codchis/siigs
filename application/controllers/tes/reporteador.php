@@ -85,9 +85,7 @@ class Reporteador extends CI_Controller {
 
 			if($op==0) {
                 $this->load->helper('formatFecha');
-                $this->load->model(DIR_TES.'/Reporte_cobertura_biologico');
 				$array = $this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
-                $vacunas = $this->Reporteador_model->getVacunas();
                 $grupo = $this->Reporteador_model->getGrupoVacunas();
                 
                 $filaTitulosGrupos = '';
@@ -95,22 +93,23 @@ class Reporteador extends CI_Controller {
                 $contGrupos = 0;
                 $contVacunas = 0;
                 
+                // Hace un recorrido de todos los grupos
                 foreach ($grupo as $gru) {
-                    $filaTitulosGrupos .= '<th colspan="'.($grupo->total+1).'">'.$grupo->grupo.'</th>';
-                    $contGrupos++;
-                }
-                
-                foreach ($vacunas as $vac) {
-                    $contVacunas++;
-                    $grupoVacuna = '';
+                    $filaTitulosGrupos .= '<th colspan="'.($gru->total+1).'">'.$gru->grupo.'</th>';
+                    $vacunas = '';
                     
-                    $filaVacunas = '<th>'.$vac->descripcion_corta.'</th>';
+                    // Obtiene las vacunas de cada grupo
+                    $vacunasGrupo = $this->Reporteador_model->getVacunasByGrupo($gru->grupo);
                     
-                    if($grupoVacuna != $vac->grupo) {
-                        
+                    // concatena todas las vacunas de cada grupo,
+                    // para mostrar en los titulos la descripción corta
+                    foreach ($vacunasGrupo as $vac) {
+                        $vacunas .= '<th>'.$vac->descripcion_corta.'</th>';
+                        $contVacunas++;
                     }
                     
-                    $grupoVacuna = $vac->grupo;
+                    $filaVacunas .= $vacunas.'<th>%Cob.</th>';
+                    $contGrupos++;
                 }
                 
                 $data['headTable'] = '<thead>
@@ -127,33 +126,7 @@ class Reporteador extends CI_Controller {
                             '.$filaTitulosGrupos.'
                         </tr>
                         <tr>
-                            <th>Total</th>
-                            <th>%Cob.</th>
-                            <th>1a</th>
-                            <th>2a</th>
-                            <th>3a</th>
-                            <th>Total</th>
-                            <th>%Cob.</th>
-                            <th>1a</th>
-                            <th>2a</th>
-                            <th>3a</th>
-                            <th>4a</th>
-                            <th>Total</th>
-                            <th>%Cob.</th>
-                            <th>1a</th>
-                            <th>2a</th>
-                            <th>3a</th>
-                            <th>Total</th>
-                            <th>%Cob.</th>
-                            <th>1a</th>
-                            <th>2a</th>
-                            <th>3a</th>
-                            <th>Total</th>
-                            <th>%Cob.</th>
-                            <th>Total</th>
-                            <th>%Cob.</th>
-                            <th>Total</th>
-                            <th>%Cob.</th>
+                            '.$filaVacunas.'
                             <th>Total</th>
                             <th>%Of.</th>
                             <th>%Nom.</th>

@@ -12,7 +12,7 @@ if($enrolado)
 		type: "POST",
 		data: {
 			'claves':[<?php  echo $enrolado->id_asu_localidad_nacimiento;?>] ,
-			'desglose':1 },
+			'desglose':5 },
 		url: '/<?php  echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
 		})
 		.done(function(dato)
@@ -20,7 +20,12 @@ if($enrolado)
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
-				document.getElementById("lnacimientoT").innerHTML=obj[0]["descripcion"];
+				var des=obj[0]["descripcion"];
+				var ed=des.split(",");
+				ed=ed[ed.length-2];
+				des=des.replace(ed+",", "");
+				
+				document.getElementById("lnacimientoT").innerHTML=des;
 			}
 		});
 		
@@ -36,7 +41,12 @@ if($enrolado)
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
-				document.getElementById("umt").innerHTML=obj[0]["descripcion"];
+				var des=obj[0]["descripcion"];
+				var ed=des.split(",");
+				ed=ed[ed.length-2];
+				des=des.replace(ed+",", "");
+				
+				document.getElementById("umt").innerHTML=des;
 			}
 		});
 		
@@ -52,7 +62,12 @@ if($enrolado)
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
-				document.getElementById("lugarcivilT").innerHTML=obj[0]["descripcion"];
+				var des=obj[0]["descripcion"];
+				var ed=des.split(",");
+				ed=ed[ed.length-2];
+				des=des.replace(ed+",", "");
+				
+				document.getElementById("lugarcivilT").innerHTML=des;
 			}
 		});
 		
@@ -68,7 +83,12 @@ if($enrolado)
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
-				document.getElementById("localidadT").innerHTML=obj[0]["descripcion"];
+				var des=obj[0]["descripcion"];
+				var ed=des.split(",");
+				ed=ed[ed.length-2];
+				des=des.replace(ed+",", "");
+				
+				document.getElementById("localidadT").innerHTML=des;
 			}
 		});
 	});
@@ -142,28 +162,6 @@ function vacunacion(id,tiene,fecha,prioridad)
                       </div>
                     </div>
                     
-                    
-                    <!-- Tipo de Beneficiario:  -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Tipo de Beneficiario</div>
-                      <div class="AccordionPanelContent"><br />
-                      	
-                        	<div style="width:100%; margin-left:20px; margin-top:-5px"><?php  
-							$i=0;$a=0;
-							$opcion='<table width="85%"><tr>';
-							foreach ($afiliaciones as $afiliacion):
-								$id= $afiliacion->id;
-								$descripcion= $afiliacion->descripcion;
-								if($a==2){$opcion.="</tr><tr>"; $a=0;}
-								$opcion.="<td width='33%' valign='top'><label><input type='checkbox' value='$id' checked disabled> $descripcion</label></td>";
-								$i++;$a++;
-							endforeach; 
-							$opcion.='</tr></table>';
-							echo $opcion;
-							?></div>
-                        
-                      </div>
-                    </div>
                     <!-- Tutor -->
                   
                     <div class="AccordionPanel">
@@ -201,45 +199,9 @@ function vacunacion(id,tiene,fecha,prioridad)
                       </div>
                     </div>
                     
-                    <!--  Unidad Medica Tratante -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Unidad Medica Tratante</div>
-                      <div class="AccordionPanelContent" >
-                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
-                      
-                          <tr>
-                            <td width="19%"><p align="right">Lugar</p></td>
-                            <td width="81%" colspan="3"><div id="umt" style="width:100%; margin-left:20px;"></div>
-                          </tr>
-                        </table>
-                        <br />
-                      
-                      </div>
-                    </div>
-                    
-                    <!--  Registro civil -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Registro Civil</div>
-                      <div class="AccordionPanelContent" >
-                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
-                          <tr>
-                            <td width="19%"><p align="right">Fecha</p></td>
-                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->fecha_registro;?></div></td>
-                            <td width="25%"><p align="right">&nbsp;</p></td>
-                            <td width="25%">&nbsp;</td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Lugar</p></td>
-                            <td colspan="3"><div id="lugarcivilT" style="width:100%; margin-left:20px;"></div></tr>
-                        </table>
-                        <br />
-                      
-                      </div>
-                    </div>
-                    
                     <!-- Direccion  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Dirección</div>
+                      <div class="AccordionPanelTab">Domicilio</div>
                       <div class="AccordionPanelContent">
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
@@ -291,6 +253,69 @@ function vacunacion(id,tiene,fecha,prioridad)
                         <br />
                       </div>
                     </div>
+                    
+                    <!-- Tipo de Beneficiario:  -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Derechohabiencia</div>
+                      <div class="AccordionPanelContent"><br />
+                      	
+                        	<div style="width:100%; margin-left:20px; margin-top:-5px"><?php  
+							$i=0;$a=0;
+							$opcion='<table width="85%"><tr>';
+							foreach ($afiliaciones as $afiliacion):
+								$id= $afiliacion->id;
+								$descripcion= $afiliacion->descripcion;
+								if($a==2){$opcion.="</tr><tr>"; $a=0;}
+								$opcion.="<td width='33%' valign='top'><label><input type='checkbox' value='$id' checked disabled> $descripcion</label></td>";
+								$i++;$a++;
+							endforeach; 
+							$opcion.='</tr></table>';
+							echo $opcion;
+							?></div>
+                        
+                      </div>
+                    </div>
+                    
+                    
+                    <!--  Unidad Medica Tratante -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Unidad Medica de Responsabilidad</div>
+                      <div class="AccordionPanelContent" >
+                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
+                      
+                          <tr>
+                            <td width="19%" valign="middle"><p align="right">Lugar</p></td>
+                            <td width="81%" colspan="3">
+                            <span style="font-size:12px; margin-left:20px; font-style:italic;">um, localidad ,municipio, estado</span>
+                            <div id="umt" style="width:100%; margin-left:20px;"></div>
+                          </tr>
+                        </table>
+                        <br />
+                      
+                      </div>
+                    </div>
+                    
+                    <!--  Registro civil -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab">Registro Civil</div>
+                      <div class="AccordionPanelContent" >
+                        <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
+                          <tr>
+                            <td width="19%"><p align="right">Fecha</p></td>
+                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->fecha_registro;?></div></td>
+                            <td width="25%"><p align="right">&nbsp;</p></td>
+                            <td width="25%">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Lugar</p></td>
+                            <td colspan="3"><div id="lugarcivilT" style="width:100%; margin-left:20px;"></div></tr>
+                        </table>
+                        <br />
+                      
+                      </div>
+                    </div>
+                    
+                    
                     
                     <!-- alergias y reacciones:  -->
                     <div class="AccordionPanel">
@@ -411,7 +436,7 @@ $i++;
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de IRA</div>
                       <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
+                      	<div style="margin-left:20px; width:100%">
                         <table width="100%">
                             <tr>
                                 <td width="85%" valign="top">
@@ -419,13 +444,15 @@ $i++;
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">IRA</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="28%" align="left">IRA</th>
+                                        <th width="15%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Tipo</th>
+                                        <th width="27%" align="left">Tratamiento</th>
                                     </tr>
                                   </table> 
                                   </div>
                                   
-                                  	<div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($iras);?></div>
+                                  	<div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($iras,"ira");?></div>
                                        
                               </td>
                                  <td valign="top">&nbsp;</td>
@@ -439,7 +466,7 @@ $i++;
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de EDA</div>
                       <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
+                      	<div style="margin-left:20px; width:100%">
                         <table width="100%">
                             <tr>
                                 <td width="85%" valign="top">
@@ -447,12 +474,14 @@ $i++;
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">EDA</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="28%" align="left">EDA</th>
+                                        <th width="15%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Tipo</th>
+                                        <th width="27%" align="left">Tratamiento</th>
                                     </tr>
                                   </table> 
                                   </div>
-                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($edas);?></div>                           
+                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($edas,"eda");?></div>                           
                               </td>
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
@@ -465,7 +494,7 @@ $i++;
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Consulta</div>
                       <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
+                      	<div style="margin-left:20px; width:100%">
                         <table width="100%">
                             <tr>
                                 <td width="85%" valign="top">
@@ -473,12 +502,14 @@ $i++;
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">Consulta</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="28%" align="left">Consulta</th>
+                                        <th width="15%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Tipo</th>
+                                        <th width="27%" align="left">Tratamiento</th>
                                     </tr>
                                   </table> 
                                   </div>
-                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($consultas);?></div>                           
+                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($consultas,"consulta");?></div>                           
                               </td>
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
