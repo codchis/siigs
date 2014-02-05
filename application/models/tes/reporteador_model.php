@@ -299,9 +299,11 @@ class Reporteador_model extends CI_Model {
         $resultIdsConTutor = $queryIdsConTutor->result();
         
         if (!$resultIdsConTutor){
+                if ($this->db->_error_number() != 0){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                     }
 		}
         
 		$sqlVacunasEsquemaCompleto = "SELECT v.id,v.descripcion_corta as descripcion FROM cns_regla_vacuna rv INNER JOIN cns_vacuna v ON rv.id_vacuna=v.id
@@ -390,9 +392,11 @@ class Reporteador_model extends CI_Model {
         $resultIdsConTutor = $queryIdsConTutor->result();
         
         if (!$resultIdsConTutor){
+                if ($this->db->_error_number() != 0){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                     }
 		}
         
 		$sqlVacunasEsquemaCompleto = "SELECT v.id,v.descripcion_corta as descripcion FROM cns_regla_vacuna rv INNER JOIN cns_vacuna v ON rv.id_vacuna=v.id

@@ -55,9 +55,9 @@ $(document).ready(function()
 				echo "</thead></tr>";
 			}
 		}
-		else echo "<tr><th><h4>No se encontro resultados</h4></td></tr>";
+		else echo "<tr><th><h4>No se encontraron resultados</h4></td></tr>";
 	}
-	else echo "<tr><th><h4>No se encontro resultados</h4></td></tr>";
+	else echo "<tr><th><h4>No se encontraron resultados</h4></td></tr>";
 	?>	
 	
 	<?php
