@@ -140,10 +140,10 @@ class Reporte_sincronizacion extends CI_Controller
 			$array=$this->Reporte_sincronizacion_model->getListado("SELECT $campos FROM tes_tableta t $join WHERE id_tes_estado_tableta NOT IN (3,2)");	
 			
 			if($op==9)
-			$array=$this->Reporte_sincronizacion_model->getListado("SELECT distinct * FROM tes_pendientes_tarjeta");
+			$array=$this->Reporte_sincronizacion_model->getListado("SELECT distinct *id_persona,fecha,tabla,resuelto,mac FROM tes_pendientes_tarjeta");
 			
 			if($op==10)
-			$array=$this->Reporte_sincronizacion_model->getListado("SELECT * FROM tes_pendientes_tarjeta");
+			$array=$this->Reporte_sincronizacion_model->getListado("SELECT id_persona,fecha,tabla,resuelto,mac FROM tes_pendientes_tarjeta");
 			
 			if($op==11)
 			$array=$this->Reporte_sincronizacion_model->getListado("SELECT * FROM tes_version");

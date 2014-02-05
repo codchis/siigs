@@ -113,8 +113,8 @@
 					  
 				},
 				// The following options are only required, if we have more than one tree on one page:
-				cookieId: "dynatree-Cb2",
-				idPrefix: "dynatree-Cb2-"
+				//cookieId: "dynatree-Cb2",
+				//idPrefix: "dynatree-Cb2-"
 			});
 		});
 		<!-- End_Exclude -->
