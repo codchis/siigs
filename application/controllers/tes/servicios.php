@@ -341,6 +341,7 @@ class Servicios extends CI_Controller {
 					ob_flush();
 					unset($cadena);
 					$cadena=array();
+					$fecha=$this->session->userdata('fecha');
 					for($i=0;$i<$contador;$i++)
 					{
 						if($sf=="")
@@ -673,7 +674,22 @@ class Servicios extends CI_Controller {
 				else
 					$this->Enrolamiento_model->cns_insert("cns_persona",$midato);
 			}	
-			
+			if(array_key_exists("cns_visita",$datos))
+			foreach($datos["cns_visita"] as  $visita)
+			{
+				$this->Enrolamiento_model->cns_insert("cns_visita",$visita);
+				
+				if($visita->id_estado_visita==1||$visita->id_estado_visita==4)
+					$this->Enrolamiento_model->cns_update_visita($visita->id_persona);
+	
+				if($visita->id_estado_visita!=1&&$visita->id_estado_visita!=4&&$visita->id_estado_visita!=3)
+					$this->Enrolamiento_model->cns_update("cns_persona",array("contador_visitas" => '0'),$visita->id_persona);
+					
+				$contador=$this->Enrolamiento_model->get_catalog2("cns_persona","id",$visita->id_persona);
+
+				if($visita->id_estado_visita==3||$contador[0]->contador_visitas==3)
+					$this->Enrolamiento_model->cns_update("cns_persona",array("activo" => '0','ultima_actualizacion' => date("Y-m-d H:i:s")),$visita->id_persona);
+			}	
 			if(array_key_exists("cns_tutor",$datos))
 			foreach($datos["cns_tutor"] as  $midato)
 			{
@@ -988,7 +1004,9 @@ class Servicios extends CI_Controller {
 		$interval  = date_diff($datetime1, $datetime2);
 		$dias      = $interval->format('%a');
 		$dias_extra= $dias+$this->session->userdata('dias_extras');
-		
+		$mas=0;
+		if($dias>365&&$dias<1461)$mas=365;
+		if($dias>1461)$mas=1461;
 		foreach($regla as $r)
 		{
 			$x=0;
@@ -1003,9 +1021,9 @@ class Servicios extends CI_Controller {
 				}
 				if($x==0)
 				{
-					if($dias>=$r->desde&&$dias<=$r->hasta||$dias>$r->hasta)
+					if($dias>=($r->desde+$mas)&&$dias<=($r->hasta+$mas)||$dias>($r->hasta+$mas))
 						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>1));
-					if($dias_extra>=$r->desde&&$dias_extra<=$r->hasta)
+					if($dias_extra>=($r->desde+$mas)&&$dias_extra<=($r->hasta+$mas))
 						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>0));
 				}
 			}
@@ -1021,18 +1039,14 @@ class Servicios extends CI_Controller {
 		 $version,
 		 '{
 			  "id_resultado": "ok",
-    "cns_control_vacuna": [
+    "cns_visita": [
         {
-            "id_persona": "c844dee37db76567e3a4e6ed64c10057",
-            "codigo_barras": "duplicada",
+            "id_persona": "00043d74df5c3f7e48f0a2776aaa2602",
             "fecha": "2014-01-07 14:57:08",
             "id_asu_um": "1019",
-            "id_vacuna": "10"
+            "id_estado_visita": "1"
         }
-    ],
-    "sis_bitacora":[{"parametros":"paciente:37648c5b456a164ca486bcaae5b16451, vacuna:6","fecha_hora":"2014-01-28 12:17:45","id_usuario":"9","id_controlador_accion":"104"}],
-	"sis_error":[{"descripcion":"Json incorrecto en pendiente de persona:002f096e99f2fcface64f406f150a60c, fecha:2014-01-22 13:28:47, tabla:cns_control_vacuna","fecha_hora":"2014-01-28 12:35:09","id_usuario":"9","id_controlador_accion":"0"},{"descripcion":"Json incorrecto en pendiente de persona:002f096e99f2fcface64f406f150a60c, fecha:2014-01-22 14:10:17, tabla:cns_control_vacuna","fecha_hora":"2014-01-28 12:35:09","id_usuario":"9","id_controlador_accion":"0"}]
-}' );
+    ]}' );
 	}    
 }
 ?>
