@@ -34,7 +34,7 @@ $(document).ready(function(){
 			document.getElementById("alert").className="warning";
 			
 	        // fecha obligatoria en 3 primeros reportes
-	        if (($(this).attr("id") == 'rpt0' || $(this).attr("id") == 'rpt1' || $(this).attr("id") == 'rpt2') && $('#fecha_corte').val() == '')
+	        if ($(this).attr("id") == 'rpt0' && $('#fecha_corte').val() == '')
 	        {
 	        	document.getElementById("alert").innerHTML='<div>Capture la fecha de corte</div>';
 	        	$('input#valido').val('0');
