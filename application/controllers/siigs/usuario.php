@@ -781,7 +781,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 			$this->session->unset_userdata('session_etab');
 			echo '<script>
 			  	document.location.href="http://etab.sm2015.com.mx/admin/";
-			  </script>';
+			  </script>';$this->cerrar_etab();
 		}
 		$token=$this->get_token('http://etab.sm2015.com.mx/admin/login',true);
 		$this->session->set_userdata( 'session_etab', "iniciado" );

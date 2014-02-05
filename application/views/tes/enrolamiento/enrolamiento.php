@@ -15,24 +15,6 @@
 	}
 	</style>
     <script>
-	var g=new Date();
-		var option = 
-		{
-			changeMonth: true,
-			changeYear: true,
-			duration:"fast",
-			dateFormat: 'dd-mm-yy',
-			constrainInput: true,
-			firstDay: 1,
-			closeText: 'X',
-			showOn: 'both',
-			buttonImage: '/resources/images/calendar.gif',
-			buttonImageOnly: true,
-			buttonText: 'Clic para seleccionar una fecha',
-			yearRange: '1900:'+g.getFullYear(),
-			showButtonPanel: false,
-			showAnim: 'slide'
-		}
 	$(document).ready(function()
 	{
 		obligatorios("enrolar");
@@ -42,6 +24,11 @@
 			else
 				rem_fecha_edo();
         });
+		
+		$("#nombre,#paterno,#materno,#lnacimientoT,#curp,#curp2,#fnacimiento,#curpT,#calle,#referencia,#colonia").change(function(e) {
+            comparar_captura();
+        });
+		
 		$("#buscar").autocomplete({
 				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/",
 				select: function (a, b) 
@@ -292,6 +279,7 @@
 	{
 		$('#ladireccion').data('old-state', $('#ladireccion').html());
 		$('#ladireccion').html($('#ladireccion').data('old-state'));
+		comparar_captura();
 	}
 	function importarDatos(id)
 	{
@@ -327,6 +315,7 @@
 						ed=ed[ed.length-2];
 						des=des.replace(ed+",", "");
 						document.getElementById("localidadT").value=des;
+						comparar_captura();
 					}
 				});
 				$("#calle").click();
@@ -569,6 +558,54 @@
 		else
 		$("#alert").css("display","")
 	}
+	function comparar_captura()
+	{
+		var no=encodeURIComponent($("#nombre").val());
+		var pa=encodeURIComponent($("#paterno").val());
+		var ma=encodeURIComponent($("#materno").val());
+		var ln=encodeURIComponent($("#lnacimientoT").val().split(",")[0]);
+		var cu=encodeURIComponent($("#curp").val()+$("#curp2").val());
+		var fn=encodeURIComponent($("#fnacimiento").val());
+		var ct=encodeURIComponent($("#curpT").val());
+		var ca=encodeURIComponent($("#calle").val());
+		var re=encodeURIComponent($("#referencia").val());
+		var co=encodeURIComponent($("#colonia").val());
+		if(no!=""&&pa!=""&&ma!=""&&ln!="")
+		{
+			$.get('/<?php echo DIR_TES.'/enrolamiento/paciente_similar'?>/'+no+'/'+pa+'/'+ma+'/'+cu+'/'+fn+'/'+ln+'/'+ca+'/'+re+'/'+co+'/'+ct, function(respuesta) 
+			{
+				if(respuesta.length>5)
+				{
+					if($("#simi"))
+					$("#simi").remove();
+					var obj = jQuery.parseJSON( respuesta );
+					var campo = '<span id="simi" >Se encontraron pacientes GUARDADOS que coinciden con los datos CAPTURADOS. dele click para compararlos<br>';
+					for(var c=0;c<obj.length; c++)
+					{
+						var prod1 = encodeURIComponent(no+'°'+pa+'°'+ma+'°'+$("#lnacimientoT").val()+'°'+cu+'°'+$("input[type='radio'][name='sexo']:checked").val()+'°'+$("#sangre option:selected").text()+'°'+fn+'°'+$("#nacionalidad option:selected").text());
+						
+						var prod2 = encodeURIComponent(ct+'°'+$("#nombreT").val()+'°'+$("#paternoT").val()+'°'+$("#maternoT").val()+'°'+$("input[type='radio'][name='sexoT']:checked").val()+'°'+$("#telefonoT").val()+'°'+$("#celularT").val()+'°'+$("#companiaT option:selected").text());
+						
+						var prod3 = encodeURIComponent($("#calle").val()+'°'+$("#numero").val()+'°'+$("#referencia").val()+'°'+$("#colonia").val()+'°'+$("#cp").val()+'°'+$("#ageb").val()+'°'+$("#sector").val()+'°'+$("#manzana").val()+'°'+$("#localidadT").val()+'°'+$("#telefono").val()+'°'+$("#celular").val()+'°'+$("#compania option:selected").text());
+						 
+						
+						var url='/<?php echo DIR_TES?>/enrolamiento/comparar_view/'+obj[c]["id"]+'/'+prod1+'/'+prod2+'/'+prod3
+						campo+='<a href="'+url+'" style="padding:5px" class="btn btn-small btn-primary" id="similar">'+obj[c]["nombre"]+' '+obj[c]["total"]+'%</a>&nbsp;&nbsp;';
+					}
+					campo+="</span>";
+					$("#tienesimilar").append(campo);
+					$("#tienesimilar").attr("class","warning");
+					$("a#similar").fancybox({
+						'width'             : '90%',
+						'height'            : '90%',				
+						'transitionIn'	: 'elastic',
+						'transitionOut'	: 'elastic',
+						'type'			: 'iframe',
+					});
+				}
+			});
+		}
+	}
 	</script><!-- mensaje-->
         <?php 	
 			if(!empty($msgResult))
@@ -589,7 +626,7 @@
                   <!-- Datos basicos -->
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Datos Basicos</div>
-                      <div class="AccordionPanelContent" >
+                      <div class="AccordionPanelContent" id="sBasico">
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
@@ -649,7 +686,7 @@
                   
                   <div class="AccordionPanel">
                       <div class="AccordionPanelTab"s>Datos de la Madre o Tutor</div>
-                      <div class="AccordionPanelContent" >
+                      <div class="AccordionPanelContent" id="sTutor">
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
@@ -685,13 +722,13 @@
                             <td width="19%"><p align="right">Nombre</p></td>
                             <td width="31%"><input name="nombreT" type="text" title='requiere' required="title='requiere' required" id="nombreT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('nombreT', ''); ?>" maxlength="35" readonly="readonly" /></td>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><input name="celularT" type="text" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo set_value('celularT', ''); ?>" readonly="readonly" /></td>
+                            <td><input name="telefonoT" type="text" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefonoT', ''); ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
                             <td><input name="paternoT" type="text" title='requiere' required="title='requiere' required" id="paternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('paternoT', ''); ?>" maxlength="20" readonly="readonly" /></td>
                             <td><p align="right">Celular</p></td>
-                            <td><input name="telefonoT" type="text" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefonoT', ''); ?>" readonly="readonly" /></td>
+                            <td><input name="celularT" type="text" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo set_value('celularT', ''); ?>" readonly="readonly" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
@@ -719,7 +756,7 @@
                       <div class="AccordionPanelTab">Domicilio</div>
                       <div class="AccordionPanelContent">
                       	<div id="compartetutor" style="width:94.7%" > </div>
-                        <div id="ladireccion">
+                        <div id="ladireccion" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Calle</p></td>
@@ -746,7 +783,7 @@
                                   <td  align="right"><p>Sector</p></td>
                                   <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo set_value('sector', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
                                   <td  align="right"><p>Manzana</p></td>
-                                  <td ><input name="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td ><input name="manzana" id="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
                                 </tr>
                               </table>
                           </td>
@@ -1119,6 +1156,7 @@
             <tr>
                 <td>
                 <br />
+                <div id="tienesimilar" style="width:94.7%; margin-left:-20px; margin-bottom:10px;" > </div>
                 <span id="enviandoof" style="margin-left:-20px;">
                 <button type="submit" name="guardar" id="guardar" class="btn btn-primary" onclick="return validarFormulario('enrolar')" >Guardar <i class="icon-hdd"></i></button>
                 <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-arrow-left"></i></button>
