@@ -122,7 +122,12 @@
 .AccordionPanelOpen .AccordionPanelTab {
 	background-image:url(headerBG.jpg);
 }
-
+.similar {
+	background-image:url(headerBG.jpg);
+}
+.compara {
+	background-image:url(subheader.fw.png);
+}
 /* This is an example of how to change the appearance of the panel tab as the
  * mouse hovers over it. The class "AccordionPanelTabHover" is programatically added
  * and removed from panel tab containers as the mouse enters and exits the tab container.

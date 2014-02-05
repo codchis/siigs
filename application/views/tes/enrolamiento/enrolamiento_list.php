@@ -7,7 +7,7 @@
 $(document).ready(function()
 {
 	<?php if(!empty($id)){?>
-	if(confirm("Registro agregado exitosamente\n\n ¿Deseas guardarlo en la tarjeta?"))
+	if(confirm("Registro Actualizado Exitosamente\n\n ¿Deseas guardarlo en la tarjeta?"))
 	{
 		$("#secretIFrame").attr("src","/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $id?>");
 	}
@@ -54,7 +54,7 @@ $opcion_print = Menubuilder::isGranted(DIR_TES.'::enrolamiento::file_to_card');
 ?>
 <?php 
 if(!empty($msgResult))
-	echo "<div class='".$this->session->flashdata('infoclass')."'>".$msgResult."</div>";
+	echo "<div class='".$infoclass."'>".$msgResult."</div>";
 ?>
 <div class="input-append"><h2><?php echo $title ?></h2>
 

@@ -2116,12 +2116,13 @@ class Enrolamiento_model extends CI_Model
 	 * @return 		result()
 	 *
 	 */
-	public function get_catalog_relevante()
+	public function get_catalog_relevante($fecha="")
 	{
 		$this->db->select('*');
 		$this->db->from('cns_catalogo_relevante_x_entorno r');
 		$this->db->join('cns_tabla_catalogo c', 'c.id = r.id_tabla_catalogo','left');
-		$query = $this->db->get(); 
+		$this->db->where('fecha_actualizacion >=',$fecha);
+		$query = $this->db->get();// echo $this->db->last_query();
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -2281,6 +2282,32 @@ class Enrolamiento_model extends CI_Model
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			throw new Exception(__CLASS__);
 		}
+	}
+	
+	/**
+	 * @access public
+	 *
+	 * devuelve todos los pacientes de la base de datos
+	 * 
+	 * @return 		result()
+	 *
+	 */
+	public function get_pacientes()
+	{
+		$query = $this->db->query("SELECT p.id, p.curp, p.nombre, p.apellido_paterno, p.apellido_materno, p.fecha_nacimiento, p.calle_domicilio, p.numero_domicilio, p.colonia_domicilio, p.referencia_domicilio, p.cp_domicilio,
+CONCAT(t.nombre,' ',t.apellido_paterno,' ',t.apellido_materno) AS nombreT, t.curp AS curpT, a.descripcion AS lugar
+FROM cns_persona p
+LEFT JOIN cns_persona_x_tutor pt ON pt.id_persona=p.id
+LEFT JOIN cns_tutor t ON t.id=pt.id_tutor
+LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento"); 
+	
+		if (!$query){
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception(__CLASS__);
+		}
+		else
+		return $query->result();
 	}
 	
 	public function getMsgError($value = 'usr')

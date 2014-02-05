@@ -165,7 +165,7 @@ class Obtenercurp extends CI_Controller
 					"informacion"=>utf8_encode(trim($if))					
 				)
 			);
-			if(!stripos($cu,'Curp')&&!stripos($cu,'ink')&&!stripos($cu,"<>"))
+			if(!stripos($cu,'Curp')&&!stripos($cu,'ink')&&!stripos($cu,"<"))
 			{
 				if($regresar==1)
 					return $array;
@@ -237,7 +237,7 @@ class Obtenercurp extends CI_Controller
 					"rfc"=>$rfc,
 				)
 			);
-			if(strlen($cur)>10&&!stripos($cur,"</span>"))
+			if(strlen($cur)>10&&!stripos($cur,"<"))
 			{
 				if($regresar==1)
 					return $array;

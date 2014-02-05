@@ -41,7 +41,7 @@ class Enrolamiento extends CI_Controller
 	 *
 	 * @return 		echo
 	 */
-	public function index($pag = 0, $id="")
+	public function index($pag = 0, $id="", $array="")
 	{
 		try{
 			if (empty($this->Usuario_model))
@@ -55,8 +55,11 @@ class Enrolamiento extends CI_Controller
 			
 			$data['id']  = $id;
 			$data['pag'] = $pag;
-			$data['infoclass'] = $this->session->flashdata('infoclass');
-			$data['msgResult'] = $this->session->flashdata('msgResult');
+			if($array!="")
+			{
+				$data['infoclass'] = $array['infoclass'];
+				$data['msgResult'] = $array['msgResult'];
+			}
 			
 			// Configuración para el Paginador
 			$configPag['base_url']   = '/'.DIR_TES.'/enrolamiento/index/';
@@ -353,11 +356,11 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 						$id=$this->Enrolamiento_model->update_nutricion();
 					
 					$data['id'] = $this->Enrolamiento_model->getId();	
-					$this->session->set_flashdata('infoclass','success');
-					$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
-					//Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario Enrolado: '.strtoupper($this->input->post('nombre')));
+					$midata['infoclass'] = 'success';
+					$midata['msgResult'] = 'Registro Actualizado Exitosamente';
+					Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario Enrolado: '.strtoupper($this->input->post('nombre')));
 					
- 					$this->index(0,$data['id']);
+ 					$this->index(0,$data['id'],$midata);
 				}
 				catch (Exception $e)
 				{
@@ -815,11 +818,11 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 					$this->addForm();
 					
 					$id=$this->Enrolamiento_model->insert();
-					$this->session->set_flashdata('infoclass','success');
-					$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
-					//Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario Enrolado: '.strtoupper($this->input->post('nombre')));
+					$midata['infoclass'] = 'success';
+					$midata['msgResult'] = 'Registro Agregado Exitosamente';
+					Bitacora_model::insert(DIR_SIIGS.'::'.__METHOD__, 'Usuario Enrolado: '.strtoupper($this->input->post('nombre')));
 					$this->session->set_userdata( 'umt', $this->Enrolamiento_model->getumt() );
- 					$this->index(0,$id);					
+ 					$this->index(0,$id,$midata);					
 				}
 				catch (Exception $e)
 				{
@@ -1134,7 +1137,7 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 	 *
 	 * valida que el nodo seleccionado en el arbol sea una unidad medica
 	 * 
-	 * @param		string 		$id      id de arbbol de segmentacion
+	 * @param		string 		$id      id de arbol de segmentacion
 	 *
 	 * @return 		echo
 	 */
@@ -1145,5 +1148,119 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 		
 		if($result[0]->grado_segmentacion!="5")
 		echo "no";
+	}
+	/**
+	 * @access public
+	 *
+	 * Comprueba la similitud de un paciente que se este capturando con los que ya existe en la base de datos, 
+	 * esto con la finalidad de disminuir datos repetidos
+	 * 
+	 * @param		string 		$nombre       nombre del paciente que se esta capturando
+	 * @param		string 		$paterno      apellido paterno del paciente
+	 * @param		string 		$materno      apellido materno del paciente
+	 * @param		string 		$curp         curp del paciente
+	 * @param		string 		$nacimiento   fecha de nacimiento del paciente
+	 * @param		string 		$calle        calle del domicilio del paciente
+	 * @param		string 		$referencia   referencia del domicilio del paciente
+	 * @param		string 		$colonia      colonia del paciente
+	 * @param		string 		$cp           cp de la colonia donde vive el paciente
+	 * @param		string 		$numero       numero de la vivienda
+	 *
+	 * @return 		json($porcentaje_similitud,$persona)
+	 */
+	public function paciente_similar($nombre, $paterno, $materno, $curp, $nacimiento, $lugar, $calle="", $referencia="", $colonia="", $curpT="")
+	{
+		$this->load->model(DIR_TES.'/Enrolamiento_model');
+		$result=$this->Enrolamiento_model->get_pacientes();
+		
+		$array=array();
+		if($result)
+		{
+			foreach($result as $x)
+			{
+				$similar=0;
+				similar_text(urldecode($nombre), $x->nombre, $percent); 
+				$similar=$similar+$percent;
+				
+				similar_text(urldecode($paterno), $x->apellido_paterno, $percent); 
+				$similar=$similar+$percent;
+				
+				similar_text(urldecode($materno), $x->apellido_materno, $percent); 
+				$similar=$similar+$percent;
+				
+				similar_text(urldecode($curp), $x->curp, $percent); 
+				$similar=$similar+$percent;
+				
+				similar_text(urldecode($nacimiento), $x->fecha_nacimiento, $percent); 
+				$similar=$similar+$percent;
+				
+				similar_text(urldecode($calle), $x->calle_domicilio, $percent); 
+				$similar=$similar+$percent;
+				
+				similar_text(urldecode($colonia), $x->colonia_domicilio, $percent); 
+				$similar=$similar+$percent;
+				
+				similar_text(urldecode($lugar), $x->lugar, $percent); 
+				$similar=$similar+$percent;
+				
+				similar_text(urldecode($curpT), $x->curpT, $percent); 
+				$similar=$similar+$percent;
+				
+				$total=$similar/9;
+				if($total>50)
+				$array[]=array("nombre" => $x->nombre.' '.$x->apellido_paterno.' '.$x->apellido_materno, "id" => $x->id, "total" => round($total, 2));
+			}
+		}
+		echo json_encode($array); 
+	}
+	
+	/**
+	 * @access public
+	 *
+	 * Crea la pagina para ver la infromacion de la persona y comprararla con la persona capturada
+	 * 
+	 * @param		string 		$id        identificador de la persona 
+	 *
+	 * @return 		echo
+	 */
+	public function comparar_view($id,$prod1="",$prod2="",$prod3="")
+	{
+		try 
+		{
+			$this->load->model(DIR_TES.'/Enrolamiento_model');
+			$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+			if (empty($this->Enrolamiento_model))
+				return false;
+			
+			$data['title'] = 'Ver Paciente';
+			$data['enrolado'] = $this->Enrolamiento_model->getById($id);
+			if(empty($data['enrolado']))
+			{
+				$data['infoclass'] = 'error';
+				$data['msgResult'] = "Registro no encontrado";
+				
+				$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_compara', $data);
+ 				$this->template->render();
+				return true;
+			}
+			$prod1=urldecode($prod1);
+			$data['prod1']=explode("°",$prod1);
+			
+			$prod2=urldecode($prod2);
+			$data['prod2']=explode("°",$prod2);
+			
+			$prod3=urldecode($prod3);
+			$data['prod3']=explode("°",$prod3);
+		}
+		catch(Exception $e)
+		{
+			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
+		}
+		$this->template->write('header','',true);
+		$this->template->write('footer','',true);
+		$this->template->write('menu','',true);
+		$this->template->write('sala_prensa','',true);
+ 		$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_compara', $data);
+ 		$this->template->render();
 	}
 }

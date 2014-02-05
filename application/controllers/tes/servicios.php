@@ -292,7 +292,7 @@ class Servicios extends CI_Controller {
 				//************ fin usuario ************
 				
 				//************ inicio catalogos ************
-				$catalog_relevante = $this->Enrolamiento_model->get_catalog_relevante();
+				$catalog_relevante = $this->Enrolamiento_model->get_catalog_relevante($this->session->userdata('fecha'));
 				foreach($catalog_relevante as $catalog)
 				{
 					$xy=0;
