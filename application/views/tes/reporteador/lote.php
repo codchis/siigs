@@ -136,33 +136,12 @@ $(document).ready(function(){
     });
 });
 </script>
-<?php 
-$opcion_index = Menubuilder::isGranted(DIR_TES.'::reporteador::index');
-$opcion_rpt1 = Menubuilder::isGranted(DIR_TES.'::reporteador::cobXtipo');
-$opcion_rpt2 = Menubuilder::isGranted(DIR_TES.'::reporteador::concAct');
-$opcion_rpt3 = Menubuilder::isGranted(DIR_TES.'::reporteador::segRv');
-$reports = array(
-		1  => 'Cobertura por Tipo de Biológico',
-		2  => 'Concentrado de Actividades',
-		3  => 'Seguimiento RV-1 y RV-5 a menores de 1 año',
-);
-$juris[''] = 'Seleccione una opción';
-foreach($jurisdicciones as $row)
-{
-    $juris[$row->id] = $row->descripcion;
-}
-$municipios[''] = 'Seleccione una opción';
-$localidades[''] = 'Seleccione una opción';
-$ums[''] = 'Seleccione una opción';
-if (!$opcion_rpt1) unset($reports[1]);
-if (!$opcion_rpt2) unset($reports[2]);
-if (!$opcion_rpt3) unset($reports[3]);
-?>
 <h2><?php echo $title ?></h2>
 <?php if(!empty($msgResult))
         echo $msgResult.'<br /><br />'; ?>
 <fieldset style="width: 60%">
 <?php echo form_open(DIR_TES.'/reporte_sincronizacion/lote/'); ?>
+    <input type="hidden" id="flagSearch" value="0">
 <table width="100%">
 <tr>
 <td>Codigo: </td>
@@ -170,9 +149,9 @@ if (!$opcion_rpt3) unset($reports[3]);
 </tr>
 <tr>
 <td width="25%">Jurisdicción: </td>
-<td width="25%"> <?php  echo form_dropdown('juris', $juris); ?></td>
+<td width="25%"> <?php echo form_dropdown('juris', $juris); ?></td>
 <td width="25%">Municipio: </td>
-<td width="25%"> <?php  echo form_dropdown('municipios', $municipios); ?></td>
+<td width="25%"> <?php echo form_dropdown('municipios', $municipios); ?></td>
 </tr>
 <tr>
 <td>Localidad: </td>

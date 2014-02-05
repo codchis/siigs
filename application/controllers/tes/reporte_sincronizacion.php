@@ -202,24 +202,24 @@ class Reporte_sincronizacion extends CI_Controller
 			if($ums!="")
 				$unidad = "AND id_asu_um='$ums'";
 				
-			if($local!="")
+			else if($local!="")
 				$unidad = "AND id_asu_um IN (
 									SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$local.")"; // ums por loc
-			if($munic!="")
+			else if($munic!="")
 				$unidad = "AND id_asu_um IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$munic.") )"; // locs por mpio
-			if($jurid!="")
+			else if($jurid!="")
 				$unidad = "AND id_asu_um IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$jurid.") ) )"; // mpios por juris
-							
+							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$jurid.") ) )"; // mpios por juris		
 			if($lotes=="")$mas="OR codigo_barras IS NULL";else $mas="";
 			$consulta="select distinct(codigo_barras) from cns_control_vacuna where (codigo_barras like '%$lotes%' $mas) $unidad and (fecha between '$desde' and '$hasta') ";
 			
 			$count=$this->Reporte_sincronizacion_model->getCount("",$consulta);
 			$array=$this->Reporte_sincronizacion_model->getListado($consulta);
+
 			$i=0;$midato=array();
 			foreach($array as $x)
 			{
@@ -296,7 +296,34 @@ class Reporte_sincronizacion extends CI_Controller
 			$data["count"]=$count;
 			$data["datos"]=$midato;
 			$data['msgResult'] = $this->session->flashdata('msgResult');
-			$data['jurisdicciones'] = (array)$this->ArbolSegmentacion_model->getDataKeyValue(1, 2);
+                        $rsJuris = $this->ArbolSegmentacion_model->getDataKeyValue(1, 2);
+                        $data['juris'][0] = 'Seleccione una opción';
+                        foreach ($rsJuris as $rsJ) {
+                            $data['juris'][$rsJ->id] = $rsJ->descripcion;
+                            
+                        $data['municipios'][0] = 'Seleccione una opción';
+                        $data['localidades'][0] = 'Seleccione una opción';
+                        $data['ums'][0] = 'Seleccione una opción';
+
+                        if($this->input->post('juris')) {
+                            $municipios = $this->ArbolSegmentacion_model->getDataKeyValue(1, 3, $this->input->post('juris'));
+                            foreach ($municipios as $mpio) {
+                                $data['municipios'][$mpio->id] = $mpio->descripcion;
+                            }
+                        }
+                        if($this->input->post('municipios')) {
+                            $localidades = $this->ArbolSegmentacion_model->getDataKeyValue(1, 4, $this->input->post('municipios'));
+                            foreach ($localidades as $loc) {
+                                $data['localidades'][$loc->id] = $loc->descripcion;
+                            }
+                        }
+                        if($this->input->post('localidades')) {
+                            $ums = $this->ArbolSegmentacion_model->getDataKeyValue(1, 5, $this->input->post('localidades'));
+                            foreach ($ums as $um) {
+                                $data['ums'][$um->id] = $um->descripcion;
+                            }
+                        }
+            }
 		}
 		catch(Exception $e){
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);

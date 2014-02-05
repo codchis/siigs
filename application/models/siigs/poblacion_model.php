@@ -82,7 +82,7 @@ class Poblacion_model extends CI_Model
     public function process()
     {
         $result = false;
-        $sql = 'INSERT INTO 
+        $sql = 'REPLACE INTO 
                     asu_poblacion (id_asu, id_grupo_etareo, ano, poblacion)
                 SELECT
                     (SELECT b.id 
