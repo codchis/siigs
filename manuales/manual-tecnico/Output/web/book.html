@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="author" content="SIIGS-TES" />
+    <meta name="date" content="05/02/2014"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>Manual Técnico</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body><div class="container">
+
+    <div class="item item:cover">
+
+<h1>Manual Técnico</h1>
+
+<h2>SIIGS-TES</h2>
+
+</div>
+    <div class="item item:toc">
+
+<h1>Índice de contenidos</h1>
+
+<ul>
+                                
+                                                                <li class="chapter level-1">
+                        <span>Capítulo 1</span> <a href="#tecnologias-utilizadas">Tecnologías utilizadas</a>
+                    </li>
+                                                                                                                                                                                                                                                                                                                    
+                            
+                                                                <li class="chapter level-1">
+                        <span>Capítulo 2</span> <a href="#instalacion-del-siigs">Instalación del SIIGS</a>
+                    </li>
+                                                                <li class="chapter level-2">
+                        <span>2.1</span> <a href="#requerimientos">Requerimientos</a>
+                    </li>
+                                                                <li class="chapter level-2">
+                        <span>2.2</span> <a href="#instalacion-de-los-requerimientos">Instalación de los requerimientos</a>
+                    </li>
+                                                                <li class="chapter level-2">
+                        <span>2.3</span> <a href="#crear-directorio-de-trabajo">Crear directorio de trabajo</a>
+                    </li>
+                                                                <li class="chapter level-2">
+                        <span>2.4</span> <a href="#obtener-el-codigo-fuente">Obtener el código fuente</a>
+                    </li>
+                                                                <li class="chapter level-2">
+                        <span>2.5</span> <a href="#configuracion">Configuración</a>
+                    </li>
+                                                                <li class="chapter level-2">
+                        <span>2.6</span> <a href="#configuracion-de-mysql">Configuración de MySQL</a>
+                    </li>
+                                                                <li class="chapter level-2">
+                        <span>2.7</span> <a href="#iniciar-la-plataforma">Iniciar la plataforma</a>
+                    </li>
+                            
+                            </ul>
+
+</div>
+    <div class="item item:introduction">
+
+<h1>Introducción</h1>
+
+<p>El presente manual técnico describe los pasos necesarios para instalar el Sistema Integral de Información y Gestión de Salud (SIIGS) así como los componentes que lo integran.</p>
+
+<p>El Sistema Integral de Información y Gestión de Salud ofrecerá un enfoque gerencial estratégico con el propósito de coadyuvar, como una herramienta tecnológica que cuente con todos los elementos de información posibles, en la toma de decisiones encaminadas al mejoramiento del estado de salud de la población, fomentando el desarrollo de la capacidad y cultura de análisis e interpretación de los datos.</p>
+
+<p>El proyecto de la Tarjeta Electrónica de Salud (TES) se incorpora en la SM2015 con el objetivo central de contribuir a la reducción de las desigualdades en salud a través del incremento en las coberturas, la utilización y en la calidad de los servicios de salud mediante intervenciones integrales en las áreas de salud reproductiva, materna, neonatal e infantil, nutrición y vacunación.</p>
+
+<p>La Tarjeta Electrónica de Salud (TES) funcionará como un expediente clínico, permitirá almacenar en un medio físico (Tarjetas RFID/NFC) la información correspondiente al registro de vacunación, monitoreo del estado nutricional y el control de enfermedades tales como las Infecciones Respiratorias Agudas (IRAs) y Enfermedades Diarreicas Agudas (EDAs), a fin de garantizar el seguimiento oportuno de la salud infantil.</p>
+
+
+</div>
+    <div class="item item:chapter">
+
+<h1 id="tecnologias-utilizadas"><span>Capítulo 1</span> Tecnologías utilizadas</h1>
+
+<p>El Sistema Integral de Información y Gestión de Salud (SIIGS) es una plataforma web que cuenta módulos para la administración de usuarios, emisión de reportes, integración de nuevos módulos/componentes.</p>
+
+<p>Todo el software utilizado para desarrollo del SIIGS y sus módulos/componentes son paquetes de software libre, los cuales se describen a continuación:</p>
+
+<ul>
+<li>Debian: Sistema Operativo</li>
+<li>GitHub: Gestor de control de versiones de código fuente</li>
+<li>Apache: Servidor web</li>
+<li>MySQL: Gestor de bases de Datos</li>
+<li>CodeIgniter: Framework de desarrollo para PHP</li>
+<li>PHP: Lenguaje de desarrollo</li>
+<li>JQuery &amp; JQueryUI: Librería de JavaSCript</li>
+<li>Bootstrap: Framework para interfaces de usuario</li>
+<li>Lector NFC</li>
+<li>EasyBook: Generador de documentos en formato PDF</li>
+</ul>
+
+<h3 id="sistema-operativo">1.0.1 Sistema Operativo</h3>
+
+<p><a href="https://www.debian.org/index.es.html">Debian GNU/Linux versión 7, Wheezy</a></p>
+
+<p>Debian es un sistema operativo (S.O.) open source. El sistema operativo es el conjunto de programas básicos y utilidades que hacen que funcione una computadora.</p>
+
+<h3 id="gestor-de-control-de-versiones">1.0.2 Gestor de control de versiones</h3>
+
+<p><a href="https://github.com/">GitHub</a></p>
+
+<p>GitHub es un servicio de hosting basado en la web para los proyectos de desarrollo de software que utilizan el sistema de control de versiones Git. GitHub ofrece cuentas gratuitas para los proyectos de código abierto, pero también tiene planes de pago para los repositorios privados. En mayo de 2011, GitHub fue repositorio de código más popular para los proyectos de código abierto. El código fuente del proyecto se encuentra disponible en <a href="https://github.com/schiapassm2015/SIIGS">https://github.com/schiapassm2015/SIIGS</a>.</p>
+
+<h3 id="servidor-web">1.0.3 Servidor web</h3>
+
+<p><a href="http://httpd.apache.org/">Apache versión 2.2</a></p>
+
+<p>El proyecto Apache HTTP Server es un esfuerzo para desarrollar y mantener un servidor HTTP de código abierto para sistemas operativos modernos, incluyendo UNIX y Windows NT. El objetivo de este proyecto es proporcionar un servidor seguro, eficiente y extensible que proporcione servicios HTTP en sincronización con los estándares HTTP actuales.</p>
+
+<h3 id="gestor-de-base-de-datos">1.0.4 Gestor de base de datos</h3>
+
+<p><a href="http://www.mysql.com/">MySQL versión 5.5</a></p>
+
+<p>MySQL es un sistema de gestión de bases de datos relacional, multihilo y multiusuario desarrollo MySQL como software libre.</p>
+
+<h3 id="framework-de-desarrollo">1.0.5 Framework de desarrollo</h3>
+
+<p><a href="http://ellislab.com/codeigniter">CodeIgniter versión 2.1.4</a></p>
+
+<p>CodeIgniter es un framework PHP potente con un tamaño muy pequeño, construida para codificadores PHP que necesitan una herramienta simple y elegante para crear aplicaciones web con todas las funciones.</p>
+
+<h3 id="lenguaje-de-desarrollo">1.0.6 Lenguaje de desarrollo</h3>
+
+<p><a href="http://php.net/">PHP versión 5.4</a></p>
+
+<p>PHP es un lenguaje de programación de propósito general que es especialmente adecuado para el desarrollo web. El código es interpretado por un servidor web con un módulo de procesador de PHP que genera la página Web resultante. Puede ser usado en la mayoría de los servidores web al igual que en casi todos los sistemas operativos y plataformas sin ningún costo.</p>
+
+<h3 id="libreria-javascript">1.0.7 Librería JavaScript</h3>
+
+<p><a href="http://jquery.com/">jQuery versión 1.7.1</a> &amp; <a href="http://jqueryui.com/">jQuery UI versión 1.10.3</a></p>
+
+<p>jQuery es una librería JavaScript rápida, pequeño y rica en funciones. Hace cosas como recorrido y manipulación del documento HTML, manejo de eventos, animación, Ajax y mucho más con un API fácil de usar que funciona a través de una multitud de navegadores. Con una combinación de versatilidad y capacidad de ampliación, jQuery ha cambiado la forma en que millones de personas escriben JavaScript.</p>
+
+<p>jQuery UI es un conjunto de elementos/funcionalidades de interacciones con la interfaz de usuario, efectos, widgets y temas incorporados sobre de la biblioteca de JavaScript jQuery.</p>
+
+<h3 id="framework-para-interfaces-de-usuario">1.0.8 Framework para interfaces de usuario</h3>
+
+<p><a href="http://getbootstrap.com/2.3.2/">Bootstrap versión 2.3.1</a></p>
+
+<p>Bootstrap es un framework de aplicaciones para usuarios elegante e intuitiva, y de gran alcance para el desarrollo web más rápido y más fácil.</p>
+
+<h3 id="lector-nfc">1.0.9 Lector NFC</h3>
+
+<p>El lector utilizado para la TES es distribuido por la empresa <a href="http://www.anayala.com/electrinet">Electrinet</a> con su controlador versión 1 para plataforma windows. El modelo de gabinete es ABS con dimensiones 75x50x17mm y conexión vía USB.</p>
+
+<h3 id="documentacion">1.0.10 Documentación</h3>
+
+<p><a href="http://easybook-project.org/">easybook versión 5</a></p>
+
+<p>La gran mayoría de la documentación ha sido escrita en formato markdown y se ha utilizado  easybook para generar salidas en formato html y pdf.</p>
+
+
+</div>
+    <div class="item item:chapter">
+
+<h1 id="instalacion-del-siigs"><span>Capítulo 2</span> Instalación del SIIGS</h1>
+
+<h2 id="requerimientos">2.1 Requerimientos</h2>
+
+<ul>
+<li>Apache 2.2</li>
+<li>MySQL 5.5</li>
+<li>PHP 5.4</li>
+</ul>
+
+<h2 id="instalacion-de-los-requerimientos">2.2 Instalación de los requerimientos</h2>
+
+<p>A continuación se describen los pasos para instalar la plataforma web en un servidor Debian GNU/Linux versión 7.</p>
+
+<p>Antes de continuar es necesario resaltar la importancia de los indicador "<strong>#</strong>" el cual significa que el comando debe ser ejecutado como usuario <strong>root</strong> y "<strong>$</strong>" que debe ser ejecutado como un <strong>usuario normal</strong>, en ambos casos desde una <strong>consola de comandos</strong>.</p>
+
+<blockquote>
+    Actualizamos la lista de paquetes del sistema operativo.
+    
+    <p># apt-get update</p>
+    
+    Instalamos todas las librerías y aplicaciones que se utilizan en la plataforma (Apache, MySQL, PHP y Git).
+    
+    <p># apt-get install php5 php5-xdebug php-apc php5-cli php5-xsl php5-intl php5-mcrypt apache2 mysql-server mysql-common mysql-client git-core curl php5-ldap php5-mysql php5-json php5-curl</p>
+</blockquote>
+
+<p>Durante el proceso de instalación se solicitará la configuración del usuario administrador (root) de MySQL se recomienda establecer una contraseña.</p>
+
+<h2 id="crear-directorio-de-trabajo">2.3 Crear directorio de trabajo</h2>
+
+<p>El directorio de trabajo puede variar de acuerdo a la configuración o preferencias que se desee utilizar durante la instalación. Como ejemplo se usará el directorio de instalación <strong>/var/www/siigs</strong>.</p>
+
+<blockquote>
+    Creamos el directorio
+
+    <p># mkdir /var/www/siigs</p>
+    
+    Esta carpeta debe estar accesible y tener permisos de escritura para le usuario de Apache (www-data en Debian), por lo que asignamos como dueño del directorio al usuario www-data:
+
+    <p># chown -R www-data /var/www/siigs</p>
+
+    Como usuario normal del sistema tenemos que ejecutar el siguiente comando con el objetivo de tener permisos sobre la carpeta que acabamos de crear:
+
+    <p>$ sudo chown -R `whoami` /var/www/siigs</p>
+    
+    Accedemos a la carpeta web del Apache
+
+    <p>$ cd /var/www</p>
+</blockquote>
+
+<p><code>Nota: Prestar atención en las comillas invertidas del comando whoami.</code></p>
+
+<h2 id="obtener-el-codigo-fuente">2.4 Obtener el código fuente</h2>
+
+<p>El proyecto completo puede ser descargardo desde: <a href="https://github.com/schiapassm2015/SIIGS">https://github.com/schiapassm2015/SIIGS</a> o clonar el repositorio ejecutando los el siguiente comando:</p>
+
+<blockquote>
+    $ sudo git clone https://github.com/schiapassm2015/SIIGS.git siigs
+</blockquote>
+
+<p>Recuerda que actualmente estamos en el directorio <em>/var/www</em> y el último parámetro del git clone es la carpeta en donde se descargará el código fuente del repositorio, en nuestro caso la carpeta que se creó en el paso anterior, es decir <em>siigs</em>.</p>
+
+<h2 id="configuracion">2.5 Configuración</h2>
+
+<p>En este caso, se considera que nuestro hostname es <em>localhost</em>. Para que la plataforma sea funcional es necesario crear un VirtualHost, para esto es necesario editar el archivo /etc/apache2/sites-available/default.</p>
+
+<blockquote>
+# gedit /etc/apache2/sites-available/default
+</blockquote>
+
+<p>Agregar el contenido al final del archivo:</p>
+
+<pre><code>&lt;VirtualHost *:80&gt;
+    DocumentRoot "/var/www/siigs"
+    ServerName siigs.localhost
+
+    &lt;Directory "/var/www/siigs"&gt;
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+        Require all granted
+        AuthType none
+        Options FollowSymLinks
+        Satisfy Any
+    &lt;/Directory&gt;
+    ErrorLog ${APACHE_LOG_DIR}/error.siigs.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.siigs.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+
+<p>En el archivo /etc/hosts agregamos la línea</p>
+
+<blockquote>
+    127.0.0.1 siigs.localhost
+</blockquote>
+
+<p><code>Nota: Consideramos que la dirección ip del host es 127.0.0.1 que es la asignada por defecto a localhost.</code></p>
+
+<p>Activar el módulo mod_rewrite, para poder utilizar las urls amigables</p>
+
+<blockquote>
+    # a2enmod rewrite
+</blockquote>
+
+<p>Reiniciar apache</p>
+
+<blockquote>
+    # /etc/init.d/apache2 restart
+</blockquote>
+
+<h2 id="configuracion-de-mysql">2.6 Configuración de MySQL</h2>
+
+<p>Nos conectamos al servidor MySQL con el siguiente comando:</p>
+
+<blockquote>
+    $ mysql -u root -h localhost -p
+</blockquote>
+
+<p>En caso de haber asignado una contraseña al usuario root durante la instalacion del servidor MySQL, esta debe de ser tecleada, en caso contrario solo presionar enter para continuar.</p>
+
+<p>Primeramente, crearemos la base de datos:</p>
+
+<blockquote>
+    CREATE DATABASE siigs;
+</blockquote>
+
+<p>Será necesario crear el usuario dueño de la base de datos, para esto se ejecuta el siguiente comando:</p>
+
+<blockquote>
+     GRANT ALL PRIVILEGES ON siigs.* TO 'usrsiigs'@'localhost' IDENTIFIED BY 'pwdsiigs' WITH GRANT OPTION;
+</blockquote>
+
+<p>Procedemos a cargar datos iniciales. Con este comando se insertan los datos iniciales del sistema.</p>
+
+<blockquote>
+    PENDIENTE
+</blockquote>
+
+<h2 id="iniciar-la-plataforma">2.7 Iniciar la plataforma</h2>
+
+<p>En este punto estamos listos para acceder a la plataforma desde la siguiente dirección:</p>
+
+<p><a href="http://siig.localhost"><strong>http://siig.localhost</strong></a></p>
+
+
+</div>
+    <div class="item item:lof">
+
+<h1>Lista de figuras</h1>
+
+<ul>
+                        </ul>
+
+</div>
+
+</div></body>
+</html>

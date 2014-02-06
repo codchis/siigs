@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="SIIGS-TES" />
+    <meta name="date" content="05/02/2014"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>Instalación del SIIGS | Manual Técnico</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body class="item item:chapter"><div class="container">
+
+
+<ul class="chunk_nav">
+    <li class="index"><a href="./index.html">Manual Técnico</a></li>
+
+    <li class="nav">
+        <div class="previous">
+                            <a href="./capitulo-1.html"><span>&larr;</span> Anterior</a>
+                    </div>
+
+        <div class="next">
+                            Siguiente <span>&rarr;</span>
+                    </div>
+    </li>
+</ul>
+
+
+<h1 id="capitulo-2"><span>Capítulo 2</span> Instalación del SIIGS</h1>
+
+<ul id="chunk_toc">
+            <li class="level-1">
+            <span></span>
+            <a href="#instalacion-del-siigs">Instalación del SIIGS</a>
+        </li>
+                <li class="level-2">
+            <span>2.1</span>
+            <a href="#requerimientos">Requerimientos</a>
+        </li>
+                <li class="level-2">
+            <span>2.2</span>
+            <a href="#instalacion-de-los-requerimientos">Instalación de los requerimientos</a>
+        </li>
+                <li class="level-2">
+            <span>2.3</span>
+            <a href="#crear-directorio-de-trabajo">Crear directorio de trabajo</a>
+        </li>
+                <li class="level-2">
+            <span>2.4</span>
+            <a href="#obtener-el-codigo-fuente">Obtener el código fuente</a>
+        </li>
+                <li class="level-2">
+            <span>2.5</span>
+            <a href="#configuracion">Configuración</a>
+        </li>
+                <li class="level-2">
+            <span>2.6</span>
+            <a href="#configuracion-de-mysql">Configuración de MySQL</a>
+        </li>
+                <li class="level-2">
+            <span>2.7</span>
+            <a href="#iniciar-la-plataforma">Iniciar la plataforma</a>
+        </li>
+    </ul>
+
+<h2 id="requerimientos">2.1 Requerimientos</h2>
+
+<ul>
+<li>Apache 2.2</li>
+<li>MySQL 5.5</li>
+<li>PHP 5.4</li>
+</ul>
+
+<h2 id="instalacion-de-los-requerimientos">2.2 Instalación de los requerimientos</h2>
+
+<p>A continuación se describen los pasos para instalar la plataforma web en un servidor Debian GNU/Linux versión 7.</p>
+
+<p>Antes de continuar es necesario resaltar la importancia de los indicador "<strong>#</strong>" el cual significa que el comando debe ser ejecutado como usuario <strong>root</strong> y "<strong>$</strong>" que debe ser ejecutado como un <strong>usuario normal</strong>, en ambos casos desde una <strong>consola de comandos</strong>.</p>
+
+<blockquote>
+    Actualizamos la lista de paquetes del sistema operativo.
+    
+    <p># apt-get update</p>
+    
+    Instalamos todas las librerías y aplicaciones que se utilizan en la plataforma (Apache, MySQL, PHP y Git).
+    
+    <p># apt-get install php5 php5-xdebug php-apc php5-cli php5-xsl php5-intl php5-mcrypt apache2 mysql-server mysql-common mysql-client git-core curl php5-ldap php5-mysql php5-json php5-curl</p>
+</blockquote>
+
+<p>Durante el proceso de instalación se solicitará la configuración del usuario administrador (root) de MySQL se recomienda establecer una contraseña.</p>
+
+<h2 id="crear-directorio-de-trabajo">2.3 Crear directorio de trabajo</h2>
+
+<p>El directorio de trabajo puede variar de acuerdo a la configuración o preferencias que se desee utilizar durante la instalación. Como ejemplo se usará el directorio de instalación <strong>/var/www/siigs</strong>.</p>
+
+<blockquote>
+    Creamos el directorio
+
+    <p># mkdir /var/www/siigs</p>
+    
+    Esta carpeta debe estar accesible y tener permisos de escritura para le usuario de Apache (www-data en Debian), por lo que asignamos como dueño del directorio al usuario www-data:
+
+    <p># chown -R www-data /var/www/siigs</p>
+
+    Como usuario normal del sistema tenemos que ejecutar el siguiente comando con el objetivo de tener permisos sobre la carpeta que acabamos de crear:
+
+    <p>$ sudo chown -R `whoami` /var/www/siigs</p>
+    
+    Accedemos a la carpeta web del Apache
+
+    <p>$ cd /var/www</p>
+</blockquote>
+
+<p><code>Nota: Prestar atención en las comillas invertidas del comando whoami.</code></p>
+
+<h2 id="obtener-el-codigo-fuente">2.4 Obtener el código fuente</h2>
+
+<p>El proyecto completo puede ser descargardo desde: <a href="https://github.com/schiapassm2015/SIIGS">https://github.com/schiapassm2015/SIIGS</a> o clonar el repositorio ejecutando los el siguiente comando:</p>
+
+<blockquote>
+    $ sudo git clone https://github.com/schiapassm2015/SIIGS.git siigs
+</blockquote>
+
+<p>Recuerda que actualmente estamos en el directorio <em>/var/www</em> y el último parámetro del git clone es la carpeta en donde se descargará el código fuente del repositorio, en nuestro caso la carpeta que se creó en el paso anterior, es decir <em>siigs</em>.</p>
+
+<h2 id="configuracion">2.5 Configuración</h2>
+
+<p>En este caso, se considera que nuestro hostname es <em>localhost</em>. Para que la plataforma sea funcional es necesario crear un VirtualHost, para esto es necesario editar el archivo /etc/apache2/sites-available/default.</p>
+
+<blockquote>
+# gedit /etc/apache2/sites-available/default
+</blockquote>
+
+<p>Agregar el contenido al final del archivo:</p>
+
+<pre><code>&lt;VirtualHost *:80&gt;
+    DocumentRoot "/var/www/siigs"
+    ServerName siigs.localhost
+
+    &lt;Directory "/var/www/siigs"&gt;
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+        Require all granted
+        AuthType none
+        Options FollowSymLinks
+        Satisfy Any
+    &lt;/Directory&gt;
+    ErrorLog ${APACHE_LOG_DIR}/error.siigs.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/access.siigs.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+
+<p>En el archivo /etc/hosts agregamos la línea</p>
+
+<blockquote>
+    127.0.0.1 siigs.localhost
+</blockquote>
+
+<p><code>Nota: Consideramos que la dirección ip del host es 127.0.0.1 que es la asignada por defecto a localhost.</code></p>
+
+<p>Activar el módulo mod_rewrite, para poder utilizar las urls amigables</p>
+
+<blockquote>
+    # a2enmod rewrite
+</blockquote>
+
+<p>Reiniciar apache</p>
+
+<blockquote>
+    # /etc/init.d/apache2 restart
+</blockquote>
+
+<h2 id="configuracion-de-mysql">2.6 Configuración de MySQL</h2>
+
+<p>Nos conectamos al servidor MySQL con el siguiente comando:</p>
+
+<blockquote>
+    $ mysql -u root -h localhost -p
+</blockquote>
+
+<p>En caso de haber asignado una contraseña al usuario root durante la instalacion del servidor MySQL, esta debe de ser tecleada, en caso contrario solo presionar enter para continuar.</p>
+
+<p>Primeramente, crearemos la base de datos:</p>
+
+<blockquote>
+    CREATE DATABASE siigs;
+</blockquote>
+
+<p>Será necesario crear el usuario dueño de la base de datos, para esto se ejecuta el siguiente comando:</p>
+
+<blockquote>
+     GRANT ALL PRIVILEGES ON siigs.* TO 'usrsiigs'@'localhost' IDENTIFIED BY 'pwdsiigs' WITH GRANT OPTION;
+</blockquote>
+
+<p>Procedemos a cargar datos iniciales. Con este comando se insertan los datos iniciales del sistema.</p>
+
+<blockquote>
+    PENDIENTE
+</blockquote>
+
+<h2 id="iniciar-la-plataforma">2.7 Iniciar la plataforma</h2>
+
+<p>En este punto estamos listos para acceder a la plataforma desde la siguiente dirección:</p>
+
+<p><a href="http://siig.localhost"><strong>http://siig.localhost</strong></a></p>
+
+
+<ul class="chunk_nav">
+    <li class="index"><a href="./index.html">Manual Técnico</a></li>
+
+    <li class="nav">
+        <div class="previous">
+                            <a href="./capitulo-1.html"><span>&larr;</span> Anterior</a>
+                    </div>
+
+        <div class="next">
+                            Siguiente <span>&rarr;</span>
+                    </div>
+    </li>
+</ul>
+
+
+</div></body>
+</html>
