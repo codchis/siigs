@@ -635,7 +635,7 @@ class Servicios extends CI_Controller {
 					echo ",";
 					$micadena["persona_x_borrar"]=$data;
 					$micadena=json_encode($micadena);
-					echo substr($micadena,1,strlen($micadena)-1);
+					echo substr($micadena,1,strlen($micadena)-2);
 					$micadena="";	
 					ob_flush();	
 					unset($data);
@@ -964,7 +964,7 @@ class Servicios extends CI_Controller {
 					echo ",";
 					$micadena["persona_x_borrar"]=$data;
 					$micadena=json_encode($micadena);
-					echo substr($micadena,1,strlen($micadena)-1);
+					echo substr($micadena,1,strlen($micadena)-2);
 					$micadena="";	
 					ob_flush();	
 					unset($data);
