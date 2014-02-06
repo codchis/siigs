@@ -707,7 +707,7 @@ class Enrolamiento_model extends CI_Model
 		
 		if (!$result)
 		{
-			$this->msg_error_usr = "Error $tabla.";
+			$this->msg_error_usr = "Error contador_visitas.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 		}
 	}

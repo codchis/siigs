@@ -27,6 +27,7 @@ class Servicios extends CI_Controller {
 		$this->load->model(DIR_SIIGS.'/Usuario_model');
 		$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
 		$this->load->model(DIR_SIIGS.'/ReglaVacuna_model');
+		$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
     }
 	/**
 	 * @access public
@@ -292,7 +293,9 @@ class Servicios extends CI_Controller {
 				//************ fin usuario ************
 				
 				//************ inicio catalogos ************
-				$catalog_relevante = $this->Enrolamiento_model->get_catalog_relevante($this->session->userdata('fecha'));
+				$fechis="";
+				if($sf!="")$fechis=$this->session->userdata('fecha');
+				$catalog_relevante = $this->Enrolamiento_model->get_catalog_relevante($fechis);
 				foreach($catalog_relevante as $catalog)
 				{
 					$xy=0;
@@ -621,7 +624,22 @@ class Servicios extends CI_Controller {
 					$cadena["esquema_incompleto"]=$rv;
 					//************ fin control catalogos X persona ************
 				}
-					
+				$array=$this->Reporte_sincronizacion_model->getListado("SELECT id FROM cns_persona WHERE activo=0");
+				if($array)
+				{
+					$data=array();
+					foreach($array as $x)
+					{
+						$data[]=$x->id;
+					}
+					echo ",";
+					$micadena["persona_x_borrar"]=$data;
+					$micadena=json_encode($micadena);
+					echo substr($micadena,1,strlen($micadena)-1);
+					$micadena="";	
+					ob_flush();	
+					unset($data);
+				}
 				// regresa el json con los datos necesarios	
 				$this->session->set_userdata( 'paso', "4" );
 				if($cadena!="")
@@ -934,6 +952,23 @@ class Servicios extends CI_Controller {
 				ob_flush();
 				unset($cadena);
 				$cadena=array();
+				
+				$array=$this->Reporte_sincronizacion_model->getListado("SELECT id FROM cns_persona WHERE activo=0");
+				if($array)
+				{
+					$data=array();
+					foreach($array as $x)
+					{
+						$data[]=$x->id;
+					}
+					echo ",";
+					$micadena["persona_x_borrar"]=$data;
+					$micadena=json_encode($micadena);
+					echo substr($micadena,1,strlen($micadena)-1);
+					$micadena="";	
+					ob_flush();	
+					unset($data);
+				}
 				// regresa el json con los datos necesarios	
 				$this->session->set_userdata( 'paso', "6" );
 				
