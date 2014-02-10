@@ -25,6 +25,6 @@ Este sistema contará con los siguientes módulos:
 
 # [Documentación](https://github.com/schiapassm2015/SIIGS/tree/master/manuales)
 
-* [Manual de instalación](https://github.com/schiapassm2015/SIIGS/blob/master/manuales/manual-tecnico/Contents/instalacion.md) 
+* [Manual de instalación](https://github.com/schiapassm2015/SIIGS/blob/master/manuales/manual-tecnico-operativo/Contents/instalacion.md) 
 
 * [Manual técnico operativo](https://github.com/schiapassm2015/SIIGS/tree/master/manuales/manual-tecnico-operativo/) [(pdf)](https://github.com/schiapassm2015/SIIGS/blob/master/manuales/manual-tecnico-operativo/Output/print/book.pdf?raw=true)
