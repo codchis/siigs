@@ -76,8 +76,12 @@ $(document).ready(function(){
 
 <?php
 if(!empty($msgResult))
+{
 echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
+}
  ?>
+<a href="<?php echo site_url().DIR_SIIGS; ?>/catalogo/" class="btn btn-primary">Regresar al listado<i class="icon-arrow-left"></i></a>
+<br/>
 <h2><?php echo $title; ?></h2>
 <?php
 if (!empty($catalogo_item))
@@ -99,10 +103,12 @@ if (!empty($catalogo_item))
     <button type="submit" name="submit" class="btn btn-primary">Guardar<i class="icon-hdd"></i></button>
     <button type="button" name="cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary" >Cancelar<i class="icon-arrow-left"></i></button>
     </form> 
+</div>
 <?php 
 if (!empty($datos))
 {
 ?>
+<div class="table table-striped">
     <table id="tabla">
     <thead>
     <thead><tr><th colspan="<?php echo count((array)$datos[0]);?>">Datos del catalogo</td></tr>
@@ -126,6 +132,7 @@ if (!empty($datos))
         </td></tr>
 </tfoot>
 </table>
+</div>
 <?php
 }
 }
@@ -134,4 +141,3 @@ else
 	echo '<div class="error">Registro no encontrado</div>';
 }
 ?>
-</div>

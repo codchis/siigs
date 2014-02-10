@@ -223,6 +223,12 @@ class Cie10 extends CI_Controller {
 			  	$data  = explode(",", fgets($fp));
                                 if (count($data) == 2)
                                 {
+                                    $utf8_encode = function($val)
+                                    {
+                                        return utf8_encode(addslashes($val));
+                                    };
+                                    $data  = array_map($utf8_encode,explode(",", fgets($fp)));
+			  	
                                     $data = preg_replace("!\r?\n!", "", $data);
                                     {
                                             //crea los rows con las filas que cumplen con la estructura en el CSV
@@ -340,11 +346,13 @@ class Cie10 extends CI_Controller {
             if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
             show_error('', 403, 'Acceso denegado');
             
-		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
+            ini_set('max_execution_time',1000);
+            
+                if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
 		//if (TRUE)
 		{
 			 $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
-		//	 $fp = fopen('catalogos/CIE10.csv', "r");
+		//	 $fp = fopen('cie10.csv', "r");
 			 $cont = 0;
 			 $columnas = array();
 			 $resultado = array();
@@ -385,11 +393,13 @@ class Cie10 extends CI_Controller {
 			 	echo Errorlog_model::save($e->getMessage(), __METHOD__);
 			 	die();
 			 }
+                         ini_set('memory_limit', '1024M');
+                         $error = false;
 			 while (!feof($fp))
 			 {
                                 $utf8_encode = function($val)
                                 {
-                                    return utf8_encode($val);
+                                    return utf8_encode(addslashes($val));
                                 };
 			  	$data  = array_map($utf8_encode,explode(",", fgets($fp)));
 			  	
@@ -408,7 +418,7 @@ class Cie10 extends CI_Controller {
 			  		}
 			  		if ($errorcols)
 			  		{
-			  			echo json_encode(array("Error","Las columnas del CSV no coinciden con la estructura de la tabla"));
+			  			echo json_encode(array("Error","Las columnas del CSV no coinciden con la estructura de la tabla".  implode(',', $campos)."  ".  implode(',', $columnas)));
 			  			die();
 			  		}
 			  		else 
@@ -435,13 +445,9 @@ class Cie10 extends CI_Controller {
 			  			}
 			  			//agrega el registro llave a la lista de llaves
 			  			array_push($datallaves,$datallave);
-
 				  		//agrega las claves con nombres de campo
-			  			$procesada = array_combine($columnas,$data);
+			  			$procesada = array_combine($columnas,$data);        
 			  			//si el registro existe en el catalogo
-                                                //  var_dump((object)$procesada);
-                                                //  var_dump($rowscat);
-                                                //  echo "<br/>";
 				  		if (in_array((object)$procesada, $rowscat))
 				  		{
 				  			$iguales += 1;				  			
@@ -451,30 +457,53 @@ class Cie10 extends CI_Controller {
 				  			//si la clave existe en el catalogo
 				  			if (in_array((object)array_combine($llaves,$datallave), $rowsllaves))
 				  			{
-								$consultaupdate = 'update cns_cie10 set ';
-								$consultaupdatewhere = ' where 1=1 ';
-								foreach ($procesada as $key => $value) 
-								{
-									$contcampos = 0; $contllaves = 0;
-									if (!in_array($key, $llaves))
-									{
-									$consultaupdate .= $key." = '".$value."',";
-									}
-									else
-									{
-										$consultaupdatewhere .= ' and '.$key." = '".$value."'";
-									}
-								}
-								$consultaupdate = substr($consultaupdate,0, count($consultaupdate)-2);
-								$consultaupdate .= $consultaupdatewhere;
-								array_push($consultamodificar, $consultaupdate);
-				  				$modificados += 1;
+                                                            
+							if ($update == true)
+                                                            {
+                                                                $consultaupdate = 'update cns_cie10 set ';
+                                                                $consultaupdatewhere = ' where 1=1 ';
+                                                                foreach ($procesada as $key => $value) 
+                                                                {
+                                                                        if (!in_array($key, $llaves))
+                                                                        {
+                                                                        $consultaupdate .= $key." = '".addslashes(utf8_encode($value))."',";
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                                $consultaupdatewhere .= ' and '.$key." = '".$value."'";
+                                                                        }
+                                                                }
+                                                                $consultaupdate = substr($consultaupdate,0, count($consultaupdate)-2);
+                                                                $consultaupdate .= $consultaupdatewhere;
+                                                                array_push($consultamodificar, $consultaupdate);
+                                                                
+                                                                if (count($consultamodificar)== 1000)
+                                                                {
+                                                                   foreach ($consultamodificar as $sql)
+                                                                        if(!$this->db->query($sql))
+                                                                            $error = true;
+                                                                    $consultamodificar = array();
+                                                                }
+                                                             }
+                                                            $modificados += 1;
 				  			}
 				  			else
 				  			{
-                                                        //       echo implode(',',(array)array_combine($llaves,$datallave))."<br/><br/>";
-                                                        //       echo implode(',',$procesada)."<br/><br/>";
-				  				array_push($consultaagregar,"insert into cns_cie10 (".implode(",", $campos).") values ('".implode("','", $data)."')");
+                                                            if ($update == true)
+                                                            {
+                                                                $arraytemp = array();
+                                                               foreach($campos as $clave=>$valor)
+                                                               {
+                                                                   $arraytemp[$valor] = $data[$clave];
+                                                               }
+                                                               array_push($consultaagregar, $arraytemp);
+                                                                if (count($consultaagregar)== 1000)
+                                                                {
+                                                                    if ($this->db->insert_batch('cns_cie10',$consultaagregar)==0)
+                                                                        $error = true;
+                                                                    $consultaagregar = array();
+                                                                }
+                                                            }
 				  				$nuevos += 1;
 				  			}
 				  		}
@@ -484,7 +513,7 @@ class Cie10 extends CI_Controller {
                                         }
 			  	}
 			 }
-			 if (count($datallaves) != count($this->_array_unique_recursive($datallaves)))
+			 if (count($datallaves) > count($this->_array_unique_recursive($datallaves)))
 			 {
 			 	echo json_encode(array("Error","El archivo contiene llaves primarias duplicadas"));
 			 	die();
@@ -502,25 +531,30 @@ class Cie10 extends CI_Controller {
 			 echo json_encode($resultado);
 			 else 
 			 {
-                           //  var_dump($consultamodificar);
-                           //  var_dump($consultaagregar);
-			 	$this->db->trans_begin();
-				foreach ($consultamodificar as $sql)
-					$this->db->query($sql);
-				foreach ($consultaagregar as $sql)
-				$this->db->query($sql);{
-				
-				if ($this->db->trans_status() === FALSE)
+                            if (count($consultaagregar)>0)
+                            {
+                                if ($this->db->insert_batch('cns_cie10',$consultaagregar)==0)
+                                {
+                                    $error = true;
+                                }
+                            }
+                            if (count($consultamodificar)>0)
+                                {
+                                    
+                                     foreach ($consultamodificar as $sql)
+                                        if(!$this->db->query($sql))
+                                            $error = true;
+                                }
+                            			
+				if ($error == true)
 				{
-				    $this->db->trans_rollback();
 				    echo json_encode(array("Error","Ha ocurrido un error al hacer el volcado, los datos no se modificaron."));
 				}
 				else
 				{
-				    $this->db->trans_commit();
 				    echo json_encode(array("Ok","Los datos del catalogo se han modificado correctamente"));
 				}
-			 }
+			 
 			}
 		}
 		else
@@ -540,7 +574,9 @@ class Cie10 extends CI_Controller {
 	{
 		foreach($arr as $key=>$value)
 			if(gettype($value)=='array')
-			    $arr[$key]=$this->_array_unique_recursive($value);
+                        {
+                            $arr[$key]=implode(",",$value);
+                        }
 			return array_unique($arr,SORT_REGULAR);
 	}
 

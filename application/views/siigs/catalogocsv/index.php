@@ -35,7 +35,11 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
             }
             if ($catalogo_item->nombre == CAT_GEOREFERENCIA) {
                 echo '<a href="/'.DIR_SIIGS.'/catalogocsv/createTableGeo/" class="btn btn-small btn-primary btn-icon">Crear&nbsp;Tabla<i class="icon-list-alt"></i></a>';
-            } ?>
+            }
+            if ($catalogo_item->nombre == CAT_AGEB) {
+                echo '<a href="/'.DIR_SIIGS.'/catalogocsv/createTableAgeb/" class="btn btn-small btn-primary btn-icon">Crear&nbsp;Tabla<i class="icon-list-alt"></i></a>';
+            }
+            ?>
                 <?php } ?>
                 </td>
 	</tr>
