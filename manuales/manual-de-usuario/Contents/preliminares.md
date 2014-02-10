@@ -1,2 +1,0 @@
-## Información preliminar
-
