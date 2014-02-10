@@ -699,6 +699,18 @@ class Enrolamiento_model extends CI_Model
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 		}
 	}
+	public function cns_update_visita($id)
+	{
+		$this->db->set('contador_visitas' , 'contador_visitas+1',false);
+		$this->db->where('id' , $id);
+		$result = $this->db->update("cns_persona"); 
+		
+		if (!$result)
+		{
+			$this->msg_error_usr = "Error contador_visitas.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+		}
+	}
 	
 	/**
 	 * @access public
@@ -2005,12 +2017,12 @@ class Enrolamiento_model extends CI_Model
 	 */
 	public function get_cns_persona($array,$fecha="")
 	{
-		$this->db->select('*');
+		$this->db->select('id, curp, nombre, apellido_paterno, apellido_materno, sexo, id_tipo_sanguineo, fecha_nacimiento, id_asu_localidad_nacimiento, calle_domicilio, numero_domicilio, colonia_domicilio, referencia_domicilio, ageb, manzana, sector, id_asu_localidad_domicilio, cp_domicilio, telefono_domicilio, fecha_registro, id_asu_um_tratante, celular, ultima_actualizacion, id_nacionalidad, id_operadora_celular, ultima_sincronizacion');
 		$this->db->from("cns_persona");
 		if($fecha!="")
 		$this->db->where("ultima_actualizacion >=", $fecha);
 		$this->db->where_in("id_asu_um_tratante", $array);
-		
+		$this->db->where_in("activo", "1");
 		$query = $this->db->get(); 
 		if (!$query)
 		{

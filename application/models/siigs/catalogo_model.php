@@ -143,7 +143,7 @@ class Catalogo_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$catalogos = $this->db->query('SELECT table_name as nombre, table_comment as comentario FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name LIKE "cat_%" and table_name <> "cat_georeferencia" and table_name <> "cat_poblacion"');
+		$catalogos = $this->db->query('SELECT table_name as nombre, table_comment as comentario FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = "'.$this->db->database.'" AND table_name LIKE "cat_%" and table_name <> "cat_georeferencia" and table_name <> "cat_poblacion" and table_name <> "cat_ageb"');
 		if (!$catalogos)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();

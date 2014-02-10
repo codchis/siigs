@@ -121,6 +121,8 @@ class CatalogoCsv extends CI_Controller {
 		if (!$this->input->is_ajax_request())
                 show_error('', 403, 'Acceso denegado');
             
+                ini_set('max_execution_time',1000);
+                
 		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
 		//if (TRUE)
 		{
@@ -130,7 +132,7 @@ class CatalogoCsv extends CI_Controller {
 			 $columnas = array();
 			 $resultado = array();
 			 $rows = array();
-			 $nuevos = 0; $modificados = 0; $iguales = 0;
+			 $nuevos = 0; $modificados = 0; $iguales = 0;$errores = 0;
 		 
 			 try 
 			 {
@@ -139,8 +141,9 @@ class CatalogoCsv extends CI_Controller {
 				//obtiene la estructura del catalogo
 			 	$catalogo = $this->CatalogoCsv_model->getByName($nombrecat);
 			 	//obtiene los nombres de los campos con su tipo de dato y otros valores
-			 	$campostemp = explode('||', $catalogo->campos);
-			 	$llavestemp = explode('||',$catalogo->llave);
+                                
+			 	$campostemp = (strlen($catalogo->campos)==0) ? array() : explode('||', $catalogo->campos);
+			 	$llavestemp = (strlen($catalogo->llave)==0) ? array() : explode('||',$catalogo->llave);
 			 	
 			 	//array para hacer modificaciones por lotes
 			 	$consultamodificar = array();
@@ -151,8 +154,10 @@ class CatalogoCsv extends CI_Controller {
 			 	$campos = array();
 			 	$llaves = array();
 			 	//obtiene el nombre de los campos y las llaves
+                                if (count($campostemp)>0)
 			 	foreach($campostemp as $item)
 			 		array_push($campos, explode('|',$item)[0]);
+                                if (count($llavestemp)>0)
 			 	foreach($llavestemp as $item)
 			 	{
 			 		$key = explode('|',$item)[0];
@@ -179,6 +184,8 @@ class CatalogoCsv extends CI_Controller {
                                 if (count($campos)>0)
                                 {
                                 $rowscat = $this->db->query("select ".implode(",",$campos)." from ".$nombrecat);
+                                //echo "select ".implode(",",$campos)." from ".$nombrecat;
+                                //var_dump($campos);
 		 		$rowscat = $rowscat->result_array();
                                 }
 			 } 
@@ -187,13 +194,16 @@ class CatalogoCsv extends CI_Controller {
 			 	echo Errorlog_model::save($e->getMessage(), __METHOD__);
 			 	die();
 			 }
+                         ini_set('memory_limit', '1024M');
+                         $error = false;
 			 while (!feof($fp))
 			 {
 			  	$utf8_encode = function($val)
                                 {
-                                    return utf8_encode($val);
+                                    return utf8_encode(addslashes($val));
                                 };
-			  	$data  = array_map($utf8_encode,explode(",", fgets($fp)));
+                                $datatemp = explode(",", fgets($fp));
+			  	$data  = array_map($utf8_encode,$datatemp);
 			  	$cont +=1;
 				$data = preg_replace("!\r?\n!", "", $data);
 			  	if ($cont == 1)
@@ -248,11 +258,13 @@ class CatalogoCsv extends CI_Controller {
 				  			//si la clave existe en el catalogo
 				  			if (in_array((object)array_combine($llaves,$datallave), $rowsllaves))
 				  			{
-								$consultaupdate = 'update '.$nombrecat. ' set ';
+                                                            
+							if ($update == true)
+                                                            {
+                                                            	$consultaupdate = 'update '.$nombrecat. ' set ';
 								$consultaupdatewhere = ' where 1=1 ';
 								foreach ($procesada as $key => $value) 
 								{
-									$contcampos = 0; $contllaves = 0;
 									if (!in_array($key, $llaves))
 									{
 									$consultaupdate .= $key." = '".$value."',";
@@ -265,20 +277,47 @@ class CatalogoCsv extends CI_Controller {
 								$consultaupdate = substr($consultaupdate,0, count($consultaupdate)-2);
 								$consultaupdate .= $consultaupdatewhere;
 								array_push($consultamodificar, $consultaupdate);
+                                                                
+                                                                if (count($consultamodificar)== 1000)
+                                                                {
+                                                                   foreach ($consultamodificar as $sql)
+                                                                        if(!$this->db->query($sql))
+                                                                            $error = true;
+                                                                    $consultamodificar = array();
+                                                                }
+                                                            }
 				  				$modificados += 1;
 				  			}
 				  			else
 				  			{
-				  				array_push($consultaagregar,"insert into ".$nombrecat. " (".implode(",", $campos).") values ('".implode("','", $data)."')");
-				  				$nuevos += 1;
+                                                            if ($update == true)
+                                                            {
+                                                                $arraytemp = array();
+                                                                foreach($campos as $clave=>$valor)
+                                                                {
+                                                                    $arraytemp[$valor] = $data[$clave];
+                                                                }
+                                                                array_push($consultaagregar, $arraytemp);
+                                                                if (count($consultaagregar)== 1000)
+                                                                {
+                                                                    if ($this->db->insert_batch($nombrecat,$consultaagregar)==0)
+                                                                        $error = true;
+                                                                    $consultaagregar = array();
+                                                                }
+                                                            }
+				  				$nuevos += 1;                                                            
 				  			}
 				  		}
 			  		}
+                                       else {
+                                            $errores +=1;
+                                        }
 			  	}
 			 }
                          //var_dump($datallaves);
-			 if (count($datallaves) != count($this->_array_unique_recursive($datallaves)))
+			 if (count($datallaves) > count($this->_array_unique_recursive($datallaves)))
 			 {
+                             //echo count($datallaves) ."   ". count($this->_array_unique_recursive($datallaves));
 			 	echo json_encode(array("Error","El archivo contiene llaves primarias duplicadas"));
 			 	die();
 			 }
@@ -289,29 +328,36 @@ class CatalogoCsv extends CI_Controller {
 				 array_push($resultado,array('Numero de registros a insertar',$nuevos));
 				 array_push($resultado,array('Numero de registros a modificar',$modificados));
 				 array_push($resultado,array('Numero de registros sin cambios',$iguales));
+                                 array_push($resultado,array('Numero de registros con errores',$errores));
 			 }
 			 if ($update == false)
 			 echo json_encode($resultado);
 			 else 
 			 {
-			 	$this->db->trans_begin();
-				foreach ($consultamodificar as $sql)
-					$this->db->query($sql);
-				foreach ($consultaagregar as $sql)
-				$this->db->query($sql);{
+                                if (count($consultaagregar)>0)
+                                {
+                                    if ($this->db->insert_batch($nombrecat,$consultaagregar)==0)
+                                        $error = true;
+                                }
+                                if (count($consultamodificar)>0)
+                                {
+                                    
+                                     foreach ($consultamodificar as $sql)
+                                        if(!$this->db->query($sql))
+                                            $error = true;
+                                }
 				
-				if ($this->db->trans_status() === FALSE)
+				if ($error == true)
 				{
-				    $this->db->trans_rollback();
+				    //$this->db->trans_rollback();
 				    echo json_encode(array("Error","Ha ocurrido un error al hacer el volcado, los datos no se modificaron."));
 				}
 				else
 				{
-				    $this->db->trans_commit();
+				    //$this->db->trans_commit();
 				    echo json_encode(array("Ok","Los datos del catalogo se han modificado correctamente"));
                                     $this->db->query("update cns_tabla_catalogo set fecha_actualizacion = NOW() where descripcion='".$nombrecat."'");
 				}
-			 }
 			}
 		}
 		else
@@ -332,19 +378,14 @@ class CatalogoCsv extends CI_Controller {
 		foreach($arr as $key=>$value)
 			if(gettype($value)=='array')
                         {
-                            //var_dump($arr[$key]);
-                            //$temp = $arr[$key];
-			    //$arr[$key]=$this->_array_unique_recursive($value);
                             $arr[$key]=implode(",",$value);
-                            
-//                            if ($temp != $arr[$key])
-//                            {
-//                                var_dump($temp);
-//                                var_dump($arr[$key]);
-//                                echo "<br/><br/><br/>";
-//                            }
                         }
-			return array_unique($arr,SORT_REGULAR);
+                        if (count($arr)> count(array_unique($arr)))
+                        {
+                            //var_dump(array_diff($arr, array_unique($arr)));
+                            //echo count($arr) ."  .  ".  count(array_unique($arr));
+                        }
+			return array_unique($arr);
 	}
 	
          /***
@@ -436,6 +477,7 @@ class CatalogoCsv extends CI_Controller {
 			$data['clsResult'] = 'error';
 		}
 
+//                $this->template->write('ajustaAncho',1,true);
 		$this->template->write_view('content',DIR_SIIGS.'/catalogocsv/update', $data);
 		$this->template->render();
 		

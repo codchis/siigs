@@ -310,7 +310,10 @@ class ArbolSegmentacion_model extends CI_Model {
                 $archivo = 'asu_data_'.$idarbol.'_'.$nivel.'_'.  implode(',', $omitidos).'_'.strtotime($fecha_update_asu).'.json';
                 $ruta_temp = $ruta;
                 if (!is_dir($ruta))
-                   mkdir($ruta, 0777, true);
+                {
+                    if(!mkdir($ruta, 0777, true))
+                            return "false";
+                }
 
                 $ruta.= $archivo;
 
@@ -404,7 +407,7 @@ class ArbolSegmentacion_model extends CI_Model {
                         try
                         {
                             $fh = fopen($ruta, 'c')
-                            or die("Error al abrir fichero para el asu");
+                            or die("false");
 
                             fwrite($fh, json_encode($resultado[1],JSON_UNESCAPED_UNICODE));
                             fclose($fh);

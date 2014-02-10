@@ -9,6 +9,13 @@
         			alert('Debe asignar al menos una relación entre los catálogos');
     				return false;
     			}
+                        
+                        if($('#columnas_descripcion').val() == "")
+    			{
+        			alert('Debe agregar por lo menos una columna a la descripción');
+    				return false;
+    			}
+                        
     			
         	  });
     	  
@@ -47,7 +54,7 @@
 	 	                	});
 
 	 	           	    	$td2 = $('<td></td>');
-	 	           	    	$descselect = $('<select name="columna_descripcion"></select><br/><input type="text" name="columnas_descripcion" value=""/>');
+	 	           	    	$descselect = $('<select name="columna_descripcion"></select><br/><input type="text" name="columnas_descripcion" id="columnas_descripcion" value=""/>');
 	 	           	    	$td2.append($descselect);
                                         
                                         $td3 = $('<td></td>');
