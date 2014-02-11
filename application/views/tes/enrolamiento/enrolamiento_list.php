@@ -60,7 +60,7 @@ if(!empty($msgResult))
 
 <?php echo form_open(DIR_TES.'/enrolamiento/index/'.$pag, array('name'=>'form_filter_bitacora', 'id'=>'form_filter_bitacora')); ?>
 Buscar usuario
-<input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" class="spa10" placeholder="Buscar Paciente" /> 
+<input type="text" name="busqueda" value="<?php echo set_value('busqueda', ''); ?>" class="spa10" placeholder="Buscar Paciente (curp ó nombre)" style="width:90%" /> 
 <button type="submit" name="btnFiltrar" id="btnFiltrar"   class="btn btn-primary">Buscar <i class="icon-search"></i></button>
 <?php if($opcion_insert) { ?><a href="/<?php echo DIR_TES?>/enrolamiento/insert" class="btn btn-primary" style="margin-left:5px">Crear nuevo <i class="icon-plus"></i></a><?php } ?>
 </form>

@@ -368,11 +368,11 @@
 							$("#curp").val(curp.substr(0,curp.length-5));
 							$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
 							$("#curp2").val(curp.substr(curp.length-5,5));
-							$("#nocurp").html('<span style="color:green">Curp encontrada en la CONDUSEF</span>');		
+							$("#nocurp").html('<span style="color:green">Curp encontrada en la base de la federación</span>');		
 						}
 						else
 						{
-							$("#nocurp").html('<span style="color:red">Curp no encontrada en la CONDUSEF calculando manualmente... Espere</span>');	
+							$("#nocurp").html('<span style="color:red">Curp no encontrada en la base de la federación calculando manualmente... Espere</span>');	
 							calcular_curp(ap,am,no,d,m,a,se,ed,0);
 						}
 					}
@@ -413,11 +413,11 @@
 								var obj = jQuery.parseJSON( data );
 								var curp=obj[0]["curp"];
 								$("#curpT").val(curp);
-								$("#errorcurptutor").html('<span style="color:green">Curp encontrada en la CONDUSEF</span>');		
+								$("#errorcurptutor").html('<span style="color:green">Curp encontrada en la base de la federación</span>');		
 							}
 							else
 							{
-								$("#errorcurptutor").html('<span style="color:red">Curp no encontrada en la CONDUSEF calculando manualmente... Espere</span>');	
+								$("#errorcurptutor").html('<span style="color:red">Curp no encontrada en la base de la federación calculando manualmente... Espere</span>');	
 								calcular_curp(ap,am,no,d,m,a,se,ed,1);
 							}
 						}
