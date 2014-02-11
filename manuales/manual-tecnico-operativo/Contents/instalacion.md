@@ -136,24 +136,25 @@ Nos conectamos al servidor MySQL con el siguiente comando:
     $ mysql -u root -h localhost -p
 </blockquote>
 
-En caso de haber asignado una contraseña al usuario root durante la instalacion del servidor MySQL, esta debe de ser tecleada, en caso contrario solo presionar enter para continuar.
+En caso de haber asignado una contraseña al usuario root durante la instalación del servidor MySQL, esta debe de ser tecleada, en caso contrario solo presionar enter para continuar.
 
-Primeramente, crearemos la base de datos:
+Procedemos a crear el usuario dueño de la base de datos, para esto se ejecuta el siguiente comando:
 
 <blockquote>
-    CREATE DATABASE siigs;
+     GRANT ALL PRIVILEGES ON *.* TO 'usrsiigs'@'localhost' IDENTIFIED BY 'pwdsiigs' WITH GRANT OPTION;
 </blockquote>
 
-Será necesario crear el usuario dueño de la base de datos, para esto se ejecuta el siguiente comando:
+Salimos de MySQL ya que nos conectamos con el usuario root, esto se lográ con el comando:
 
-<blockquote>
-     GRANT ALL PRIVILEGES ON siigs.* TO 'usrsiigs'@'localhost' IDENTIFIED BY 'pwdsiigs' WITH GRANT OPTION;
+<blockquote> 
+    exit;
 </blockquote>
 
-Procedemos a cargar datos iniciales. Con este comando se insertan los datos iniciales del sistema.
+Procedemos a cargar datos iniciales. Nos conectamos a MySQL con el usuario que acabamos de crear:
 
 <blockquote>
-    PENDIENTE
+    <p>$ mysql -u usrsiigs -h localhost -p</p>
+    <p>source /var/www/siigs/bd/siigs.sql</p>
 </blockquote>
 
 
