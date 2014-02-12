@@ -1598,10 +1598,31 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->db->select('*');
 			$this->db->from('cns_persona');
-			$this->db->like('curp', $keywords);
-			$this->db->or_like('nombre', $keywords);
-			$this->db->or_like('apellido_paterno', $keywords);
-			$this->db->or_like('apellido_materno', $keywords);
+			$cadena=explode(" ",$keywords);
+			if(count($cadena)==1)
+			{
+				$this->db->like('curp', $keywords);
+				$this->db->or_like('nombre', $keywords);
+				$this->db->or_like('apellido_paterno', $keywords);
+				$this->db->or_like('apellido_materno', $keywords);
+			}
+			else if(count($cadena)==2)
+			{
+				$this->db->like('nombre', $cadena[0]);
+				$this->db->like('apellido_paterno', $cadena[1]);
+			}
+			else if (count($cadena)==3)
+			{
+				$this->db->like('nombre', $cadena[0]);
+				$this->db->like('apellido_paterno', $cadena[1]);
+				$this->db->like('apellido_materno', $cadena[2]);
+			}
+			else if (count($cadena)==4)
+			{
+				$this->db->like('nombre', $cadena[0].' '.$cadena[1]);
+				$this->db->like('apellido_paterno', $cadena[2]);
+				$this->db->like('apellido_materno', $cadena[3]);
+			}
 			$query = $this->db->get();
 		}
 		
@@ -1630,12 +1651,34 @@ class Enrolamiento_model extends CI_Model
 			$query = $this->db->get('cns_persona');
 		else 
 		{
+			
 			$this->db->select('*');
 			$this->db->from('cns_persona');
-			$this->db->like('curp', $keywords);
-			$this->db->or_like('nombre', $keywords);
-			$this->db->or_like('apellido_paterno', $keywords);
-			$this->db->or_like('apellido_materno', $keywords);
+			$cadena=explode(" ",$keywords);
+			if(count($cadena)==1)
+			{
+				$this->db->like('curp', $keywords);
+				$this->db->or_like('nombre', $keywords);
+				$this->db->or_like('apellido_paterno', $keywords);
+				$this->db->or_like('apellido_materno', $keywords);
+			}
+			else if(count($cadena)==2)
+			{
+				$this->db->like('nombre', $cadena[0]);
+				$this->db->like('apellido_paterno', $cadena[1]);
+			}
+			else if (count($cadena)==3)
+			{
+				$this->db->like('nombre', $cadena[0]);
+				$this->db->like('apellido_paterno', $cadena[1]);
+				$this->db->like('apellido_materno', $cadena[2]);
+			}
+			else if (count($cadena)==4)
+			{
+				$this->db->like('nombre', $cadena[0].' '.$cadena[1]);
+				$this->db->like('apellido_paterno', $cadena[2]);
+				$this->db->like('apellido_materno', $cadena[3]);
+			}
 			$query = $this->db->get();
 		}
 		if(!$query) 

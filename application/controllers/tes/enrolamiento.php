@@ -691,7 +691,8 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		foreach($vacunas as $x)
 		{
 			$data.=$x->id."=";
-			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+			$data.=date("Y-m-d",strtotime($x->fecha))."=";
+			$data.=$x->id_asu_um."°";
 		}
 		if(empty($vacunas))
 			$data.="~";
@@ -701,9 +702,10 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		foreach($iras as $x)
 		{
 			$data.=$x->id."=";
+			$data.=$x->fecha."=";
+			$data.=$x->id_asu_um."=";
 			$data.=$x->id_tratamiento;					 if($x->id_tratamiento=="")$data.="¬=";else $data.="=";
-			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬=";else $data.="=";
-			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬°";else $data.="°";
 		}
 		if(empty($iras))
 			$data.="~";
@@ -713,9 +715,10 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		foreach($edas as $x)
 		{
 			$data.=$x->id."=";
+			$data.=$x->fecha."=";
+			$data.=$x->id_asu_um."=";
 			$data.=$x->id_tratamiento;					 if($x->id_tratamiento=="")$data.="¬=";else $data.="=";
-			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬=";else $data.="=";
-			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬°";else $data.="°";
 		}
 		if(empty($edas))
 			$data.="~";
@@ -725,9 +728,10 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		foreach($consultas as $x)
 		{
 			$data.=$x->id."=";
+			$data.=$x->fecha."=";
+			$data.=$x->id_asu_um."=";
 			$data.=$x->id_tratamiento;					 if($x->id_tratamiento=="")$data.="¬=";else $data.="=";
-			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬=";else $data.="=";
-			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬°";else $data.="°";
 		}
 		if(empty($consultas))
 			$data.="~";
@@ -737,7 +741,8 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 		foreach($anutricional as $x)
 		{
 			$data.=$x->id."=";
-			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+			$data.=date("Y-m-d",strtotime($x->fecha))."=";
+			$data.=$x->id_asu_um."°";
 		}
 		if(empty($anutricional))
 			$data.="~";
@@ -749,7 +754,8 @@ ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			$data.=$x->peso."=";
 			$data.=$x->altura."=";
 			$data.=$x->talla."=";
-			$data.=date("Y-m-d",strtotime($x->fecha))."°";
+			$data.=date("Y-m-d",strtotime($x->fecha))."=";
+			$data.=$x->id_asu_um."°";
 		}
 		if(empty($nutricion))
 			$data.="~";
