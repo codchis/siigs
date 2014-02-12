@@ -661,7 +661,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
         	<table width="100%">
             <tr>
                 <td>
-                  <div id="Accordion1" class="Accordion" tabindex="0" style="margin-left:-20px;" >
+                  <div id="base de la federación" class="Accordion" tabindex="0" style="margin-left:-20px;" >
                   
                   <!-- Datos basicos -->
                   <?php if($cn_basico){ ?>
@@ -1255,7 +1255,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 	</td></tr></table>
 
 <script type="text/javascript">
-var Accordion1 = new Spry.Widget.Accordion("Accordion1", { useFixedPanelHeights: false, defaultPanel: 0 });
+var base de la federación = new Spry.Widget.Accordion("base de la federación", { useFixedPanelHeights: false, defaultPanel: 0 });
 </script>
 <?php 
 }

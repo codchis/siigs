@@ -8,7 +8,6 @@
  * @created    2013-11-27
  */
 class Servicios extends CI_Controller {
-    
     public function __construct()
     {
         parent::__construct();
@@ -291,44 +290,7 @@ class Servicios extends CI_Controller {
 				}
 				
 				//************ fin usuario ************
-				
-				//************ inicio catalogos ************
-				$fechis="";
-				if($sf!="")$fechis=$this->session->userdata('fecha');
-				$catalog_relevante = $this->Enrolamiento_model->get_catalog_relevante($fechis);
-				foreach($catalog_relevante as $catalog)
-				{
-					$xy=0;
-					if($sf=="")
-					{
-						$array=$this->Enrolamiento_model->get_catalog($catalog->descripcion);
-						if($array)
-						$xy=1;
-					}
-					else
-					{
-						$fecha=$this->session->userdata('fecha'); 
-						$fecha2=$catalog->fecha_actualizacion;
-						if(strtotime($fecha2)>strtotime($fecha))
-						{
-							$array=$this->Enrolamiento_model->get_catalog($catalog->descripcion);
-							if($array)
-							$xy=1;
-						}
-					}
-					if($xy==1)
-					{
-						$cadena[$catalog->descripcion]= $array;
-						$micadena=json_encode($cadena);
-						echo substr($micadena,1,strlen($micadena)-2).",";
-						$micadena="";
-						ob_flush();
-						unset($cadena);
-						$cadena=array();
-					}
-				}	
-				//************ fin catalogos ************
-				
+
 				//************ inicio asu ************
 				if($si=="")
 				{
@@ -415,6 +377,11 @@ class Servicios extends CI_Controller {
 					$cadena=array();
 				}	
 				//************ fin notificacion ************
+				
+				//************ inicio catalogos ************
+				if($sf=="")
+				$this->catalogos_relevantes();
+				//************ fin catalogos ************
 				
 				//************ inicio tes_pendientes_tarjeta ************
 				$pendiente=$this->Enrolamiento_model->get_catalog2("tes_pendientes_tarjeta","resuelto","0");
@@ -639,7 +606,8 @@ class Servicios extends CI_Controller {
 					$micadena="";	
 					ob_flush();	
 					unset($data);
-				}
+				}				
+				
 				// regresa el json con los datos necesarios	
 				$this->session->set_userdata( 'paso', "4" );
 				if($cadena!="")
@@ -835,7 +803,13 @@ class Servicios extends CI_Controller {
 			// se obtienen los usuarios asignados, el tipo de censo y la unidad médica
 			if ($tableta->usuarios_asignados == 1 && $tableta->id_tipo_censo != null && $tableta->id_asu_um != null)
 			{
+				//************ inicio asu ************
 				$this->is_step_2($id_sesion,"","si");
+				//************ fin asu ************
+				
+				//************ inicio catalogos ************
+				$this->catalogos_relevantes("si");
+				//************ fin catalogos ************
 				
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
@@ -1064,6 +1038,32 @@ class Servicios extends CI_Controller {
 			}
 		}
 		return $cadena;
+	}
+	/**
+	 * @access public
+	 *
+	 * Genera los catalogos relevantes por entorno
+	 * 
+	 * @param		string 		$sf            bandera que activa el filtro de fechas segun el tipo de sincronizacion
+	 *
+	 * @return 		echo
+	 */
+	public function catalogos_relevantes($sf="")
+	{
+		$fechis="";
+		if($sf!="")$fechis=$this->session->userdata('fecha');
+		$catalog_relevante = $this->Enrolamiento_model->get_catalog_relevante($fechis);
+		foreach($catalog_relevante as $catalog)
+		{
+			$array=$this->Enrolamiento_model->get_catalog($catalog->descripcion);
+			$cadena[$catalog->descripcion]= $array;
+			$micadena=json_encode($cadena);
+			echo ",".substr($micadena,1,strlen($micadena)-2);
+			$micadena="";
+			ob_flush();
+			unset($cadena);
+			$cadena=array();
+		}	
 	}
 	public function prueba2($id_accion,$id_tab=null,$id_sesion=null, $version=null)
 	{

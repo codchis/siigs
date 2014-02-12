@@ -781,10 +781,13 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 			$this->session->unset_userdata('session_etab');
 			echo '<script>
 			  	document.location.href="http://etab.sm2015.com.mx/admin/";
-			  </script>';$this->cerrar_etab();
+			  </script>';
+			$this->cerrar_etab();
 		}
-		$token=$this->get_token('http://etab.sm2015.com.mx/admin/login',true);
-		$this->session->set_userdata( 'session_etab', "iniciado" );
+		$token=$this->get_token('http://etab.sm2015.com.mx/admin/login',true,'name="_csrf_token" value="',26,40);
+		if($this->get_token('http://etab.sm2015.com.mx/admin/login_check',true,'images/logo_salud.png"  />',0,26,"_username=$user&_password=$pass&")=='images/logo_salud.png"  />')
+			$this->session->set_userdata( 'session_etab', "iniciado" );
+		else $this->automatic_access();
 		echo '<script src="/resources/js/jquery.js"></script>
 
 		<form action="http://etab.sm2015.com.mx/admin/login_check" method="post" >
@@ -815,7 +818,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 	 * 
 	 * @return token
 	 */
-	function get_token($url,$var)
+	function get_token($url,$var,$valor="",$num="",$count="",$par="")
 	{
 		global $mas;
 		
@@ -834,11 +837,11 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		if($var)
 		{
 			$galleta=$this->get_galleta();
-			curl_setopt($ch, CURLOPT_POSTFIELDS,'PHPSESSID='.$galleta.'&_submit=Entrar');
+			curl_setopt($ch, CURLOPT_POSTFIELDS,$par.'PHPSESSID='.$galleta.'&_submit=Entrar');
 		}
 		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)");
 		$html = curl_exec($ch);
-		$token=substr($html,stripos($html,'name="_csrf_token" value="')+26,40);
+		$token=substr($html,stripos($html,$valor)+$num,$count);
 		
 		$err = 0;
 		$err = curl_errno($ch); 
