@@ -128,6 +128,24 @@ class Reporteador_model extends CI_Model {
         
         $gruposVacuna = $this->Reporteador_model->getGrupoVacunas();
         
+        // Validar que exista poblacion para el año especificado
+        $anio = (int)formatFecha($fecha, 'Y');
+        
+        $queryPob = $this->db->query('SELECT
+                    SUM(poblacion) AS poblacion
+                FROM 
+                    asu_poblacion
+                WHERE 
+                    id_asu IN ('.implode(',', $idsAsu).') AND 
+                    ano = '.$anio);
+        
+        $resultPob = $queryPob->row();
+        
+        // Si no existe poblacion en el año, tomar la población del año anterior
+        if(!$resultPob->poblacion) {
+            $anio--;
+        }
+        
         foreach ($resultGrupoEtareo as $grupoEtareo) {
             // Se crea el objeto reporte del tipo clase generica
             // dado que el reporte es dinamico no se puede conocer
@@ -148,7 +166,7 @@ class Reporteador_model extends CI_Model {
                 WHERE 
                     id_asu IN ('.implode(',', $idsAsu).') AND 
                     id_grupo_etareo = '.$idGrupoEtareo.' AND 
-                    ano = '.formatFecha($fecha, 'Y'));
+                    ano = '.$anio);
             
             $resultPob = $queryPob->row();
 
@@ -177,17 +195,18 @@ class Reporteador_model extends CI_Model {
             $objReporte->pob_oficial = (int)$resultPob->poblacion;
             $objReporte->pob_nominal = (int)$resultNom->nominal;
             $objReporte->concordancia = $objReporte->pob_oficial ? round(($objReporte->pob_nominal/$objReporte->pob_oficial)*100, 2) : 0;
+            $esq_comp_tot = 0;
             
             foreach ($gruposVacuna as $grupo) {
                 $ultimaDosisTotal = 0;
                 $ultimaDosisDescrip = '';
+                
                 // Obtiene las vacunas de cada grupo
                 $vacunas = $this->Reporteador_model->getVacunasByGrupo($grupo->grupo);
                 
                 foreach ($vacunas as $vac) {
                     if( $grupoEtareo->dia_inicio >= $vac->dia_inicio_aplicacion_nacido && $vac->dia_fin_aplicacion_nacido <= ($grupoEtareo->dia_fin+1) ){
                         $objReporte->{$vac->descripcion_corta} = $vac->descripcion_corta;
-                        
                         $queryCob = $this->db->query('SELECT 
                                 COUNT(cns_persona.id) AS total
                             FROM 
@@ -207,19 +226,21 @@ class Reporteador_model extends CI_Model {
                                     BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
                         $resultCob = $queryCob->row();
                         
-                        $objReporte->{$vac->descripcion_corta} = $resultCob->total;
+                        $objReporte->{$vac->descripcion_corta} = $resultCob->total;//'gi: '.$grupoEtareo->dia_inicio.'>= vi: '.$vac->dia_inicio_aplicacion_nacido.' && vf: '.$vac->dia_fin_aplicacion_nacido.' <= gf: '.($grupoEtareo->dia_fin+1);//$resultCob->total;
                         $ultimaDosisTotal = $resultCob->total;
-                        $ultimaDosisDescrip = $vac->descripcion_corta;
+                        $esq_comp_tot += $resultCob->total;
                     } else {
                         $objReporte->{$vac->descripcion_corta} = '-';
+                        $ultimaDosisTotal = 0;
                     }
-                    //$objReporte->{$vac->descripcion_corta} = $grupoEtareo->dia_inicio.'-'.$grupoEtareo->dia_fin.'<br>'.$vac->dia_inicio_aplicacion_nacido.'-'.$vac->dia_fin_aplicacion_nacido;
+                    
+                    $ultimaDosisDescrip = $vac->descripcion_corta;
                 }
                 
                 $objReporte->{$ultimaDosisDescrip.'_cob'} = ($objReporte->pob_oficial ? round($ultimaDosisTotal/$objReporte->pob_oficial, 2)*100 : 0).'%';
             }
             
-            $objReporte->esq_comp_tot = 19;
+            $objReporte->esq_comp_tot = $esq_comp_tot;
             $objReporte->esq_comp_oficial = $objReporte->pob_oficial ? round($objReporte->esq_comp_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->esq_comp_nominal = $objReporte->pob_nominal ? round($objReporte->esq_comp_tot/$objReporte->pob_nominal, 2) : 0;
 
