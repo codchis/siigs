@@ -267,28 +267,28 @@ class Reporteador_model extends CI_Model {
 			t.nombre AS nombre_tutor,t.curp AS curp_tutor,t.sexo AS sexo_tutor
 			FROM cns_persona p 
 			INNER JOIN cns_persona_x_tutor pt ON p.id=pt.id_persona
-			INNER JOIN cns_tutor t ON t.id=pt.id_tutor";
+			INNER JOIN cns_tutor t ON t.id=pt.id_tutor WHERE p.activo=1";
 		switch($nivel){
 			case 5:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante=".$id;
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante=".$id;
 				break;
 			case 4:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 									SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.")"; // ums por loc
 				break;
 			case 3:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") )"; // locs por mpio
 				break;
 			case 2:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") ) )"; // mpios por juris
 				break;
 			case 1:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
@@ -360,28 +360,28 @@ class Reporteador_model extends CI_Model {
 			t.nombre AS nombre_tutor,t.curp AS curp_tutor,t.sexo AS sexo_tutor, TIMESTAMPDIFF(DAY, fecha_nacimiento, CURDATE()) AS edad_dias 
 			FROM cns_persona p 
 			INNER JOIN cns_persona_x_tutor pt ON p.id=pt.id_persona
-			INNER JOIN cns_tutor t ON t.id=pt.id_tutor";
+			INNER JOIN cns_tutor t ON t.id=pt.id_tutor WHERE p.activo=1";
 		switch($nivel){
 			case 5:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante=".$id;
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante=".$id;
 				break;
 			case 4:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 									SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.")"; // ums por loc
 				break;
 			case 3:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") )"; // locs por mpio
 				break;
 			case 2:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") ) )"; // mpios por juris
 				break;
 			case 1:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
