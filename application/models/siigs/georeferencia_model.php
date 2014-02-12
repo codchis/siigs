@@ -98,6 +98,7 @@ class Georeferencia_model extends CI_Model
                 JOIN
                     cat_georeferencia
                 ON
+                    b.id_raiz=1 AND 
                     a.id_estado = cat_georeferencia.id_estado AND 
                     a.id_municipio = cat_georeferencia.id_municipio AND 
                     a.id_localidad = cat_georeferencia.id_localidad';

@@ -88,7 +88,7 @@ class Tableta extends CI_Controller {
             );
             
             if(!empty($filtro['edo'])) {
-                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['edo'].' ORDER BY descripcion');
+                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$filtro['edo'].' ORDER BY descripcion');
                 $result = $query->result();
 
                 if ($result){
@@ -99,7 +99,7 @@ class Tableta extends CI_Controller {
             }
             
             if(!empty($filtro['juris'])) {
-                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['juris'].' ORDER BY descripcion');
+                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$filtro['juris'].' ORDER BY descripcion');
                 $result = $query->result();
 
                 if ($result){
@@ -110,7 +110,7 @@ class Tableta extends CI_Controller {
             }
             
             if(!empty($filtro['muni'])) {
-                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['muni'].' ORDER BY descripcion');
+                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$filtro['muni'].' ORDER BY descripcion');
                 $result = $query->result();
 
                 if ($result){
@@ -121,7 +121,7 @@ class Tableta extends CI_Controller {
             }
             
             if(!empty($filtro['locali'])) {
-                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['locali'].' ORDER BY descripcion');
+                $query = $this->db->query('SELECT id,descripcion FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$filtro['locali'].' ORDER BY descripcion');
                 $result = $query->result();
 
                 if ($result){

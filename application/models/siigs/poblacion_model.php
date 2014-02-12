@@ -91,6 +91,7 @@ class Poblacion_model extends CI_Model
                     ON  a.id = b.id_tabla_original AND 
                         b.grado_segmentacion = 3 
                     WHERE  
+                        b.id_raiz=1 AND 
                         a.id_estado = cat_poblacion.id_estado AND 
                         a.id_jurisdiccion = cat_poblacion.id_jurisdiccion AND
                         a.id_municipio = cat_poblacion.id_municipio) AS id_asu,

@@ -426,7 +426,7 @@ class Tableta_model extends CI_Model
             $idsAsuUM = array($filtro['um']);
         /* *********************************************/
         } else if(!empty($filtro['locali'])) {
-            $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['locali']);
+            $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$filtro['locali']);
             $resultIdsAsu = $queryIdsAsu->result();
 
             if (!$resultIdsAsu){
@@ -439,7 +439,7 @@ class Tableta_model extends CI_Model
         /* *********************************************/
         } else if(!empty($filtro['muni'])) {
             $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
-                                                (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['muni'].')');
+                                                (SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$filtro['muni'].')');
             $resultIdsAsu = $queryIdsAsu->result();
 
             if (!$resultIdsAsu){
@@ -453,7 +453,7 @@ class Tableta_model extends CI_Model
         } else if(!empty($filtro['juris'])) {
             $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
                                                 (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
-                                                    (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['juris'].'))');
+                                                    (SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$filtro['juris'].'))');
             $resultIdsAsu = $queryIdsAsu->result();
 
             if (!$resultIdsAsu){
@@ -468,7 +468,7 @@ class Tableta_model extends CI_Model
             $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
                                                 (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
                                                     (SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
-                                                        (SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$filtro['edo'].')))');
+                                                        (SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$filtro['edo'].')))');
             $resultIdsAsu = $queryIdsAsu->result();
 
             if (!$resultIdsAsu){

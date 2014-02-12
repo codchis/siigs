@@ -87,7 +87,7 @@ class Reporteador_model extends CI_Model {
             case 1: // Estado
                 // Obtiene todos los municipios del estado
                 $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
-                                    ( SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$id.' )');
+                                    ( SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$id.' )');
                 $resultIdsAsu = $queryIdsAsu->result();
 
                 if (!$resultIdsAsu){
@@ -103,7 +103,7 @@ class Reporteador_model extends CI_Model {
                 break;
             case 2: // Jurisdiccion
                 // Obtiene todos los municipios de la jurisdiccion
-                $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre = '.$id);
+                $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre = '.$id);
                 $resultIdsAsu = $queryIdsAsu->result();
 
                 if (!$resultIdsAsu){
@@ -149,7 +149,7 @@ class Reporteador_model extends CI_Model {
         
         // Obtiene el id asu de las UMs
         $queryIdsUMs = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).') )');
+                            SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre IN ('.implode(',', $idsAsu).') )');
         $resultIdsUMs = $queryIdsUMs->result();
 
         if (!$resultIdsUMs){
