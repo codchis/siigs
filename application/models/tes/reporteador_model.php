@@ -60,6 +60,7 @@ class Reporteador_model extends CI_Model {
 	{
         $result = array();
         $idsAsu = array();
+        $idsUMs = array();
         // NOTA: Excluir el grupo etareo menor de ocho
 		$sqlGrupoEtareo = "SELECT * FROM asu_grupo_etareo WHERE id!=9 ORDER BY dia_fin";
         
@@ -146,6 +147,21 @@ class Reporteador_model extends CI_Model {
             $anio--;
         }
         
+        // Obtiene el id asu de las UMs
+        $queryIdsUMs = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).') )');
+        $resultIdsUMs = $queryIdsUMs->result();
+
+        if (!$resultIdsUMs){
+            $this->msg_error_usr = "Servicio temporalmente no disponible.";
+            $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+            throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+        }
+
+        foreach ($resultIdsUMs as $tempAsu) {
+            $idsUMs[] = $tempAsu->id;
+        }
+        
         foreach ($resultGrupoEtareo as $grupoEtareo) {
             // Se crea el objeto reporte del tipo clase generica
             // dado que el reporte es dinamico no se puede conocer
@@ -181,11 +197,8 @@ class Reporteador_model extends CI_Model {
                 FROM 
                     cns_persona 
                 WHERE 
-                    id_asu_um_tratante IN (
-                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                        )
-                    ) AND 
+                    activo = 1 AND
+                    id_asu_um_tratante IN ('.implode(',', $idsUMs).') AND 
                     TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
                         BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
             
@@ -195,7 +208,6 @@ class Reporteador_model extends CI_Model {
             $objReporte->pob_oficial = (int)$resultPob->poblacion;
             $objReporte->pob_nominal = (int)$resultNom->nominal;
             $objReporte->concordancia = $objReporte->pob_oficial ? round(($objReporte->pob_nominal/$objReporte->pob_oficial)*100, 2) : 0;
-            $esq_comp_tot = 0;
             
             foreach ($gruposVacuna as $grupo) {
                 $ultimaDosisTotal = 0;
@@ -215,20 +227,16 @@ class Reporteador_model extends CI_Model {
                                 cns_control_vacuna 
                                     ON cns_persona.id = cns_control_vacuna.id_persona
                             WHERE 
+                                activo = 1 AND
                                 cns_control_vacuna.fecha<="'.formatFecha($fecha, 'Y-m-d').'" AND
                                 id_vacuna = '.$vac->id.' AND
-                                id_asu_um_tratante IN (
-                                    SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                                    )
-                                ) AND 
+                                id_asu_um_tratante IN ('.implode(',', $idsUMs).') AND 
                                 TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
                                     BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
                         $resultCob = $queryCob->row();
                         
-                        $objReporte->{$vac->descripcion_corta} = $resultCob->total;//'gi: '.$grupoEtareo->dia_inicio.'>= vi: '.$vac->dia_inicio_aplicacion_nacido.' && vf: '.$vac->dia_fin_aplicacion_nacido.' <= gf: '.($grupoEtareo->dia_fin+1);//$resultCob->total;
+                        $objReporte->{$vac->descripcion_corta} = $resultCob->total;
                         $ultimaDosisTotal = $resultCob->total;
-                        $esq_comp_tot += $resultCob->total;
                     } else {
                         $objReporte->{$vac->descripcion_corta} = '-';
                         $ultimaDosisTotal = 0;
@@ -240,7 +248,18 @@ class Reporteador_model extends CI_Model {
                 $objReporte->{$ultimaDosisDescrip.'_cob'} = ($objReporte->pob_oficial ? round($ultimaDosisTotal/$objReporte->pob_oficial, 2)*100 : 0).'%';
             }
             
-            $objReporte->esq_comp_tot = $esq_comp_tot;
+            $queryEsqComp = $this->db->query('SELECT 
+                    COUNT(evalEsquema(id, TIMESTAMPDIFF(DAY, fecha_nacimiento, CURDATE()))) AS esquema_completo
+                FROM 
+                    cns_persona 
+                WHERE activo = 1 AND
+                id_asu_um_tratante IN ('.implode(',', $idsUMs).') AND 
+                TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
+                    BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
+            
+            $resultEsqComp = $queryEsqComp->row();
+            
+            $objReporte->esq_comp_tot = $resultEsqComp->esquema_completo;
             $objReporte->esq_comp_oficial = $objReporte->pob_oficial ? round($objReporte->esq_comp_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->esq_comp_nominal = $objReporte->pob_nominal ? round($objReporte->esq_comp_tot/$objReporte->pob_nominal, 2) : 0;
 
