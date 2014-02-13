@@ -691,7 +691,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->where('id' , $id);
 		if($campo!="")
 			$this->db->where($campo , $valor);
-		$result = $this->db->update($tabla, $array);  //echo $this->db->last_query()."; <br>";
+		$result = $this->db->update($tabla, $array);  
 		
 		if (!$result)
 		{
@@ -1040,7 +1040,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->db->where('id_persona' , $persona);
 			$result = $this->db->update('tes_entorno_x_persona', $data); 
-		}//echo $this->db->last_query();
+		}
 		if (!$result)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -1941,7 +1941,7 @@ class Enrolamiento_model extends CI_Model
 			$this->db->group_by("tipo");
 		if($orden!=""&&$orden!="cc")
 			$this->db->order_by($orden, "asc");
-		$query = $this->db->get(); echo $this->db->last_query();
+		$query = $this->db->get(); 
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -2008,7 +2008,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->where($campo2, $id2);
 		if($l2!="")
 		$this->db->limit($l2, $l1);
-		$query = $this->db->get(); //echo $this->db->last_query();
+		$query = $this->db->get(); 
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -2036,7 +2036,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->from("tes_notificacion");
 		$this->db->like("id_arr_asu", $id);
 		$this->db->where("fecha_fin >=",date("Y-m-d"));
-		$query = $this->db->get(); //echo $this->db->last_query();
+		$query = $this->db->get(); 
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -2065,7 +2065,8 @@ class Enrolamiento_model extends CI_Model
 		if($fecha!="")
 		$this->db->where("ultima_actualizacion >=", $fecha);
 		$this->db->where_in("id_asu_um_tratante", $array);
-		$this->db->where_in("activo", "1");
+		$this->db->where("activo", "1");
+		$this->db->where("(DATEDIFF(NOW(),fecha_nacimiento)/365)<",5);
 		$query = $this->db->get(); 
 		if (!$query)
 		{
@@ -2106,7 +2107,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->where_in("id_persona", $array);
 		if($l1!=""||$l2!="")
 		$this->db->limit($l2, $l1);
-		$query = $this->db->get();// echo $this->db->last_query();
+		$query = $this->db->get();
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -2177,7 +2178,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->from('cns_catalogo_relevante_x_entorno r');
 		$this->db->join('cns_tabla_catalogo c', 'c.id = r.id_tabla_catalogo','left');
 		$this->db->where('fecha_actualizacion >=',$fecha);
-		$query = $this->db->get();// echo $this->db->last_query();
+		$query = $this->db->get();
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -2203,7 +2204,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->select('*');
 		$this->db->from('cns_transaccion_relevante_x_entorno r');
 		$this->db->join('cns_tabla_transaccion c', 'c.id = r.id_tabla_transaccion','left');
-		$query = $this->db->get(); //echo $this->db->last_query();
+		$query = $this->db->get(); 
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
@@ -2228,7 +2229,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->select('host');
 		$this->db->select_max('version');
 		$this->db->from('tes_version');
-		$query = $this->db->get(); //echo $this->db->last_query();
+		$query = $this->db->get(); 
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
