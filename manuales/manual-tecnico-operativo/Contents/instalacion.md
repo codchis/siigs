@@ -26,6 +26,12 @@ Antes de continuar es necesario resaltar la importancia de los indicador "**#**"
 Durante el proceso de instalación se solicitará la configuración del usuario administrador (root) de MySQL se recomienda establecer una contraseña.
 
 
+<blockquote>
+    NOTA: Revisar la versión instalada de Apache, en caso de haber sido instalado la versión Filter debe ser reemplazada por la versión Handler, esto se logra con la ejecución del siguiente comando:<br>
+    
+    <p># apt-get install libapache2-mod-php5</p>
+</blockquote>
+
 ## Crear directorio de trabajo
 
 El directorio de trabajo puede variar de acuerdo a la configuración o preferencias que se desee utilizar durante la instalación. Como ejemplo se usará el directorio de instalación **/var/www/siigs**.

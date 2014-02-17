@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="author" content="SIIGS-TES" />
-    <meta name="date" content="10/02/2014"/>
+    <meta name="date" content="13/02/2014"/>
     <meta name="generator" content="easybook 5.0-DEV"/>
 
     <title>Manual Operativo</title>
@@ -142,6 +142,12 @@
 
 <p>Durante el proceso de instalación se solicitará la configuración del usuario administrador (root) de MySQL se recomienda establecer una contraseña.</p>
 
+<blockquote>
+    NOTA: Revisar la versión instalada de Apache, en caso de haber sido instalado la versión Filter debe ser reemplazada por la versión Handler, esto se logra con la ejecución del siguiente comando:<br/>
+    
+    <p># apt-get install libapache2-mod-php5</p>
+</blockquote>
+
 <h2 id="crear-directorio-de-trabajo">2.3 Crear directorio de trabajo</h2>
 
 <p>El directorio de trabajo puede variar de acuerdo a la configuración o preferencias que se desee utilizar durante la instalación. Como ejemplo se usará el directorio de instalación <strong>/var/www/siigs</strong>.</p>
@@ -247,24 +253,25 @@
     $ mysql -u root -h localhost -p
 </blockquote>
 
-<p>En caso de haber asignado una contraseña al usuario root durante la instalacion del servidor MySQL, esta debe de ser tecleada, en caso contrario solo presionar enter para continuar.</p>
+<p>En caso de haber asignado una contraseña al usuario root durante la instalación del servidor MySQL, esta debe de ser tecleada, en caso contrario solo presionar enter para continuar.</p>
 
-<p>Primeramente, crearemos la base de datos:</p>
+<p>Procedemos a crear el usuario dueño de la base de datos, para esto se ejecuta el siguiente comando:</p>
 
 <blockquote>
-    CREATE DATABASE siigs;
+     GRANT ALL PRIVILEGES ON *.* TO 'usrsiigs'@'localhost' IDENTIFIED BY 'pwdsiigs' WITH GRANT OPTION;
 </blockquote>
 
-<p>Será necesario crear el usuario dueño de la base de datos, para esto se ejecuta el siguiente comando:</p>
+<p>Salimos de MySQL ya que nos conectamos con el usuario root, esto se lográ con el comando:</p>
 
-<blockquote>
-     GRANT ALL PRIVILEGES ON siigs.* TO 'usrsiigs'@'localhost' IDENTIFIED BY 'pwdsiigs' WITH GRANT OPTION;
+<blockquote> 
+    exit;
 </blockquote>
 
-<p>Procedemos a cargar datos iniciales. Con este comando se insertan los datos iniciales del sistema.</p>
+<p>Procedemos a cargar datos iniciales. Nos conectamos a MySQL con el usuario que acabamos de crear:</p>
 
 <blockquote>
-    PENDIENTE
+    <p>$ mysql -u usrsiigs -h localhost -p</p>
+    <p>source /var/www/siigs/bd/siigs.sql</p>
 </blockquote>
 
 <h2 id="iniciar-la-plataforma">2.7 Iniciar la plataforma</h2>

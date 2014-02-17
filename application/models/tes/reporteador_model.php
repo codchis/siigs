@@ -60,6 +60,7 @@ class Reporteador_model extends CI_Model {
 	{
         $result = array();
         $idsAsu = array();
+        $idsUMs = array();
         // NOTA: Excluir el grupo etareo menor de ocho
 		$sqlGrupoEtareo = "SELECT * FROM asu_grupo_etareo WHERE id!=9 ORDER BY dia_fin";
         
@@ -86,7 +87,7 @@ class Reporteador_model extends CI_Model {
             case 1: // Estado
                 // Obtiene todos los municipios del estado
                 $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN 
-                                    ( SELECT id FROM asu_arbol_segmentacion WHERE id_padre='.$id.' )');
+                                    ( SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre='.$id.' )');
                 $resultIdsAsu = $queryIdsAsu->result();
 
                 if (!$resultIdsAsu){
@@ -102,7 +103,7 @@ class Reporteador_model extends CI_Model {
                 break;
             case 2: // Jurisdiccion
                 // Obtiene todos los municipios de la jurisdiccion
-                $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre = '.$id);
+                $queryIdsAsu = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre = '.$id);
                 $resultIdsAsu = $queryIdsAsu->result();
 
                 if (!$resultIdsAsu){
@@ -128,6 +129,39 @@ class Reporteador_model extends CI_Model {
         
         $gruposVacuna = $this->Reporteador_model->getGrupoVacunas();
         
+        // Validar que exista poblacion para el año especificado
+        $anio = (int)formatFecha($fecha, 'Y');
+        
+        $queryPob = $this->db->query('SELECT
+                    SUM(poblacion) AS poblacion
+                FROM 
+                    asu_poblacion
+                WHERE 
+                    id_asu IN ('.implode(',', $idsAsu).') AND 
+                    ano = '.$anio);
+        
+        $resultPob = $queryPob->row();
+        
+        // Si no existe poblacion en el año, tomar la población del año anterior
+        if(!$resultPob->poblacion) {
+            $anio--;
+        }
+        
+        // Obtiene el id asu de las UMs
+        $queryIdsUMs = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
+                            SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre IN ('.implode(',', $idsAsu).') )');
+        $resultIdsUMs = $queryIdsUMs->result();
+
+        if (!$resultIdsUMs){
+            $this->msg_error_usr = "Servicio temporalmente no disponible.";
+            $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+            throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+        }
+
+        foreach ($resultIdsUMs as $tempAsu) {
+            $idsUMs[] = $tempAsu->id;
+        }
+        
         foreach ($resultGrupoEtareo as $grupoEtareo) {
             // Se crea el objeto reporte del tipo clase generica
             // dado que el reporte es dinamico no se puede conocer
@@ -148,7 +182,7 @@ class Reporteador_model extends CI_Model {
                 WHERE 
                     id_asu IN ('.implode(',', $idsAsu).') AND 
                     id_grupo_etareo = '.$idGrupoEtareo.' AND 
-                    ano = '.formatFecha($fecha, 'Y'));
+                    ano = '.$anio);
             
             $resultPob = $queryPob->row();
 
@@ -163,11 +197,8 @@ class Reporteador_model extends CI_Model {
                 FROM 
                     cns_persona 
                 WHERE 
-                    id_asu_um_tratante IN (
-                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                        )
-                    ) AND 
+                    activo = 1 AND
+                    id_asu_um_tratante IN ('.implode(',', $idsUMs).') AND 
                     TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
                         BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
             
@@ -181,13 +212,13 @@ class Reporteador_model extends CI_Model {
             foreach ($gruposVacuna as $grupo) {
                 $ultimaDosisTotal = 0;
                 $ultimaDosisDescrip = '';
+                
                 // Obtiene las vacunas de cada grupo
                 $vacunas = $this->Reporteador_model->getVacunasByGrupo($grupo->grupo);
                 
                 foreach ($vacunas as $vac) {
                     if( $grupoEtareo->dia_inicio >= $vac->dia_inicio_aplicacion_nacido && $vac->dia_fin_aplicacion_nacido <= ($grupoEtareo->dia_fin+1) ){
                         $objReporte->{$vac->descripcion_corta} = $vac->descripcion_corta;
-                        
                         $queryCob = $this->db->query('SELECT 
                                 COUNT(cns_persona.id) AS total
                             FROM 
@@ -196,30 +227,39 @@ class Reporteador_model extends CI_Model {
                                 cns_control_vacuna 
                                     ON cns_persona.id = cns_control_vacuna.id_persona
                             WHERE 
+                                activo = 1 AND
                                 cns_control_vacuna.fecha<="'.formatFecha($fecha, 'Y-m-d').'" AND
                                 id_vacuna = '.$vac->id.' AND
-                                id_asu_um_tratante IN (
-                                    SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                                        SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN ('.implode(',', $idsAsu).')
-                                    )
-                                ) AND 
+                                id_asu_um_tratante IN ('.implode(',', $idsUMs).') AND 
                                 TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
                                     BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
                         $resultCob = $queryCob->row();
                         
                         $objReporte->{$vac->descripcion_corta} = $resultCob->total;
                         $ultimaDosisTotal = $resultCob->total;
-                        $ultimaDosisDescrip = $vac->descripcion_corta;
                     } else {
                         $objReporte->{$vac->descripcion_corta} = '-';
+                        $ultimaDosisTotal = 0;
                     }
-                    //$objReporte->{$vac->descripcion_corta} = $grupoEtareo->dia_inicio.'-'.$grupoEtareo->dia_fin.'<br>'.$vac->dia_inicio_aplicacion_nacido.'-'.$vac->dia_fin_aplicacion_nacido;
+                    
+                    $ultimaDosisDescrip = $vac->descripcion_corta;
                 }
                 
                 $objReporte->{$ultimaDosisDescrip.'_cob'} = ($objReporte->pob_oficial ? round($ultimaDosisTotal/$objReporte->pob_oficial, 2)*100 : 0).'%';
             }
             
-            $objReporte->esq_comp_tot = 19;
+            $queryEsqComp = $this->db->query('SELECT 
+                    COUNT(evalEsquema(id, TIMESTAMPDIFF(DAY, fecha_nacimiento, CURDATE()))) AS esquema_completo
+                FROM 
+                    cns_persona 
+                WHERE activo = 1 AND
+                id_asu_um_tratante IN ('.implode(',', $idsUMs).') AND 
+                TIMESTAMPDIFF(DAY, fecha_nacimiento, "'.formatFecha($fecha, 'Y-m-d').'")
+                    BETWEEN '.$grupoEtareo->dia_inicio.' AND '.$grupoEtareo->dia_fin);
+            
+            $resultEsqComp = $queryEsqComp->row();
+            
+            $objReporte->esq_comp_tot = $resultEsqComp->esquema_completo;
             $objReporte->esq_comp_oficial = $objReporte->pob_oficial ? round($objReporte->esq_comp_tot/$objReporte->pob_oficial, 2) : 0;
             $objReporte->esq_comp_nominal = $objReporte->pob_nominal ? round($objReporte->esq_comp_tot/$objReporte->pob_nominal, 2) : 0;
 
@@ -267,28 +307,28 @@ class Reporteador_model extends CI_Model {
 			t.nombre AS nombre_tutor,t.curp AS curp_tutor,t.sexo AS sexo_tutor
 			FROM cns_persona p 
 			INNER JOIN cns_persona_x_tutor pt ON p.id=pt.id_persona
-			INNER JOIN cns_tutor t ON t.id=pt.id_tutor";
+			INNER JOIN cns_tutor t ON t.id=pt.id_tutor WHERE p.activo=1";
 		switch($nivel){
 			case 5:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante=".$id;
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante=".$id;
 				break;
 			case 4:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 									SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.")"; // ums por loc
 				break;
 			case 3:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") )"; // locs por mpio
 				break;
 			case 2:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") ) )"; // mpios por juris
 				break;
 			case 1:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
@@ -360,28 +400,28 @@ class Reporteador_model extends CI_Model {
 			t.nombre AS nombre_tutor,t.curp AS curp_tutor,t.sexo AS sexo_tutor, TIMESTAMPDIFF(DAY, fecha_nacimiento, CURDATE()) AS edad_dias 
 			FROM cns_persona p 
 			INNER JOIN cns_persona_x_tutor pt ON p.id=pt.id_persona
-			INNER JOIN cns_tutor t ON t.id=pt.id_tutor";
+			INNER JOIN cns_tutor t ON t.id=pt.id_tutor WHERE p.activo=1";
 		switch($nivel){
 			case 5:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante=".$id;
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante=".$id;
 				break;
 			case 4:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 									SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.")"; // ums por loc
 				break;
 			case 3:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") )"; // locs por mpio
 				break;
 			case 2:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$id.") ) )"; // mpios por juris
 				break;
 			case 1:
-				$sqlIdsConTutor .= " WHERE p.id_asu_um_tratante IN (
+				$sqlIdsConTutor .= " AND p.id_asu_um_tratante IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 						SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
