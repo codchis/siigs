@@ -94,7 +94,8 @@ class Georeferencia_model extends CI_Model
                 JOIN 
                     asu_arbol_segmentacion b 
                 ON  a.id = b.id_tabla_original AND 
-                    b.grado_segmentacion = 4 
+                    b.grado_segmentacion = 4 AND
+                    b.id_raiz = 1
                 JOIN
                     cat_georeferencia
                 ON

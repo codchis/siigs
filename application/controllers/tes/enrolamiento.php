@@ -1149,6 +1149,40 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 		if($result[0]->grado_segmentacion!="5")
 		echo "no";
 	}
+        
+	 /**
+	 * @access public
+	 *
+	 * Busca dentro del catalogo asu_ageb la unidad médica de acuerdo a la localidad y ageb
+	 * Solo se permite su acceso por medio de peticiones AJAX
+         * 
+	 * @param int $idasulocalidad Id de la localidad en el ASU 
+	 * @param string $ageb Numero de ageb
+         * 
+	 * @return Object 
+         * (key,value)
+         * (-1 , Clues) = La clues existe en el catalogo AGEB pero no está registrada en nuestro arbol ASU
+         * (0,0) = No existe ninguna unidad medica con esa localidad y ageb
+         * (1,Clues) = Si existe en el catalogo AGEB y en el ASU
+	 */
+	public function searchum($idasulocalidad,$ageb)
+	{
+            	//if (!$this->input->is_ajax_request())
+                //show_error('', 403, 'Acceso denegado');
+                
+		$this->load->model(DIR_SIIGS.'/Ageb_model');
+		$result=$this->Ageb_model->searchUM($idasulocalidad,$ageb);
+                
+                if ($result == -1)
+                    echo json_encode (array("clave"=> 0,"valor"=>0));
+                else if ($result == 0) {
+                    echo json_encode (array("clave"=> -1,"valor"=>$result));
+                }
+                else{
+                    echo json_encode (array("clave"=> 1,"valor"=>$result));
+                }
+                
+	}
 	/**
 	 * @access public
 	 *
