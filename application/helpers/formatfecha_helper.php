@@ -176,7 +176,7 @@ function getArrayView($array,$id="")
 				<table width="100%" >
 				<tr>
 					<th width="10%" >'.$i.'</th>
-					<th width="'.$ha.'" align="left"><input style="width:'.$xa.';border:0px" value="'.$descripcion.'" readonly></th>
+					<th width="'.$ha.'" align="left"><input style="width:'.$xa.';border:0px" value="'.$descripcion.'" title="'.$descripcion.'" readonly></th>
 					<th width="'.$hb.'" align="left">'.date("d-m-Y",strtotime($fecha)).'</th>
 					'.$mas.'
 				</tr>

@@ -31,7 +31,6 @@ class Reporte_sincronizacion_model extends CI_Model
 	 */
 	public function getListado($sql)
 	{
-
 		$query = $this->db->query($sql); //echo $this->db->last_query();
 	
 		if (!$query){

@@ -24,7 +24,9 @@
 			else
 				rem_fecha_edo();
         });
-		
+		$("#localidadT,#ageb").change(function(e) {
+			obtener_um_responsabilidad();
+        });
 		$("#nombre,#paterno,#materno,#lnacimientoT,#curp,#curp2,#fnacimiento,#curpT,#calle,#referencia,#colonia").change(function(e) {
             comparar_captura();
         });
@@ -83,6 +85,8 @@
 									}
      							});
 							}
+							if(uri.substr(uri.search("/")+1,uri.length)=="localidadT")
+								obtener_um_responsabilidad();
 						}
 						if(uri.substr(uri.search("/")+1,uri.length)=="lnacimientoT")
 						getcurp();
@@ -174,6 +178,57 @@
         });
 		habilitarTutor();
 	});
+	function obtener_um_responsabilidad()
+	{
+		var ageb=$("#ageb").val();
+		var loca=$("#localidad").val();
+		document.getElementById("umt").value="";
+		document.getElementById("um").value="";
+		if(ageb!=""&&loca!="")
+		{
+			$.ajax({
+			type: "POST",
+			url: '/<?php echo DIR_TES.'/enrolamiento/searchum/';?>'+loca+'/'+ageb,
+			})
+			.done(function(dato)
+			{
+				if(dato)
+				{
+					var obj = jQuery.parseJSON( dato );
+					var cv=obj["clave"];
+					var um=obj["valor"];
+					if(cv==0)
+					{
+						$("#tieneum").html('<span style="width:"100%" class="error">Esta fuera del área de responsabilidad verifique AGEB y LOCALIDAD de la sección DIRECCIÓN</span>');
+					}
+					else if(cv==1)
+					{
+						$("#tieneum").html("<span></span>");
+						$.ajax({
+						type: "POST",
+						data: {
+							'claves':[um] ,
+							'desglose':5 },
+						url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
+						})
+						.done(function(datos)
+						{
+							if(datos)
+							{
+								var obj1 = jQuery.parseJSON( datos );
+								var des=obj1[0]["descripcion"];
+								var ed=des.split(",");
+								ed=ed[ed.length-2];
+								des=des.replace(ed+",", "");
+								document.getElementById("umt").value=des;
+								document.getElementById("um").value=um;
+							}
+						});
+					}
+				}
+			});
+		}
+	}
 	function habilitarTutor()
 	{
 		if(document.getElementById("captura").checked)
@@ -318,6 +373,7 @@
 						comparar_captura();
 					}
 				});
+				obtener_um_responsabilidad();
 				$("#calle").click();
 			}
 		});
@@ -614,8 +670,8 @@
 			echo form_open(DIR_TES.'/enrolamiento/insert',array('onkeyup' => 'cleanForm()','onclick' => 'cleanForm()', 'id' => 'enrolar')); 
 		?>
         <!-- mensaje -->
-    <div class="info requiere" style="width:93%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
-    <div id="alert"></div>
+    <div class="info requiere" style="width:93.2%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
+    <div id="alert" style="width:93.2%"></div>
 	<table align="center" width="97.5%" border="0" cellpadding="0" cellspacing="0" style="margin-left:20px"><tr><td>
     	
         	<table width="100%">
@@ -794,7 +850,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
                               <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
                             </td>
                           </tr>
                           <tr>
@@ -1156,7 +1212,8 @@
             <tr>
                 <td>
                 <br />
-                <div id="tienesimilar" style="width:94.7%; margin-left:-20px; margin-bottom:10px;" > </div>
+                <div id="tienesimilar" style="width:95.7%; margin-left:-20px; margin-bottom:10px;" > </div>
+                <div id="tieneum" style="width:95.7%; margin-left:-20px; margin-bottom:10px;" > </div>
                 <span id="enviandoof" style="margin-left:-20px;">
                 <button type="submit" name="guardar" id="guardar" class="btn btn-primary" onclick="return validarFormulario('enrolar')" >Guardar <i class="icon-hdd"></i></button>
                 <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-arrow-left"></i></button>

@@ -654,14 +654,14 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			echo form_open(DIR_TES.'/enrolamiento/update/'.$enrolado->id,array('onkeyup' => 'cleanForm()','onclick' => 'cleanForm()', 'id' => 'enrolar')); 
 		?>
       <!-- mensaje -->
-      <div class="info requiere" style="width:93%"><img src="/resources/images/asterisco.png" />Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
-    <div id="alert"></div>
+      <div class="info requiere" style="width:93.2%"><img src="/resources/images/asterisco.png" />Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
+    <div id="alert" style="width:93.2%"></div>
 	<table align="center" width="97.5%" border="0" cellpadding="0" cellspacing="0" style="margin-left:20px"><tr><td>
     	
         	<table width="100%">
             <tr>
                 <td>
-                  <div id="base de la federación" class="Accordion" tabindex="0" style="margin-left:-20px;" >
+                  <div id="Accordion1" class="Accordion" tabindex="0" style="margin-left:-20px;" >
                   
                   <!-- Datos basicos -->
                   <?php if($cn_basico){ ?>
@@ -1253,10 +1253,6 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
             </tr>
         </table>
 	</td></tr></table>
-
-<script type="text/javascript">
-var base de la federación = new Spry.Widget.Accordion("base de la federación", { useFixedPanelHeights: false, defaultPanel: 0 });
-</script>
 <?php 
 }
 else
@@ -1265,4 +1261,6 @@ else
  echo '<a href="" class="btn btn-primary" onclick="window.location.href=\'/'.DIR_TES.'/enrolamiento/\';return false;">Regresar</a></div>';
 }
 
-?>
+?><script type="text/javascript">
+var Accordion1 = new Spry.Widget.Accordion("Accordion1", { useFixedPanelHeights: false, defaultPanel: 0 });
+</script>

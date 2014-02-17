@@ -1,5 +1,160 @@
+<!-- TES -->
 
+code {
+font-family: Consolas, Monaco, Courier New, Courier, monospace;
+font-size: 16px;
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E2E2E2), color-stop(100%, #FCFCFC));
+    background-image: -webkit-linear-gradient(bottom, #E2E2E2 0%, #FCFCFC 100%);
+    background-image: -moz-linear-gradient(bottom, #E2E2E2 0%, #FCFCFC 100%);
+    background-image: -o-linear-gradient(bottom, #E2E2E2 0%, #FCFCFC 100%);
+    background-image: -ms-linear-gradient(bottom, #E2E2E2 0%, #FCFCFC 100%);
+    background-image: linear-gradient(bottom, #E2E2E2 0%, #FCFCFC 100%);
+filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#E2E2E2',EndColorStr='#FCFCFC');
+border: 1px solid #D0D0D0;
+color: #002166;
+display: block;
+margin: 14px 0 14px 0;
+padding: 12px 10px 12px 10px;
+}
 
+#container
+{
+border: 1px solid #D0D0D0;
+-webkit-box-shadow: 0 0 8px #999;
+
+-webkit-border-radius: 8px 8px 8px 8px;
+    -moz-border-radius: 8px 8px 8px 8px;
+-o-border-radius: 8px 8px 8px 8px;
+-ms-border-radius: 8px 8px 8px 8px;
+    border-radius: 8px 8px 8px 8px;
+}
+
+.guardar,.agregar,.add,.cancelar,.cat {
+    padding: 8px 10px 8px 10px;
+    margin: 5px 2px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;    
+
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+-o-border-radius: 3px;
+-ms-border-radius: 3px;
+    border-radius: 3px;
+text-decoration:none;
+    text-shadow: 0px 1px 0px black;
+}
+.guardar
+{
+background: 0 100% url(../images/menu/guardar.fw.png) repeat-x;
+border: 1px solid #009;
+}
+.guardar:hover
+{
+background: 0 70% url(../images/menu/guardar.fw.png) repeat-x;
+border: 1px solid #009;
+}
+.guardar:focus,.guardar:active
+{
+background: 0 40% url(../images/menu/guardar.fw.png) repeat-x;
+border: 1px solid #009;
+}
+.cat
+{
+background: 0 100% url(../images/menu/cat.fw.png) repeat-x;
+border: 1px solid #ACAC00;
+}
+.cat:hover
+{
+background: 0 70% url(../images/menu/cat.fw.png) repeat-x;
+border: 1px solid #ACAC00;
+}
+.cat:focus,.cat:active
+{
+background: 0 40% url(../images/menu/cat.fw.png) repeat-x;
+border: 1px solid #ACAC00;
+}
+.agregar
+{
+background: 0 100% url(../images/menu/headerBG.jpg) repeat-x;
+border: 1px solid #00A3D9;
+}
+.agregar:hover
+{
+background: 0 70% url(../images/menu/headerBG.jpg) repeat-x;
+border: 1px solid #00A3D9;
+}
+.agregar:focus,.agregar:active
+{
+background: 0 40% url(../images/menu/headerBG.jpg) repeat-x;
+border: 1px solid #00A3D9;
+}
+.add
+{
+background: 0 100% url(../images/menu/add.fw.png) repeat-x;
+border: 1px solid #007900;
+}
+.add:hover
+{
+background: 0 70% url(../images/menu/add.fw.png) repeat-x;
+border: 1px solid #007900;
+}
+.add:focus,.add:active
+{
+background: 0 40% url(../images/menu/add.fw.png) repeat-x;
+border: 1px solid #007900;
+}
+.cancelar
+{
+background: 0 100% url(../images/menu/cancelar.fw.png) repeat-x;
+border: 1px solid #9B0000;
+}
+.cancelar:hover
+{
+background: 0 70% url(../images/menu/cancelar.fw.png) repeat-x;
+border: 1px solid #9B0000;
+}
+.cancelar:focus,.cancelar:active
+{
+background: 0 40% url(../images/menu/cancelar.fw.png) repeat-x;
+border: 1px solid #9B0000;
+}
+/***************************************/
+
+.info, .success, .warning, .error, .validation 
+{
+border: 0px solid;
+padding:15px 10px 15px 50px;
+background-repeat: no-repeat;
+background-position: 10px center;
+
+}
+.info 
+{
+color: #000;
+background-color: #E6E7FF;
+background-image: url('../images/1info.png');
+}
+.success 
+{
+color: #4F8A10;
+background-color: #DFF2BF;
+background-image: url('../images/1success.png');
+}
+.warning 
+{
+color: #9F6000;
+background-color: #FEEFB3;
+background-image: url('../images/1warning.png');
+}
+.error 
+{
+color: #D8000C;
+background-color: #FFBABA;
+background-image: url('../images/1error.png');
+}
+/*
 <!-- TES -->
 
 code {
@@ -122,7 +277,7 @@ code {
 	background: 0 40% url(../images/menu/cancelar.fw.png) repeat-x;
 	border: 1px solid #9B0000;
 }
-/***************************************/
+/***************************************
 
 .info, .success, .warning, .error, .validation 
 {
