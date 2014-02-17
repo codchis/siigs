@@ -104,10 +104,10 @@ echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm
                     <td>'.htmlentities($fila->tipo_censo).'</td>
                     <td><a href="/'.DIR_TES.'/tree/create/TES/Unidad Médica/1/radio/0/id_unidad_medica/nombre_unidad_medica/1/1/'.
                         urlencode(json_encode(array(NULL))).'/'.urlencode(json_encode(array(1,2,3,4,5))).'" '.
-                        'class="agregarUM '.($fila->id_asu_um==0 ? 'btn btn-small btn-primary' : '').'" '
+                        'class="agregarUM '.($fila->id_asu_um==0 ? 'btn btn-small btn-primary btn-icon' : '').'" '
                         . 'data-tipocenso="'.$fila->id_tipo_censo.'" data-um="'.$fila->id_asu_um.'" data-tableta="'.$fila->id.'" data-periodo="'.$fila->periodo_esq_inc.'">'.
-                        ($fila->id_asu_um==0 ? 'Asignar' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
-                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'" class="btn btn-small btn-primary">'.($fila->usuarios_asignados==0 ? 'Asignar' : 'Ver').' <i class="icon-user"></i></a></td>';
+                        ($fila->id_asu_um==0 ? 'Asignar  <i class="icon-home"></i>' : $unidades_medicas[$fila->id_asu_um]).'</a></td>
+                    <td><a href="'.site_url().DIR_TES.'/usuario_tableta/index/'.$fila->id.'" class="btn btn-small btn-primary btn-icon">'.($fila->usuarios_asignados==0 ? 'Asignar' : 'Ver').' <i class="icon-user"></i></a></td>';
                     
                     if($showView) echo '<td><a id="detalles" href="'.site_url().DIR_TES.'/tableta/view/'.$fila->id.'" class="btn btn-small btn-primary btn-icon">Detalles <i class="icon-eye-open"></i></a></td>';
                     
