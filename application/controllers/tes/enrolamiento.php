@@ -1167,8 +1167,8 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 	 */
 	public function searchum($idasulocalidad,$ageb)
 	{
-            	//if (!$this->input->is_ajax_request())
-                //show_error('', 403, 'Acceso denegado');
+            	if (!$this->input->is_ajax_request())
+                show_error('', 403, 'Acceso denegado');
                 
 		$this->load->model(DIR_SIIGS.'/Ageb_model');
 		$result=$this->Ageb_model->searchUM($idasulocalidad,$ageb);
