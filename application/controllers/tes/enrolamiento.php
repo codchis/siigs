@@ -1176,6 +1176,32 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 			echo json_encode (array("clave"=> 1,"valor"=>$result));
 		}
 	}
+        
+        
+	 /**
+	 * @access public
+	 *
+	 * Regresa un objeto JSON con la lista de agebs disponibles en la localidad
+	 * Solo se permite su acceso por medio de peticiones AJAX
+         * 
+	 * @param int $idasulocalidad Id de la localidad en el ASU
+         * 
+	 * @return Object 
+	 */
+	public function searchageb($idasulocalidad,$like)
+	{
+		//if (!$this->input->is_ajax_request())
+		//show_error('', 403, 'Acceso denegado');
+                
+		$this->load->model(DIR_SIIGS.'/Ageb_model');
+		$result=$this->Ageb_model->searchageb($idasulocalidad,$like);
+                $dato = array();
+                foreach ($result as $item)
+                    $dato[] = $item->ageb;
+                echo json_encode ($dato);
+	}
+        
+        
 	/**
 	 * @access public
 	 *
