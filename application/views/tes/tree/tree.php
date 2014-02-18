@@ -13,6 +13,7 @@
 
 <script type="text/javascript">
 	$(function(){
+		$("#tree").height(screen.height/2.74);
 		$("#btnCollapseAll").click(function(){
 		  $("#tree").dynatree("getRoot").visit(function(node){
 			node.expand(false);
@@ -135,8 +136,8 @@
 		<?php } ?>
         <a href="#" onClick="parent.jQuery.fancybox.close();" class="guardar">Ok</a>
         <h1><?php echo htmlentities(urldecode($titulo)); ?></h1>
-       <div>Seleccionado: <span id="echoSelection">-</span></div>
-	<div id="tree"></div>
+       	<div>Seleccionado: <span id="echoSelection">-</span></div>
+		<div id="tree" style="overflow:inherit;"></div>
 	
 </body>
 </html>
