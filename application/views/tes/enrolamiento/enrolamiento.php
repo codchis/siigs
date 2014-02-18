@@ -32,7 +32,14 @@
 		$("#nombre,#paterno,#materno,#lnacimientoT,#curp,#curp2,#fnacimiento,#curpT,#calle,#referencia,#colonia").change(function(e) {
             comparar_captura();
         });
-		
+		$("#ageb").autocomplete({
+				source: "/<?php echo DIR_TES?>/enrolamiento/searchageb/"+$("#localidad").val(),
+				select: function (a, b) 
+				{
+					var valor=b.item.value;
+					buscarTutor(valor.substr(0,valor.indexOf(" ")));
+				}
+		})
 		$("#buscar").autocomplete({
 				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/",
 				select: function (a, b) 
@@ -104,29 +111,7 @@
 	$("a#fba1").click(function(e) {
         $.fancybox.showActivity();
     });						
-		 
-		<?php if($session!=""){?>
-		$.ajax({
-		type: "POST",
-		data: {
-			'claves':[<?php echo $session;?>] ,
-			'desglose':5 },
-		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
-		})
-		.done(function(dato)
-		{
-			if(dato)
-			{
-				var obj = jQuery.parseJSON( dato );
-				var des=obj[0]["descripcion"];
-				var ed=des.split(",");
-				ed=ed[ed.length-2];
-				des=des.replace(ed+",", "");
-				document.getElementById("um").value=obj[0]["id"];
-				document.getElementById("umt").value=des;
-			}
-		});
-		<?php }?>
+		
 		<?php
 		$alergias="";
 		$afiliaciones="";
@@ -348,6 +333,16 @@
                             <td><p align="right">CP</p></td>
                             <td><input name="cp" type="text"  id="cp" style="width:75%; margin-left:10px;" value="<?php echo set_value('cp', ''); ?>" maxlength="5"></td>
                           </tr>
+                          
+                          <tr>
+                            <td><p align="right">Localidad</p></td>
+                            <td colspan="3">
+                            <div class="input-append" style="width:100%">
+                            <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
+                              <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
+                            </td>
+                          </tr>
                           <tr>
                           <td colspan="4" width="100%">
                               <table width="97%" border="0">
@@ -361,15 +356,6 @@
                                 </tr>
                               </table>
                           </td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Localidad</p></td>
-                            <td colspan="3">
-                            <div class="input-append" style="width:100%">
-                            <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
-                              <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
-                            </td>
                           </tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
@@ -416,7 +402,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly" title="requiere">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
-                            <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/<?php echo urlencode(json_encode(array(5)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div></td>
+                            </div></td>
                           </tr>
                         </table>
                         <br />
@@ -453,7 +439,7 @@
                     
                     <!-- alergias y reacciones:  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Historial de Alergias y Reacciones Febriles</div>
+                      <div class="AccordionPanelTab">Alergias y Antecedentes Familiares de Riesgo</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         	<div id="alergias" style="margin-left:10px;">
