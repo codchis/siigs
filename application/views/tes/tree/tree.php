@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
 	$(function(){
-		$("#tree").height(screen.height/2.74);
+		$("#tree").height(screen.height/3);
 		$("#btnCollapseAll").click(function(){
 		  $("#tree").dynatree("getRoot").visit(function(node){
 			node.expand(false);
