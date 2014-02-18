@@ -313,6 +313,7 @@ class Servicios extends CI_Controller {
 							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","id_raiz","1","","",($i*8000),8000);
 						else
 							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","fecha_update >=",$fecha,"id_raiz","1",($i*8000),8000);
+						
 						if($asu)
 						{
 							$micadena=json_encode($asu);
@@ -338,14 +339,14 @@ class Servicios extends CI_Controller {
 					ob_flush();
 					unset($cadena);
 					$cadena=array();
-				}
+				}				
 				//************ fin asu ************
 				
 				//************ inicio notificacion ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
 				
-				
 				$i=0;$array=array();$tem="";
+				if($asu_um)
 				foreach($asu_um as $id)
 				{
 					$result=$this->Enrolamiento_model->get_notificacion($id);
@@ -591,6 +592,10 @@ class Servicios extends CI_Controller {
 								  "prioridad"=> $regla_vacuna[$x][$y]["prioridad"]);
 					$cadena["esquema_incompleto"]=$rv;
 					//************ fin control catalogos X persona ************
+				}
+				else
+				{
+					echo json_encode(array("cns_persona" => array()));
 				}
 				$array=$this->Reporte_sincronizacion_model->getListado("SELECT id FROM cns_persona WHERE activo=0");
 				if($array)
