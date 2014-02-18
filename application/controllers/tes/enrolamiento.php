@@ -163,19 +163,7 @@ class Enrolamiento extends CI_Controller
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 			$fecha=$data['enrolado']->fecha_nacimiento;
 			$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("
-SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, 
-CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, 
-CASE WHEN cv.fecha IS NULL THEN CONCAT('Desde:',r.dia_inicio_aplicacion_nacido,' Hasta:',r.dia_fin_aplicacion_nacido) ELSE DATE_FORMAT(cv.fecha, '%d-%m-%Y') END AS fecha,
-DATEDIFF(NOW(),'$fecha') AS dias,
-CASE WHEN DATEDIFF(NOW(),'$fecha') >=r.dia_inicio_aplicacion_nacido AND DATEDIFF(NOW(),'$fecha')<=r.dia_fin_aplicacion_nacido  THEN '1' ELSE 
-CASE WHEN DATEDIFF(NOW(),'$fecha')>r.dia_fin_aplicacion_nacido AND cv.fecha IS NULL THEN '2' ELSE 
-CASE WHEN DATEDIFF(NOW(),'$fecha') <r.dia_inicio_aplicacion_nacido AND cv.fecha IS NULL THEN '3' END END 
-END AS prioridad
-FROM siigs.cns_regla_vacuna r 
-LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna 
-LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  
-LEFT JOIN cns_persona p ON p.id=cv.id_persona 
-ORDER BY r.id_vacuna,r.orden_esq_com ASC");
+SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, CASE WHEN cv.fecha IS NULL THEN CONCAT('Desde:',r.dia_inicio_aplicacion_nacido,' Hasta:',r.dia_fin_aplicacion_nacido) ELSE CONCAT('Fecha Aplicada: ',' ',DATE_FORMAT(cv.fecha, '%d-%m-%Y')) END AS fecha,DATEDIFF(NOW(),'$fecha') AS dias,CASE WHEN DATEDIFF(NOW(),'$fecha')>=r.dia_inicio_aplicacion_nacido AND DATEDIFF(NOW(),'$fecha')<=r.dia_fin_aplicacion_nacido  THEN '1' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')>r.dia_fin_aplicacion_nacido AND cv.fecha IS NULL THEN '2' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')<r.dia_inicio_aplicacion_nacido AND cv.fecha IS NULL THEN '3' END) END) END AS prioridad FROM cns_regla_vacuna r LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  LEFT JOIN cns_persona p ON p.id=cv.id_persona ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 			$peso_x_edad   = $this->Enrolamiento_model->get_catalog2("cns_peso_x_edad","sexo"  ,$data['enrolado']->sexo);
@@ -1173,21 +1161,20 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 	 */
 	public function searchum($idasulocalidad,$ageb)
 	{
-            	if (!$this->input->is_ajax_request())
-                show_error('', 403, 'Acceso denegado');
+		if (!$this->input->is_ajax_request())
+		show_error('', 403, 'Acceso denegado');
                 
 		$this->load->model(DIR_SIIGS.'/Ageb_model');
 		$result=$this->Ageb_model->searchUM($idasulocalidad,$ageb);
                 
-                if ($result == -1)
-                    echo json_encode (array("clave"=> 0,"valor"=>0));
-                else if ($result == 0) {
-                    echo json_encode (array("clave"=> -1,"valor"=>$result));
-                }
-                else{
-                    echo json_encode (array("clave"=> 1,"valor"=>$result));
-                }
-                
+		if ($result == -1)
+			echo json_encode (array("clave"=> 0,"valor"=>0));
+		else if ($result == 0) {
+			echo json_encode (array("clave"=> -1,"valor"=>$result));
+		}
+		else{
+			echo json_encode (array("clave"=> 1,"valor"=>$result));
+		}
 	}
 	/**
 	 * @access public

@@ -955,14 +955,14 @@ width: 100% ;
 
 .vacuna thead tr th
 {
-	background-color:#8ECA35;
+	background-color:#e8eced;
 }
 .vacuna div
 {
 	width:100%;
 	height:25px;
-	background-color:#999;
-	border:solid 1px #666;
+	background-color:#E5E5E5;
+	border:solid 1px #D3D3D3;
 	padding-top:5px;
 	padding-bottom:5px;
 	display:block;
