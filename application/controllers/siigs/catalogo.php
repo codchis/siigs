@@ -243,7 +243,7 @@ class Catalogo extends CI_Controller {
 			 $columnas = array();
 			 $resultado = array();
 			 $rows = array();
-			 $nuevos = 0; $modificados = 0; $iguales = 0;$errores = 0;
+			 $nuevos = 0; $modificados = 0; $iguales = 0;$errores = 0; $lineaserrores = array();
 
 			 //obtiene los datos del catalogo
 			 try 
@@ -462,6 +462,7 @@ class Catalogo extends CI_Controller {
 				  		}
 			  		}
                                         else {
+                                            $lineaserrores[] = $cont;
                                             $errores +=1;
                                         }
 			  	}
@@ -478,7 +479,7 @@ class Catalogo extends CI_Controller {
 				 array_push($resultado,array('Numero de registros a insertar',$nuevos));
 				 array_push($resultado,array('Numero de registros a modificar',$modificados));
 				 array_push($resultado,array('Numero de registros sin cambios',$iguales));
-                                 array_push($resultado,array('Numero de registros con errores',$errores));
+                                 array_push($resultado,array('Numero de registros con errores',$errores."(".implode(',',$lineaserrores).")"));
 			 }
 			 if ($update == false)
 			 echo json_encode($resultado);
