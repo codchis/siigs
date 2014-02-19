@@ -6,7 +6,8 @@ if(!empty($msgResult)) {
     
     echo '<div class="table table-striped">
         <table>
-        <tr><td><strong>MAC</strong></td><td>'.$registro->mac.'</td></tr>
+        <tr><td><strong>MAC</strong></td><td>'.$registro->mac.'</td>
+            <td rowspan="6"><strong>Usuarios de la tableta</strong><br><br>'.implode('<br>',$usuarios).'</td></tr>
         <tr><td><strong>Versi&oacute;n</strong></td><td>'.$registro->id_version.'</td></tr>
         <tr><td><strong>Ultima Actualizaci&oacute;n</strong></td><td>'.formatFecha($registro->ultima_actualizacion).'</td></tr>
         <tr><td><strong>Estado Tableta</strong></td><td>'.$registro->status.'</td></tr>
