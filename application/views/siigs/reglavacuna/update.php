@@ -124,6 +124,10 @@ if (!empty($regla_item))
 		<td><label for="region">Regi&oacute;n:</label></td>
                 <td colspan="2"><input type="text" name="region" id="region" value="<?php echo $regla_item->region; ?>"/></td>
 	</tr>
+        <tr>
+		<td><label for="region">Observaciones de la Regi&oacute;n:</label></td>
+                <td colspan="2"><textarea type="text" name="observacion_region" id="observacion_region" rows="5"><?php echo $regla_item->observacion_region; ?></textarea></td>
+	</tr>
 	<tr>
             <td><input type="checkbox" name="esq_com" id="esq_com" <?php  echo ($regla_item->esq_com == "1") ? 'checked' : '';?>/> Esquema Completo </td>
                 <td colspan="2" id="td_orden" style="visibility:<?php echo ($regla_item->esq_com == "1") ? 'visible' : 'hidden'; ?>">Orden: <?php  echo  form_dropdown('orden_esq_com', $orden, $regla_item->orden_esq_com); ?></td>
