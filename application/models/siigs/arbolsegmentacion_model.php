@@ -407,7 +407,7 @@ class ArbolSegmentacion_model extends CI_Model {
                         try
                         {
                             $fh = fopen($ruta, 'c');
-                            if($fh)
+                            if(!$fh)
                             {
                                return "false";
                             }
