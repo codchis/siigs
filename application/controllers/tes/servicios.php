@@ -318,7 +318,7 @@ class Servicios extends CI_Controller {
 						{
 							$micadena=json_encode($asu);
 							echo substr($micadena,1,strlen($micadena)-2);
-						
+							if($sf=="")
 							if(($i+2)<$contador)echo ",";
 							$micadena="";
 							ob_flush();
