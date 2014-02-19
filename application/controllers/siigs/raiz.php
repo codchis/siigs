@@ -30,6 +30,7 @@ class Raiz extends CI_Controller {
 	}
         
         public function iniciarasu($id){
+            error_reporting(E_ALL);
             try
             {
                 if (($this->ArbolSegmentacion_model->getChildrenFromLevel($id,1,array(),array(), array())) != "false")

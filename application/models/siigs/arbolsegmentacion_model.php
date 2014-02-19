@@ -330,6 +330,7 @@ class ArbolSegmentacion_model extends CI_Model {
                 else
                 {  
                     ini_set('max_execution_time',1000);
+                    ini_set('memory_limit', '1024M');
 
                     $arbol = $this->getTree($idarbol, $nivel, $omitidos);
                     
