@@ -32,13 +32,21 @@
 		$("#nombre,#paterno,#materno,#lnacimientoT,#curp,#curp2,#fnacimiento,#curpT,#calle,#referencia,#colonia").change(function(e) {
             comparar_captura();
         });
+		$("#ageb").click(function(e) {
+			obtener_um_responsabilidad();
+        });
+		$("#ageb").blur(function(e) {
+			obtener_um_responsabilidad();
+        });
 		$("#ageb").autocomplete({
-				source: "/<?php echo DIR_TES?>/enrolamiento/searchageb/"+$("#localidad").val(),
-				select: function (a, b) 
-				{
-					var valor=b.item.value;
-					buscarTutor(valor.substr(0,valor.indexOf(" ")));
-				}
+				source: function(request, response) {
+                $.ajax({
+                  url: "/<?php echo DIR_TES?>/enrolamiento/searchageb/"+$('#localidad').val()+"/"+request.term,
+                  dataType: "json",
+                  success: function(data) {
+                    response(data);
+                  }
+                });}
 		})
 		$("#buscar").autocomplete({
 				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/",
