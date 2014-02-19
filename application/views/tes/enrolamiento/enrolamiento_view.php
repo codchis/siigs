@@ -95,15 +95,15 @@ if($enrolado)
 function vacunacion(id,tiene,fecha,prioridad)
 {
 	if(prioridad==1)
-		color="#F66";
+		color="#ffcc0a";
 	else if(prioridad==2)
-		color="#B90000";
+		color="#e7232a";
 	else if(prioridad==3)
-		color="#FF6FB7";
+		color="#ff0085";
 	else
-		color='white';
+		color='#61ac1e';
 	if(tiene=="X")
-	$('#'+id).html("<span style='margin-left:-8px;'><?php echo VACUNA_APLICADA; ?></span>");
+	$('#'+id).html("<span style='margin-left:-9px;color:#fff; font-size:20px;'><?php echo VACUNA_APLICADA; ?></span>");
 	else
 	$('#'+id).html("<span style='margin-left:-8px;'>"+tiene+"</span>");
 	$('#'+id).attr("title",fecha);
@@ -344,15 +344,15 @@ function vacunacion(id,tiene,fecha,prioridad)
                     <!-- vacunacion  -->
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab">Control de Vacunación</div>
-                      <div class="AccordionPanelContent" ><br />
-                      <h2>Numero de días: <?php echo $vacunacion[0]->dias ?></h2>
+                      <div class="AccordionPanelContent" >
+                      <h2 style="margin-left:10px;">Numero de días: <?php echo $vacunacion[0]->dias ?></h2>
                        <table width="100%" border="0" class="table vacuna" style="margin-left:10px" cellpadding="0" cellspacing="0">
-                           <thead bgcolor="#8ECA35">
+                           <thead bgcolor="#e8eced">
                               <tr>
-                                <th width="30%" rowspan="2" scope="col">Vacunas</th>
-                                <th colspan="6" scope="col">Dosis</th>
+                                <th width="30%" rowspan="2" scope="col" style="color:#333; font-size:24px;">Vacuna</th>
+                                <th colspan="6" scope="col" style="color:#333; font-size:18px;">Dosis</th>
                               </tr>
-                              <tr>
+                              <tr style="color:#4d4d4d; font-size:14px;">
                                 <th width="8%" scope="col">U</th>
                                 <th width="8%" scope="col">R</th>
                                 <th width="8%" scope="col">1a</th>
@@ -366,14 +366,13 @@ function vacunacion(id,tiene,fecha,prioridad)
 						   foreach($vacunacion as $vacuna)
 						   {
 							   $vc=$vacuna->descripcion." ";
-							   $color=array("","#2828FF","#FF9326","#09F","#FDB802","#009","#26CDFD","#AC72FC","#FD9BF3","#960BA6","#FDAB02");
-							   
-							if($tem!=stripos($vc," "))
+							   $color=array("","#005fae","#f78f24","#0094c9","#c9bb00","#006a5a","#00a7e6","#f499c1","#794098","#b73092","#f6945c");
+							if($tem!=stripos($vc," ")||count(explode(" ",$vc))==2)
 							{
 								$a++;
 							 echo " 
                            	  <tr>
-                           		<td ><div id='var0$i' style='padding-left:14px; background-color:".@$color[$a]."; color:white'>".str_replace('Primera','',$vc)."</div></td>
+                           		<td ><div id='var0$i' style='padding-left:14px; background-color:".@$color[$a]."; color:white;font-size:16px;'>".str_replace('Primera','',$vc)."</div></td>
                                 <td ><div id='var1$i' align='center'></div></td>
                                 <td ><div id='var2$i' align='center'></div></td>
                                 <td ><div id='var3$i' align='center'></div></td>

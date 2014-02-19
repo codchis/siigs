@@ -106,6 +106,8 @@ class ReglaVacuna extends CI_Controller {
 		$this->form_validation->set_rules('id_vacuna', 'Vacuna', 'trim|xss_clean|required|is_natural_no_zero');
                 $this->form_validation->set_rules('id_via_vacuna', 'Vía Vacuna', 'trim|xss_clean|required|is_natural_no_zero');
                 $this->form_validation->set_rules('dosis', 'Dosis', 'trim|xss_clean|decimal');
+                $this->form_validation->set_rules('region', 'Región', 'trim|xss_clean|max_length[90]');
+                $this->form_validation->set_rules('observacion_region', 'Observación de la región', 'trim|xss_clean|max_length[450]');
                 //$this->form_validation->set_rules('tipo_aplicacion', 'Tipo de aplicación', 'trim|xss_clean|required');
 
                 $vacunas = $this->db->query("select id,descripcion from cns_vacuna where activo=1")->result();
@@ -159,6 +161,7 @@ class ReglaVacuna extends CI_Controller {
                                 $this->ReglaVacuna_model->setIdViaVacuna($this->input->post('id_via_vacuna'));
                                 $this->ReglaVacuna_model->setDosis($this->input->post('dosis'));
                                 $this->ReglaVacuna_model->setRegion($this->input->post('region'));
+                                $this->ReglaVacuna_model->setObservacionRegion($this->input->post('observacion_region'));
                                 $this->ReglaVacuna_model->setAlergias($this->input->post('alergias'));
                                 $this->ReglaVacuna_model->setEsqComp(($this->input->post('esq_com') == false) ? false : true);
                                 $this->ReglaVacuna_model->setForzarAplicacion(($this->input->post('forzar_aplicacion') == false) ? false : true);
@@ -214,6 +217,8 @@ class ReglaVacuna extends CI_Controller {
                 //$this->form_validation->set_rules('tipo_aplicacion', 'Tipo de aplicación', 'trim|xss_clean|required');
                 $this->form_validation->set_rules('id_via_vacuna', 'Vía Vacuna', 'trim|xss_clean|required|is_natural_no_zero');
                 $this->form_validation->set_rules('dosis', 'Dosis', 'trim|xss_clean|decimal');
+                $this->form_validation->set_rules('region', 'Región', 'trim|xss_clean|max_length[90]');
+                $this->form_validation->set_rules('observacion_region', 'Observación de la región', 'trim|xss_clean|max_length[450]');
 
                 $vacunas = $this->db->query("select id,descripcion from cns_vacuna where activo=1")->result();
                 $data['vacunas'][''] = 'Elige una vacuna';
@@ -277,6 +282,7 @@ class ReglaVacuna extends CI_Controller {
                             $this->ReglaVacuna_model->setIdViaVacuna($this->input->post('id_via_vacuna'));
                             $this->ReglaVacuna_model->setDosis($this->input->post('dosis'));
                             $this->ReglaVacuna_model->setRegion($this->input->post('region'));
+                            $this->ReglaVacuna_model->setObservacionRegion($this->input->post('observacion_region'));
                             $this->ReglaVacuna_model->setAlergias($this->input->post('alergias'));
                             $this->ReglaVacuna_model->setEsqComp(($this->input->post('esq_com') == false) ? false : true);
                             $this->ReglaVacuna_model->setForzarAplicacion(($this->input->post('forzar_aplicacion') == false) ? false : true);

@@ -89,7 +89,8 @@ class Poblacion_model extends CI_Model
                     FROM   cat_municipio a 
                     JOIN   asu_arbol_segmentacion b 
                     ON  a.id = b.id_tabla_original AND 
-                        b.grado_segmentacion = 3 
+                        b.grado_segmentacion = 3 AND
+                        b.id_raiz = 1
                     WHERE  
                         b.id_raiz=1 AND 
                         a.id_estado = cat_poblacion.id_estado AND 

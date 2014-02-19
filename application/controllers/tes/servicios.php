@@ -313,6 +313,7 @@ class Servicios extends CI_Controller {
 							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","id_raiz","1","","",($i*8000),8000);
 						else
 							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","fecha_update >=",$fecha,"id_raiz","1",($i*8000),8000);
+						
 						if($asu)
 						{
 							$micadena=json_encode($asu);
@@ -338,14 +339,14 @@ class Servicios extends CI_Controller {
 					ob_flush();
 					unset($cadena);
 					$cadena=array();
-				}
+				}				
 				//************ fin asu ************
 				
 				//************ inicio notificacion ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
 				
-				
 				$i=0;$array=array();$tem="";
+				if($asu_um)
 				foreach($asu_um as $id)
 				{
 					$result=$this->Enrolamiento_model->get_notificacion($id);
@@ -475,6 +476,7 @@ class Servicios extends CI_Controller {
 			ini_set("memory_limit","100M");
 		if ($id_sesion == $this->session->userdata('session')) // valida el token de entrada es el token que solicito el servicio
 		{
+			$cadena="";
 			// se obtiene el dispositivo por token
 			$tableta = $this->Tableta_model->getByMac($this->session->userdata('mac'));
 			// se obtienen los usuarios asignados, el tipo de censo y la unidad médica
@@ -590,6 +592,10 @@ class Servicios extends CI_Controller {
 								  "prioridad"=> $regla_vacuna[$x][$y]["prioridad"]);
 					$cadena["esquema_incompleto"]=$rv;
 					//************ fin control catalogos X persona ************
+				}
+				else
+				{
+					echo json_encode(array("cns_persona" => array()));
 				}
 				$array=$this->Reporte_sincronizacion_model->getListado("SELECT id FROM cns_persona WHERE activo=0");
 				if($array)
@@ -708,7 +714,10 @@ class Servicios extends CI_Controller {
 							$b_campo="id_persona";
 							$b_valor=$midato->id_persona;
 							if($catalog->descripcion=="cns_antiguo_domicilio")
+							{
 								$f_campo='fecha_cambio';
+								$f_valor=$midato->fecha_cambio;
+							}
 							if($catalog->descripcion=="cns_persona_x_alergia")
 							{
 								$f_campo='ultima_actualizacion';
@@ -1016,6 +1025,7 @@ class Servicios extends CI_Controller {
 		$mas=0;
 		if($dias>365&&$dias<1461)$mas=365;
 		if($dias>1461)$mas=1461;
+		
 		foreach($regla as $r)
 		{
 			$x=0;
@@ -1030,10 +1040,13 @@ class Servicios extends CI_Controller {
 				}
 				if($x==0)
 				{
-					if($dias>=($r->desde+$mas)&&$dias<=($r->hasta+$mas)||$dias>($r->hasta+$mas))
-						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>1));
-					if($dias_extra>=($r->desde+$mas)&&$dias_extra<=($r->hasta+$mas))
-						array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>0));
+					if($r->hasta>$mas)
+					{
+						if(($dias>=($r->desde)&&$dias<=($r->hasta)||$dias>($r->hasta)))
+							array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>1));
+						if(($dias_extra>=($r->desde)&&$dias_extra<=($r->hasta)))
+							array_push($cadena,array("id_persona" => $id_persona,"id_vacuna" => $r->id, "prioridad"=>0));
+					}
 				}
 			}
 		}

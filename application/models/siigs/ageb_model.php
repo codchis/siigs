@@ -83,25 +83,60 @@ class Ageb_model extends CI_Model
     {
         $result = false;
         
-        $sql = 'REPLACE INTO 
-                    asu_poblacion (id_asu, id_grupo_etareo, ano, poblacion)
-                SELECT
-                    (SELECT b.id 
-                    FROM   cat_municipio a 
-                    JOIN   asu_arbol_segmentacion b 
-                    ON  a.id = b.id_tabla_original AND 
-                        b.grado_segmentacion = 3 
-                    WHERE  
-                        a.id_estado = cat_poblacion.id_estado AND 
-                        a.id_jurisdiccion = cat_poblacion.id_jurisdiccion AND
-                        a.id_municipio = cat_poblacion.id_municipio) AS id_asu,
-                    (SELECT id 
-                    FROM asu_grupo_etareo
-                    WHERE RTRIM(LTRIM(LOWER(descripcion))) = RTRIM(LTRIM(LOWER(cat_poblacion.grupo_etareo))) ) AS grupo_etareo,
-                    cat_poblacion.ano, 
-                    cat_poblacion.poblacion 
-                FROM 
-                    cat_poblacion';
+//        $sql = "REPLACE INTO 
+//                    asu_ageb (id_asu_localidad, ageb,id_asu_um)
+//                SELECT  
+//                    c.id AS id_asu_localidad,
+//                    LPAD(a.ageb,4,'0000') AS ageb,
+//                    CASE WHEN
+//                        IFNULL(d.id , '') = ''
+//                    THEN
+//                        a.clues
+//                    ELSE
+//                        d.id
+//                    END 
+//                    AS id_asu_um
+//                    FROM 
+//                        cat_ageb a
+//                    JOIN 
+//                        cat_localidad b 
+//                    ON 
+//                        b.id_localidad = a.id_localidad 
+//                        AND b.id_municipio = a.id_municipio 
+//                        AND a.id_estado = b.id_estado
+//                    LEFT OUTER JOIN 
+//                        asu_arbol_segmentacion c 
+//                    ON 
+//                        b.id = c.id_tabla_original 
+//                        AND c.grado_segmentacion = 4 
+//                        AND c.id_raiz = 1 
+//                    LEFT OUTER JOIN 
+//                        asu_arbol_segmentacion d 
+//                    ON 
+//                        d.grado_segmentacion = 5 
+//                        AND d.id_raiz = 1 
+//                        AND d.id_tabla_original = a.clues";
+        
+        $sql = "REPLACE INTO 
+                    asu_ageb (id_asu_localidad, ageb,id_asu_um)
+                SELECT  
+                    d.id_padre AS id_asu_localidad,
+                    LPAD(a.ageb,4,'0000') AS ageb,
+                    d.id AS id_asu_um
+                    FROM 
+                        cat_ageb a
+                    JOIN 
+                        cat_localidad b 
+                    ON 
+                        b.id_localidad = a.id_localidad 
+                        AND b.id_municipio = a.id_municipio 
+                        AND a.id_estado = b.id_estado
+                    JOIN 
+                        asu_arbol_segmentacion d 
+                    ON 
+                        d.grado_segmentacion = 5 
+                        AND d.id_raiz = 1 
+                        AND d.id_tabla_original = a.clues";
 
         $result = $this->db->query($sql);
 
@@ -114,5 +149,61 @@ class Ageb_model extends CI_Model
         
         return $result;
     }
+    
+    	/**
+	 *Devuelve la información de una UM de acuerdo a su localidad y ageb
+	 *
+	 *@access  public
+	 *@return  Object
+	 *@param   int $idlocalidad Id del ASU de la localidad
+         *@param   string Ageb
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function searchUM($idlocalidad,$ageb)
+	{
+		$query = $this->db->get_where('asu_ageb', array('id_asu_localidad' => $idlocalidad, 'ageb' => $ageb));
+
+		if (!$query)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener la información de la UM por medio de la AGEB y Localidad";
+			throw new Exception(__CLASS__);
+		}
+		else
+                {
+                    if ($query->num_rows()>0)
+                       // if ($query->row()->id_asu_um == 0)
+                       //     return -1;
+                       //     else
+                        return $query->row()->id_asu_um;
+                    else
+                        return -1;
+                }
+			
+	}
+        
+    	/**
+	 *Devuelve una lista de AGEBS de la localidad pasada como parámetro
+	 *
+	 *@access  public
+	 *@return  Object
+	 *@param   int $idlocalidad Id del ASU de la localidad
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+	public function searchageb($idlocalidad,$like)
+	{
+		$query = $this->db->query("select ageb from asu_ageb where id_asu_localidad = ".$idlocalidad." and ageb like '%".addslashes($like)."%'");
+		if (!$query)
+		{
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			$this->msg_error_usr = "Ocurrió un error al obtener la lista de AGEBs por localidad";
+			throw new Exception(__CLASS__);
+		}
+		else
+                {
+                    return $query->result();
+                }
+			
+	}
     
 }

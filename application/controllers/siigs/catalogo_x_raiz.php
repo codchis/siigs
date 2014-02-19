@@ -230,17 +230,20 @@ class Catalogo_x_raiz extends CI_Controller {
             
 		try
 		{
-			if (empty($this->Catalogo_x_raiz_model))
-				return false;
+                    if (empty($this->Catalogo_x_raiz_model))
+                        return false;
 				
-			$id_raiz = 	$this->Catalogo_x_raiz_model->getById($id)->id_raiz_arbol;
-			//var_dump($id_raiz);
-			//die();
-			$this->load->helper('url');
-			$this->Catalogo_x_raiz_model->setId($id);
-			$this->Catalogo_x_raiz_model->delete();
-                        $this->session->set_flashdata('clsResult','success');
-			$this->session->set_flashdata('msgResult', 'Catálogo eliminado exitosamente');
+                    $element = 	$this->Catalogo_x_raiz_model->getById($id);
+                    $id_raiz = $element->id_raiz_arbol;
+                    //var_dump($id_raiz);
+                    //die();
+                    $this->load->helper('url');
+                    $this->Catalogo_x_raiz_model->setId($id);
+                    $this->Catalogo_x_raiz_model->setGrado($element->grado_segmentacion);
+                    $this->Catalogo_x_raiz_model->setIdRaiz($id_raiz);
+                    $this->Catalogo_x_raiz_model->delete();
+                    $this->session->set_flashdata('clsResult','success');
+                    $this->session->set_flashdata('msgResult', 'Catálogo eliminado exitosamente');
 		}
 		catch(Exception $e)
 		{

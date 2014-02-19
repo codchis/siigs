@@ -118,6 +118,10 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><label for="region">Regi&oacute;n:</label></td>
                 <td colspan="2"><input type="text" name="region" id="region" value="<?php echo set_value('region', ''); ?>"/></td>
 	</tr>
+        <tr>
+		<td><label for="region">Observaciones de la Regi&oacute;n:</label></td>
+                <td colspan="2"><textarea type="text" name="observacion_region" id="observacion_region" rows="5" ><?php echo set_value('observacion_region', ''); ?></textarea></td>
+	</tr>
 	<tr>
 		<td><input type="checkbox" name="esq_com" id="esq_com"/> Esquema Completo</td>
                 <td colspan="2" id="td_orden" style="visibility:hidden">Orden: <?php  echo  form_dropdown('orden_esq_com', $orden); ?></td>

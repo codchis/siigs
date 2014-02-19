@@ -1894,7 +1894,7 @@ class Enrolamiento_model extends CI_Model
 	public function get_catalog($catalog,$campo="",$id="",$orden="")
 	{
 		 if($catalog=="cns_regla_vacuna")
-		$this->db->select('id, id_vacuna, dia_inicio_aplicacion_nacido, dia_fin_aplicacion_nacido, id_vacuna_secuencial, dia_inicio_aplicacion_secuencial, dia_fin_aplicacion_secuencial, ultima_actualizacion, activo, id_via_vacuna,  dosis, region, esq_com, orden_esq_com, alergias, forzar_aplicacion');
+		$this->db->select('id, id_vacuna, dia_inicio_aplicacion_nacido, dia_fin_aplicacion_nacido, id_vacuna_secuencial, dia_inicio_aplicacion_secuencial, dia_fin_aplicacion_secuencial, ultima_actualizacion, activo, id_via_vacuna,  dosis, region, esq_com, orden_esq_com, alergias, forzar_aplicacion, observacion_region');
 		else
 		$this->db->select('*');
 		$this->db->from($catalog);

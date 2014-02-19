@@ -18,12 +18,14 @@ foreach ($llaves as $campo)
 {
 	//var_dump($campo);
 	$datos = explode('|', $campo);
+        if (!empty($datos[3]))
 	echo '<tr><td>'.$datos[0]. '</td><td>' . $datos[1]. '</td><td>' . $datos[2]. '</td><td>' . $datos[3].'</tr>';
 }
 foreach ($campos as $campo)
 {
 	//var_dump($campo);
 	$datos = explode('|', $campo);
+        if (!empty($datos[3]))
 	echo '<tr><td>'.$datos[0]. '</td><td>' . $datos[1]. '</td><td>' . $datos[2]. '</td><td>' . $datos[3].'</tr>';
 }
 echo '</table>';

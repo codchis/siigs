@@ -407,9 +407,10 @@ class Catalogo_x_raiz_model extends CI_Model {
 	public function delete()
 	{
                 $query_relaciones = $this->db->delete('asu_relacion_catalogo', array('id_raiz_x_catalogo' => $this->getId()));
+                $query_datos_asu = $this->db->delete('asu_arbol_segmentacion',array('grado_segmentacion'=> $this->getGrado(), 'id_raiz' => $this->getIdRaiz()));
 		$query = $this->db->delete('asu_raiz_x_catalogo', array('id' => $this->getId()));
 
-		if (!$query && !$query_relaciones)
+		if (!$query_relaciones || !$query_datos_asu || !$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			$this->msg_error_usr = "Ocurrió un error al eliminar la raiz x catalogo";

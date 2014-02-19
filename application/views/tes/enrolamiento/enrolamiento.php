@@ -2,6 +2,8 @@
     <link href="/resources/SpryAssets/SpryAccordion.css" rel="stylesheet" type="text/css" /> 
     <script src="/resources/SpryAssets/SpryAccordion.js" type="text/javascript"></script>
     
+    <script type="text/javascript" src="/resources/js/enrolamiento.js"></script>
+    
     <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
 	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
     <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
@@ -24,11 +26,28 @@
 			else
 				rem_fecha_edo();
         });
-		
+		$("#localidadT,#ageb").change(function(e) {
+			obtener_um_responsabilidad();
+        });
 		$("#nombre,#paterno,#materno,#lnacimientoT,#curp,#curp2,#fnacimiento,#curpT,#calle,#referencia,#colonia").change(function(e) {
             comparar_captura();
         });
-		
+		$("#ageb").click(function(e) {
+			obtener_um_responsabilidad();
+        });
+		$("#ageb").blur(function(e) {
+			obtener_um_responsabilidad();
+        });
+		$("#ageb").autocomplete({
+				source: function(request, response) {
+                $.ajax({
+                  url: "/<?php echo DIR_TES?>/enrolamiento/searchageb/"+$('#localidad').val()+"/"+request.term,
+                  dataType: "json",
+                  success: function(data) {
+                    response(data);
+                  }
+                });}
+		})
 		$("#buscar").autocomplete({
 				source: "/<?php echo DIR_TES?>/enrolamiento/autocomplete/",
 				select: function (a, b) 
@@ -83,6 +102,8 @@
 									}
      							});
 							}
+							if(uri.substr(uri.search("/")+1,uri.length)=="localidadT")
+								obtener_um_responsabilidad();
 						}
 						if(uri.substr(uri.search("/")+1,uri.length)=="lnacimientoT")
 						getcurp();
@@ -98,29 +119,7 @@
 	$("a#fba1").click(function(e) {
         $.fancybox.showActivity();
     });						
-		 
-		<?php if($session!=""){?>
-		$.ajax({
-		type: "POST",
-		data: {
-			'claves':[<?php echo $session;?>] ,
-			'desglose':5 },
-		url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
-		})
-		.done(function(dato)
-		{
-			if(dato)
-			{
-				var obj = jQuery.parseJSON( dato );
-				var des=obj[0]["descripcion"];
-				var ed=des.split(",");
-				ed=ed[ed.length-2];
-				des=des.replace(ed+",", "");
-				document.getElementById("um").value=obj[0]["id"];
-				document.getElementById("umt").value=des;
-			}
-		});
-		<?php }?>
+		
 		<?php
 		$alergias="";
 		$afiliaciones="";
@@ -174,438 +173,6 @@
         });
 		habilitarTutor();
 	});
-	function habilitarTutor()
-	{
-		if(document.getElementById("captura").checked)
-		{
-			$("#nombreT").removeAttr("readonly");
-			$("#paternoT").removeAttr("readonly");
-			$("#maternoT").removeAttr("readonly");
-			$("#celularT").removeAttr("readonly");
-			$("#telefonoT").removeAttr("readonly");
-			$("#companiaT").removeAttr("readonly");
-			$("#sexoT_1").removeAttr("readonly");
-			$("#sexoT_2").removeAttr("readonly");
-		}
-		else
-		{
-			$("#nombreT").attr("readonly",true);
-			$("#paternoT").attr("readonly",true);
-			$("#maternoT").attr("readonly",true);
-			$("#celularT").attr("readonly",true);
-			$("#telefonoT").attr("readonly",true);
-			$("#companiaT").attr("readonly",true);
-			$("#sexoT_1").attr("readonly",true);	
-			$("#sexoT_2").attr("readonly",true);
-			var buscar=$("#curpT").val();
-			if($("#buscar").val()!="")
-				buscar=$("#buscar").val().substr(0,18);
-			if(buscar!="")		
-			buscarTutor(buscar);		
-		}
-	}
-	
-	function buscarTutor(buscar)
-	{
-		buscar=buscar.replace(" ","");
-		buscar=buscar.replace("=","");
-		$("#idtutor").val("");
-		$("#nombreT").val("");
-		$("#paternoT").val("");
-		$("#maternoT").val("");
-		$("#celularT").val("");
-		
-		$("#telefonoT").val("");
-		$("#companiaT").val("");
-		$("#sexoT_1").attr("checked",false);
-		$("#sexoT_2").attr("checked",false);
-			
-		if($("#buscar").val()!="")
-		$("#buscarError").html('');
-		//var buscar = $("#buscar").val();
-		$.ajax({
-			url: "/<?php echo DIR_TES?>/enrolamiento/data_tutor/"+buscar,
-			type: "POST",
-			data: "json",
-			success:function(data){
-				var obj = jQuery.parseJSON( data );
-				//console.debug(obj);
-				if(obj[0]["error"]=="")
-				{
-					$("#idtutor").val(obj[0]["idtutor"]);
-					$("#nombreT").val(obj[0]["nombreT"]);
-					$("#paternoT").val(obj[0]["paternoT"]);
-					$("#maternoT").val(obj[0]["maternoT"]);
-					$("#celularT").val(obj[0]["celularT"]);
-					$("#curpT").val(obj[0]["curpT"]);
-					$("#telefonoT").val(obj[0]["telefonoT"]);
-					$("#companiaT option[value="+obj[0]["companiaT"]+"]").attr("selected",true);
-					if(obj[0]["sexoT_1"]=="1")
-					$("#sexoT_1").attr("checked",true);
-					if(obj[0]["sexoT_2"]=="1")
-					$("#sexoT_2").attr("checked",true);
-					$("#tutoredit").html("Editar datos de la Madre o Tutor");
-					$("#captura").attr("checked","true");
-					$("#curpT").click();
-					$.get('/<?php echo DIR_TES.'/enrolamiento/brothers_search/';?>'+$("#idtutor").val(), function(respuesta) 
-					{
-						if(respuesta.length>5)
-						{
-							var obj = jQuery.parseJSON( respuesta );
-							var campo = '<span id="hermanos" >Hay personas con el mismo tutor: Si desea importar su misma dirección dele click<br>';
-							for(var c=0;c<obj.length; c++)
-								campo+='<input type="button"  value="'+obj[c]["nombre"]+'" onclick="importarDatos(\''+obj[c]["id_persona"]+'\')" style="padding:5px" class="btn btn-small btn-primary"/>&nbsp;&nbsp;'
-							campo+='<br><input type="button"  value="LIMPIAR" onclick="limpiar_direccion()" style="padding:5px" class="btn btn-small btn-primary"/></span>';
-							$("#compartetutor").append(campo);
-							$("#compartetutor").attr("class","info");
-						}
-					});
-				}
-				else
-				{
-					$("#tutoredit").html("Capturar Nueva Madre o Tutor");
-					$("#buscarError").html('<strong>'+obj[0]["error"]+'&nbsp;</strong>');
-					if(document.getElementById("hermanos"))
-					{
-						$("#hermanos").remove();	
-						$("#compartetutor").attr("class","");	
-					}
-				}
-				habilitarTutor();
-			}
-		});
-	}
-	function limpiar_direccion()
-	{
-		$('#ladireccion').data('old-state', $('#ladireccion').html());
-		$('#ladireccion').html($('#ladireccion').data('old-state'));
-		comparar_captura();
-	}
-	function importarDatos(id)
-	{
-		$.get('/<?php echo DIR_TES.'/enrolamiento/brother_found/';?>'+id, function(respuesta) 
-		{
-			if(respuesta.length>5)
-			{
-				var obj = jQuery.parseJSON( respuesta );
-				$("#calle").val(obj[0]["calle_domicilio"]);
-				$("#numero").val(obj[0]["numero_domicilio"]);
-				$("#referencia").val(obj[0]["referencia_domicilio"]);
-				$("#colonia").val(obj[0]["colonia_domicilio"]);
-				$("#cp").val(obj[0]["cp_domicilio"]);
-				$("#ageb").val(obj[0]["ageb"]);
-				$("#sector").val(obj[0]["sector"]);
-				$("#manzana").val(obj[0]["manzana"]);
-				$("#localidad").val(obj[0]["id_asu_localidad_domicilio"]);
-				$("#telefono").val(obj[0]["telefono_domicilio"]);
-				$.ajax({
-				type: "POST",
-				data: {
-					'claves':[$("#localidad").val()] ,
-					'desglose':3 },
-				url: '/<?php echo DIR_SIIGS.'/raiz/getDataTreeFromId';?>',
-				})
-				.done(function(dato)
-				{
-					if(dato)
-					{
-						var obj = jQuery.parseJSON( dato );
-						var des=obj[0]["descripcion"];
-						var ed=des.split(",");
-						ed=ed[ed.length-2];
-						des=des.replace(ed+",", "");
-						document.getElementById("localidadT").value=des;
-						comparar_captura();
-					}
-				});
-				$("#calle").click();
-			}
-		});
-	}
-	function omitirAcentos(text) 
-	{
-		var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
-		var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
-		for (var i=0; i<acentos.length; i++) 
-			text = text.replace(acentos.charAt(i), original.charAt(i));
-		
-		return text;
-	}
-
-	function getcurp()
-	{
-		var ap=omitirAcentos($("#paterno").val());
-		var am=omitirAcentos($("#materno").val());
-		var no=omitirAcentos($("#nombre").val());
-		var se=$("input[name='sexo']:checked").val();
-		var fn=$("#fnacimiento").val();
-		var ed=$("#lnacimientoT").val().split(",");
-		ed=ed[ed.length-1];
-		
-		ed=$.trim(ed);
-		var d=fn.substr(0,2);
-		var m=fn.substr(3,2);
-		var a=fn.substr(6,4);
-		var x=parseInt(a)+"";
-		
-		if(ap!=""&&am!=""&&no!=""&&se!=""&&fn!=""&&ed!="")
-		{
-			if(x.length>3)
-			{
-				$("#nocurp").html('<span style="color:blue">Buscando Curp... Espere</span>');
-				$("#curp").val("");
-				$("#curpl").html("");		
-				$("#curp2").val("");
-				$.ajax({
-					url: "/<?php echo DIR_TES?>/obtenercurp/curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
-					type: "POST",
-					data: "json",
-					success:function(data){
-						if(data)
-						{
-							var obj = jQuery.parseJSON( data );
-							var curp=obj[0]["curp"];
-							$("#curp").val(curp.substr(0,curp.length-5));
-							$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
-							$("#curp2").val(curp.substr(curp.length-5,5));
-							$("#nocurp").html('<span style="color:green">Curp encontrada en la base de la federación</span>');		
-						}
-						else
-						{
-							$("#nocurp").html('<span style="color:red">Curp no encontrada en la base de la federación calculando manualmente... Espere</span>');	
-							calcular_curp(ap,am,no,d,m,a,se,ed,0);
-						}
-					}
-				});
-			}
-			else {$("#fnacimiento").val("");$("#fnacimiento").attr("placeholder","dd-mm-yyyy"); $("#fnacimiento").focus();};
-		}
-	 	return false;
-	}
-	function getcurpTutor()
-	{
-		if(document.getElementById("fechaT"))
-		{
-			var ap=omitirAcentos($("#paternoT").val());
-			var am=omitirAcentos($("#maternoT").val());
-			var no=omitirAcentos($("#nombreT").val());
-			var se=$("input[name='sexoT']:checked").val();
-			var fn=$("#fechaT").val();
-			var ed=$("#edoT").val();
-			var d=fn.substr(0,2);
-			var m=fn.substr(3,2);
-			var a=fn.substr(6,4);
-			var x=parseInt(a)+"";
-			
-			if(ap!=""&&am!=""&&no!=""&&se!=""&&fn!=""&&ed!="")
-			{
-				if(x.length>3)
-				{
-					$("#errorcurptutor").html('<span style="color:blue">Buscando Curp... Espere</span>');
-					$("#curpT").val("");
-					$.ajax({
-						url: "/<?php echo DIR_TES?>/obtenercurp/curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
-						type: "POST",
-						data: "json",
-						success:function(data){
-							if(data)
-							{
-								var obj = jQuery.parseJSON( data );
-								var curp=obj[0]["curp"];
-								$("#curpT").val(curp);
-								$("#errorcurptutor").html('<span style="color:green">Curp encontrada en la base de la federación</span>');		
-							}
-							else
-							{
-								$("#errorcurptutor").html('<span style="color:red">Curp no encontrada en la base de la federación calculando manualmente... Espere</span>');	
-								calcular_curp(ap,am,no,d,m,a,se,ed,1);
-							}
-						}
-					});
-				}
-			}
-		}
-	 	return false;
-	}
-	function calcular_curp(ap,am,no,d,m,a,se,ed,op)
-	{
-		$.ajax({
-			url: "/<?php echo DIR_TES?>/obtenercurp/calcular_curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
-			type: "POST",
-			data: "json",
-			success:function(data){
-				if(data)
-				{
-					var obj = jQuery.parseJSON( data );
-					var curp=obj[0]["curp"];
-					if(op==1)
-					{
-						$("#curpT").val(curp);
-						$("#errorcurptutor").html('<span style="color:green">Curp calculada correctamente</span>');	
-
-					}
-					else
-					{
-						$("#curp").val(curp.substr(0,curp.length-5));
-						$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
-						$("#curp2").val(curp.substr(curp.length-5,5));
-						$("#nocurp").html('<span style="color:green">Curp calculada correctamente</span>');	
-					}
-				}
-				else
-				{
-					if(op==1)
-						$("#errorcurptutor").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');
-					else
-						$("#nocurp").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');	
-				}
-			}
-		});
-	}
-	function add(id,n,a)
-	{	
-		num=document.getElementById(n).value*1;	
-		num=num+1;
-		document.getElementById(n).value=num;
-		var miclase="";
-		if((num%2)==0) miclase="row2"; else miclase="row1";
-		if(num<10)num="0"+num;
-		var campo_mas=""; var ax="99%"; var by="80%"; var ha="50%",hb="40%";
-		if(id=="ira"||id=="eda"||id=="consulta")
-		{
-			campo_mas='<th width="20%"><select name="tratamiento'+id+'[]" id="tratamiento'+id+num+'" style="width:99%;"></select></th><th width="27%"><select name="tratamiento_des'+id+'[]" id="tratamiento_des'+id+num+'" style="width:99%;"></select></th>';
-			ax="99%"; by="70%"; ha="28%"; hb="15%";
-		}
-			
-		campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="'+ha+'"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:'+ax+'"></select></th>  <th width="'+hb+'"><input name="f'+id+'[]" type="text" id="f'+id+num+'" style="width:'+by+'"></th>'+campo_mas+'</tr> </table> </div></span>';
-		
-		$("#"+a).append(campo);
-		
-		$("#f"+id+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
-		$("#f"+id+num).datepicker(optionsFecha );
-		$("#"+id+num).load("/tes/enrolamiento/catalog_select/"+id);
-		if(id=="ira"||id=="eda"||id=="consulta")
-		{
-			$("#tratamiento"+id+num).load("/tes/enrolamiento/tratamiento_select/activo/1/0/tipo");
-			$("#tratamiento"+id+num).click(function(e) 
-			{
-				num=this.id.replace(/\D/g,'');
-				$("#tratamiento_des"+id+num).load("/tes/enrolamiento/tratamiento_select/tipo/"+encodeURIComponent(this.value)+"/0/descripcion/");
-			});
-		}
-		
-	}
-	function rem(id,n)
-	{
-		num=document.getElementById(n).value;
-		
-		if(num != 0&&num>0)
-		{
-			if(num<10)num="0"+num;
-			$("#r"+id+num).remove();
-			num--;
-			document.getElementById(n).value = num;
-		}
-	}
-	
-	function addNutricional()
-	{	
-		num=document.getElementById("nNu").value*1;	
-		num=num+1;
-		document.getElementById("nNu").value=num;
-		var miclase="";
-		if((num%2)==0) miclase="row2"; else miclase="row1";
-		if(num<10)num="0"+num;
-		
-		campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'"  style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'+num+'"  style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
-		$("#cNu").append(campo);
-		$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
-		$("#fCNu"+num).datepicker(optionsFecha );
-		
-	}
-	function remNutricional()
-	{
-		num=document.getElementById("nNu").value;
-		
-		if(num != 0&&num>0)
-		{
-			if(num<10)num="0"+num;
-			$("#rCNu"+num).remove();
-			num--;
-			document.getElementById("nNu").value = num;
-		}
-	}
-	
-	function add_fecha_edo()
-	{	
-		campo = '<span id="_fecha_edo" ><p>Fecha: <input id="fechaT" style="height:25px; width:150px; margin-top:-6px;">&nbsp; Estado: <select id="edoT"><option value="">Seleccione</option><option value="AGUASCALIENTES">AGUASCALIENTES</option><option value="BAJA CALIFORNIA NORTE">BAJA CALIFORNIA</option><option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR</option><option value="CAMPECHE">CAMPECHE</option><option value="CHIAPAS">CHIAPAS</option><option value="CHIHUAHUA">CHIHUAHUA</option><option value="COAHUILA">COAHUILA</option><option value="COLIMA">COLIMA</option><option value="DISTRITO FEDERAL">DISTRITO FEDERAL</option><option value="DURANGO">DURANGO</option><option value="GUANAJUATO">GUANAJUATO</option><option value="GUERRERO">GUERRERO</option><option value="HIDALGO">HIDALGO</option><option value="JALISCO">JALISCO</option><option value="MEXICO">MEXICO</option><option value="MORELOS">MORELOS</option><option value="MICHOACAN">MICHOACAN</option><option value="NAYARIT">NAYARIT</option><option value="NUEVO LEON">NUEVO LEON</option><option value="OAXACA">OAXACA</option><option value="PUEBLA">PUEBLA</option><option value="QT">QUERETARO</option><option value="QUINTANA ROO">QUINTANA ROO</option><option value="SAN LUIS POTOSI">SAN LUIS POTOSI</option><option value="SINALOA">SINALOA</option><option value="SONORA">SONORA</option><option value="TABASCO">TABASCO</option><option value="TAMAULIPAS">TAMAULIPAS</option><option value="TLAXCALA">TLAXCALA</option><option value="VERACRUZ">VERACRUZ</option><option value="YUCATAN">YUCATAN</option><option value="ZACATECAS">ZACATECAS</option><option value="NACIDO EN EL EXTRANJERO">EXTRANJERO</option></select></p></span>';
-		$("#tutorcurp").append(campo);
-		$("#fechaT").datepicker(optionsFecha );
-		$("#fechaT,#edoT").change(function()
-		{       
-			getcurpTutor();
-		});	
-	}
-	function rem_fecha_edo()
-	{
-		$("#_fecha_edo").remove();
-	}
-	function cleanForm()
-	{
-		var valor=$("#alert").html();
-		if(valor.search("incorrecto")<0)
-		limpiaformulario("enrolar");
-		else
-		$("#alert").css("display","")
-	}
-	function comparar_captura()
-	{
-		var no=encodeURIComponent($("#nombre").val());
-		var pa=encodeURIComponent($("#paterno").val());
-		var ma=encodeURIComponent($("#materno").val());
-		var ln=encodeURIComponent($("#lnacimientoT").val().split(",")[0]);
-		var cu=encodeURIComponent($("#curp").val()+$("#curp2").val());
-		var fn=encodeURIComponent($("#fnacimiento").val());
-		var ct=encodeURIComponent($("#curpT").val());
-		var ca=encodeURIComponent($("#calle").val());
-		var re=encodeURIComponent($("#referencia").val());
-		var co=encodeURIComponent($("#colonia").val());
-		if(no!=""&&pa!=""&&ma!=""&&ln!="")
-		{
-			$.get('/<?php echo DIR_TES.'/enrolamiento/paciente_similar'?>/'+no+'/'+pa+'/'+ma+'/'+cu+'/'+fn+'/'+ln+'/'+ca+'/'+re+'/'+co+'/'+ct, function(respuesta) 
-			{
-				if(respuesta.length>5)
-				{
-					if($("#simi"))
-					$("#simi").remove();
-					var obj = jQuery.parseJSON( respuesta );
-					var campo = '<span id="simi" >Se encontraron pacientes GUARDADOS que coinciden con los datos CAPTURADOS. dele click para compararlos<br>';
-					for(var c=0;c<obj.length; c++)
-					{
-						var prod1 = encodeURIComponent(no+'°'+pa+'°'+ma+'°'+$("#lnacimientoT").val()+'°'+cu+'°'+$("input[type='radio'][name='sexo']:checked").val()+'°'+$("#sangre option:selected").text()+'°'+fn+'°'+$("#nacionalidad option:selected").text());
-						
-						var prod2 = encodeURIComponent(ct+'°'+$("#nombreT").val()+'°'+$("#paternoT").val()+'°'+$("#maternoT").val()+'°'+$("input[type='radio'][name='sexoT']:checked").val()+'°'+$("#telefonoT").val()+'°'+$("#celularT").val()+'°'+$("#companiaT option:selected").text());
-						
-						var prod3 = encodeURIComponent($("#calle").val()+'°'+$("#numero").val()+'°'+$("#referencia").val()+'°'+$("#colonia").val()+'°'+$("#cp").val()+'°'+$("#ageb").val()+'°'+$("#sector").val()+'°'+$("#manzana").val()+'°'+$("#localidadT").val()+'°'+$("#telefono").val()+'°'+$("#celular").val()+'°'+$("#compania option:selected").text());
-						 
-						
-						var url='/<?php echo DIR_TES?>/enrolamiento/comparar_view/'+obj[c]["id"]+'/'+prod1+'/'+prod2+'/'+prod3
-						campo+='<a href="'+url+'" style="padding:5px" class="btn btn-small btn-primary" id="similar">'+obj[c]["nombre"]+' '+obj[c]["total"]+'%</a>&nbsp;&nbsp;';
-					}
-					campo+="</span>";
-					$("#tienesimilar").append(campo);
-					$("#tienesimilar").attr("class","warning");
-					$("a#similar").fancybox({
-						'width'             : '90%',
-						'height'            : '90%',				
-						'transitionIn'	: 'elastic',
-						'transitionOut'	: 'elastic',
-						'type'			: 'iframe',
-					});
-				}
-			});
-		}
-	}
 	</script><!-- mensaje-->
         <?php 	
 			if(!empty($msgResult))
@@ -614,8 +181,8 @@
 			echo form_open(DIR_TES.'/enrolamiento/insert',array('onkeyup' => 'cleanForm()','onclick' => 'cleanForm()', 'id' => 'enrolar')); 
 		?>
         <!-- mensaje -->
-    <div class="info requiere" style="width:93%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
-    <div id="alert"></div>
+    <div class="info requiere" style="width:93.2%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
+    <div id="alert" style="width:93.2%"></div>
 	<table align="center" width="97.5%" border="0" cellpadding="0" cellspacing="0" style="margin-left:20px"><tr><td>
     	
         	<table width="100%">
@@ -774,6 +341,16 @@
                             <td><p align="right">CP</p></td>
                             <td><input name="cp" type="text"  id="cp" style="width:75%; margin-left:10px;" value="<?php echo set_value('cp', ''); ?>" maxlength="5"></td>
                           </tr>
+                          
+                          <tr>
+                            <td><p align="right">Localidad</p></td>
+                            <td colspan="3">
+                            <div class="input-append" style="width:100%">
+                            <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
+                              <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
+                            </td>
+                          </tr>
                           <tr>
                           <td colspan="4" width="100%">
                               <table width="97%" border="0">
@@ -787,15 +364,6 @@
                                 </tr>
                               </table>
                           </td>
-                          </tr>
-                          <tr>
-                            <td><p align="right">Localidad</p></td>
-                            <td colspan="3">
-                            <div class="input-append" style="width:100%">
-                            <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
-                              <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
-                            </td>
                           </tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
@@ -842,7 +410,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly" title="requiere">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
-                            <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(NULL)));?>/<?php echo urlencode(json_encode(array(5)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div></td>
+                            </div></td>
                           </tr>
                         </table>
                         <br />
@@ -879,7 +447,7 @@
                     
                     <!-- alergias y reacciones:  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Historial de Alergias y Reacciones Febriles</div>
+                      <div class="AccordionPanelTab">Alergias y Antecedentes Familiares de Riesgo</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         	<div id="alergias" style="margin-left:10px;">
@@ -1155,8 +723,8 @@
             </tr>
             <tr>
                 <td>
-                <br />
-                <div id="tienesimilar" style="width:94.7%; margin-left:-20px; margin-bottom:10px;" > </div>
+                <div id="tienesimilar" style="width:95.7%; margin-left:-20px; margin-bottom:10px;" > </div>
+                <div id="tieneum" style="width:95.7%; margin-left:-20px; margin-bottom:10px;" ></div>
                 <span id="enviandoof" style="margin-left:-20px;">
                 <button type="submit" name="guardar" id="guardar" class="btn btn-primary" onclick="return validarFormulario('enrolar')" >Guardar <i class="icon-hdd"></i></button>
                 <button type="button"  onclick="window.location.href='/<?php echo DIR_TES?>/enrolamiento/'" class="btn btn-primary">Cancelar <i class="icon-arrow-left"></i></button>

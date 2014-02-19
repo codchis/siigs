@@ -61,7 +61,7 @@ class Tableta extends CI_Controller {
             $data['tipos_censo'] = $this->Tipo_censo_model->getAll();
             $data['unidades_medicas'] = array();
             
-            $registroEliminar = @$_POST['registroEliminar'];
+            $registroEliminar = isset($_POST['registroEliminar']) ? $_POST['registroEliminar'] : null;
 
             if( !empty($registroEliminar) ) {
                 $this->Tableta_model->delete($registroEliminar);
@@ -137,7 +137,10 @@ class Tableta extends CI_Controller {
             foreach ($data['registros'] as $registro) {
                 if(!empty($registro->id_asu_um)) {
                     $unidad_medica = $this->ArbolSegmentacion_model->getDescripcionById(array($registro->id_asu_um), 2);
-                    $data['unidades_medicas'][$unidad_medica[0]->id] = $unidad_medica[0]->descripcion;
+                    
+                    if($unidad_medica) {
+                        $data['unidades_medicas'][$unidad_medica[0]->id] = $unidad_medica[0]->descripcion;
+                    }
                 }
             }
         } catch (Exception $e) {

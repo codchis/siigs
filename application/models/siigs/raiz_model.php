@@ -216,8 +216,8 @@ class Raiz_model extends CI_Model {
 	public function delete()
 	{
 
-		$query = $this->db->delete('asu_raiz', array('id' => $this->getId()));
-                $asu = $this->db->delete('asu_arbol_segmentacion', array('id_raiz' => $this->getId()));
+            $asu = $this->db->delete('asu_arbol_segmentacion', array('id_raiz' => $this->getId()));	
+            $query = $this->db->delete('asu_raiz', array('id' => $this->getId()));   
 
 		if (!$query || !$asu)
 		{

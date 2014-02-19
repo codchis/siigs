@@ -17,6 +17,7 @@ if (!empty($regla_item))
         <tr><td><strong>Via Vacuna</strong></td><td>'.$regla_item->via_vacuna.'</td></tr>
         <tr><td><strong>Dosis</strong></td><td>'.$regla_item->dosis.'</td></tr>
         <tr><td><strong>Regi&oacute;n</strong></td><td>'.$regla_item->region.'</td></tr>
+        <tr><td><strong>Observaciones de la Regi&oacute;n</strong></td><td>'.$regla_item->observacion_region.'</td></tr>
         <tr><td><strong>Esquema Completo</strong></td><td>'.(($regla_item->esq_com == 1) ? 'Si' : 'No').'</td></tr>';
             
         if (($regla_item->esq_com == 1)) 

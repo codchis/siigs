@@ -72,6 +72,12 @@ class ReglaVacuna_model extends CI_Model {
         
 	/**
 	 * @access private
+	 * @var    string
+	 */
+	private $observacion_region;
+        
+	/**
+	 * @access private
 	 * @var    bool
 	 */
 	private $esq_com;
@@ -178,6 +184,13 @@ class ReglaVacuna_model extends CI_Model {
 	public function setRegion($value) {
 		$this->region = $value;
 	}
+
+        public function getObservacionRegion() {
+		return $this->observacion_region;
+	}
+	public function setObservacionRegion($value) {
+		$this->observacion_region = $value;
+	}
         
         public function getEsqComp() {
 		return $this->esq_com;
@@ -253,7 +266,7 @@ class ReglaVacuna_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-		$query = $this->db->query("SELECT distinct a.id,b.descripcion as vacuna,a.id_vacuna_secuencial , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa, case when ifnull(a.id_via_vacuna,'') = '' then '' else d.descripcion end as via_vacuna, a.dosis as dosis, a.region as region, a.esq_com, a.orden_esq_com, a.alergias FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 left outer join cns_via_vacuna d on a.id_via_vacuna = d.id");
+		$query = $this->db->query("SELECT distinct a.id,b.descripcion as vacuna,a.id_vacuna_secuencial , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa, case when ifnull(a.id_via_vacuna,'') = '' then '' else d.descripcion end as via_vacuna, a.dosis as dosis, a.region as region, a.esq_com, a.orden_esq_com, a.alergias,a.observacion_region FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 left outer join cns_via_vacuna d on a.id_via_vacuna = d.id");
 		if (!$query)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -274,7 +287,7 @@ class ReglaVacuna_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->query("SELECT distinct a.id,a.id_vacuna,a.id_via_vacuna,a.id_vacuna_secuencial,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa, a.dia_inicio_aplicacion_secuencial as desdese, a.dia_fin_aplicacion_secuencial as hastase, case when ifnull(a.id_via_vacuna,'') = '' then '' else d.descripcion end as via_vacuna, a.dosis as dosis, a.region as region, a.esq_com, a.orden_esq_com, a.alergias as id_alergias,a.forzar_aplicacion FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 left outer join cns_via_vacuna d on a.id_via_vacuna = d.id where a.id=".$id);
+		$query = $this->db->query("SELECT distinct a.id,a.id_vacuna,a.id_via_vacuna,a.id_vacuna_secuencial,b.descripcion as vacuna , CASE WHEN IFNULL(a.dia_inicio_aplicacion_nacido,'') = '' THEN 'Secuencial' ELSE 'Nacimiento' END AS aplicacion , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_inicio_aplicacion_secuencial else a.dia_inicio_aplicacion_nacido end as desde , case when ifnull(a.dia_inicio_aplicacion_nacido,'') = '' then a.dia_fin_aplicacion_secuencial else a.dia_fin_aplicacion_nacido end as hasta , case when ifnull(a.id_vacuna_secuencial,'') = '' then 'Ninguna' else c.descripcion end as previa, a.dia_inicio_aplicacion_secuencial as desdese, a.dia_fin_aplicacion_secuencial as hastase, case when ifnull(a.id_via_vacuna,'') = '' then '' else d.descripcion end as via_vacuna, a.dosis as dosis, a.region as region, a.esq_com, a.orden_esq_com, a.alergias as id_alergias,a.forzar_aplicacion, a.observacion_region FROM cns_regla_vacuna a join cns_vacuna b on a.id_vacuna = b.id and b.activo = 1 left outer join cns_vacuna c on a.id_vacuna_secuencial = c.id and c.activo = 1 left outer join cns_via_vacuna d on a.id_via_vacuna = d.id where a.id=".$id);
 
 		if (!$query)
 		{
@@ -326,6 +339,7 @@ class ReglaVacuna_model extends CI_Model {
                                 'alergias' => (!empty($this->alergias)) ? $this->alergias : null,
                                 'esq_com' => $this->esq_com,
                                 'forzar_aplicacion' => $this->forzar_aplicacion,
+                                'observacion_region' =>$this->observacion_region,
                                 'ultima_actualizacion' => date('Y-m-d H:i:s')
 		);
                 
@@ -368,6 +382,7 @@ class ReglaVacuna_model extends CI_Model {
                                 'alergias' => (!empty($this->alergias)) ? $this->alergias : null,
                                 'esq_com' => $this->esq_com,
                                 'forzar_aplicacion' => $this->forzar_aplicacion,
+                                'observacion_region' =>$this->observacion_region,
                                 'ultima_actualizacion' => date('Y-m-d H:i:s')
 		);
 

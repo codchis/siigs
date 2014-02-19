@@ -545,7 +545,7 @@ class CatalogoCsv extends CI_Controller {
         die();
 	}
     
-    /**
+        /**
 	 *Acción para ejecutar la creación de la tabla poblacional
 	 *No recibe parámetros
 	 *
@@ -576,4 +576,38 @@ class CatalogoCsv extends CI_Controller {
         redirect(DIR_SIIGS.'/catalogocsv/', 'refresh');
         die();
 	}
+        
+        /**
+	 *Acción para ejecutar la creación de la tabla Asu Ageb
+	 *No recibe parámetros
+	 *
+	 *@return void
+	 */
+	public function createTableAgeb()
+	{
+            ini_set('max_execution_time',1000);
+            
+            $this->load->model(DIR_SIIGS.'/Ageb_model');
+
+                    if (empty($this->Ageb_model)) {
+                echo 'No se puede cargar el modelo Ageb';
+                            return false;
+            }
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+                    show_error('', 403, 'Acceso denegado');
+            try
+            {
+                $this->Ageb_model->process();
+                $this->session->set_flashdata('msgResult', 'Datos procesados correctamente');
+                $this->session->set_flashdata('clsResult', 'success');
+            }
+            catch (Exception $e) {
+                    $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+                    $this->session->set_flashdata('clsResult', 'error');
+            }
+        
+        redirect(DIR_SIIGS.'/catalogocsv/', 'refresh');
+        //die();
+	}
+
 }
