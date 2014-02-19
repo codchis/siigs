@@ -353,7 +353,7 @@ class Reporteador_model extends CI_Model {
 		$th = '<tr><th>Apellido Paterno</th><th>Apellido Materno</th><th>Nombre</th>
 						<th>Domicilio</th><th>CURP</th><th>Fecha Nac</th><th>Sexo</th>';
 		foreach($resultVacunasEsquemaCompleto as $vacuna){
-			$th.= '<th>'.$vacuna->descripcion.'</th>';
+			$th.= '<th class="rotate-45"><div><span>'.$vacuna->descripcion.'</span></div></th>';
 		}
 		$th.='</tr>';
 		

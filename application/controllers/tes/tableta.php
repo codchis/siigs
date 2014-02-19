@@ -284,6 +284,8 @@ class Tableta extends CI_Controller {
      */
     public function view($id)
     {
+        $usuarios = array();
+        
         if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
             show_error('', 403, 'Acceso denegado');
             return false;
@@ -293,6 +295,8 @@ class Tableta extends CI_Controller {
             return false;
 
         try {
+            $this->load->model(DIR_TES.'/Usuario_tableta_model');
+            
             $data['registro'] = $this->Tableta_model->getById($id);
             $data['title'] = 'Datos del registro';
             
@@ -301,7 +305,20 @@ class Tableta extends CI_Controller {
             if( empty($data['registro']) ) {
                 $data['msgResult'] = 'ERROR: El registro solicitado no existe';
                 $data['clsResult'] = 'error';
+            } else {
+                $usuariosTableta = $this->Usuario_tableta_model->getUsuariosByTableta($id);
+
+                if(!empty($usuariosTableta)) {
+                    $this->load->model(DIR_TES.'/Usuario_model');
+
+                    foreach ($usuariosTableta as $usuario) {
+                        $infoUsuario = $this->Usuario_model->getById($usuario->id_usuario, true);
+                        $usuarios[] = $infoUsuario->nombre_usuario;
+                    }
+                }
             }
+            
+            $data['usuarios'] = $usuarios;
         } catch (Exception $e) { 
             $data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
             $data['clsResult'] = 'error';

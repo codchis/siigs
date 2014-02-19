@@ -24,7 +24,6 @@ $(document).ready(function()
 });
 </script>
 
-
 <div align="right">
 <a id="csv" href=""><img src="/resources/images/csv.png" style="border:none; "  title="Exportar a CSV" class="btn btn-primary"/></a>
 <a id="pdf" href=""><img src="/resources/images/pdf.png" style="border:none; "  title="Exportar a PDF" class="btn btn-primary"/></a>
@@ -37,7 +36,8 @@ $(document).ready(function()
 	if(isset($msgResult))
 	echo "<div class='$infoclass'>".$msgResult."</div>";
 ?>
-<table border="0" width="100%" id="tabla" class="table table-striped">
+
+<table border="0" width="100%" id="tabla" class="table table-striped table-header-rotated">
     <?php
 	if(isset($datos))
 	{
@@ -82,4 +82,5 @@ $(document).ready(function()
 	?>
 </table>
 </div>
+
 <div align="right"><input type="button" onClick="parent.jQuery.fancybox.close();" value="Cerrar" style="height:58px; " class="btn btn-primary"></div>
