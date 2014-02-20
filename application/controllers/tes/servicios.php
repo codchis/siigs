@@ -211,7 +211,7 @@ class Servicios extends CI_Controller {
 	public function is_step_2($id_sesion, $si="", $sf="")
 	{
 		ini_set("max_execution_time", 999999999);
-		
+		ini_set("memory_limit","300M");
 		$micadena="";
 		$misesion=$this->session->userdata('session');
 		$mac=$this->session->userdata('mac');
@@ -294,7 +294,7 @@ class Servicios extends CI_Controller {
 				//************ inicio asu ************
 				if($si=="")
 				{
-					$count=$this->Enrolamiento_model->get_catalog_count("asu_arbol_segmentacion","id_raiz","1");
+					/*$count=$this->Enrolamiento_model->get_catalog_count("asu_arbol_segmentacion","id_raiz","1");
 					$mas=$count%8000;
 					$contador=$count/8000;
 					if($mas>0)(int)$contador++;
@@ -306,9 +306,9 @@ class Servicios extends CI_Controller {
 					ob_flush();
 					unset($cadena);
 					$cadena=array();
-					$fecha=$this->session->userdata('fecha');
+					
 					for($i=0;$i<$contador;$i++)
-					{
+					{$fecha=$this->session->userdata('fecha');
 						if($sf=="")
 							$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","id_raiz","1","","",($i*8000),8000);
 						else
@@ -318,15 +318,33 @@ class Servicios extends CI_Controller {
 						{
 							$micadena=json_encode($asu);
 							echo substr($micadena,1,strlen($micadena)-2);
-						
+							
 							if(($i+2)<$contador)echo ",";
 							$micadena="";
 							ob_flush();
+							
 						}
-					}
+					/*}
 					if($count>0)
 					echo "]";
-					ob_flush();
+					ob_flush();*/
+					
+					$fecha=$this->session->userdata('fecha');
+					if($sf=="")
+						$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","id_raiz","1");
+					else
+						$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","fecha_update >=",$fecha,"id_raiz","1");
+					
+					if($asu)
+					{
+						$cadena["asu_arbol_segmentacion"]=$asu;
+						$micadena=json_encode($cadena);
+						echo substr($micadena,1,strlen($micadena)-2);
+						$micadena="";
+						ob_flush();
+						unset($cadena);
+						$cadena=array();
+					}
 				}
 				else 
 				{

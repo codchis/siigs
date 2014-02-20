@@ -76,6 +76,8 @@ Es necesario dar permisos de lectura y escritura a determinados directorios ya q
     <p>$ sudo chmod 766 -R /var/www/siigs/application/json</p>
 
     <p>$ sudo chmod 766 -R /var/www/siigs/application/logs</p>
+
+    <p>$ sudo chmod 766 -R /var/www/siigs/application/updloads</p>
 </blockquote>
 
 ## Configuración
