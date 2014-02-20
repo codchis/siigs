@@ -330,6 +330,7 @@ class ArbolSegmentacion_model extends CI_Model {
                 else
                 {  
                     ini_set('max_execution_time',1000);
+                    ini_set('memory_limit', '1024M');
 
                     $arbol = $this->getTree($idarbol, $nivel, $omitidos);
                     
@@ -406,8 +407,12 @@ class ArbolSegmentacion_model extends CI_Model {
 
                         try
                         {
-                            $fh = fopen($ruta, 'c')
-                            or die("false");
+                            $fh = fopen($ruta, 'c');
+                            if(!$fh)
+                            {
+                               return "false";
+                            }
+                            
 
                             fwrite($fh, json_encode($resultado[1],JSON_UNESCAPED_UNICODE));
                             fclose($fh);
@@ -432,7 +437,7 @@ class ArbolSegmentacion_model extends CI_Model {
                         }
                         catch(Exception $e)
                         {
-                            $this->msg_error_log = "(". __METHOD__.") => " .'ASU'.': '."No se pudo crear el archivo JSON para el asu (".$ruta.") ::".$e->getMessage();        
+                            $this->msg_error_log = "(". __METHOD__.") => " .'ASU'.': '."No se pudo crear el archivo JSON para el asu (".$ruta.") ::".$e->getMessage();
                             return "false";
                         }
                         return $resultado[1];

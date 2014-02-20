@@ -19,6 +19,7 @@
     <script>
 	$(document).ready(function()
 	{
+		$("#nombre").focus(); 
 		obligatorios("enrolar");
 		$("#fecha_edo").click(function(e) {
             if(this.checked)
@@ -103,12 +104,18 @@
      							});
 							}
 							if(uri.substr(uri.search("/")+1,uri.length)=="localidadT")
+							{
+								$("#ageb").focus();
 								obtener_um_responsabilidad();
+							}
 						}
 						if(uri.substr(uri.search("/")+1,uri.length)=="lnacimientoT")
-						getcurp();
+						{
+							$("#curp").focus();
+							getcurp();
+						}
 					});
-				}
+				}				
 			},
 			onComplete: function(){
             $('#fancybox-frame').load(function(){
@@ -183,7 +190,7 @@
         <!-- mensaje -->
     <div class="info requiere" style="width:93.2%">Las formas y los campos marcados con un asterisco (<img src="/resources/images/asterisco.png" />) son campos obligatorios y deben ser llenados.</div>
     <div id="alert" style="width:93.2%"></div>
-	<table align="center" width="97.5%" border="0" cellpadding="0" cellspacing="0" style="margin-left:20px"><tr><td>
+	<table align="center" width="97.5%" border="0" cellpadding="0" cellspacing="0" style="margin-left:20px" ><tr><td>
     	
         	<table width="100%">
             <tr>
@@ -198,45 +205,45 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombre" type="text" title='requiere' required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('nombre', ''); ?>" maxlength="35"></td>
+                            <td width="31%"><input name="nombre" type="text" title='requiere' required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" onkeydown="return entertab(event,3)" value="<?php echo set_value('nombre', ''); ?>" maxlength="35"></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%" align="right">
                               <label style=" margin-left:10px; float:left">
-                                <input type="radio" name="sexo" value="M" <?php echo set_radio('sexo', 'M'); ?> id="sexo_1" onclick="getcurp();" title='requiere' required style="margin-top:-3px;">
+                                <input type="radio" name="sexo" value="M" <?php echo set_radio('sexo', 'M'); ?> id="sexo_1" onclick="getcurp();" title='requiere' required style="margin-top:-3px;" onkeydown="return entertab(event,2)">
                                 Masculino</label>
                               <label style=" float:left">
-                                <input type="radio" name="sexo" value="F" <?php echo set_radio('sexo', 'F'); ?> id="sexo_2" onclick="getcurp();" style="margin-top:-3px;">
+                                <input type="radio" name="sexo" value="F" <?php echo set_radio('sexo', 'F'); ?> id="sexo_2" onclick="getcurp();" style="margin-top:-3px;" onkeydown="return entertab(event,4)">
                                 Femenino</label>
                              </td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paterno" type="text" title='requiere' required id="paterno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('paterno', ''); ?>" maxlength="20"></td>
+                            <td><input name="paterno" type="text" title='requiere' required id="paterno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('paterno', ''); ?>" maxlength="20" onkeydown="return entertab(event,5)"></td>
                             <td><p align="right">Tipo de Sangre</p></td>
                             <td>
-                              <select name="sangre" id="sangre" style="width:80%; margin-left:10px;" title='requiere' required>                           
+                              <select name="sangre" id="sangre" style="width:80%; margin-left:10px;" title='requiere' required onkeydown="return entertab(event,6)">                           
                             
                             </select></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="materno" type="text" title='requiere' required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('materno', ''); ?>" maxlength="20"></td>
+                            <td><input name="materno" type="text" title='requiere' required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('materno', ''); ?>" maxlength="20" onkeydown="return entertab(event,7)"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" title='requiere' required value="<?php echo date('d-m-Y', strtotime(set_value('fnacimiento', ''))); ?>" placeholder="dd-mm-yyyy"></td>
+                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" title='requiere' required value="<?php echo date('d-m-Y', strtotime(set_value('fnacimiento', ''))); ?>" placeholder="dd-mm-yyyy" onkeydown="return entertab(event,11)"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
-                            <td colspan="3"><div class="input-append" style="width:100%"><input name="lnacimientoT" type="text" title='requiere' required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo set_value('lnacimientoT', ''); ?>" readonly="readonly">
+                            <td colspan="3"><div class="input-append" style="width:100%"><input name="lnacimientoT" type="text" title='requiere' required id="lnacimientoT" style="width:68%; margin-left:10px;" value="<?php echo set_value('lnacimientoT', ''); ?>" readonly="readonly" onkeydown="return entertab(event,9)">
                             	<input name="lnacimiento" type="hidden" id="lnacimiento" value="<?php echo set_value('lnacimiento', ''); ?>">                              
-                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>' id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a><div id="aqui"></div></div>
+                              <a href='/<?php echo DIR_TES?>/tree/create/TES/Lugar de Nacimiento/1/radio/0/lnacimiento/lnacimientoT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(2,3,4)));?>' id="fba1" class="btn btn-primary" onkeydown="return entertab(event,9)">Seleccionar <i class="icon-search"></i></a><div id="aqui"></div></div>
                               </td>
                             </tr>
                           <tr>
-                            <td><p align="right">CURP</p></td>
-                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp', ''); ?>" maxlength="12">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:24.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp2', ''); ?>" maxlength="6"></td>
+                            <td><p align="right">Pre CURP</p></td>
+                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp', ''); ?>" maxlength="12" onkeydown="return entertab(event,10)">
+                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:24.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp2', ''); ?>" maxlength="6" onkeydown="return entertab(event,1)"></td>
                             <td><p align="right">Nacionalidad</p></td>
-                            <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required">
+                            <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,12)">
                             </select></td>
                           </tr>
                           <tr>
@@ -252,14 +259,14 @@
                     <!-- Tutor -->
                   
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"s>Datos de la Madre o Tutor</div>
+                      <div class="AccordionPanelTab">Datos de la Madre o Tutor</div>
                       <div class="AccordionPanelContent" id="sTutor">
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td height="50" colspan="2"><p align="right" >Madres o Tutores ya Capturados</p></td>
                             <td colspan="2"><div class="input-append" >
-                              <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" value="<?php echo set_value('buscar', ''); ?>" />
+                              <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" value="<?php echo set_value('buscar', ''); ?>" onkeydown="return entertab(event,15)" />
                            <a href="#" id="buscarCurp" class="btn btn-primary">Buscar <i class="icon-search"></i></a></div></td>
                           </tr>
                           <tr>
@@ -273,35 +280,35 @@
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">CURP</p></td>
-                            <td width="31%"><input name="curpT" type="text"  id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo set_value('curpT', ''); ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)" /></td>
+                            <td width="31%"><input name="curpT" type="text"  id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo set_value('curpT', ''); ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)" onkeydown="return entertab(event,18)" /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
                               <label style=" margin-left:10px; float:left">
-                                <input type="radio" name="sexoT" value="M" <?php echo set_radio('sexoT', 'M'); ?> id="sexoT_1" style="margin-top:-3px;">
+                                <input type="radio" name="sexoT" value="M" <?php echo set_radio('sexoT', 'M'); ?> id="sexoT_1" style="margin-top:-3px;" onkeydown="return entertab(event,17)" >
                                 Masculino</label>
                                 &nbsp;
                               <label style=" float:left">
-                                <input type="radio" name="sexoT" value="F" <?php echo set_radio('sexoT', 'F'); ?> id="sexoT_2" style="margin-top:-3px;">
+                                <input type="radio" name="sexoT" value="F" <?php echo set_radio('sexoT', 'F'); ?> id="sexoT_2" style="margin-top:-3px;" onkeydown="return entertab(event,19)" >
                                 Femenino</label>
                              </td>
                           </tr>
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombreT" type="text" title='requiere' required="title='requiere' required" id="nombreT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('nombreT', ''); ?>" maxlength="35" readonly="readonly" /></td>
+                            <td width="31%"><input name="nombreT" type="text" title='requiere' required="title='requiere' required" id="nombreT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('nombreT', ''); ?>" maxlength="35" readonly="readonly" onkeydown="return entertab(event,20)"  /></td>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><input name="telefonoT" type="text" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefonoT', ''); ?>" readonly="readonly" /></td>
+                            <td><input name="telefonoT" type="text" id="telefonoT" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefonoT', ''); ?>" readonly="readonly" onkeydown="return entertab(event,21)" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><input name="paternoT" type="text" title='requiere' required="title='requiere' required" id="paternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('paternoT', ''); ?>" maxlength="20" readonly="readonly" /></td>
+                            <td><input name="paternoT" type="text" title='requiere' required="title='requiere' required" id="paternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('paternoT', ''); ?>" maxlength="20" readonly="readonly" onkeydown="return entertab(event,22)" /></td>
                             <td><p align="right">Celular</p></td>
-                            <td><input name="celularT" type="text" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo set_value('celularT', ''); ?>" readonly="readonly" /></td>
+                            <td><input name="celularT" type="text" id="celularT" style="width:80%; margin-left:10px;" value="<?php echo set_value('celularT', ''); ?>" readonly="readonly" onkeydown="return entertab(event,23)" /></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><input name="maternoT" type="text" title='requiere' required="title='requiere' required" id="maternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('maternoT', ''); ?>" maxlength="20" readonly="readonly"/></td>
+                            <td><input name="maternoT" type="text" title='requiere' required="title='requiere' required" id="maternoT" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('maternoT', ''); ?>" maxlength="20" readonly="readonly" onkeydown="return entertab(event,16)" /></td>
                             <td><p align="right">Compania Celular</p></td>
-                            <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" >
+                            <td><select name="companiaT" id="companiaT" style="width:85%; margin-left:10px;" onkeydown="return entertab(event,25)">
                             </select></td>
                           </tr>
                           <tr>
@@ -327,27 +334,27 @@
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Calle</p></td>
-                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;"  value="<?php echo set_value('calle', ''); ?>"></td>
+                            <td width="31%"><input name="calle" type="text" id="calle" style="width:80%; margin-left:10px;"  value="<?php echo set_value('calle', ''); ?>" onkeydown="return entertab(event,26)"></td>
                             <td width="25%"><p align="right">Número</p></td>
-                            <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo set_value('numero', ''); ?>"></td>
+                            <td width="25%"><input name="numero" type="text" id="numero" style="width:75%; margin-left:10px;" value="<?php echo set_value('numero', ''); ?>" onkeydown="return entertab(event,27)"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Referencia</p></td>
-                            <td colspan="3"><input name="referencia" type="text" id="referencia" style="width:68%; margin-left:10px;"  value="<?php echo set_value('referencia', ''); ?>" /></td>
+                            <td colspan="3"><input name="referencia" type="text" id="referencia" style="width:68%; margin-left:10px;"  value="<?php echo set_value('referencia', ''); ?>" onkeydown="return entertab(event,28)"/></td>
                           </tr>
                           <tr>
                             <td><p align="right">Colonia</p></td>
-                            <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo set_value('colonia', ''); ?>"></td>
+                            <td><input name="colonia" type="text" id="colonia" style="width:80%; margin-left:10px;" value="<?php echo set_value('colonia', ''); ?>" onkeydown="return entertab(event,29)"></td>
                             <td><p align="right">CP</p></td>
-                            <td><input name="cp" type="text"  id="cp" style="width:75%; margin-left:10px;" value="<?php echo set_value('cp', ''); ?>" maxlength="5"></td>
+                            <td><input name="cp" type="text"  id="cp" style="width:75%; margin-left:10px;" value="<?php echo set_value('cp', ''); ?>" maxlength="5" onkeydown="return entertab(event,30)"></td>
                           </tr>
                           
                           <tr>
                             <td><p align="right">Localidad</p></td>
                             <td colspan="3">
                             <div class="input-append" style="width:100%">
-                            <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly">
-                              <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>"/>
+                            <input name="localidadT" type="text" title='requiere' required="title='requiere' required" id="localidadT" style="width:68%; margin-left:10px;" value="<?php echo set_value('localidadT', ''); ?>" readonly="readonly" onkeydown="return entertab(event,32)">
+                              <input name="localidad" type="hidden" id="localidad" value="<?php echo set_value('localidad', ''); ?>" onkeydown="return entertab(event,32)"/>
                               <a href="/<?php echo DIR_TES?>/tree/create/TES/Direccion/1/radio/0/localidad/localidadT/1/1/<?php echo urlencode(json_encode(array(2,5)));?>/<?php echo urlencode(json_encode(array(3,4)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a></div>
                             </td>
                           </tr>
@@ -356,24 +363,24 @@
                               <table width="97%" border="0">
                                 <tr>
                                   <td width="19%" align="right"><p>Ageb</p></td>
-                                  <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo set_value('ageb', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" /></td>
+                                  <td ><input name="ageb" type="text"  id="ageb" style="width:75%; margin-left:15px;" value="<?php echo set_value('ageb', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" onkeydown="return entertab(event,33)"/></td>
                                   <td  align="right"><p>Sector</p></td>
-                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo set_value('sector', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td ><input name="sector" type="text"  id="sector" style="width:75%; margin-left:10px;" value="<?php echo set_value('sector', ''); ?>" maxlength="4" onkeypress="return validar(event,'NL',this.id)" onkeydown="return entertab(event,34)"/></td>
                                   <td  align="right"><p>Manzana</p></td>
-                                  <td ><input name="manzana" id="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)"/></td>
+                                  <td ><input name="manzana" id="manzana" type="text"  style="width:75%; margin-left:10px;" value="<?php echo set_value('manzana', ''); ?>" maxlength="3" onkeypress="return validar(event,'NL',this.id)" onkeydown="return entertab(event,35)"/></td>
                                 </tr>
                               </table>
                           </td>
                           </tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><input name="telefono" type="text" id="telefono" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefono', ''); ?>" /></td> 
+                            <td><input name="telefono" type="text" id="telefono" style="width:80%; margin-left:10px;" value="<?php echo set_value('telefono', ''); ?>" onkeydown="return entertab(event,36)"/></td> 
                             <td><p align="right">Celular</p></td> 
-                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo set_value('celular', ''); ?>" /></td>                          
+                            <td><input name="celular" type="text" id="celular" style="width:75%; margin-left:10px;" value="<?php echo set_value('celular', ''); ?>" onkeydown="return entertab(event,37)"/></td>                          
                           </tr>
                           <tr>
                             <td><p align="right">Compania Celular</p></td>
-                            <td><select name="compania" id="compania" style="width:85%; margin-left:10px;" >
+                            <td><select name="compania" id="compania" style="width:85%; margin-left:10px;" onkeydown="return entertab(event,38)">
                             </select></td> 
                             <td></td> 
                             <td></td>                          

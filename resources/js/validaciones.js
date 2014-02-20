@@ -250,15 +250,17 @@ function obligatorios(formulario)
 	}
 }
 var cx=0;
-function entertab(e) //convertir el enter en un tab
+function entertab(e,i) //convertir el enter en un tab
 { 
-	if (e.keyCode == 13) 
-	{			
-		e.preventDefault();
-		var inputs = $(this).closest('form').find(':input:visible');
-		inputs.eq( inputs.index(this)+ 1 ).focus();  
+	if (e.keyCode == 13||e.keyCode == 9) 
+	{		
+		if(i==12||i==25||i==38)
+			Accordion1.openNextPanel();
+		if(document.getElementById("fechaT"))
+			i=i+2;	
+		document.forms[0].elements[i].focus();
 		return false;
-   }
+	}
 }
 // fin validar formularios
 

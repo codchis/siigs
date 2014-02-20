@@ -37,7 +37,7 @@ $(document).ready(function()
 	echo "<div class='$infoclass'>".$msgResult."</div>";
 ?>
 
-<table border="0" width="100%" id="tabla" class="table table-striped table-header-rotated">
+<table border="0" width="100%" id="tabla" class="table table-striped">
     <?php
 	if(isset($datos))
 	{

@@ -37,6 +37,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
     <script>
 	$(document).ready(function()
 	{
+		$("#nombre").focus();
 		$.fancybox.showActivity();
 		$("#fecha_edo").click(function(e) {
             if(this.checked)
@@ -123,10 +124,16 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
      							});
 							}
 							if(uri.substr(uri.search("/")+1,uri.length)=="localidadT")
+							{
+								$("#ageb").focus();
 								obtener_um_responsabilidad();
+							}
 						}
 						if(uri.substr(uri.search("/")+1,uri.length)=="lnacimientoT")
-						getcurp();
+						{
+							$("#curp").focus();
+							getcurp();
+						}
 					});
 				}
 			},
@@ -301,7 +308,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%" height="50"><p align="right">Nombre</p></td>
-                            <td width="31%"><input name="nombre" type="text" title='requiere' required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->nombre; ?>" maxlength="35">
+                            <td width="31%"><input name="nombre" type="text" title='requiere' required id="nombre" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo $enrolado->nombre; ?>" maxlength="35" >
                             <input name="id" type="hidden" id="id" value="<?php echo $id;?>"  />
                             <input name="id_cns_basico" type="hidden" id="id_cns_basico" value="<?php echo $id;?>"  /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
@@ -340,7 +347,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                               </td>
                             </tr>
                           <tr>
-                            <td><p align="right">CURP</p></td>
+                            <td><p align="right">Pre CURP</p></td>
                             <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,0,12); ?>" maxlength="12">
                             <input name="curp2" type="text"  id="curp2"  style="letter-spacing:1px; width:22.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,12,15); ?>" maxlength="6"></td>
                             <td><p align="right">Nacionalidad</p></td>
