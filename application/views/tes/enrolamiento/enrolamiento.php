@@ -239,7 +239,7 @@
                               </td>
                             </tr>
                           <tr>
-                            <td><p align="right">CURP</p></td>
+                            <td><p align="right">Pre CURP</p></td>
                             <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp', ''); ?>" maxlength="12" onkeydown="return entertab(event,10)">
                             <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:24.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp2', ''); ?>" maxlength="6" onkeydown="return entertab(event,1)"></td>
                             <td><p align="right">Nacionalidad</p></td>

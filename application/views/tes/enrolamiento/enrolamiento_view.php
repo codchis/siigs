@@ -151,7 +151,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                             <td colspan="3"><div id="lnacimientoT" style="width:100%; margin-left:20px;"></div></td>
                             </tr>
                           <tr>
-                            <td><p align="right">CURP</p></td>
+                            <td><p align="right">Pre CURP</p></td>
                             <td ><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->curp;?></div></td>
                             <td><p align="right">Nacionalidad</p></td>
                             <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->nacionalidad;?></div></td>
