@@ -7,7 +7,7 @@
 $(document).ready(function(){
     $("a#detalles").fancybox({
         'width'         : '50%',
-        'height'        : '60%',				
+        'height'        : '75%',				
         'transitionIn'	: 'elastic',
         'transitionOut'	: 'elastic',
         'type'			: 'iframe',									

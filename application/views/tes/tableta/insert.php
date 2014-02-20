@@ -9,8 +9,7 @@ echo validation_errors();
 echo form_open(site_url().DIR_TES.'/tableta/insert/'); ?>
 <table>
     <tr><td>MAC: </td><td><?php echo form_input( array('name'=>'mac', 'maxlength'=>'20') ); ?> </td></tr>
-    <tr><td colspan="2"><button type="submit">Guardar <i class="icon-ok"></i></button>
-        <button type="button" name="cancelar" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta/'" >Cancelar <i class="icon-chevron-left"></i></button></td></tr>
+    <tr><td colspan="2"><button type="submit">Guardar <i class="icon-hdd"></i></button>
+        <button type="button" name="cancelar" onclick="location.href='<?php echo site_url().DIR_TES; ?>/tableta/'" >Cancelar <i class="icon-arrow-left"></i></button></td></tr>
 </table>
 </form>
-<a href="<?php echo site_url().DIR_TES; ?>/tableta">Regresar al listado <i class="icon-arrow-left"></i></a>

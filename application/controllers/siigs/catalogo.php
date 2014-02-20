@@ -725,7 +725,7 @@ class Catalogo extends CI_Controller {
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 
-//                $this->template->write('ajustaAncho',1,true);
+        $this->template->write('ajustaAncho',1,true);
 		$this->template->write_view('content',DIR_SIIGS.'/catalogo/update', $data);
 		$this->template->render();
 		

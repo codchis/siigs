@@ -107,7 +107,7 @@ $(document).ready(function(){
                     <td>'.htmlentities($fila->entorno).'</td>
                     <td>'.htmlentities($fila->controlador).'</td>
                     <td>'.htmlentities($fila->accion).'</td>
-                    <td><a id="detalles" href="'.site_url().DIR_SIIGS.'/errorlog/view/'.$fila->id.'" class="btn btn-small btn-primary">Detalles <i class="icon-eye-open"></i></a></td>
+                    <td><a id="detalles" href="'.site_url().DIR_SIIGS.'/errorlog/view/'.$fila->id.'" class="btn btn-small btn-primary btn-icon">Detalles <i class="icon-eye-open"></i></a></td>
                 </tr>';
             }
         } else {

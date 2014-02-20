@@ -63,8 +63,8 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
     <legend><strong>Opciones de filtrado</strong></legend>
  		<?php echo form_open(DIR_SIIGS.'/controlador/index/'.$pag, array('name'=>'form_filter_controlador', 'id'=>'form_filter_controlador')); ?>
 	         Entorno:
-	        <?php  echo  form_dropdown('id_entorno', $entornos, $id_entorno); ?>
-                 <button type="submit" name="btnFiltrar" id="btnFiltrar" onclick="return buscar();" class="btn btn-primary">Buscar<i class="icon-search"></i></button>
+	        <?php  echo  form_dropdown('id_entorno', $entornos, $id_entorno, 'style="margin-bottom: 0px !important;"'); ?>
+                 <button type="submit" name="btnFiltrar" id="btnFiltrar" onclick="return buscar();" class="btn btn-primary">Filtrar <i class="icon-search"></i></button>
    		</form>
 </fieldset>
 <div class="table table-striped">

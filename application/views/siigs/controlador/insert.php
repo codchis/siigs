@@ -34,8 +34,8 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	</tr>
 	<tr>
 		<td colspan=2>
-		<input type="submit" name="submit" value="Guardar" class="btn btn-primary"  onclick="return validarFormulario('frm_insert')"/>
-                <input type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/controlador/'" class="btn btn-primary" />
+            <button type="submit" name="submit"   value="Guardar"  class="btn btn-primary" onclick="return validarFormulario('frm_insert')">Guardar <i class="icon-hdd"></i></button>
+            <button type="button" name="cancelar" value="Cancelar" class="btn btn-primary" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/controlador/'">Cancelar <i class=" icon-arrow-left"></i></button>
 		<td>
 	</tr>
 </table>
