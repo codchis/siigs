@@ -304,10 +304,10 @@ class Reporteador_model extends CI_Model {
         $result = array();
 		$sqlIdsConTutor = "SELECT p.id,p.apellido_paterno,p.apellido_materno,p.nombre,p.calle_domicilio as domicilio,p.curp,p.fecha_nacimiento,p.sexo,'' AS edadEmb,
 			'' AS esquema,t.apellido_paterno AS apellido_paterno_tutor,t.apellido_materno AS apellido_materno_tutor,
-			t.nombre AS nombre_tutor,t.curp AS curp_tutor,t.sexo AS sexo_tutor
+			t.nombre AS nombre_tutor,t.curp AS curp_tutor,t.sexo AS sexo_tutor, m.descripcion as parto_multiple
 			FROM cns_persona p 
 			INNER JOIN cns_persona_x_tutor pt ON p.id=pt.id_persona
-			INNER JOIN cns_tutor t ON t.id=pt.id_tutor WHERE p.activo=1";
+			INNER JOIN cns_tutor t ON t.id=pt.id_tutor INNER JOIN cns_parto_multiple m ON p.id_parto_multiple=m.id WHERE p.activo=1";
 		switch($nivel){
 			case 5:
 				$sqlIdsConTutor .= " AND p.id_asu_um_tratante=".$id;
@@ -351,7 +351,7 @@ class Reporteador_model extends CI_Model {
 		$queryVacunasEsquemaCompleto = $this->db->query($sqlVacunasEsquemaCompleto);
 		$resultVacunasEsquemaCompleto = $queryVacunasEsquemaCompleto->result();
 		$th = '<tr><th>Apellido Paterno</th><th>Apellido Materno</th><th>Nombre</th>
-						<th>Domicilio</th><th>CURP</th><th>Fecha Nac</th><th>Sexo</th>';
+						<th>Domicilio</th><th>CURP</th><th>Fecha Nac</th><th>Parto Múltiple</th><th>Sexo</th>';
 		foreach($resultVacunasEsquemaCompleto as $vacuna){
 			$th.= '<th><div><span>'.$vacuna->descripcion.'</span></div></th>';
 		}
@@ -370,6 +370,7 @@ class Reporteador_model extends CI_Model {
             $objReporte->domicilio = $IdConTutor->domicilio;
             $objReporte->curp = $IdConTutor->curp;
             $objReporte->fecha_nacimiento = $IdConTutor->fecha_nacimiento;
+            $objReporte->parto_multiple = $IdConTutor->parto_multiple;
             $objReporte->sexo = $IdConTutor->sexo;
             foreach ($resultVacunasEsquemaCompleto as $vacuna){
             	$objReporte->vacunas[$vacuna->id] = in_array($vacuna->id, $resultVacunasAplicadas) ? VACUNA_APLICADA : VACUNA_NOAPLICADA;
@@ -383,6 +384,7 @@ class Reporteador_model extends CI_Model {
             $objReporte->domicilio = '';
             $objReporte->curp = $IdConTutor->curp_tutor;
             $objReporte->fecha_nacimiento = '';
+            $objReporte->parto_multiple = '';
             $objReporte->sexo = $IdConTutor->sexo_tutor;
             foreach ($resultVacunasEsquemaCompleto as $vacuna){
             	$objReporte->vacunas[$vacuna->id] = VACUNA_NOAPLICADA;

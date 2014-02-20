@@ -45,6 +45,12 @@ class Reporte_censo_nominal extends CI_Model
      * @var    varchar
      */
     public $fecha_nacimiento;
+
+    /**
+     * @access public
+     * @var    varchar
+     */
+    public $parto_multiple;
     
     /**
      * @access public
