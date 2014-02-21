@@ -230,7 +230,7 @@
                             <td><p align="right">Apellido Materno</p></td>
                             <td><input name="materno" type="text" title='requiere' required id="materno" style="width:80%; margin-left:10px;" onkeypress="return validar(event,'L',this.id)" value="<?php echo set_value('materno', ''); ?>" maxlength="20" onkeydown="return entertab(event,7)"></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" title='requiere' required value="<?php echo  strtotime(set_value('fnacimiento', '')); ?>"  onkeydown="return entertab(event,11)"></td>
+                            <td><input name="fnacimiento" type="text" id="fnacimiento" style="width:65%; margin-left:10px;" title='requiere' required value="<?php echo strtotime(set_value('fnacimiento', '')); ?>" onkeydown="return entertab(event,11)"></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
