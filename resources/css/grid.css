@@ -27,7 +27,7 @@ width:100%;
 -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
 -o-border-radius: 0px;
--ms-border-radius: 3px;
+-ms-border-radius: 0px;
     border-radius: 0px;
     border: 0px solid #CCC;
 padding-top:4px;
@@ -38,20 +38,13 @@ width:100%;
 
 .row2
 {
-background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #F3F3F3), color-stop(100%, #FFF));
-    background-image: -webkit-linear-gradient(bottom, #F3F3F3 0%, #FFF 100%);
-    background-image: -moz-linear-gradient(bottom, #F3F3F3 0%, #FFF 100%);
-    background-image: -o-linear-gradient(bottom, #F3F3F3 0%, #FFF 100%);
-    background-image: -ms-linear-gradient(bottom, #F3F3F3 0%, #FFF 100%);
-    background-image: linear-gradient(bottom, #F3F3F3 0%, #FFF 100%);
-filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#F3F3F3',EndColorStr='#ffffff');
-
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
--o-border-radius: 3px;
--ms-border-radius: 3px;
-    border-radius: 3px;
-    border: 1px solid #CCC;
+background-color:#f2f2f2;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+-o-border-radius: 0px;
+-ms-border-radius: 0px;
+    border-radius: 0px;
+    border: 0px solid #CCC;
 padding-top:4px;
 padding-bottom:4px;
 height:50px;
@@ -74,11 +67,11 @@ width:100%;
 	filter:progid:DXImageTrans.Microsoft.Gradient(GradientType=0,StartColorStr='#FBB717',EndColorStr='#FFFA8A');
 
 
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-	-o-border-radius: 3px;
-	-ms-border-radius: 3px;
-   	border-radius: 4px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+	-o-border-radius: 0px;
+	-ms-border-radius: 0px;
+   	border-radius: 0px;
     border: 1px solid #DF7000;
     text-shadow: 0px 1px 1px #999999;
 	height:30px;
@@ -95,11 +88,11 @@ width:100%;
     background-image: linear-gradient(bottom, #CCC 0%, #FFF 100%);
 	filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#ffffff',EndColorStr='#cccccc');
 
-	-webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-	-o-border-radius: 3px;
-	-ms-border-radius: 3px;
-    border-radius: 3px;
+	-webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+	-o-border-radius: 0px;
+	-ms-border-radius: 0px;
+    border-radius: 0px;
     border: 1px solid #CCC;
 	padding-top:4px;
 	padding-bottom:4px;
@@ -117,11 +110,11 @@ width:100%;
     background-image: linear-gradient(bottom, #F3F3F3 0%, #FFF 100%);
 	filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#F3F3F3',EndColorStr='#ffffff');
 
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-	-o-border-radius: 3px;
-	-ms-border-radius: 3px;
-    border-radius: 3px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+	-o-border-radius: 0px;
+	-ms-border-radius: 0px;
+    border-radius: 0px;
     border: 1px solid #CCC;
 	padding-top:4px;
 	padding-bottom:4px;

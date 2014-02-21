@@ -6323,17 +6323,21 @@ button.close {
 .btn-soporte {
     background: #e82128;
     text-shadow: rgba(0,0,0,.4) 0 0px 0;
-   color: white;
+    color: white !important;
 }
    
-.btn-soporte:hover {
+.btn-soporte:hover, .btn-bienvenida:hover{
    background: #e82128;
-   color: #edd1d3;
+   color: #edd1d3 !important;
 }
 
 .btn-bienvenida {
-   width:220px;
+   width:185px;
    background: #e82128;
    text-shadow: rgba(0,0,0,.4) 0 0px 0;
    color: white;
-   }
+}
+
+a.btn-bienvenida {
+   color: white !important;
+}

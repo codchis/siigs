@@ -174,7 +174,10 @@ $(document).ready(function(){
 </fieldset>
 <hr />
 <div id="contenido_lote">
-<?php for($i = 0; $i < $count; $i++){?>
+<?php
+if($count<=0)
+echo "<div class='error'>No se encontro resultado</div>";
+for($i = 0; $i < $count; $i++){?>
 <div id='popimpr<?php echo $i?>'  >
 <table border="0" width="100%" id="tabla<?php echo $i?>" class="table table-striped  ">
 <thead>

@@ -124,7 +124,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                   
                   <!-- Datos basicos -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Datos Basicos</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/dbasicos.png"/>Datos Basicos</div>
                       <div class="AccordionPanelContent" >
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
@@ -156,6 +156,12 @@ function vacunacion(id,tiene,fecha,prioridad)
                             <td><p align="right">Nacionalidad</p></td>
                             <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->nacionalidad;?></div></td>
                           </tr>
+                          <tr>
+                            <td><p align="right">Parto Multiple</p></td>
+                            <td ><div style="width:100%; margin-left:20px; margin-top:-5px" id="parto"><?php  echo $enrolado->parto;?></div></td>
+                            <td><p align="right">&nbsp;</p></td>
+                            <td>&nbsp;</td>
+                          </tr>
                         </table>
                         <br />
                       
@@ -165,7 +171,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                     <!-- Tutor -->
                   
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Datos de la Madre o Tutor</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/madre.png"/>Datos de la Madre o Tutor</div>
                       <div class="AccordionPanelContent" >
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
@@ -178,7 +184,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
                             <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->paternoT;?></div></td>
-                            <td><p align="right">CURP</p></td>
+                            <td><p align="right">Pre CURP</p></td>
                             <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->curpT;?></div></td>
                           </tr>
                           <tr>
@@ -201,7 +207,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                     
                     <!-- Direccion  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Domicilio</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/domicilio.png"/>Domicilio</div>
                       <div class="AccordionPanelContent">
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
@@ -256,7 +262,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                     
                     <!-- Tipo de Beneficiario:  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Derechohabiencia</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/derecho.png"/>Derechohabiencia</div>
                       <div class="AccordionPanelContent"><br />
                       	
                         	<div style="width:100%; margin-left:20px; margin-top:-5px"><?php  
@@ -279,7 +285,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                     
                     <!--  Unidad Medica Tratante -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Unidad Medica de Responsabilidad</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/unidadm.png"/>Unidad Medica de Responsabilidad</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                       
@@ -297,7 +303,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                     
                     <!--  Registro civil -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Registro Civil</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/rcivil.png"/>Registro Civil</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
@@ -319,7 +325,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                     
                     <!-- alergias y reacciones:  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Historial de Alergias y Reacciones Febriles</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/halergias.png"/>Alergias y Antecedentes Heredero Familiar de Riesgo</div>
                       <div class="AccordionPanelContent"><br />
                       	
                         	<div style="width:100%; margin-left:20px; margin-top:-5px"><?php  
@@ -343,9 +349,21 @@ function vacunacion(id,tiene,fecha,prioridad)
                     
                     <!-- vacunacion  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Vacunación</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/vacunacion.png"/>Control de Vacunación</div>
                       <div class="AccordionPanelContent" >
-                      <h2 style="margin-left:10px;">Numero de días: <?php echo $vacunacion[0]->dias ?></h2>
+                      <h2 style="margin-left:10px;">
+                      <?php if(isset($vacunacion)){?>
+                      <table width="100%"><tr>
+                      <th width="20%" align="left">Numero de días: </th><td width="13%" align="left"><?php echo $vacunacion[0]->dias ?></td>
+                      <th width="20%" align="left">Numero de Meses: </th><td width="13%" align="left">
+					  <?php
+					  	$datetime1 = date_create($enrolado->fecha_nacimiento);
+						$datetime2 = date_create(date("Y-m-d"));
+						$interval  = date_diff($datetime1, $datetime2);
+					  	echo round(($vacunacion[0]->dias/365.25)*12);
+					  ?></td>
+                      <th width="20%" align="left">Numero de Años: </th><td width="14%"><?php echo $interval->format('%y'); ?></td>
+                      </tr></table><?php }?></h2>
                        <table width="100%" border="0" class="table vacuna" style="margin-left:10px" cellpadding="0" cellspacing="0">
                            <thead bgcolor="#e8eced">
                               <tr>
@@ -353,16 +371,17 @@ function vacunacion(id,tiene,fecha,prioridad)
                                 <th colspan="6" scope="col" style="color:#333; font-size:18px;">Dosis</th>
                               </tr>
                               <tr style="color:#4d4d4d; font-size:14px;">
-                                <th width="8%" scope="col">U</th>
-                                <th width="8%" scope="col">R</th>
+                                <th width="8%" scope="col">U</th>                             
                                 <th width="8%" scope="col">1a</th>
                                 <th width="8%" scope="col">2a</th>
                                 <th width="8%" scope="col">3a</th>
                                 <th width="8%" scope="col">4a</th>
+                                <th width="8%" scope="col">R</th>
                               </tr>
                            </thead>
                            <?php 
 							$tem=0; $i=0;
+							if(isset($vacunacion))
 						   foreach($vacunacion as $vacuna)
 						   {
 							   $vc=$vacuna->descripcion." ";
@@ -373,12 +392,12 @@ function vacunacion(id,tiene,fecha,prioridad)
 							 echo " 
                            	  <tr>
                            		<td ><div id='var0$i' style='padding-left:14px; background-color:".@$color[$a]."; color:white;font-size:16px;'>".str_replace('Primera','',$vc)."</div></td>
-                                <td ><div id='var1$i' align='center'></div></td>
-                                <td ><div id='var2$i' align='center'></div></td>
+                                <td ><div id='var1$i' align='center'></div></td>                                
                                 <td ><div id='var3$i' align='center'></div></td>
                                 <td ><div id='var4$i' align='center'></div></td>
                                 <td ><div id='var5$i' align='center'></div></td>
                                 <td ><div id='var6$i' align='center'></div></td>
+								<td ><div id='var2$i' align='center'></div></td>
                            	  </tr>";
 							}
 							$tem=stripos($vc," ");
@@ -433,7 +452,7 @@ $i++;
                     
                     <!-- ira  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de IRA</div>
+                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/iras.png"/></span>Control de IRA</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:100%">
                         <table width="100%">
@@ -463,7 +482,7 @@ $i++;
                     
                     <!-- eda  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de EDA</div>
+                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/edas.png"/></span>Control de EDA</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:100%">
                         <table width="100%">
@@ -491,7 +510,7 @@ $i++;
                     
                     <!-- consulta  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Consulta</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consulta</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:100%">
                         <table width="100%">
@@ -519,7 +538,7 @@ $i++;
                     
                     <!-- accion nutricional  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Acción Nutricional</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/nutricion.png"/>Control de Acción Nutricional</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table width="100%">
@@ -544,7 +563,7 @@ $i++;
                     </div>
                     <!-- nutricion PESO -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control Nutricional (PESO)</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/peso.png"/>Control Nutricional (PESO)</div>
                       <div class="AccordionPanelContent"><br />
                       <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/graph/graph_init/Grafica/Nutrición PESO/<?php  echo urlencode(($control_nutricional));?>/<?php  echo urlencode(($label));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
                       </div>
@@ -552,7 +571,7 @@ $i++;
                     
                     <!-- nutricion ALTURA -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control Nutricional (ALTURA)</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/altura.png"/>Control Nutricional (ALTURA)</div>
                       <div class="AccordionPanelContent"><br />
                       <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/graph/graph_init/Grafica/Nutrición Altura/<?php  echo urlencode(($control_nutricional_altura));?>/<?php  echo urlencode(($label_altura));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
                       </div>

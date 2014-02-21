@@ -69,6 +69,10 @@ function getArray($array,$id,$nu)
 		$ha="28%";$hb="15%";
 		$xb="70%";
 	}
+	if($id=="vacuna")
+	{
+		$xa="98%"; $xb="78%"; $ha="40%"; $hb="30%";
+	}
 	$i=0; $grid="";
 	foreach($array as $dato)
 	{
@@ -79,12 +83,16 @@ function getArray($array,$id,$nu)
 			$fecha=$_POST["f$id"][$i-1];
 			if($id=="ira"||$id=="eda"||$id=="consulta")
 			$y=$_POST["tratamiento_des$id"][$i-1];
+			if($id=="vacuna")
+			$f=$_POST["ffolio$id"][$i-1];
 		}
 		else 
 		{
 			$fecha=$dato["fecha"];
 			if($id=="ira"||$id=="eda"||$id=="consulta")
 			$y=$dato["id_tratamiento"];
+			if($id=="vacuna")
+			$f=$dato["codigo_barras"];
 		}
 			
 		if(isset($_POST[$id][$i-1]))
@@ -110,6 +118,10 @@ function getArray($array,$id,$nu)
 						num=this.id.replace("/\D/g","");
 						$("#tratamiento_des'.$id.$num.'").load("/tes/enrolamiento/tratamiento_select/tipo/"+encodeURIComponent(this.value)+"/0/descripcion/");
 					});';
+		}
+		if($id=="vacuna")
+		{
+			$mas='<th width="20%" align="left"><input type="text" name="ffolio'.$id.'[]" id="ffolio'.$id.$num.'" style="width:87%;" value="'.$f.'">';
 		}
 		$grid.= '<span id="r'.$id.$num.'" ><div class="'.$clase.'" >
 				<table width="100%" >

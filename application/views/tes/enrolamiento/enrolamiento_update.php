@@ -37,7 +37,6 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
     <script>
 	$(document).ready(function()
 	{
-		$("#nombre").focus();
 		$.fancybox.showActivity();
 		$("#fecha_edo").click(function(e) {
             if(this.checked)
@@ -256,6 +255,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		$("#tbenef").load("/tes/enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afili;?>");		
 		$("#sangre").load("/tes/enrolamiento/catalog_select/tipo_sanguineo/<?php echo $enrolado->sangre; ?>");	
 		$("#nacionalidad").load("/tes/enrolamiento/catalog_select/nacionalidad/<?php echo $enrolado->nacionalidadid; ?>/descripcion");
+		$("#parto").load("/tes/enrolamiento/catalog_select/parto_multiple/<?php echo $enrolado->id_parto_multiple; ?>/id");
 		$("#compania").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraid; ?>");
 		
 		$("#companiaT").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo $enrolado->operadoraTid; ?>", function() {
@@ -302,7 +302,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                   <!-- Datos basicos -->
                   <?php if($cn_basico){ ?>
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Datos Basicos</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/dbasicos.png"/>Datos Basicos</div>
                       <div class="AccordionPanelContent" >
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
@@ -355,6 +355,13 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             </select></td>
                           </tr>
                           <tr>
+                            <td><p align="right">Parto Multiple</p></td>
+                            <td ><select name="parto" id="parto" style="width:85%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,1)">
+                            </select></td>
+                            <td><p align="right">&nbsp;</p></td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr>
                             <td>&nbsp;</td>
                             <td colspan="3" ><span id="nocurp" style="letter-spacing:1px; width:100%;margin-left:10px;"></span></td>
                           </tr>
@@ -397,6 +404,12 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td><p align="right">Nacionalidad</p></td>
                             <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->nacionalidad;?></div></td>
                           </tr>
+                          <tr>
+                            <td><p align="right">Parto Multiple</p></td>
+                            <td ><div style="width:100%; margin-left:20px; margin-top:-5px" id="parto"><?php  echo $enrolado->parto;?></div></td>
+                            <td><p align="right">&nbsp;</p></td>
+                            <td>&nbsp;</td>
+                          </tr>
                         </table>
                         <br />
                       
@@ -407,7 +420,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!-- Tutor -->
                   	<?php if($cn_tutor){ ?>
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Datos de la Madre o Tutor</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/madre.png"/>Datos de la Madre o Tutor</div>
                       <div class="AccordionPanelContent" >
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
@@ -431,7 +444,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             </td>
                           </tr>
                           <tr>
-                            <td width="19%"><p align="right">CURP</p></td>
+                            <td width="19%"><p align="right">Pre CURP</p></td>
                             <td width="31%"><input name="curpT" type="text" id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo $enrolado->curpT; ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)"/></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
@@ -480,7 +493,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!-- Direccion  -->
                     <?php if($cn_direccion){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Domicilio</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/domicilio.png"/>Domicilio</div>
                       <div class="AccordionPanelContent">
                       <div id="compartetutor" style="width:94.7%" > </div>
                         <div id="ladireccion">
@@ -547,7 +560,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!-- Tipo de Beneficiario:  -->
                     <?php if($cn_beneficiario){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Derechohabiencia</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/derecho.png"/>Derechohabiencia</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                        	<div id="tbenef" style="margin-left:10px;">
@@ -564,7 +577,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!--  Unidad Medica Tratante -->
                     <?php if($cn_umt){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Unidad Medica de Responsabilidad</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/unidadm.png"/>Unidad Medica de Responsabilidad</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                       
@@ -587,7 +600,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!--  Registro civil -->
                     <?php if($cn_regcivil){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Registro Civil</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/rcivil.png"/>Registro Civil</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
@@ -616,7 +629,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!-- alergias y reacciones:  -->
                     <?php if($cn_alergia){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Alergias y Antecedentes Familiares de Riesgo</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/halergias.png"/>Alergias y Antecedentes Heredero Familiar de Riesgo</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         	<div id="alergias" style="margin-left:10px;">
@@ -631,7 +644,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                   <!-- vacunacion  -->
                     <?php if($cn_vacuna){ ?>
                   <div class="AccordionPanel">
-                    <div class="AccordionPanelTab">Control de Vacunación</div>
+                    <div class="AccordionPanelTab"><img src="/resources/images/vacunacion.png"/>Control de Vacunación</div>
                       <div class="AccordionPanelContent"><br />                      
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -641,8 +654,9 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">Vacuna</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="40%" align="left">Vacuna</th>
+                                        <th width="30%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Folio</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -664,7 +678,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!-- ira  -->
                     <?php if($cn_ira){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de IRA</div>
+                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/iras.png"/></span>Control de IRA</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -699,7 +713,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!-- eda  -->
                     <?php if($cn_eda){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de EDA</div>
+                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/edas.png"/></span>Control de EDA</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -734,7 +748,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!-- consulta  -->
                     <?php if($cn_consulta){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Consulta</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consulta</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -773,7 +787,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                   <!-- nutricion  -->
                     <?php if($cn_nutricion){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control Nutricional</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/nutricion.png"/>Control Nutricional</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -847,7 +861,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     <!-- accion nutricional  -->
                     <?php if($cn_accion){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Acción Nutricional</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/nutricionales.png"/>Control de Acción Nutricional</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>

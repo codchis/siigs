@@ -165,6 +165,7 @@
 		$("#tbenef").load("/tes/enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afiliaciones;?>");	
 		$("#sangre").load("/tes/enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', ''); ?>");	
 		$("#nacionalidad").load("/tes/enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', '142'); ?>/descripcion/descripcion");
+		$("#parto").load("/tes/enrolamiento/catalog_select/parto_multiple/<?php echo set_value('parto', '1'); ?>/id/id");
 		$("#compania").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo set_value('compania', ''); ?>");
 		$("#companiaT").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo set_value('companiaT', ''); ?>");
 		
@@ -199,7 +200,7 @@
                   
                   <!-- Datos basicos -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Datos Basicos</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/dbasicos.png"/>Datos Basicos</div>
                       <div class="AccordionPanelContent" id="sBasico">
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
@@ -241,17 +242,23 @@
                           <tr>
                             <td><p align="right">Pre CURP</p></td>
                             <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp', ''); ?>" maxlength="12" onkeydown="return entertab(event,10)">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:24.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp2', ''); ?>" maxlength="6" onkeydown="return entertab(event,1)"></td>
+                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:24.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp2', ''); ?>" maxlength="6" onkeydown="return entertab(event,12)"></td>
                             <td><p align="right">Nacionalidad</p></td>
-                            <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,12)">
+                            <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,13)">
                             </select></td>
+                          </tr>
+                          <tr>
+                            <td><p align="right">Parto Multiple</p></td>
+                            <td ><select name="parto" id="parto" style="width:85%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,1)">
+                            </select></td>
+                            <td><p align="right">&nbsp;</p></td>
+                            <td>&nbsp;</td>
                           </tr>
                           <tr>
                             <td>&nbsp;</td>
                             <td colspan="3" ><span id="nocurp" style="letter-spacing:1px; width:100%;margin-left:10px;"></span></td>
                           </tr>
                         </table>
-                        <br />
                       
                       </div>
                     </div>
@@ -259,7 +266,7 @@
                     <!-- Tutor -->
                   
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Datos de la Madre o Tutor</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/madre.png"/>Datos de la Madre o Tutor</div>
                       <div class="AccordionPanelContent" id="sTutor">
                       
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
@@ -279,7 +286,7 @@
                             </td>
                           </tr>
                           <tr>
-                            <td width="19%"><p align="right">CURP</p></td>
+                            <td width="19%"><p align="right">Pre CURP</p></td>
                             <td width="31%"><input name="curpT" type="text"  id="curpT" style="width:80%; margin-left:10px;"  value="<?php echo set_value('curpT', ''); ?>" maxlength="18" onkeypress="return validar(event,'NL',this.id)" onkeydown="return entertab(event,18)" /></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%">
@@ -327,7 +334,7 @@
                     
                     <!-- Direccion  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Domicilio</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/domicilio.png"/>Domicilio</div>
                       <div class="AccordionPanelContent">
                       	<div id="compartetutor" style="width:94.7%" > </div>
                         <div id="ladireccion" >
@@ -393,7 +400,7 @@
                     
                     <!-- Tipo de Beneficiario:  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Derechohabiencia</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/derecho.png"/>Derechohabiencia</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                        	<div id="tbenef" style="margin-left:10px;">
@@ -407,7 +414,7 @@
                     
                     <!--  Unidad Medica Tratante -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Unidad Medica de Responsabilidad</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/unidadm.png"/>Unidad Medica de Responsabilidad</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                       
@@ -427,7 +434,7 @@
                     
                     <!--  Registro civil -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Registro Civil</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/rcivil.png"/>Registro Civil</div>
                       <div class="AccordionPanelContent" >
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
@@ -454,7 +461,7 @@
                     
                     <!-- alergias y reacciones:  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Alergias y Antecedentes Familiares de Riesgo</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/halergias.png"/>Alergias y Antecedentes Heredero Familiar de Riesgo</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         	<div id="alergias" style="margin-left:10px;">
@@ -467,7 +474,7 @@
                     
                     <!-- vacunacion  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Vacunación</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/vacunacion.png"/>Control de Vacunación</div>
                       <div class="AccordionPanelContent"><br />                      
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -477,8 +484,9 @@
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="50%" align="left">Vacuna</th>
-                                        <th width="40%" align="left">Fecha</th>
+                                        <th width="40%" align="left">Vacuna</th>
+                                        <th width="30%" align="left">Fecha</th>
+                                        <th width="20%" align="left">Folio</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -504,7 +512,7 @@
                     
                     <!-- ira  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de IRA</div>
+                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/iras.png"/></span>Control de IRA</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -545,7 +553,7 @@
                     
                     <!-- eda  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de EDA</div>
+                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/edas.png"/></span>Control de EDA</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -584,7 +592,7 @@
                     
                     <!-- consulta  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Consulta</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consulta</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -624,7 +632,7 @@
                     
                     <!-- nutricion  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control Nutricional</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/nutricion.png"/>Control Nutricional</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -692,7 +700,7 @@
                     
                     <!-- accion nutricional  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab">Control de Acción Nutricional</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/nutricionales.png"/>Control de Acción Nutricional</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>

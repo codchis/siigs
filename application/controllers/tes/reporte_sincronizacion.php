@@ -199,17 +199,17 @@ class Reporte_sincronizacion extends CI_Controller
 			$local=$this->input->post('localidades');
 			$ums  =$this->input->post('ums');
 			
-			if($ums!="")
+			if($ums!=""&&$ums!='0')
 				$unidad = "AND id_asu_um='$ums'";
 				
-			else if($local!="")
+			else if($local!=""&&$ums!='0')
 				$unidad = "AND id_asu_um IN (
 									SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$local.")"; // ums por loc
-			else if($munic!="")
+			else if($munic!=""&&$ums!='0')
 				$unidad = "AND id_asu_um IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 								SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$munic.") )"; // locs por mpio
-			else if($jurid!="")
+			else if($jurid!=""&&$ums!='0')
 				$unidad = "AND id_asu_um IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (

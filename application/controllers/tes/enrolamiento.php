@@ -948,6 +948,7 @@ SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia
 		$this->Enrolamiento_model->setsangre($this->input->post('sangre'));
 		$this->Enrolamiento_model->setfnacimiento($this->input->post('fnacimiento'));
 		$this->Enrolamiento_model->settbeneficiario($this->input->post('tbeneficiario'));
+		$this->Enrolamiento_model->setparto($this->input->post('parto'));
 		
 		$this->Enrolamiento_model->setidtutor($this->input->post('idtutor'));				
 		$this->Enrolamiento_model->setnombreT($this->input->post('nombreT'));
@@ -981,6 +982,7 @@ SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia
 		
 		$this->Enrolamiento_model->setvacuna($this->input->post('vacuna'));
 		$this->Enrolamiento_model->setfvacuna($this->input->post('fvacuna'));
+		$this->Enrolamiento_model->setcodigo_barras($this->input->post('ffoliovacuna'));
 		
 		$this->Enrolamiento_model->setira($this->input->post('ira'));
 		$this->Enrolamiento_model->setfira($this->input->post('fira'));

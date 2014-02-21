@@ -254,10 +254,20 @@ function entertab(e,i) //convertir el enter en un tab
 { 
 	if (e.keyCode == 13||e.keyCode == 9) 
 	{		
-		if(i==12||i==25||i==38)
+		if(i==13||i==25||i==38)
 			Accordion1.openNextPanel();
+		if(i>14)
+			i=i+1;
 		if(document.getElementById("fechaT"))
-			i=i+2;	
+		{
+			if(i==101)
+			{
+				document.forms[0].elements[27].focus();
+				return false;
+			}
+			if(i>25)
+				i=i+2;	
+		}
 		document.forms[0].elements[i].focus();
 		return false;
 	}

@@ -33,6 +33,7 @@ class Enrolamiento_model extends CI_Model
 	private $sangre;
 	private $fnacimiento;
 	private $tbeneficiario;
+	private $parto;
 	
 	// civil
    	private $fechacivil;
@@ -62,6 +63,7 @@ class Enrolamiento_model extends CI_Model
 	// vacunacion
 	private $vacuna= array();
 	private $fvacuna= array();
+	private $codigo_barras= array();
 	
 	// IRA
 	private $ira= array();
@@ -211,6 +213,16 @@ class Enrolamiento_model extends CI_Model
 	public function settbeneficiario($value) 
 	{
 		$this->tbeneficiario = $value;
+	}
+	
+	public function getparto()
+	{
+	    return $this->parto;
+	}
+
+	public function setparto($value) 
+	{
+		$this->parto = $value;
 	}
 	//tutor
 	public function getidtutor()
@@ -460,6 +472,16 @@ class Enrolamiento_model extends CI_Model
 	public function setfvacuna($value) 
 	{
 		$this->fvacuna = $value;
+	}
+	
+	public function getcodigo_barras()
+	{
+	    return $this->codigo_barras;
+	}
+
+	public function setcodigo_barras($value) 
+	{
+		$this->codigo_barras = $value;
 	}
 	
 	public function getira()
@@ -737,6 +759,7 @@ class Enrolamiento_model extends CI_Model
 			'sexo' => $this->sexo,
 			'id_tipo_sanguineo' => $this->sangre,
 			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)),
+			'id_parto_multiple' => $this->parto,
 			
 			// civil
 			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
@@ -857,7 +880,7 @@ class Enrolamiento_model extends CI_Model
 					'id_vacuna' => $this->vacuna[$i],
 					'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
 					'id_asu_um' => $id_asu_um,
-					
+					'codigo_barras' => $this->codigo_barras[$i],
 				);
 				if($this->vacuna[$i]!="")
 				{
@@ -1100,6 +1123,7 @@ class Enrolamiento_model extends CI_Model
 			'curp' => $this->curp,
 			'sexo' => $this->sexo,
 			'id_tipo_sanguineo' => $this->sangre,
+			'id_parto_multiple' => $this->parto,
 			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)));
 		$this->db->where('id' , $this->id);
 		$result = $this->db->update('cns_persona', $data); 
@@ -1317,7 +1341,7 @@ class Enrolamiento_model extends CI_Model
 				'id_vacuna' => $this->vacuna[$i],
 				'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
 				'id_asu_um' => $id_asu_um,
-				
+				'codigo_barras' => $this->codigo_barras[$i],
 			);
 			if($this->vacuna[$i]!="")
 			{
@@ -1608,8 +1632,7 @@ class Enrolamiento_model extends CI_Model
 			}
 			else if(count($cadena)==2)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('apellido_paterno', $cadena[1]);
+				$this->db->where("nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')");
 			}
 			else if (count($cadena)==3)
 			{
@@ -1619,7 +1642,8 @@ class Enrolamiento_model extends CI_Model
 			}
 			else if (count($cadena)==4)
 			{
-				$this->db->like('nombre', $cadena[0].' '.$cadena[1]);
+				$this->db->like('nombre', $cadena[0]);
+				$this->db->like('nombre', $cadena[1]);
 				$this->db->like('apellido_paterno', $cadena[2]);
 				$this->db->like('apellido_materno', $cadena[3]);
 			}
@@ -1664,8 +1688,7 @@ class Enrolamiento_model extends CI_Model
 			}
 			else if(count($cadena)==2)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('apellido_paterno', $cadena[1]);
+				$this->db->where("nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')");
 			}
 			else if (count($cadena)==3)
 			{
@@ -1675,7 +1698,8 @@ class Enrolamiento_model extends CI_Model
 			}
 			else if (count($cadena)==4)
 			{
-				$this->db->like('nombre', $cadena[0].' '.$cadena[1]);
+				$this->db->like('nombre', $cadena[0]);
+				$this->db->like('nombre', $cadena[1]);
 				$this->db->like('apellido_paterno', $cadena[2]);
 				$this->db->like('apellido_materno', $cadena[3]);
 			}
@@ -1703,7 +1727,7 @@ class Enrolamiento_model extends CI_Model
 	public function getById($id)
 	{
 		
-		$this->db->select('p.*,s.id as sangre, s.descripcion as tsangre, n.id as nacionalidadid, n.descripcion as nacionalidad, o.id as operadoraid,o.descripcion as operadora, t.id as idT, t.curp as curpT, t.nombre as nombreT, t.apellido_paterno as paternoT, t.apellido_materno as maternoT, t.sexo as sexoT, t.telefono as telefonoT, t.celular as celularT,o1.id as operadoraTid, o1.descripcion as operadoraT, rc.id_localidad_registro_civil');
+		$this->db->select('p.*,s.id as sangre, s.descripcion as tsangre, n.id as nacionalidadid, n.descripcion as nacionalidad, o.id as operadoraid,o.descripcion as operadora, t.id as idT, t.curp as curpT, t.nombre as nombreT, t.apellido_paterno as paternoT, t.apellido_materno as maternoT, t.sexo as sexoT, t.telefono as telefonoT, t.celular as celularT,o1.id as operadoraTid, o1.descripcion as operadoraT, rc.id_localidad_registro_civil, pm.descripcion as parto');
 		$this->db->from('cns_persona p');
 		$this->db->join('cns_nacionalidad n', 'n.id = p.id_nacionalidad','left');
 		$this->db->join('cns_tipo_sanguineo s', 's.id = p.id_tipo_sanguineo','left');
@@ -1712,6 +1736,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->join('cns_tutor t', 't.id = pt.id_tutor','left');
 		$this->db->join('cns_operadora_celular o1', 'o1.id = t.id_operadora_celular','left');
 		$this->db->join('cns_registro_civil rc', 'rc.id_persona = p.id','left');
+		$this->db->join('cns_parto_multiple pm', 'pm.id = p.id_parto_multiple','left');
 		$this->db->where('p.id', $id);
 		$query = $this->db->get();
 		if (!$query){
@@ -2060,7 +2085,7 @@ class Enrolamiento_model extends CI_Model
 	 */
 	public function get_cns_persona($array,$fecha="")
 	{
-		$this->db->select('id, curp, nombre, apellido_paterno, apellido_materno, sexo, id_tipo_sanguineo, fecha_nacimiento, id_asu_localidad_nacimiento, calle_domicilio, numero_domicilio, colonia_domicilio, referencia_domicilio, ageb, manzana, sector, id_asu_localidad_domicilio, cp_domicilio, telefono_domicilio, fecha_registro, id_asu_um_tratante, celular, ultima_actualizacion, id_nacionalidad, id_operadora_celular, ultima_sincronizacion');
+		$this->db->select('id, curp, nombre, apellido_paterno, apellido_materno, sexo, id_tipo_sanguineo, fecha_nacimiento, id_asu_localidad_nacimiento, calle_domicilio, numero_domicilio, colonia_domicilio, referencia_domicilio, ageb, manzana, sector, id_asu_localidad_domicilio, cp_domicilio, telefono_domicilio, fecha_registro, id_asu_um_tratante, celular, ultima_actualizacion, id_nacionalidad, id_operadora_celular, ultima_sincronizacion, id_parto_multiple');
 		$this->db->from("cns_persona");
 		if($fecha!="")
 		$this->db->where("ultima_actualizacion >=", $fecha);
