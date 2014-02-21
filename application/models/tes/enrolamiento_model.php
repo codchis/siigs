@@ -790,15 +790,17 @@ class Enrolamiento_model extends CI_Model
 		}
 		else
 		{
+			$this->setid($unico_id);
 			$dat = array(
 				'id_persona' => $this->id,
 				'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
 				'id_localidad_registro_civil' => $this->lugarcivil,
 			);
 			$res = $this->db->insert('cns_registro_civil', $dat);
+			
 			$companiaT=$this->companiaT;
 			if($companiaT=="")$companiaT=NULL;
-			$this->setid($unico_id);
+			
 			$unico_idtutor=md5(uniqid());
 			$data0 = array(
 					// tutor

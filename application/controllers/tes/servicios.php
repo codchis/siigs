@@ -292,6 +292,7 @@ class Servicios extends CI_Controller {
 				//************ fin usuario ************
 
 				//************ inicio asu ************
+				$inicio_asu=0;
 				if($si=="")
 				{
 					/*$count=$this->Enrolamiento_model->get_catalog_count("asu_arbol_segmentacion","id_raiz","1");
@@ -344,6 +345,7 @@ class Servicios extends CI_Controller {
 						ob_flush();
 						unset($cadena);
 						$cadena=array();
+						$inicio_asu=1;
 					}
 				}
 				else 
@@ -386,6 +388,7 @@ class Servicios extends CI_Controller {
 				}
 				if(count($array)>0)
 				{
+					if($inicio_asu==1)
 					echo ",";
 					$cadena["tes_notificacion"]= $array;
 					$micadena=json_encode($cadena);
