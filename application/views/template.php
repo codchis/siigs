@@ -46,7 +46,10 @@
 
                 if(tabla) {
                     ancho = $("#tabla").width() + $(".span1").width()*4;
-                    $("#bodyPagina").width(ancho+"px");
+                    
+                    if(ancho>1100) {
+                        $("#bodyPagina").width(ancho+"px");
+                    }
                 }
             });
         </script>';

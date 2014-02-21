@@ -286,8 +286,8 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<tr>
 		<td colspan=2>
 			<input type="hidden" name="llaves" id="llaves" value="1" />
-                        <button type="submit" name="submit" id="submit" class="btn btn-primary" onclick="return validarFormulario('enviardatos')">Guardar<i class="icon-hdd"></i></button>
-                        <button type="button" name="cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary">Cancelar<i class="icon-arrow-left"></i></button>
+                <button type="submit" name="submit" id="submit" class="btn btn-primary" onclick="return validarFormulario('enviardatos')">Guardar<i class="icon-hdd"></i></button>
+                <button type="button" name="cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/catalogo/'" class="btn btn-primary">Cancelar<i class="icon-arrow-left"></i></button>
 		<td>
 	</tr>
 </table>

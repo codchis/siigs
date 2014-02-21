@@ -52,8 +52,8 @@ if(is_object($registro)) {
         <tr><td>Controlador: </td><td><?php echo form_dropdown('controlador', $controladores, $registro->id_controlador); ?> </td></tr>
         <tr><td>Atributos: </td><td><?php echo form_input( array('name'=>'atributo', 'maxlength'=>'300', 'value'=>$registro->atributo) ); ?> </td></tr>
         <tr><td colspan="2">
-            <button type="submit" value="Actualizar" class="btn btn-primary" onclick="return validarFormulario('insertMenu')" >Actualizar <i class="icon-ok"></i></button>
-            <button type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/'" class="btn btn-primary" >Cancelar <i class="icon-chevron-left"></i></button>
+            <button type="submit" value="Actualizar" class="btn btn-primary" onclick="return validarFormulario('insertMenu')" >Actualizar <i class="icon-hdd"></i></button>
+            <button type="button" name="cancelar" value="Cancelar" onclick="location.href='<?php echo site_url().DIR_SIIGS; ?>/menu/'" class="btn btn-primary" >Cancelar <i class="icon-arrow-left"></i></button>
         </td></tr>
         </table>
         </div>
