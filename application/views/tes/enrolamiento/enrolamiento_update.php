@@ -269,6 +269,17 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		});	
 		<?php if($cn_tutor) {?>
 		$("#captura").click(function(e) {
+			$("#idtutor").val("");
+			$("#nombreT").val("");
+			$("#paternoT").val("");
+			$("#maternoT").val("");
+			$("#celularT").val("");
+			
+			$("#telefonoT").val("");
+			$("#companiaT").val("");
+			$("#sexoT_1").attr("checked",false);
+			$("#sexoT_2").attr("checked",false);
+			$("#buscarError").html('');
             habilitarTutor();
         });
 		$("#buscarCurp").click(function(e) {

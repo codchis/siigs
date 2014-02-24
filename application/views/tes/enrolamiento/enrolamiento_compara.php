@@ -217,31 +217,31 @@ if($enrolado)
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="21%"><p align="right">Nombre</p></td>
-                            <td width="29%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php echo $prod1[0];?></div></td>
+                            <td width="29%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php echo urldecode($prod1[0]);?></div></td>
                             <td width="25%"><p align="right">Sexo</p></td>
-                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod1[5];?></div></td>
+                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod1[5]);?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod1[1];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod1[1]);?></div></td>
                             <td><p align="right">Tipo de Sangre</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod1[6];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod1[6]);?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod1[2];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod1[2]);?></div></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo date("Y-m-d",strtotime($prod1[7]));?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo date("Y-m-d",strtotime(urldecode($prod1[7])));?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
-                            <td colspan="3"><div id="" style="width:100%; margin-left:20px;"><?php  echo $prod1[3];?></div></td>
+                            <td colspan="3"><div id="" style="width:100%; margin-left:20px;"><?php  echo urldecode($prod1[3]);?></div></td>
                             </tr>
                           <tr>
                             <td><p align="right">CURP</p></td>
-                            <td ><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod1[4];?></div></td>
+                            <td ><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod1[4]);?></div></td>
                             <td><p align="right">Nacionalidad</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod1[8];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod1[8]);?></div></td>
                           </tr>
                         </table>
                         <br />
@@ -258,27 +258,27 @@ if($enrolado)
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="21%"><p align="right">Nombre</p></td>
-                            <td width="29%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod2[1];?></div></td>
+                            <td width="29%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod2[1]);?></div></td>
                             <td width="25%"><p align="right">Sexo</p></td>
-                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod2[4];?></div></td>
+                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod2[4]);?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Paterno</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod2[2];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod2[2]);?></div></td>
                             <td><p align="right">CURP</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod2[0];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod2[0]);?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Apellido Materno</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod2[3];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod2[3]);?></div></td>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod2[5];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod2[5]);?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Celular</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod2[6];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod2[6]);?></div></td>
                             <td><p align="right">Compania Celular</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod2[7];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod2[7]);?></div></td>
                           </tr>
                         </table>
                         <br />
@@ -293,46 +293,46 @@ if($enrolado)
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Calle</p></td>
-                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[0];?></div></td>
+                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[0]);?></div></td>
                             <td width="25%"><p align="right">Número</p></td>
-                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[1];?></div></td>
+                            <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[1]);?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Referencia</p></td>
-                            <td colspan="3"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[2];?></div></td>
+                            <td colspan="3"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[2]);?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Colonia</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[3];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[3]);?></div></td>
                             <td><p align="right">CP</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[4];?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[4]);?></div></td>
                           </tr>
                           <tr>
                           <td colspan="4" width="100%">
                               <table width="89%" border="0">
                                 <tr>
                                   <td width="22%" align="right"><p>Ageb&nbsp;</p></td>
-                                  <td ><div style="width:75%; margin-left:15px; margin-top:-3px"><?php  echo $prod3[5];?></div></td>
+                                  <td ><div style="width:75%; margin-left:15px; margin-top:-3px"><?php  echo urldecode($prod3[5]);?></div></td>
                                   <td  align="right"><p>Sector</p></td>
-                                  <td ><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[6];?></div></td>
+                                  <td ><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[6]);?></div></td>
                                   <td  align="right"><p>Manzana</p></td>
-                                  <td width="16%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[7];?></div></td>
+                                  <td width="16%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[7]);?></div></td>
                                 </tr>
                               </table>
                           </td>
                           </tr>
                           <tr>
                             <td><p align="right">Localidad</p></td>
-                            <td colspan="3"><div id="localidadT" style="width:100%; margin-left:20px;"><?php  echo $prod3[8];?></div></tr>
+                            <td colspan="3"><div id="localidadT" style="width:100%; margin-left:20px;"><?php  echo urldecode($prod3[8]);?></div></tr>
                           <tr>
                             <td><p align="right">Telefono de Casa</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[9];?></div></td> 
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[9]);?></div></td> 
                             <td><p align="right">Celular</p></td> 
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[10];?></div></td>                          
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[10]);?></div></td>                          
                           </tr>
                           <tr>
                             <td><p align="right">Compania Celular</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $prod3[11];?></div></td> 
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo urldecode($prod3[11]);?></div></td> 
                             <td></td> 
                             <td></td>                          
                           </tr>

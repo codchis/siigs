@@ -860,10 +860,10 @@ function pie (container) {
 	,e=[<?php echo $graficas; ?>];
 	
 	(function h()
-	{
+	{console.log(f.type);
 		var a=e.shift()
 		,f=c[a];
-		if(f.type==="profile"||f.type==="test")
+		if(f.type==="profile"||f.type==="test"||f.type==="")
 			return;var g=$(s);
 		g.data("example",f)
 		,b.append(g)

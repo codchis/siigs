@@ -82,21 +82,21 @@ function habilitarTutor()
 
 function buscarTutor(buscar)
 {
-	buscar=buscar.replace(" ","");
-	buscar=buscar.replace("=","");
-	$("#idtutor").val("");
-	$("#nombreT").val("");
-	$("#paternoT").val("");
-	$("#maternoT").val("");
-	$("#celularT").val("");
-	
-	$("#telefonoT").val("");
-	$("#companiaT").val("");
-	$("#sexoT_1").attr("checked",false);
-	$("#sexoT_2").attr("checked",false);
+	if($("#buscar").val()!=""||$("#curpT").val()!="")
+	{
+		buscar=buscar.replace(" ","");
+		buscar=buscar.replace("=","");
+		/*$("#idtutor").val("");
+		$("#nombreT").val("");
+		$("#paternoT").val("");
+		$("#maternoT").val("");
+		$("#celularT").val("");
 		
-	if($("#buscar").val()!="")
-	$("#buscarError").html('');
+		$("#telefonoT").val("");
+		$("#companiaT").val("");
+		$("#sexoT_1").attr("checked",false);
+		$("#sexoT_2").attr("checked",false);
+		$("#buscarError").html('');*/
 	//var buscar = $("#buscar").val();
 	$.ajax({
 		url: "/tes/enrolamiento/data_tutor/"+buscar,
@@ -107,6 +107,7 @@ function buscarTutor(buscar)
 			//console.debug(obj);
 			if(obj[0]["error"]=="")
 			{
+				$("#buscarError").html('');
 				$("#idtutor").val(obj[0]["idtutor"]);
 				$("#nombreT").val(obj[0]["nombreT"]);
 				$("#paternoT").val(obj[0]["paternoT"]);
@@ -127,6 +128,12 @@ function buscarTutor(buscar)
 					if(respuesta.length>5)
 					{
 						var obj = jQuery.parseJSON( respuesta );
+						if(document.getElementById("hermanos"))
+						{
+							$("#hermanos").remove();	
+							$("#compartetutor").attr("class","");	
+						}
+						
 						var campo = '<span id="hermanos" >Hay personas con el mismo tutor: Si desea importar su misma dirección dele click<br>';
 						for(var c=0;c<obj.length; c++)
 							campo+='<input type="button"  value="'+obj[c]["nombre"]+'" onclick="importarDatos(\''+obj[c]["id_persona"]+'\')" style="padding:5px" class="btn btn-small btn-primary"/>&nbsp;&nbsp;'
@@ -149,6 +156,7 @@ function buscarTutor(buscar)
 			habilitarTutor();
 		}
 	});
+	}
 }
 function limpiar_direccion()
 {
@@ -349,15 +357,15 @@ function add(id,n,a)
 	var campo_mas=""; var ax="99%"; var by="80%"; var ha="50%",hb="40%";
 	if(id=="ira"||id=="eda"||id=="consulta")
 	{
-		campo_mas='<th width="20%"><select name="tratamiento'+id+'[]" id="tratamiento'+id+num+'" style="width:99%;"></select></th><th width="27%"><select name="tratamiento_des'+id+'[]" id="tratamiento_des'+id+num+'" style="width:99%;"></select></th>';
+		campo_mas='<th width="20%"><select name="tratamiento'+id+'[]" id="tratamiento'+id+num+'" style="width:99%;" onkeydown="return entertab(event,0)"></select></th><th width="27%"><select name="tratamiento_des'+id+'[]" id="tratamiento_des'+id+num+'" style="width:99%;"></select></th>';
 		ax="99%"; by="70%"; ha="28%"; hb="15%";
 	}
 	if(id=="vacuna")	
 	{
-		campo_mas='<th width="20%"><input type="text" name="ffolio'+id+'[]" id="ffolio'+id+num+'" style="width:87%;"></th>';
+		campo_mas='<th width="20%"><input type="text" name="ffolio'+id+'[]" id="ffolio'+id+num+'" style="width:87%;" onkeydown="return entertab(event,0)"></th>';
 		ax="98%"; by="78%"; ha="40%"; hb="30%";
 	}
-	campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="'+ha+'"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:'+ax+'"></select></th>  <th width="'+hb+'"><input name="f'+id+'[]" type="text" id="f'+id+num+'" style="width:'+by+'"></th>'+campo_mas+'</tr> </table> </div></span>';
+	campo = '<span id="r'+id+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="'+ha+'"><select name="'+id+'[]" id="'+id+num+'" title="requiere" class="requiere" required style="width:'+ax+'" onkeydown="return entertab(event,0)"></select></th>  <th width="'+hb+'"><input name="f'+id+'[]" type="text" id="f'+id+num+'" style="width:'+by+'" onkeydown="return entertab(event,0)"></th>'+campo_mas+'</tr> </table> </div></span>';
 	
 	$("#"+a).append(campo);
 	
@@ -398,7 +406,7 @@ function addNutricional()
 	if((num%2)==0) miclase="row2"; else miclase="row1";
 	if(num<10)num="0"+num;
 	
-	campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'"  style="width:85%;"></th> <th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'+num+'"  style="width:85%;"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
+	campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th> <th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 	$("#cNu").append(campo);
 	$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 	$("#fCNu"+num).datepicker(optionsFecha );
@@ -419,7 +427,7 @@ function remNutricional()
 
 function add_fecha_edo()
 {	
-	campo = '<span id="_fecha_edo" ><p>Fecha: <input id="fechaT" style="height:25px; width:150px; margin-top:-6px;" onkeydown="return entertab(event,100)">&nbsp; Estado: <select id="edoT" onkeydown="return entertab(event,25)"><option value="" >Seleccione</option><option value="AGUASCALIENTES">AGUASCALIENTES</option><option value="BAJA CALIFORNIA NORTE">BAJA CALIFORNIA</option><option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR</option><option value="CAMPECHE">CAMPECHE</option><option value="CHIAPAS">CHIAPAS</option><option value="CHIHUAHUA">CHIHUAHUA</option><option value="COAHUILA">COAHUILA</option><option value="COLIMA">COLIMA</option><option value="DISTRITO FEDERAL">DISTRITO FEDERAL</option><option value="DURANGO">DURANGO</option><option value="GUANAJUATO">GUANAJUATO</option><option value="GUERRERO">GUERRERO</option><option value="HIDALGO">HIDALGO</option><option value="JALISCO">JALISCO</option><option value="MEXICO">MEXICO</option><option value="MORELOS">MORELOS</option><option value="MICHOACAN">MICHOACAN</option><option value="NAYARIT">NAYARIT</option><option value="NUEVO LEON">NUEVO LEON</option><option value="OAXACA">OAXACA</option><option value="PUEBLA">PUEBLA</option><option value="QT">QUERETARO</option><option value="QUINTANA ROO">QUINTANA ROO</option><option value="SAN LUIS POTOSI">SAN LUIS POTOSI</option><option value="SINALOA">SINALOA</option><option value="SONORA">SONORA</option><option value="TABASCO">TABASCO</option><option value="TAMAULIPAS">TAMAULIPAS</option><option value="TLAXCALA">TLAXCALA</option><option value="VERACRUZ">VERACRUZ</option><option value="YUCATAN">YUCATAN</option><option value="ZACATECAS">ZACATECAS</option><option value="NACIDO EN EL EXTRANJERO">EXTRANJERO</option></select></p></span>';
+	campo = '<span id="_fecha_edo" ><p>Fecha: <input id="fechaT" style="height:25px; width:150px; margin-top:-6px;" onkeydown="return entertab(event,100)" tabindex="19">&nbsp; Estado: <select id="edoT" onkeydown="return entertab(event,25)" tabindex="20"><option value="" >Seleccione</option><option value="AGUASCALIENTES">AGUASCALIENTES</option><option value="BAJA CALIFORNIA NORTE">BAJA CALIFORNIA</option><option value="BAJA CALIFORNIA SUR">BAJA CALIFORNIA SUR</option><option value="CAMPECHE">CAMPECHE</option><option value="CHIAPAS">CHIAPAS</option><option value="CHIHUAHUA">CHIHUAHUA</option><option value="COAHUILA">COAHUILA</option><option value="COLIMA">COLIMA</option><option value="DISTRITO FEDERAL">DISTRITO FEDERAL</option><option value="DURANGO">DURANGO</option><option value="GUANAJUATO">GUANAJUATO</option><option value="GUERRERO">GUERRERO</option><option value="HIDALGO">HIDALGO</option><option value="JALISCO">JALISCO</option><option value="MEXICO">MEXICO</option><option value="MORELOS">MORELOS</option><option value="MICHOACAN">MICHOACAN</option><option value="NAYARIT">NAYARIT</option><option value="NUEVO LEON">NUEVO LEON</option><option value="OAXACA">OAXACA</option><option value="PUEBLA">PUEBLA</option><option value="QT">QUERETARO</option><option value="QUINTANA ROO">QUINTANA ROO</option><option value="SAN LUIS POTOSI">SAN LUIS POTOSI</option><option value="SINALOA">SINALOA</option><option value="SONORA">SONORA</option><option value="TABASCO">TABASCO</option><option value="TAMAULIPAS">TAMAULIPAS</option><option value="TLAXCALA">TLAXCALA</option><option value="VERACRUZ">VERACRUZ</option><option value="YUCATAN">YUCATAN</option><option value="ZACATECAS">ZACATECAS</option><option value="NACIDO EN EL EXTRANJERO">EXTRANJERO</option></select></p></span>';
 	$("#tutorcurp").append(campo);
 	$("#fechaT").datepicker(optionsFecha );
 	$("#fechaT,#edoT").change(function()

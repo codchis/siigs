@@ -503,8 +503,11 @@ SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia
 				}
 				if(stripos(".".$sel,$id))$che="checked";
 				if($a==$col&&$catalog!="alergia"){$opcion.="</tr><tr>"; $a=0;}
-				
-				$opcion.="<td width='33%' valign='top'><label><input name='".$catalog."[]' id='$catalog$i' type='$tipo' value='$id' $che style='margin-top:-2px;'> $descripcion</label></td>";
+				if($catalog=="afiliacion")
+				{$xi=$i+200; $xy=$xi+1;}
+				if($catalog=="alergia")
+				{$xi=$i+400; $xy=$xi+1;}
+				$opcion.="<td width='33%' valign='top'><label><input name='".$catalog."[]' id='$catalog$i' type='$tipo' value='$id' $che style='margin-top:-2px;' tabindex='$xi' onkeydown='return entertab(event,0)'> $descripcion</label></td>";
 				$i++;$a++;
 			}
 			$opcion.='</tr></table>';

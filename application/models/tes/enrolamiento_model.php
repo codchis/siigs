@@ -685,7 +685,7 @@ class Enrolamiento_model extends CI_Model
 	 */
 	public function cns_insert($tabla,$array)
 	{
-		$result = $this->db->insert($tabla, $array); 
+		$result = $this->db->insert($tabla, $array);
 		
 		if (!$result)
 		{
@@ -708,11 +708,14 @@ class Enrolamiento_model extends CI_Model
 	 * @return 		result()
 	 *
 	 */
-	public function cns_update($tabla,$array,$id,$campo="", $valor="")
+	public function cns_update($tabla,$array,$id,$campo="", $valor="",$campo2="", $valor2="")
 	{
-		$this->db->where('id' , $id);
+		if($id!="")
+			$this->db->where('id' , $id);
 		if($campo!="")
 			$this->db->where($campo , $valor);
+		if($campo2!="")
+			$this->db->where($campo2 , $valor2);
 		$result = $this->db->update($tabla, $array);  
 		
 		if (!$result)

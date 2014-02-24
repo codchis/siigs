@@ -676,6 +676,11 @@ class Servicios extends CI_Controller {
 	{
 		header('Content-Type: text/html; charset=UTF-8');
 		$bien=0;
+		$fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a");
+		fputs($fp, "FECHA: ".date("d/m/Y H:i:s")." => MAC:"
+			.$this->session->userdata('mac')." => VERSION:"
+			.$this->session->userdata('id_version')." => PASO:"
+			.$this->session->userdata('paso')." JSON recibido: ".($datos)."\r\n");
 		$datos=(array)json_decode($datos);
 		try
 		{
@@ -749,9 +754,10 @@ class Servicios extends CI_Controller {
 							if($f_valor=="")	
 							$f_valor=$midato->fecha;
 						}
-						
+						if(array_key_exists("id_invitado",$midato))
+							unset($midato->id_invitado);
 						if($this->Enrolamiento_model->get_catalog2($catalog->descripcion,$b_campo,$b_valor,$f_campo,$f_valor))
-							$this->Enrolamiento_model->cns_update($catalog->descripcion, $b_campo,$b_valor,$f_campo,$f_valor);
+							$this->Enrolamiento_model->cns_update($catalog->descripcion,$midato,"",$b_campo,$b_valor,$f_campo,$f_valor);
 						else
 							$this->Enrolamiento_model->cns_insert($catalog->descripcion,$midato);
 					}
@@ -1106,16 +1112,7 @@ class Servicios extends CI_Controller {
 		 json_encode(array("id_tab"=>$id_tab)) , 
 		 json_encode(array("id_sesion"=>$id_sesion)), 
 		 $version,
-		 '{
-			  "id_resultado": "ok",
-    "cns_visita": [
-        {
-            "id_persona": "00043d74df5c3f7e48f0a2776aaa2602",
-            "fecha": "2014-01-07 14:57:08",
-            "id_asu_um": "1019",
-            "id_estado_visita": "1"
-        }
-    ]}' );
+		 '{"cns_control_nutricional":[{"talla":"0","peso":"20","id_persona":"60f4c276d0b7297abe808710030899e7","altura":"50","fecha":"2014-02-24 15:30:54","id_asu_um":"20169","id_invitado":null}],"sis_bitacora":[{"parametros":"paciente:60f4c276d0b7297abe808710030899e7, altura:50, peso:20.0","fecha_hora":"2014-02-24 15:30:54","id_usuario":"23","id_controlador_accion":"87"}]}' );
 	}    
 }
 ?>

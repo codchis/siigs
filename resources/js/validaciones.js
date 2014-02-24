@@ -192,16 +192,28 @@ var clk=0;
 function validarFormulario(formulario)//para este metodo los inputs agregar title='requiere' y  llamar en el boton o submit asi                                              onclick="return validarFormulario('formulario')"  formulario=nombre del formulario
 {
 		bien =true; clk=1;
+		var m=0; var n=0;
         var c=0;var frm=document.getElementById(formulario);  //formulario
         for(c=0;c<frm.length;c++)//tantos imputs tenga el formulario
         {
 			if(frm.elements[c].title=="requiere"&&(frm.elements[c].value==""))//si el campo es requerido y esta vacio
 			{
+				m=m+1;
 				if(bien)
 				frm.elements[c].focus(); 
 				frm.elements[c].style.borderColor="#FF0000";
 				frm.elements[c].className="requiere";
 				bien= false;
+				if(m==1)
+				{
+					if(c<15)
+					n=0;
+					if(c>15&&c<30)
+					n=1;
+					if(c>30&&c<45)
+					n=2;
+					Accordion1.openPanel(n);
+				}
 			} //cambiar el estilo
         }
         if(bien==false)//si bien cambio
@@ -251,9 +263,9 @@ function obligatorios(formulario)
 }
 var cx=0;
 function entertab(e,i) //convertir el enter en un tab
-{ 
-	if (e.keyCode == 13||e.keyCode == 9) 
-	{		
+{
+	if (e.keyCode == 13) 
+	{	
 		if(i==13||i==25||i==38)
 			Accordion1.openNextPanel();
 		if(i>14)
@@ -271,6 +283,8 @@ function entertab(e,i) //convertir el enter en un tab
 		document.forms[0].elements[i].focus();
 		return false;
 	}
+	if((e.keyCode == 9)&&(i==13||i==25||i==38))
+		Accordion1.openNextPanel();
 }
 // fin validar formularios
 

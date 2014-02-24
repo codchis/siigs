@@ -774,8 +774,9 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 	{
 		if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
+				
 		$user="admin";
-		$pass="adminSM2015";
+		$pass="adminSM2015";		
 		if($this->session->userdata('session_etab')=="iniciado")
 		{
 			$this->session->unset_userdata('session_etab');
@@ -784,10 +785,14 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 			  </script>';
 			$this->cerrar_etab();
 		}
+		
 		$token=$this->get_token('http://etab.sm2015.com.mx/admin/login',true,'name="_csrf_token" value="',26,40);
-		if($this->get_token('http://etab.sm2015.com.mx/admin/login_check',true,'images/logo_salud.png"  />',0,26,"_username=$user&_password=$pass&")=='images/logo_salud.png"  />')
+		$valida=$this->get_token('http://etab.sm2015.com.mx/admin/login_check',true,'<ul class="nav">',906,20,"_username=$user&_password=$pass&_csrf_token=$token&_submit=Entrar");
+		
+		if($valida=='li class="dropdown">')
 			$this->session->set_userdata( 'session_etab', "iniciado" );
 		else $this->automatic_access();
+
 		echo '<script src="/resources/js/jquery.js"></script>
 
 		<form action="http://etab.sm2015.com.mx/admin/login_check" method="post" >
