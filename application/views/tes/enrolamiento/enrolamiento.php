@@ -435,7 +435,7 @@
                             <div class="input-append" style="width:100%">
                             <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly" title="requiere" tabindex="300">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
-                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/umt/um/1/1/<?php echo urlencode(json_encode(array(2)));?>/<?php echo urlencode(json_encode(array(4,5)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a>        
+                              <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(2)));?>/<?php echo urlencode(json_encode(array(4,5)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a>        
                             </div></td>
                           </tr>
                         </table>
