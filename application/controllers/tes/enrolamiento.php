@@ -105,13 +105,18 @@ class Enrolamiento extends CI_Controller
 		);
 		$dom=$this->ArbolSegmentacion_model->getDescripcionById(array($persona->id_asu_localidad_domicilio),3);// loca edo
 		$asu=$this->ArbolSegmentacion_model->getDescripcionById(array($persona->id_asu_um_tratante),3);// um juridiccion
-		$dom=explode(",",$dom[0]->descripcion);
-		$asu=explode(",",$asu[0]->descripcion);
-		$datos["localidad"]=trim($dom[0]);
-		$datos["municipio"]=trim($dom[1]);
-		
-		$datos["um"]=trim($asu[0]);
-		$datos["juridiccion"]=trim($asu[3]);
+		if($dom)
+		{
+			$dom=explode(",",$dom[0]->descripcion);
+			$datos["localidad"]=trim($dom[0]);
+			$datos["municipio"]=trim($dom[1]);
+		}
+		if($asu)
+		{
+			$asu=explode(",",$asu[0]->descripcion);
+			$datos["um"]=trim($asu[0]);
+			$datos["juridiccion"]=trim($asu[3]);
+		}
 		$valor=array();
 		foreach($alergia as $x)
 		{
