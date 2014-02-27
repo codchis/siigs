@@ -86,8 +86,8 @@ function buscarTutor(buscar)
 	{
 		buscar=buscar.replace(" ","");
 		buscar=buscar.replace("=","");
-		/*$("#idtutor").val("");
-		$("#nombreT").val("");
+		$("#idtutor").val("");
+		/*$("#nombreT").val("");
 		$("#paternoT").val("");
 		$("#maternoT").val("");
 		$("#celularT").val("");
@@ -232,7 +232,7 @@ function getcurp()
 	var a=fn.substr(6,4);
 	var x=parseInt(a)+"";
 	
-	if(ap!=""&&am!=""&&no!=""&&se!=""&&fn!=""&&ed!="")
+	if(ap!=""&&am!=""&&no!=""&&(se!=""&&typeof(se)!="undefined")&&fn!=""&&ed!="")
 	{
 		if(x.length>3)
 		{
@@ -281,7 +281,7 @@ function getcurpTutor()
 		var a=fn.substr(6,4);
 		var x=parseInt(a)+"";
 		
-		if(ap!=""&&am!=""&&no!=""&&se!=""&&fn!=""&&ed!="")
+		if(ap!=""&&am!=""&&no!=""&&(se!=""&&typeof(se)!="undefined")&&fn!=""&&ed!="")
 		{
 			if(x.length>3)
 			{

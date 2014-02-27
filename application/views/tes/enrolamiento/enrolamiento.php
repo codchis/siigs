@@ -159,6 +159,10 @@
 		$("#nombreT,#paternoT,#maternoT").blur(function()
 		{       
 			getcurpTutor();
+		});
+		$("#sexoT_1,#sexoT_2").click(function()
+		{       
+			getcurpTutor();
 		});	
 		
 		$("#alergias").load("/tes/enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>/tipo/tipo");	
