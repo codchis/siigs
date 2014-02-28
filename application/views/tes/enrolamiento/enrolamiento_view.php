@@ -4,6 +4,8 @@
 <?php 
 if($enrolado)
 {
+	$ci = &get_instance();
+	$ci->load->model(DIR_TES.'/Reporte_sincronizacion_model');
 ?>
     <script>
 	$(document).ready(function()
@@ -100,6 +102,8 @@ function vacunacion(id,tiene,fecha,prioridad)
 		color="#e7232a";
 	else if(prioridad==3)
 		color="#ff0085";
+	else if(prioridad==10)
+		color="#7EDA2C";
 	else
 		color='#61ac1e';
 	if(tiene=="X")
@@ -130,7 +134,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
                             <td width="19%"><p align="right">Nombre</p></td>
-                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->nombre;?></div></td>
+                            <td width="31%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->nombre; $id_x=$enrolado->id;?></div></td>
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%"><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->sexo;?></div></td>
                           </tr>
@@ -405,6 +409,60 @@ function vacunacion(id,tiene,fecha,prioridad)
 							{
 								
 							}
+							
+							if($vacuna->descripcion=="Sabin"||$vacuna->descripcion=="SR")				  
+		{
+			$vac1=$vacuna->id_vacuna;
+			$vaf1=$vacuna->fecha;
+			$vcb1=$vacuna->codigo_barras;
+			$vat1=$vacuna->tiene;
+			$total=$ci->Reporte_sincronizacion_model->getCount("", "select id_vacuna from cns_control_vacuna where id_persona='$id_x' and id_vacuna='$vac1'");
+			$y=0;
+			$x=0;
+			for($m=1;$m<8;$m++)
+			{
+				$y++;
+				if($total<$y)$vat1="";
+				$va=$ci->Reporte_sincronizacion_model->getListado("SELECT * FROM cns_control_vacuna WHERE id_persona='$id_x' and id_vacuna='$vac1' limit $x, 1");
+				if($va)
+				{
+					$x++;
+					$vaf1="Fecha Aplicada: ".date("d-m-Y",strtotime($va[0]->fecha));
+				}
+				?>
+                
+                <script>
+					vacunacion("var<?php if($m==7)echo '2'.$i; else if($m==2){$m++;echo '3'.$i;} else echo $m.$i?>",'<?php echo $vat1 ?>','<?php echo $vaf1 ?>','10');
+				</script>
+                <?php
+			}
+		}
+		if(stripos($vacuna->descripcion,"nfluenza Re"))			  
+		{
+			$vac1=$vacuna->id_vacuna;
+			$vaf1=$vacuna->fecha;
+			$vcb1=$vacuna->codigo_barras;
+			$vat1=$vacuna->tiene;
+			$total=$ci->Reporte_sincronizacion_model->getCount("", "select id_vacuna from cns_control_vacuna where id_persona='$id_x' and id_vacuna='$vac1'");
+			$y=0; $x=0;
+			for($m=5;$m<8;$m++)
+			{
+				$y++;
+				if($total<$y)$vat1="";
+				$va=$ci->Reporte_sincronizacion_model->getListado("SELECT * FROM cns_control_vacuna WHERE id_persona='$id_x' and id_vacuna='$vac1' limit $x, 1");
+				if($va)
+				{
+					$x++;
+					$vaf1="Fecha Aplicada: ".date("d-m-Y",strtotime($va[0]->fecha));
+				}
+				?>
+                
+                <script>
+					vacunacion("var<?php if($m==7)echo "2".($i-2); else echo $m.($i-2)?>",'<?php echo $vat1 ?>','<?php echo $vaf1 ?>','10');
+				</script>
+                <?php
+			}
+		}
 						  
 if(stripos($vc,"nica"))   
 {?>

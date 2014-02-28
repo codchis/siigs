@@ -73,6 +73,7 @@ Buscar usuario
 		<th><h2>Nombre</h2></th>
 		<th><h2>Ap. Paterno</h2></th>
 		<th><h2>Ap. Materno</h2></th>
+        <th><h2>Edad</h2></th>
 		<?php if($opcion_view) { ?><th></th><?php } ?>
 		<?php if($opcion_update) { ?><th></th><?php } ?>
         <?php if($opcion_print) { ?><th></th><?php } ?>
@@ -84,6 +85,12 @@ Buscar usuario
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
 		<td><?php echo $user_item->apellido_materno ?></td>
+        <td><?php 
+				$datetime1 = date_create($user_item->fecha_nacimiento);
+				$datetime2 = date_create(date("Y-m-d"));
+				$interval  = date_diff($datetime1, $datetime2);
+				echo $interval->format('%y').".".$interval->format('%m').",".$interval->format('%d')." Años";
+			?></td>
 		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" id="detalles">Detalles<i class="icon-eye-open"></i></a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Modificar<i class="icon-pencil"></i></a></td><?php } ?>
         <?php if($opcion_print) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" target="_blank">Descargar<i class="icon-download-alt"></i></a></td><?php } ?>
