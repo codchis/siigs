@@ -47,9 +47,17 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		$("#localidadT,#ageb").change(function(e) {
 			obtener_um_responsabilidad();
         });
-		$("#nombre,#paterno,#materno,#lnacimientoT,#curp,#curp2,#fnacimiento,#curpT,#calle,#referencia,#colonia").change(function(e) {
-            comparar_captura();
+		$("#nombre,#paterno,#materno,#lnacimientoT,#curp,#curp2,#curpT,#calle,#referencia,#colonia").change(function(e) {
+           comparar_captura(); 
         });
+		$("#fnacimiento").change(function()
+		{   
+			getcurp();
+			comparar_captura();
+			$("#vc").html('<span style="color:green;margin-left:10px;">Creando... Espere</span>');
+			$("#vc").load("/tes/enrolamiento/vacunacion/"+this.value+"/<?php echo $id;?>");
+		});
+		$("#vc").load("/tes/enrolamiento/vacunacion/<?php echo date('d-m-Y', strtotime($enrolado->fecha_nacimiento)); ?>/<?php echo $id;?>");
 		$("#ageb").click(function(e) {
 			obtener_um_responsabilidad();
         });
@@ -658,8 +666,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                   <div class="AccordionPanel">
                     <div class="AccordionPanelTab"><img src="/resources/images/vacunacion.png"/>Control de Vacunación</div>
                       <div class="AccordionPanelContent"><br />                      
-                      	<div style="margin-left:20px; width:90%">
-                        <table>
+                      	<div style="margin-left:20px; width:97%">
+                        <!--<table>
                             <tr>
                                 <td width="85%" valign="top">
                                 <div class="detalle" style="width:100%">
@@ -672,7 +680,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php echo getArray($vacunas,'vacuna','vn');?>
+                                  <?php //echo getArray($vacunas,'vacuna','vn');?>
                                   <div id="vc">
                                   </div>                           
                                  </td>
@@ -680,8 +688,9 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                    <button type="button" class="btn btn-primary" onclick="add('vacuna','vn','vc');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
                                    <button type="button" class="btn btn-primary" onclick="rem('vacuna','vn');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> </td>
                               </tr>                     
-                          </table>
+                          </table>-->
                         <input name="id_cns_vacuna" type="hidden" id="id_cns_vacuna" value="<?php echo $id;?>"  />
+                         <div id="vc"></div>
                         </div>
                       </div>
                     </div>

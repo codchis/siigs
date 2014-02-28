@@ -846,6 +846,7 @@ SELECT DISTINCT	r.id_vacuna, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia
 				$data["title"]="TES";
 				$data["titulo"]="Enrolamiento";
 				$data["session"]=$this->session->userdata('umt');
+				
 				//$this->template->write_view('header',DIR_TES.'/header.php');
 				//$this->template->write_view('menu',DIR_TES.'/menu.php');
 				$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento',$data);
@@ -1252,10 +1253,7 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 				$similar=$similar+$percent;
 				
 				similar_text(urldecode($curp), $x->curp, $percent); 
-				$similar=$similar+$percent;
-				
-				similar_text(urldecode($nacimiento), $x->fecha_nacimiento, $percent); 
-				$similar=$similar+$percent;
+				$similar=$similar+$percent;								
 				
 				similar_text(urldecode($calle), $x->calle_domicilio, $percent); 
 				$similar=$similar+$percent;
@@ -1269,8 +1267,8 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 				similar_text(urldecode($curpT), $x->curpT, $percent); 
 				$similar=$similar+$percent;
 				
-				$total=$similar/9;
-				if($total>50)
+				$total=$similar/8;
+				if($total>50&&($nacimiento == $x->fecha_nacimiento)||$total>80)
 				$array[]=array("nombre" => $x->nombre.' '.$x->apellido_paterno.' '.$x->apellido_materno, "id" => $x->id, "total" => round($total, 2));
 			}
 		}
@@ -1325,5 +1323,15 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 		$this->template->write('sala_prensa','',true);
  		$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_compara', $data);
  		$this->template->render();
+	}
+	public function vacunacion($fecha,$id="")
+	{
+		$fecha=date("Y-m-d",strtotime($fecha));
+		$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
+		$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("
+SELECT DISTINCT	r.id_vacuna,cv.codigo_barras, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, CASE WHEN cv.fecha IS NULL THEN CONCAT('Desde:',r.dia_inicio_aplicacion_nacido,' Hasta:',r.dia_fin_aplicacion_nacido) ELSE CONCAT('Fecha Aplicada: ',' ',DATE_FORMAT(cv.fecha, '%d-%m-%Y')) END AS fecha,DATEDIFF(NOW(),'$fecha') AS dias,CASE WHEN DATEDIFF(NOW(),'$fecha')>=r.dia_inicio_aplicacion_nacido AND DATEDIFF(NOW(),'$fecha')<=r.dia_fin_aplicacion_nacido  THEN '1' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')>r.dia_fin_aplicacion_nacido AND cv.fecha IS NULL THEN '2' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')<r.dia_inicio_aplicacion_nacido AND cv.fecha IS NULL THEN '3' END) END) END AS prioridad FROM cns_regla_vacuna r LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  LEFT JOIN cns_persona p ON p.id=cv.id_persona GROUP BY v.descripcion ORDER BY r.id_vacuna,r.orden_esq_com ASC");
+		$data["fecha"]=$fecha;
+		$data['id_x']=$id;
+		$this->load->view(DIR_TES.'/enrolamiento/vacuna', $data);
 	}
 }

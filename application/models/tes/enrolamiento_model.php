@@ -887,7 +887,7 @@ class Enrolamiento_model extends CI_Model
 					'id_asu_um' => $id_asu_um,
 					'codigo_barras' => $this->codigo_barras[$i],
 				);
-				if($this->vacuna[$i]!="")
+				if($this->fvacuna[$i]!="")
 				{
 					$result2 = $this->db->insert('cns_control_vacuna', $data2);
 					if (!$result2)
@@ -1348,7 +1348,7 @@ class Enrolamiento_model extends CI_Model
 				'id_asu_um' => $id_asu_um,
 				'codigo_barras' => $this->codigo_barras[$i],
 			);
-			if($this->vacuna[$i]!="")
+			if($this->fvacuna[$i]!="")
 			{
 				$result2 = $this->db->insert('cns_control_vacuna', $data2);
 				if (!$result2)

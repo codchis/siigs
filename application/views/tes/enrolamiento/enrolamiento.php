@@ -10,7 +10,7 @@
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
-	<style>
+    <style>
 	td p
 	{
 		font-family:Open Sans Condensed ,sans-serif; font-size: 18px; font-weight: bold; text-shadow: 0 0px 0 #FFFFFF;
@@ -154,6 +154,8 @@
 		$("#fnacimiento").change(function()
 		{       
 			getcurp();
+			$("#vc").html('<span style="color:green;margin-left:10px;">Creando... Espere</span>');
+			$("#vc").load("/tes/enrolamiento/vacunacion/"+this.value);
 		});
 		
 		$("#nombreT,#paternoT,#maternoT").blur(function()
@@ -167,7 +169,7 @@
 		
 		$("#alergias").load("/tes/enrolamiento/catalog_check/alergia/checkbox/3/<?php echo $alergias;?>/tipo/tipo");	
 		$("#tbenef").load("/tes/enrolamiento/catalog_check/afiliacion/checkbox/2/<?php echo $afiliaciones;?>");	
-		$("#sangre").load("/tes/enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', ''); ?>");	
+		$("#sangre").load("/tes/enrolamiento/catalog_select/tipo_sanguineo/<?php echo set_value('sangre', '9'); ?>");	
 		$("#nacionalidad").load("/tes/enrolamiento/catalog_select/nacionalidad/<?php echo set_value('nacionalidad', '142'); ?>/descripcion/descripcion");
 		$("#parto").load("/tes/enrolamiento/catalog_select/parto_multiple/<?php echo set_value('parto', '1'); ?>/id/id");
 		$("#compania").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo set_value('compania', ''); ?>");
@@ -492,8 +494,8 @@
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab"><img src="/resources/images/vacunacion.png"/>Control de Vacunación</div>
                       <div class="AccordionPanelContent"><br />                      
-                      	<div style="margin-left:20px; width:90%">
-                        <table>
+                      	<div style="margin-left:10px; width:97%">
+                        <!--<table>
                             <tr>
                                 <td width="85%" valign="top">
                                 <div class="detalle" style="width:100%">
@@ -506,14 +508,13 @@
                                     </tr>
                                   </table> 
                                   </div>
-                                  <?php
+                                  <?php /*
 								  	  $array=array();
 									  if(isset($_POST["vacuna"])) $array= $_POST["vacuna"];
 									   
-									  echo getArray($array,'vacuna','vn');
+									  echo getArray($array,'vacuna','vn');*/
 								  ?>
-<div id="vc">
-</div>                           
+                           
                                  </td>
                                  <td valign="top"> 
                                    <button type="button" class="btn btn-primary" onclick="add('vacuna','vn','vc');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
@@ -521,7 +522,12 @@
                                    
                                   </td>
                               </tr>                     
-                          </table>
+                          </table> -->
+                          <div id="vc"><span style='color:red; margin-left:10px;'>No se ha seleccionado la fecha de nacimiento</span></div>
+                      
+                       
+                          
+                          
                         </div>
                       </div>
                     </div>
