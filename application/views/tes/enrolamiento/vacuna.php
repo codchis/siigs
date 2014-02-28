@@ -177,9 +177,9 @@ $(document).ready(function()
 		</script><?php 
 		}
 		else if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci"))
-		{?>
+		{echo $vc;?>
 		<script>
-			vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->id_vacuna ?>','<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>','<?php echo $vacuna->codigo_barras ?>');
+			vacunacion("var2<?php if(stripos($vc,"PT"))echo $i; else if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->id_vacuna ?>','<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>','<?php echo $vacuna->codigo_barras ?>');
 		</script><?php 
 		}
 		else if(stripos($vc,"rimera")) 
