@@ -103,7 +103,7 @@ $(document).ready(function()
           </tr>
        </thead>
        <?php 
-        $tem=0; $i=0; $a=0;
+        $tem=0; $i=0; $a=0; 
         if(isset($vacunacion))
        foreach($vacunacion as $vacuna)
        {
@@ -169,6 +169,7 @@ $(document).ready(function()
                 <?php
 			}
 		}
+	
 		if(stripos($vc,"nica"))   
 		{?>
 		<script>
@@ -178,7 +179,7 @@ $(document).ready(function()
 		else if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci"))
 		{?>
 		<script>
-			vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->id_vacuna ?>','<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>','<?php echo $vacuna->codigo_barras ?>');
+			vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->id_vacuna ?>','<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>','<?php echo $vacuna->codigo_barras ?>');
 		</script><?php 
 		}
 		else if(stripos($vc,"rimera")) 
@@ -205,7 +206,6 @@ $(document).ready(function()
 			vacunacion("var6<?php echo $i-3?>",'<?php echo $vacuna->id_vacuna ?>','<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>','<?php echo $vacuna->codigo_barras ?>');
 		</script><?php 
 		}
-		
 		$i++;
    }
 	?>

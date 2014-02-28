@@ -415,7 +415,7 @@ if(stripos($vc,"nica"))
 if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci"))
 {?>
 <script>
-	vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>');
+	vacunacion("var2<?php if(stripos($vc,"RP"))echo $i-1; else if(stripos($vc,"efuerzo")||stripos($vc,"evacunaci")) echo $i-2; else echo $i?>",'<?php echo $vacuna->tiene ?>','<?php echo $vacuna->fecha ?>','<?php echo $vacuna->prioridad ?>');
 </script><?php 
 }
 if(stripos($vc,"rimera")) 
