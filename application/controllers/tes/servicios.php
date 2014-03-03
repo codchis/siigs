@@ -409,6 +409,7 @@ class Servicios extends CI_Controller {
 				$pendiente=$this->Enrolamiento_model->get_catalog2("tes_pendientes_tarjeta","resuelto","0");
 				if($pendiente)
 				{
+					if($sf=="")
 					echo ",";
 					$cadena["tes_pendientes_tarjeta"]= $pendiente;
 					$micadena=json_encode($cadena);
