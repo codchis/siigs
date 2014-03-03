@@ -2,16 +2,21 @@
 <script>
 function vacunacion(control,id,tiene,fecha,prioridad,ff)
 {
-	/*if(prioridad==1)
-		color="#ffcc0a";
-	else if(prioridad==2)
-		color="#e7232a";
-	else if(prioridad==3)
-		color="#ff0085";
-	else if(prioridad==10)
-		color="#61ac1e";
-	else*/
-		color='#61ac1e';console.log(control+"->"+id+"->"+tiene+"->"+fecha);
+	if($("#id_x").val()!="")
+	{
+		if(prioridad==1)
+			color="#ffcc0a";
+		else if(prioridad==2)
+			color="#e7232a";
+		else if(prioridad==3)
+			color="#ff0085";
+		else if(prioridad==10)
+			color="#61ac1e";
+		else
+			color='#61ac1e';
+	}
+	else
+		color='#61ac1e';
 	if(tiene=="X")
 	{
 		fv=fecha.substr(fecha.search("Fecha Aplicada:")+17,fecha.length)
@@ -223,3 +228,4 @@ $(document).ready(function()
    }
 	?>
 </table>
+<input type="hidden" value="<?php echo $id_x;?>" id="id_x" />
