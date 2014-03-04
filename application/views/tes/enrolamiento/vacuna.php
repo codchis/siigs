@@ -28,8 +28,8 @@ function vacunacion(control,id,tiene,fecha,prioridad,ff)
 	$('#'+control).css({'background-color':color,'cursor':'pointer'});
 	$('#'+control).click(function(e) {
 		$("#control").val(control);
-		$("#fecha").val();
-		$("#folio").val();
+		$("#fecha").val($("#fv"+control).val());
+		$("#folio").val($("#ff"+control).val());
         $( "#dialog-form" ).dialog( "open" );
     });
 	
@@ -48,6 +48,7 @@ $(document).ready(function()
       height: 300,
       width: 300,
       modal: true,
+	  resizable: false,
       buttons: {
         "Ok": function() {
 			ctr=$("#control").val();
@@ -66,6 +67,15 @@ $(document).ready(function()
 });
 
 </script>
+<style>
+.ui-dialog .ui-dialog-titlebar-close span
+{
+display: block;
+margin: 1px;
+margin-left: -8px;
+margin-top: -7px;
+}
+</style>
 <div id="dialog-form" title="Agregar Vacuna">
   <fieldset>
     <label for="fecha">Fecha: </label>
