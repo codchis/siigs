@@ -948,9 +948,9 @@ SELECT DISTINCT	r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplica
 	public function addForm()
 	{
 		$this->Enrolamiento_model->setnacionalidad($this->input->post('nacionalidad'));				
-		$this->Enrolamiento_model->setnombre(strtoupper($this->input->post('nombre')));
-		$this->Enrolamiento_model->setpaterno(strtoupper($this->input->post('paterno')));
-		$this->Enrolamiento_model->setmaterno(strtoupper($this->input->post('materno')));
+		$this->Enrolamiento_model->setnombre(trim(strtoupper($this->input->post('nombre'))));
+		$this->Enrolamiento_model->setpaterno(trim(strtoupper($this->input->post('paterno'))));
+		$this->Enrolamiento_model->setmaterno(trim(strtoupper($this->input->post('materno'))));
 		$this->Enrolamiento_model->setlnacimiento($this->input->post('lnacimiento'));
 		$this->Enrolamiento_model->setcurp($this->input->post('curp').$this->input->post('curp2'));
 		$this->Enrolamiento_model->setsexo($this->input->post('sexo'));
@@ -960,9 +960,9 @@ SELECT DISTINCT	r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplica
 		$this->Enrolamiento_model->setparto($this->input->post('parto'));
 		
 		$this->Enrolamiento_model->setidtutor($this->input->post('idtutor'));				
-		$this->Enrolamiento_model->setnombreT(strtoupper($this->input->post('nombreT')));
-		$this->Enrolamiento_model->setpaternoT(strtoupper($this->input->post('paternoT')));
-		$this->Enrolamiento_model->setmaternoT(strtoupper($this->input->post('maternoT')));
+		$this->Enrolamiento_model->setnombreT(trim(strtoupper($this->input->post('nombreT'))));
+		$this->Enrolamiento_model->setpaternoT(trim(strtoupper($this->input->post('paternoT'))));
+		$this->Enrolamiento_model->setmaternoT(trim(strtoupper($this->input->post('maternoT'))));
 		$this->Enrolamiento_model->setcurpT($this->input->post('curpT'));
 		$this->Enrolamiento_model->setsexoT($this->input->post('sexoT'));
 		$this->Enrolamiento_model->settelefonoT($this->input->post('telefonoT'));
@@ -973,9 +973,9 @@ SELECT DISTINCT	r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplica
 		$this->Enrolamiento_model->setlugarcivil($this->input->post('lugarcivil'));
 		$this->Enrolamiento_model->setumt($this->input->post('um'));
 		
-		$this->Enrolamiento_model->setcalle(strtoupper($this->input->post('calle')));
-		$this->Enrolamiento_model->setreferencia(strtoupper($this->input->post('referencia')));				
-		$this->Enrolamiento_model->setcolonia(strtoupper($this->input->post('colonia')));
+		$this->Enrolamiento_model->setcalle(trim(strtoupper($this->input->post('calle'))));
+		$this->Enrolamiento_model->setreferencia(trim(strtoupper($this->input->post('referencia'))));				
+		$this->Enrolamiento_model->setcolonia(trim(strtoupper($this->input->post('colonia'))));
 		$this->Enrolamiento_model->setlocalidad($this->input->post('localidad'));
 		$this->Enrolamiento_model->settelefono($this->input->post('telefono'));
 		$this->Enrolamiento_model->setcompania($this->input->post('compania'));
