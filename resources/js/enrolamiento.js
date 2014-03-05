@@ -123,6 +123,7 @@ function buscarTutor(buscar)
 				$("#tutoredit").html("Editar datos de la Madre o Tutor");
 				$("#captura").attr("checked","true");
 				$("#curpT").click();
+				if($("#compartetutor"))
 				$.get('/tes/enrolamiento/brothers_search/'+$("#idtutor").val(), function(respuesta) 
 				{
 					if(respuesta.length>5)
