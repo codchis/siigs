@@ -552,7 +552,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                   <div class="AccordionPanel">
                       <div class="AccordionPanelTab"><img src="/resources/images/domicilio.png"/>Domicilio</div>
                       <div class="AccordionPanelContent">
-                      <div id="compartetutor" style="width:94.7%" > </div>
+                      
                         <div id="ladireccion">
                         <table width="90%" border="0" cellspacing="0" cellpadding="0" style="margin-left:15px;">
                           <tr>
