@@ -406,7 +406,7 @@ function addNutricional()
 	if((num%2)==0) miclase="row2"; else miclase="row1";
 	if(num<10)num="0"+num;
 	
-	campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th> <th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
+	campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".001" min="0" name="cpeso[]" id="cpeso'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th> <th width="18%"><input type="number" step=".001" min="0" max="300" name="caltura[]" id="caltura'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="18%"><input type="number" step=".001" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
 	$("#cNu").append(campo);
 	$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 	$("#fCNu"+num).datepicker(optionsFecha );

@@ -886,7 +886,7 @@ SELECT DISTINCT	r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplica
 			$this->form_validation->set_rules('lnacimiento', 'Lugar de Nacimiento', 'trim|required');
 			$this->form_validation->set_rules('lnacimientoT', 'Lugar de Nacimiento', 'xss_clean|trim');
 			$this->form_validation->set_rules('curp', 'CURP', 'trim|xss_clean');
-			$this->form_validation->set_rules('curp2', 'CURP', 'xss_clean|callback_ifCurpExists');
+			$this->form_validation->set_rules('curp2', 'CURP', 'xss_clean');//|callback_ifCurpExists
 			$this->form_validation->set_rules('nacionalidad', 'Nacionalidad', '');
 		}
 		
@@ -928,7 +928,7 @@ SELECT DISTINCT	r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplica
 			$this->form_validation->set_rules('paternoT', 'paternoT', 'xss_clean');
 			$this->form_validation->set_rules('maternoT', 'maternoT', 'xss_clean');
 			$this->form_validation->set_rules('celularT', 'celularT', 'xss_clean');
-			$this->form_validation->set_rules('curpT', 'curpT', 'xss_clean|callback_ifCurpTExists');
+			$this->form_validation->set_rules('curpT', 'curpT', 'xss_clean');//|callback_ifCurpTExists
 			$this->form_validation->set_rules('telefonoT', 'telefonoT', 'xss_clean');
 			$this->form_validation->set_rules('sexoT', 'sexoT', '');
 			$this->form_validation->set_rules('companiaT', 'companiaT', 'trim');

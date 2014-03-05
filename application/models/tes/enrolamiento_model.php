@@ -1663,20 +1663,35 @@ class Enrolamiento_model extends CI_Model
 			}
 			else if(count($cadena)==2)
 			{
-				$this->db->where("nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')");
+				$this->db->where("(nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')) or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%')");
 			}
 			else if (count($cadena)==3)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('apellido_paterno', $cadena[1]);
-				$this->db->like('apellido_materno', $cadena[2]);
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%') or
+				(nombre like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%')");
 			}
 			else if (count($cadena)==4)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('nombre', $cadena[1]);
-				$this->db->like('apellido_paterno', $cadena[2]);
-				$this->db->like('apellido_materno', $cadena[3]);
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%')");
+			}
+			else if (count($cadena)==5)
+			{
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_paterno like '%".$cadena[4]."%') or 				
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_paterno like '%".$cadena[4]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(nombre like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%')");
 			}
 			$query = $this->db->get();
 		}
@@ -1719,20 +1734,35 @@ class Enrolamiento_model extends CI_Model
 			}
 			else if(count($cadena)==2)
 			{
-				$this->db->where("nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')");
+				$this->db->where("(nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')) or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%')");
 			}
 			else if (count($cadena)==3)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('apellido_paterno', $cadena[1]);
-				$this->db->like('apellido_materno', $cadena[2]);
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%') or
+				(nombre like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%')");
 			}
 			else if (count($cadena)==4)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('nombre', $cadena[1]);
-				$this->db->like('apellido_paterno', $cadena[2]);
-				$this->db->like('apellido_materno', $cadena[3]);
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%')");
+			}
+			else if (count($cadena)==5)
+			{
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_paterno like '%".$cadena[4]."%') or 				
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_paterno like '%".$cadena[4]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(nombre like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%')");
 			}
 			$query = $this->db->get();
 		}
