@@ -24,6 +24,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
     <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
 	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
     <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <script type="text/javascript" src="/resources/js/hilo.js"></script>
     <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
@@ -35,6 +36,43 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 	</style>
    
     <script>
+	Concurrent.Thread.create(function()
+	{
+		var start = new Date().getSeconds();
+		var a=1; var r=0; r2=200000;
+		while ( a=1 )
+		{
+			if (r==r2)
+			{
+				$.get("/<?php echo DIR_TES?>/enrolamiento/checar_session", function(result) 
+				{
+					if(result=="no")
+					{
+						r2=(200000*30);
+						$.fancybox.showActivity();
+						$.fancybox({
+							'width'         : '70%',
+							'height'        : '70%',				
+							'transitionIn'	: 'elastic',
+							'transitionOut'	: 'elastic',
+							'type'			: 'iframe',	
+							'href'			: "/<?php echo DIR_SIIGS?>/usuario/login",
+							'onClosed'		: function(){
+								r2=200000;
+							},
+							onComplete      : function(){
+								$('#fancybox-frame').load(function(){
+									$.fancybox.hideActivity();
+								});
+							}
+						});
+					}
+				});
+				r=0;
+			}
+			r++;
+		}
+	});
 	$(document).ready(function()
 	{
 		$.fancybox.showActivity();

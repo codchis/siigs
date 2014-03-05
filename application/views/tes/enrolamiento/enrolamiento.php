@@ -27,7 +27,7 @@
 			if (r==r2)
 			{
 				$.get("/<?php echo DIR_TES?>/enrolamiento/checar_session", function(result) 
-				{console.log(result);
+				{
 					if(result=="no")
 					{
 						r2=(200000*30);
