@@ -329,7 +329,7 @@ class CI_Pagination {
 		$output = preg_replace("#([^:])//+#", "\\1/", $output);
 
 		// Add the wrapper HTML if exists
-		$output = $this->full_tag_open.$output.$this->full_tag_close;
+		$output = $this->full_tag_open.$output.$this->num_tag_open.'<span> Total de registros: '.number_format($this->total_rows).'</span>'.$this->num_tag_close.$this->full_tag_close;
 
 		return $output;
 	}
