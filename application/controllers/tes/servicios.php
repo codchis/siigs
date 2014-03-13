@@ -386,6 +386,7 @@ class Servicios extends CI_Controller {
 					//	$cadena["tes_notificacion"]= 'Error recuperando tes_notificacion';
 					
 				}
+				$noti=0;
 				if(count($array)>0)
 				{
 					if($inicio_asu==1)
@@ -397,6 +398,7 @@ class Servicios extends CI_Controller {
 					ob_flush();
 					unset($cadena);
 					$cadena=array();
+					$noti=1;
 				}	
 				//************ fin notificacion ************
 				
@@ -409,7 +411,7 @@ class Servicios extends CI_Controller {
 				$pendiente=$this->Enrolamiento_model->get_catalog2("tes_pendientes_tarjeta","resuelto","0");
 				if($pendiente)
 				{
-					if($sf=="")
+					if($noti==1||$inicio_asu==1)
 					echo ",";
 					$cadena["tes_pendientes_tarjeta"]= $pendiente;
 					$micadena=json_encode($cadena);
@@ -506,6 +508,7 @@ class Servicios extends CI_Controller {
 			{
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
+				
 				if($tableta->id_tipo_censo!=5)
 				{
 					$asu_um = array_reverse($asu_um);
