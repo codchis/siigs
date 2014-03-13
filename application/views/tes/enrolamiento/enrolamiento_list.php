@@ -7,9 +7,25 @@
 $(document).ready(function()
 {
 	<?php if(!empty($id)){?>
-	if(confirm("Registro Actualizado Exitosamente\n\n ¿Deseas guardarlo en la tarjeta?"))
+	if(confirm("<?php echo $msgResult ?>\n\n ¿Deseas guardarlo en la tarjeta?"))
 	{
-		$("#secretIFrame").attr("src","/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $id?>");
+		$.fancybox.showActivity();
+		$.fancybox({
+			'width'         : '30%',
+			'height'        : '30%',				
+			'transitionIn'	: 'elastic',
+			'transitionOut'	: 'elastic',
+			'type'			: 'iframe',	
+			'href'			: "/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $id?>",
+			'onClosed'		: function(){
+				window.location.href="/<?php echo DIR_TES?>/enrolamiento/";
+			},
+			onComplete      : function(){
+				$('#fancybox-frame').load(function(){
+					$.fancybox.hideActivity();
+				});
+			}
+		});
 	}
 	else window.location.href = "/<?php echo DIR_TES?>/enrolamiento/";
 	<?php } ?>
@@ -80,7 +96,7 @@ Buscar usuario
 	</tr>
     </thead>
 	<?php if (isset($users)) foreach ($users as $user_item): ?>
-	<tr>
+	<tr >
 		<td><?php echo $user_item->curp ?></td>
 		<td><?php echo $user_item->nombre ?></td>
 		<td><?php echo $user_item->apellido_paterno ?></td>
@@ -89,7 +105,7 @@ Buscar usuario
 				$datetime1 = date_create($user_item->fecha_nacimiento);
 				$datetime2 = date_create(date("Y-m-d"));
 				$interval  = date_diff($datetime1, $datetime2);
-				echo $interval->format('%y').".".$interval->format('%m').",".$interval->format('%d')." Años";
+				echo "A:".$interval->format('%y')." M:".$interval->format('%m')." D:".$interval->format('%d');
 			?></td>
 		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" id="detalles">Detalles<i class="icon-eye-open"></i></a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Modificar<i class="icon-pencil"></i></a></td><?php } ?>

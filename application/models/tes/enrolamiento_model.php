@@ -789,7 +789,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Enrolamiento Fallido.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 		{
@@ -817,6 +817,7 @@ class Enrolamiento_model extends CI_Model
 				'telefono' => $this->telefonoT,
 				'id_operadora_celular' => $companiaT,
 				'celular' => $this->celularT,
+				'ultima_actualizacion' => date("Y-m-d H:i:s")
 			);
 			if($this->idtutor=="")
 			{
@@ -828,6 +829,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "No se guardo Tutor.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 				else
 				{
@@ -842,6 +844,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "No se actualizo Tutor.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 			}
 			$data01 = array(
@@ -854,6 +857,7 @@ class Enrolamiento_model extends CI_Model
 			{
 				$this->msg_error_usr = "No se relaciono Tutor.";
 				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 			}
 			$id_asu_um=$this->umt;
 			
@@ -873,6 +877,7 @@ class Enrolamiento_model extends CI_Model
 					{
 						$this->msg_error_usr = "Error Alergias.";
 						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 					}
 				}
 			}
@@ -894,6 +899,7 @@ class Enrolamiento_model extends CI_Model
 					{
 						$this->msg_error_usr = "Error vacunas.";
 						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 					}
 				}
 			}
@@ -919,6 +925,7 @@ class Enrolamiento_model extends CI_Model
 					{
 						$this->msg_error_usr = "Error IRA.";
 						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 					}
 				}
 			}
@@ -944,6 +951,7 @@ class Enrolamiento_model extends CI_Model
 					{
 						$this->msg_error_usr = "Error EDA.";
 						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 					}
 				}
 			}
@@ -969,6 +977,7 @@ class Enrolamiento_model extends CI_Model
 					{
 						$this->msg_error_usr = "Error Consulta.";
 						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 					}
 				}
 			}
@@ -990,6 +999,7 @@ class Enrolamiento_model extends CI_Model
 					{
 						$this->msg_error_usr = "Error Accion nutricional.";
 						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 					}
 				}
 			}
@@ -1013,6 +1023,7 @@ class Enrolamiento_model extends CI_Model
 					{
 						$this->msg_error_usr = "Error Nutricion.";
 						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 					}
 				}
 			}
@@ -1032,6 +1043,7 @@ class Enrolamiento_model extends CI_Model
 					{
 						$this->msg_error_usr = "Error Afiliacion.";
 						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 					}
 				}
 			}
@@ -1072,6 +1084,7 @@ class Enrolamiento_model extends CI_Model
 		if (!$result)
 		{
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}	
 	}
 	
@@ -1136,7 +1149,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Actualizacion Fallida.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 	}
 	/**
@@ -1160,7 +1173,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Actualizacion Fallida.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 	}
 	/**
@@ -1199,7 +1212,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Actualizacion Fallida.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 	}
 	/**
@@ -1250,6 +1263,7 @@ class Enrolamiento_model extends CI_Model
 			'telefono' => $this->telefonoT,
 			'id_operadora_celular' => $companiaT,
 			'celular' => $this->celularT,
+			
 			);
 		//
 		if($this->idtutor=="")
@@ -1261,6 +1275,7 @@ class Enrolamiento_model extends CI_Model
 			{
 				$this->msg_error_usr = "No se guardo Tutor.";
 				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 			}
 			else
 			{
@@ -1276,6 +1291,7 @@ class Enrolamiento_model extends CI_Model
 			{
 				$this->msg_error_usr = "No se actualizo Tutor.";
 				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 			}
 		}
 	
@@ -1292,6 +1308,7 @@ class Enrolamiento_model extends CI_Model
 			{
 				$this->msg_error_usr = "Error actualizando Tutor.";
 				$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+				throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 			}
 		}
 	}
@@ -1322,6 +1339,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "Error actualizando Alergias.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 			}
 		}
@@ -1355,6 +1373,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "Error actualizando vacunas.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 			}
 		}
@@ -1392,6 +1411,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "Error  actualizando IRA.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 			}
 		}
@@ -1429,6 +1449,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "Error actualizando EDA.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 			}
 		}
@@ -1466,6 +1487,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "Error actualizando Consulta.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 			}
 		}
@@ -1499,6 +1521,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "Error actualizando Accion nutricional.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 			}
 		}
@@ -1534,6 +1557,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "Error actualizando Nutricion.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 			}
 		}
@@ -1566,6 +1590,7 @@ class Enrolamiento_model extends CI_Model
 				{
 					$this->msg_error_usr = "Error actualizando Afiliacion.";
 					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 				}
 			}
 		}
@@ -1598,6 +1623,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "No se actualizo Tutor.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 	}
 	 /**
@@ -1637,20 +1663,35 @@ class Enrolamiento_model extends CI_Model
 			}
 			else if(count($cadena)==2)
 			{
-				$this->db->where("nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')");
+				$this->db->where("(nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')) or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%')");
 			}
 			else if (count($cadena)==3)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('apellido_paterno', $cadena[1]);
-				$this->db->like('apellido_materno', $cadena[2]);
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%') or
+				(nombre like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%')");
 			}
 			else if (count($cadena)==4)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('nombre', $cadena[1]);
-				$this->db->like('apellido_paterno', $cadena[2]);
-				$this->db->like('apellido_materno', $cadena[3]);
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%')");
+			}
+			else if (count($cadena)==5)
+			{
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_paterno like '%".$cadena[4]."%') or 				
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_paterno like '%".$cadena[4]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(nombre like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%')");
 			}
 			$query = $this->db->get();
 		}
@@ -1658,7 +1699,7 @@ class Enrolamiento_model extends CI_Model
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}	
 		else
 			return $query->result();
@@ -1693,20 +1734,35 @@ class Enrolamiento_model extends CI_Model
 			}
 			else if(count($cadena)==2)
 			{
-				$this->db->where("nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')");
+				$this->db->where("(nombre like '%".$cadena[0]."%' and (nombre like '%".$cadena[1]."%' or apellido_paterno like '%".$cadena[1]."%')) or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%')");
 			}
 			else if (count($cadena)==3)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('apellido_paterno', $cadena[1]);
-				$this->db->like('apellido_materno', $cadena[2]);
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%') or
+				(nombre like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%')");
 			}
 			else if (count($cadena)==4)
 			{
-				$this->db->like('nombre', $cadena[0]);
-				$this->db->like('nombre', $cadena[1]);
-				$this->db->like('apellido_paterno', $cadena[2]);
-				$this->db->like('apellido_materno', $cadena[3]);
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%') or
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_materno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%')");
+			}
+			else if (count($cadena)==5)
+			{
+				$this->db->where("(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and nombre like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_paterno like '%".$cadena[4]."%') or 				
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or 
+				(nombre like '%".$cadena[0]."%' and nombre like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_paterno like '%".$cadena[3]."%' and apellido_paterno like '%".$cadena[4]."%') or 
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(apellido_paterno like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_materno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%') or
+				(nombre like '%".$cadena[0]."%' and apellido_paterno like '%".$cadena[1]."%' and apellido_paterno like '%".$cadena[2]."%' and apellido_materno like '%".$cadena[3]."%' and apellido_materno like '%".$cadena[4]."%')");
 			}
 			$query = $this->db->get();
 		}
@@ -1714,7 +1770,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		return $query->num_rows;
 	}
@@ -1747,7 +1803,7 @@ class Enrolamiento_model extends CI_Model
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->row();
@@ -1773,7 +1829,7 @@ class Enrolamiento_model extends CI_Model
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->row();
@@ -1804,7 +1860,7 @@ class Enrolamiento_model extends CI_Model
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}	
 		else
 			return $query->result();
@@ -1836,7 +1892,7 @@ class Enrolamiento_model extends CI_Model
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}	
 		else
 			return $query->result();
@@ -1871,7 +1927,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -1902,7 +1958,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -1938,7 +1994,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -1976,7 +2032,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2043,7 +2099,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2071,7 +2127,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2096,13 +2152,13 @@ class Enrolamiento_model extends CI_Model
 		$this->db->where("ultima_actualizacion >=", $fecha);
 		$this->db->where_in("id_asu_um_tratante", $array);
 		$this->db->where("activo", "1");
-		$this->db->where("(DATEDIFF(NOW(),fecha_nacimiento)/365)<",5);
+		$this->db->where("(DATEDIFF(NOW(),fecha_nacimiento)/365.25)<",5); 
 		$query = $this->db->get(); 
 		if (!$query)
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2142,7 +2198,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2188,7 +2244,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2213,7 +2269,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2239,7 +2295,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2264,7 +2320,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2288,7 +2344,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2318,7 +2374,7 @@ class Enrolamiento_model extends CI_Model
 		{
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->result();
@@ -2345,7 +2401,7 @@ class Enrolamiento_model extends CI_Model
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 			return $query->row();
@@ -2366,7 +2422,7 @@ class Enrolamiento_model extends CI_Model
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 	}
 	
@@ -2390,7 +2446,7 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 		if (!$query){
 			$this->msg_error_usr = "Servicio temporalmente no disponible.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-			throw new Exception(__CLASS__);
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
 		else
 		return $query->result();

@@ -7,7 +7,7 @@ var optionsFecha = {
     duration: "fast",
     dateFormat: 'dd-mm-yy',
     constrainInput: true,
-    firstDay: 1,
+    firstDay: 0,
     closeText: 'X',
     showOn: 'both',
     buttonImage: '/resources/images/calendar.gif',
