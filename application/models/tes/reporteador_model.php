@@ -56,7 +56,7 @@ class Reporteador_model extends CI_Model {
      * @param   date    $fecha  Fecha de corte de elemento
 	 * @return  void
 	 */
-	public function getCoberturaBiologicoListado($nivel, $id, $fecha)
+	public function getCoberturaBiologicoListado($nivel, $id, $fecha, $fechaFin = null)
 	{
         $result = array();
         $idsAsu = array();
