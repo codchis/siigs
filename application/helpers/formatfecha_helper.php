@@ -208,3 +208,17 @@ function getArrayView($array,$id="")
 	}
 	return $grid;
 }
+
+/*
+ * Valida si una cadena es una fecha valida,
+ * con base en el formato
+ */
+function isDate($date, $format = 'Y-m-d') {
+    $version = explode('.', phpversion());
+    if (((int) $version[0] >= 5 && (int) $version[1] >= 2 && (int) $version[2] > 17)) {
+        $d = DateTime::createFromFormat($format, $date);
+    } else {
+        $d = new DateTime(date($format, strtotime($date)));
+    }
+    return $d && $d->format($format) == $date;
+}
