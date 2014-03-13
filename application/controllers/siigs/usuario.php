@@ -40,7 +40,7 @@ class Usuario extends CI_Controller {
 			$this->load->helper('url');
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nombre_usuario', 'Nombre de Usuario', 'trim|required');
-			$this->form_validation->set_rules('clave', 'Clave', 'trim|required|md5');
+			$this->form_validation->set_rules('clave', 'Clave', 'trim|required');
 			$data['msgResult'] = $this->session->flashdata('msgResult');
 			$data['clsResult'] = $this->session->flashdata('clsResult');
 			
@@ -52,7 +52,7 @@ class Usuario extends CI_Controller {
 			}
 			else
 			{
-				$rowUser = $this->Usuario_model->authenticate($this->input->post('nombre_usuario'), $this->input->post('clave'));
+				$rowUser = $this->Usuario_model->authenticate($this->input->post('nombre_usuario'), md5($this->input->post('clave')));
 				if ($rowUser)
 				{
 					if (!$rowUser->activo)
@@ -64,6 +64,7 @@ class Usuario extends CI_Controller {
 					{
 						// almacena en session las variables necesarias
 						$this->session->set_userdata(USERNAME, strtoupper($rowUser->nombre_usuario));
+                                                $this->session->set_userdata(PASSWORD, $this->input->post('clave'));
 						$this->session->set_userdata(USER_LOGGED, $rowUser->id);
 						$this->session->set_userdata(GROUP_ID, strtoupper($rowUser->id_grupo));
 						// obtiene los permisos del grupo al que pertenece el usuario logueado

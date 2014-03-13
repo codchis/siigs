@@ -24,6 +24,7 @@ define('CAT_GEOREFERENCIA', 'cat_georeferencia');
 define('CAT_AGEB', 'cat_ageb');
 define('CATALOGOSCSV', '"cns_vacuna","cns_nacionalidad","cns_accion_nutricional","cns_afiliacion","cns_operadora_celular","cns_alergia","cns_tipo_sanguineo","cns_altura_x_edad","cns_peso_x_edad","cns_imc_x_edad","cns_tratamiento","cns_estado_visita","'.CAT_POBLACION.'","'.CAT_GEOREFERENCIA.'","'.CAT_AGEB.'"');
 define('USERNAME', 'username');
+define('PASSWORD', 'password');
 define('USER_LOGGED', 'user_id');
 define('GROUP_ID', 'group_id');
 define('REDIRECT_TO', 'redirect_to');
