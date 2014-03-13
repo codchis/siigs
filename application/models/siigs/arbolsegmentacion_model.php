@@ -205,6 +205,86 @@ class ArbolSegmentacion_model extends CI_Model {
                 }
         }
 
+/**
+	 * Regresa el objeto del arbol de segmentacion por nivel o hijos de un elemento seleccionado
+	 *
+	 * @access public
+         * 
+         * @param int $idarbol ID del arbol a crear
+         * @param int $nivel Nivel de segmentacion desde el cual se iniciará a desarrollar el arbol
+         * @param $nivelesocultos Array con los niveles que se deben ocultar 
+         * 
+	 * @return Object un arreglo con la estructura del arbol
+	 * @throws Exception En caso de algun error al consultar la base de datos
+	 */
+
+        public function getTreeBlockData($idarbol , $nivel,$elegido)
+        {
+            if ($nivel>0)
+            {
+                if ($elegido > 0)
+                {
+                    $nivelpadre = $this->db->query("select grado_segmentacion as nivel from asu_arbol_segmentacion where id=".$elegido)->result()[0]->nivel;
+                    $consulta = "select tabla".($nivel).".id_padre as parent, tabla".($nivel).".id as id, tabla".($nivel).".grado_segmentacion as nivel, tabla".($nivel).".descripcion as descripcion from asu_arbol_segmentacion tabla".$nivelpadre;
+                    $tempnivel = $nivelpadre;
+                    while ($nivelpadre<$nivel)
+                    {
+                        $nivelpadre +=1;
+                        $consulta .= " join asu_arbol_segmentacion tabla".($nivelpadre)." on tabla".($nivelpadre).".id_padre = tabla".($nivelpadre-1).".id";
+                    }
+                    $consulta .= " where tabla".($tempnivel).".id=".$elegido." order by tabla".($nivelpadre).".descripcion";
+                
+                    //var_dump($consulta);
+                    $query = $this->db->query($consulta);
+                    if (!$query)
+                    {
+                        $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                        $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion";
+                        throw new Exception(__CLASS__);
+                    }
+                    else
+                    {
+                    return array('resultado' => $query->result());  
+                    }
+                    
+                    //var_dump($consulta);
+                    
+                }
+                else
+                {
+                    $consulta = "select id_padre as parent, id,grado_segmentacion as nivel,descripcion from asu_arbol_segmentacion where id_raiz = ". $idarbol . " and grado_segmentacion = ".$nivel." order by descripcion";
+                    $query = $this->db->query($consulta);
+                    if (!$query)
+                    {
+                        $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                        $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion";
+                        throw new Exception(__CLASS__);
+                    }
+                    else
+                    {
+                    return array('resultado' => $query->result());  
+                    }
+                }
+            }
+            else if ($elegido > 0)
+            {
+                $consulta = "select id,grado_segmentacion as nivel,descripcion from asu_arbol_segmentacion where id_raiz = ". $idarbol . " and id_padre = ".$elegido." order by descripcion";
+                $query = $this->db->query($consulta);
+                if (!$query)
+                {
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al obtener los datos del arbol de segmentacion";
+                    throw new Exception(__CLASS__);
+                }
+                else
+                {
+                return array('resultado' => $query->result());  
+                }
+            }
+            
+        }
+
+        
         /***
          * 
          * Obtiene las unidades medicas correspondientes a un ID de un elemento
@@ -278,6 +358,273 @@ class ArbolSegmentacion_model extends CI_Model {
                 }
             }
         }
+ 
+        /**
+         * Obtener el elemento del ASU por medio de su ID
+         * @param int item seleccionado
+         * @return object con los datos del elemento
+         * 
+         * regresa array vacio si el elemento no existe en el ASU
+         * 
+         * @throws Exception En caso de algun error al consultar la base de datos
+         */
+        
+        public function getById($item)
+        {
+            $resultado = $this->db->query("select * from asu_arbol_segmentacion where id=".$item);
+            if (!$resultado)
+            {
+                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                $this->msg_error_usr = "Ocurrió un error al obtener el elemento padre";
+                throw new Exception(__CLASS__);
+            }
+            else
+            {
+                if ($resultado->num_rows()>0)
+                    return $resultado->result();
+                else
+                    return array();
+            }
+            
+        }
+        
+        /**
+         * Convierte el tipo de arreglo para enviarlo como se debe recibir en el cliente de Javascript
+         * @param Array fila array de valores
+         * @param bool Seleccionable opcion para que este elemento sea seleccionable
+         * @return Array Preparado para el javascript cliente
+         */
+        
+        public function convertType($arbol,$seleccionable, $seleccionados)
+        {
+            $resultado = array();
+            foreach($arbol as $fila)
+            {
+                $fila = (array) $fila;
+                if ($fila['id'] != null)
+                {
+                    $arraytemp =  array('key' => $fila['id'], 'title'=> $fila['descripcion'],'tooltip'=>$fila['nivel']);
+                    if (isset($fila['children']))
+                        $arraytemp["children"] = $fila['children'];
+                    else
+                        $arraytemp["isLazy"] = true;
+                    if (!$seleccionable)
+                    {
+                        $arraytemp["unselectable"] = true;
+                        $arraytemp["hideCheckbox"] = true;
+                    }
+                    if (in_array($fila["id"], $seleccionados))
+                    {
+                        $arraytemp["select"] = true;
+                    }
+                    array_push($resultado, $arraytemp);
+                }
+            }            
+            return $resultado;
+        }
+        
+        /**
+         * Accion para devolver un bloque del ASU a partir de un nivel especificado o una clave seleccionada, niveles omitidos y elementos preseleccionados
+         * 
+         * @param Int $idarbol Id del arbol a crear
+         * @param Int $nivel Nivel de segmentacion desde la cual se desarrolla el arbol
+         * @param Array int $omitidos Array de niveles omitidos
+         * @param Array int $seleccionados Array de elementos seleccionados
+         * @param Array int $seleccionables Array de niveles que son seleccionables
+         * @param Array int $elegido Clave seleccionada para obtener sus hijos
+         * 
+         * @return Object un arreglo con la estructura del arbol
+	 * @throws Exception En caso de algun error al consultar la base de datos
+         * 
+         */
+               
+        public function getTreeBlock($idarbol, $nivel , $seleccionados = array(), $seleccionable , $elegido, $omitidos = array(), $seleccionables = array())
+        {
+            try
+            {
+                $fecha_update_asu = $this->db->query("select max(fecha_update) as fecha from asu_arbol_segmentacion where id_raiz=".$idarbol);
+                if (!$fecha_update_asu)
+                {
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    $this->msg_error_usr = "Ocurrió un error al obtener la ultima actualizacion del asu";
+                    return "false";
+                }
+
+                $fecha_update_asu = $fecha_update_asu->result()[0]->fecha;
+                $ruta = __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'json'.DIRECTORY_SEPARATOR;
+                $archivo = 'asu_data_'.$idarbol.'_'.$nivel.'_'.$elegido.'_'.$seleccionable.'_'.strtotime($fecha_update_asu).'.json';
+                $ruta_temp = $ruta;
+                if (!is_dir($ruta))
+                {
+                    if(!mkdir($ruta, 0777, true))
+                            return "false";
+                }
+
+                $ruta.= $archivo;
+
+                if (file_exists($ruta) && (count($seleccionados)==0 || $seleccionados[0]==""))
+                {
+                    $str_datos = file_get_contents($ruta);
+                    $datos = json_decode($str_datos,true);
+                    //if (count($seleccionados)>0)
+                    $datos = $this->_addSelectedItems($datos, $nivel, $seleccionados, $seleccionable);
+                    //var_dump($datos);          
+                    return $datos;
+                }
+                else
+                {  
+                    ini_set('max_execution_time',1000);
+                    ini_set('memory_limit', '1024M');
+
+                    if (count($seleccionados)>0 && $seleccionados[0]!="")
+                    {
+                       
+                        $resultadotemp = array();
+                        $resultadotemp[0] = $this->getTreeBlockData($idarbol, $nivel,0);
+                        $ultimaclave = 0;
+                        foreach($seleccionados as $seleccionado)
+                        {
+                           $item = $this->getById($seleccionado);
+                           if (count($item)> 0)
+                           {
+                               $tempnivel = $item[0]->grado_segmentacion;
+                               
+                               if (in_array($tempnivel,$omitidos))
+                               {
+                                   continue;
+                               }
+                               $id = $item[0]->id;
+                               while($tempnivel>$nivel)
+                               {
+                                   //echo $tempnivel."..";
+                                   $item = $this->getById($id);
+                                    if (count($item)> 0)
+                                    {
+                                        if (!isset($resultadotemp[$item[0]->id_padre]))
+                                        {
+                                        $resultadotemp[$item[0]->id_padre] = 
+                                                $this->getTreeBlockData($idarbol, $item[0]->grado_segmentacion, $item[0]->id_padre);
+                                        $id = $item[0]->id_padre;
+                                        $ultimaclave = $item[0]->id_padre;
+                                        }
+                                    }
+                                    $tempnivel -=1;
+                                    while(in_array($tempnivel,$omitidos))
+                                    {
+                                        $itempadre = $this->getById($ultimaclave);
+                                        if (count($itempadre)>0)
+                                        {
+                                            foreach($resultadotemp[$ultimaclave]["resultado"] as $clave => $valor)
+                                            {
+                                           //     echo        $resultadotemp[$ultimaclave]["resultado"][$clave]->parent."...".$itempadre[0]->id_padre."<br/>" ;
+                                                $resultadotemp[$ultimaclave]["resultado"][$clave]->parent = $itempadre[0]->id_padre;
+                                           //     echo        $resultadotemp[$ultimaclave]["resultado"][$clave]->parent."...".$itempadre[0]->id_padre."<br/>" ;
+                                            }
+                                        }
+                                        $tempnivel -=1;
+                                    }
+                               }
+                           }
+                        }
+                        $resultado = array();
+                        foreach($resultadotemp as $clave1 => $valor1)
+                        {
+                           foreach($resultadotemp as $clave2 => $valor2)
+                            {
+                               if ($clave1 != $clave2)
+                               {
+                                   if (!empty($resultadotemp[$clave1]["resultado"]) && !empty($resultadotemp[$clave2]["resultado"]) && $resultadotemp[$clave1]["resultado"][0]->nivel>$resultadotemp[$clave2]["resultado"][0]->nivel)
+                                   {
+                                        foreach($resultadotemp[$clave2]["resultado"] as $clave=>$valor)
+                                        {
+                                           if ($resultadotemp[$clave2]["resultado"][$clave]->id == $clave1)
+                                           {
+                                     //          echo $resultadotemp[$clave2]["resultado"][$clave]->id."...".$clave1."<br/>";
+                                               $resultadotemp[$clave2]["resultado"][$clave]->children = $this->convertType($resultadotemp[$clave1]["resultado"],in_array($resultadotemp[$clave1]["resultado"][0]->nivel, $seleccionables),$seleccionados);
+                                               $resultadotemp[$clave1]["resultado"] = null;
+                                               continue;
+                                           }
+                                           
+                                        }
+                                   }
+                               }
+                            } 
+                        }
+                        foreach($resultadotemp as $clave1 => $valor1)
+                        {
+                            if ($clave1>0 && $resultadotemp[$clave1]["resultado"] != null)
+                            {
+                                foreach($resultadotemp[0]["resultado"] as $clave2 => $valor2)
+                                {
+                                   // var_dump($resultadotemp[0]["resultado"][$clave2]);
+                                    if ($resultadotemp[0]["resultado"][$clave2]->id == $resultadotemp[$clave1]["resultado"][0]->parent)
+                                    {
+                                        $resultadotemp[0]["resultado"][$clave2]->children = $this->convertType($resultadotemp[$clave1]["resultado"],in_array($resultadotemp[$clave1]["resultado"][0]->nivel, $seleccionables),$seleccionados);
+                                        $resultadotemp[$clave1]["resultado"] = null;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        $resultadotemp[0]["resultado"] = $this->convertType($resultadotemp[0]["resultado"],in_array($resultadotemp[0]["resultado"][0]->nivel, $seleccionables),$seleccionados);
+                        
+                        return $resultadotemp[0]["resultado"];
+                        
+                    }
+                    else
+                    {
+                        $arbol = $this->getTreeBlockData($idarbol, $nivel,$elegido);
+                                   
+                        if (count($arbol['resultado']) == 0)
+                        {
+                            return array();
+                        }
+
+                        $resultado = $this->convertType($arbol["resultado"], $seleccionable, $seleccionados);
+                    }
+                        try
+                        {
+                            $fh = fopen($ruta, 'c');
+                            if(!$fh)
+                            {
+                               return "false";
+                            }
+
+                            fwrite($fh, json_encode($resultado,JSON_UNESCAPED_UNICODE));
+                            fclose($fh);
+
+                            $fechas = $this->db->query("select distinct fecha_update as fecha from asu_arbol_segmentacion where id_raiz=".$idarbol);
+                            if (!$fechas)
+                            {
+                                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                                $this->msg_error_usr = "Ocurrió un error al obtener el registro de actualizaciones del asu";
+                                return "false";
+                            }
+                            else
+                            {
+                                foreach ($fechas->result() as $item)
+                                {
+                                    $archivotemp = 'asu_data_'.$idarbol.'_'.$nivel.'_'.$elegido.'_'.$seleccionable.'_'.strtotime($item->fecha).'.json';
+                                    if ($archivo != $archivotemp)
+                                        if (file_exists($ruta_temp.$archivotemp))
+                                            unlink($ruta_temp.$archivotemp);                            
+                                }
+                            }               
+                        }
+                        catch(Exception $e)
+                        {
+                            $this->msg_error_log = "(". __METHOD__.") => " .'ASU'.': '."No se pudo crear el archivo JSON para el asu (".$ruta.") ::".$e->getMessage();
+                            return "false";
+                        }
+                        return $resultado;
+                }
+            }
+            catch(Exception $e)
+            {
+                return "false";
+            }
+        }
+        
         
         /**
          * Accion para devolver el esquema completo del ASU a partir de un nivel especificado, niveles omitidos y elementos preseleccionados
@@ -450,33 +797,32 @@ class ArbolSegmentacion_model extends CI_Model {
             }
         }
         
-        public function _addSelectedItems($datos,$seleccionados, $nivel, $omitidos, $seleccionables)
+        public function _addSelectedItems($datos,$nivel, $seleccionados, $seleccionables)
         {
-            while(in_array($nivel, $omitidos))
-                $nivel += 1;
             
-            //var_dump($nivel);
             
             foreach($datos as $clave => $dato)
             {
-                if (array_key_exists('children', $dato) && count($dato['children'])>0)
-                {
-                    $nivel += 1;
-                    $datos[$clave]['children'] = $this->_addSelectedItems($datos[$clave]['children'],$seleccionados, $nivel, $omitidos , $seleccionables);
-                    $nivel -= 1;
-                }
                 if (in_array($dato["key"],$seleccionados))
                 {
                     $datos[$clave]["select"] = true;
                 }
-                if (count($seleccionables)>0)
-                if (!in_array($nivel,$seleccionables))
+                
+                if(gettype($seleccionables)=='array')
                 {
-                   // echo $nivel;
-                   // var_dump($seleccionables);
-                   // echo "<br/><br/><br/>";
-                    $datos[$clave]["unselectable"] = true;
-                    $datos[$clave]["hideCheckbox"] = true;
+                    if (!in_array($nivel,$seleccionables))
+                    {
+                        $datos[$clave]["unselectable"] = true;
+                        $datos[$clave]["hideCheckbox"] = true;
+                    }
+                }
+                else
+                {
+                    if ($seleccionables==false)
+                    {
+                        $datos[$clave]["unselectable"] = true;
+                        $datos[$clave]["hideCheckbox"] = true;
+                    }
                 }
             }
             return $datos;

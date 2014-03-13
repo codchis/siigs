@@ -30,16 +30,26 @@
 		var treeData ="";
 		var omitidos=[];
 		omitidos[0]=null;
+                //VARIABLES PASADAS COMO PARAMETRO
+                var idarbol = <?php echo $idarbol;?>;
+                var nivel = <?php echo $nivel;?>;
+                var omitidos = <?php echo json_encode($omitidos);?>;
+                var seleccionados = parent.document.getElementById("<?php echo $id;?>").value.split(',');
+                var seleccionables = <?php echo json_encode($seleccionables);?>;
+                console.log(seleccionables);
+                console.log(omitidos);
+                console.log(seleccionados);
 		$.ajax({
-			type: "POST",
+			type: "GET",
 			data: {
-				'idarbol':<?php echo $idarbol;?> ,
-				'nivel':<?php echo $nivel;?> ,
-				'omitidos': <?php echo json_encode($omitidos);?>,
-				'seleccionados': parent.document.getElementById("<?php echo $id;?>").value.split(',') ,
-				'seleccionables': <?php echo json_encode($seleccionables);?>},
+				'idarbol':idarbol,
+				'nivel':nivel,
+				'seleccionados': seleccionados,
+                                'omitidos' : omitidos,
+                                'seleccionables' : seleccionables,
+				'seleccionable': (jQuery.inArray(nivel,seleccionables)==-1 ? false : true)},
 			//(count($omitidos) > 0) ? explode(',',$omitidos) : 'null';
-			url: '/<?php echo DIR_SIIGS.'/raiz/getChildrenFromLevel';?>',
+			url: '/<?php echo DIR_SIIGS.'/raiz/getTreeBlock';?>',
 			})
 			.done(function(dato)
 			{
@@ -113,6 +123,36 @@
 					$("#echoSelection").text(selValor.join(", "));
 					  
 				},
+                                onLazyRead: function(node){
+                                    nivel = node.data.tooltip/1+1;
+                                    console.log(nivel);
+                                    var cambio = false;
+                                    while(jQuery.inArray(nivel,omitidos)>-1)
+                                    {
+                                        cambio = true;
+                                        nivel +=1;
+                                    }
+                                    console.log(nivel);
+                                node.appendAjax({url: '/<?php echo DIR_SIIGS.'/raiz/getTreeBlock';?>',
+                                data: { "nivel" : ((cambio == true) ? nivel : 0),
+                                        "idarbol" : idarbol,
+                                        "elegido" : node.data.key,
+                                        'seleccionable': (jQuery.inArray(nivel,seleccionables)==-1 ? false : true),
+                                       "mode": "all"
+                                       },
+                                // (Optional) use JSONP to allow cross-site-requests
+                                // (must be supported by the server):
+                                // dataType: "jsonp",
+                                success: function(node) {
+                                    // Called after nodes have been created and the waiting icon was removed.
+                                    // 'this' is the options for this Ajax request
+                                    },
+                                error: function(node, XMLHttpRequest, textStatus, errorThrown) {
+                                    // Called on error, after error icon was created.
+                                    },
+                                cache: false // Append random '_' argument to url to prevent caching.
+                               });
+                                 },
 				// The following options are only required, if we have more than one tree on one page:
 				//cookieId: "dynatree-Cb2",
 				//idPrefix: "dynatree-Cb2-"

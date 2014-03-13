@@ -611,8 +611,8 @@ class Raiz extends CI_Controller {
          * @return Object JSON con la información requerida
          * @return 'Acceso denegado si la petición no es de tipo AJAX'
          * **/
-        
-        public function getChildrenFromLevel()
+
+                public function getChildrenFromLevel()
         {
             try 
             {
@@ -644,7 +644,56 @@ class Raiz extends CI_Controller {
 		echo $e->getMessage();
             }
         }
-              
+        
+        public function getTreeBlock()
+        {
+            try 
+            {
+		if ($this->input->is_ajax_request() || true)
+		{                    
+                    $seleccionables = array();
+                    $omitidos = array();
+                    $seleccionados = array();
+                    $idarbol=0;
+                    $nivel=0;
+                    $elegido=0;
+                    
+                    if (($this->input->get('idarbol',TRUE)))
+                    $idarbol = $this->input->get('idarbol',TRUE);
+                    if (($this->input->get('nivel',TRUE)))
+                    $nivel = $this->input->get('nivel',TRUE);
+                    if (($this->input->get('elegido',TRUE)))
+                    $elegido = $this->input->get('elegido',TRUE);
+                    if (($this->input->get('omitidos',TRUE)))
+                    $omitidos = $this->input->get('omitidos',TRUE);
+                    if (($this->input->get('seleccionados',TRUE)))
+                    $seleccionados = $this->input->get('seleccionados',TRUE);
+                    if (($this->input->get('seleccionable',TRUE)))
+                    $seleccionable = $this->input->get('seleccionable',TRUE);
+                    if (($this->input->get('seleccionables',TRUE)))
+                    $seleccionables = $this->input->get('seleccionables',TRUE);
+                    //$idarbol = 1;
+                    //$nivel = 1;
+                    $seleccionable = (($seleccionable == 'true') ? true : false);
+                    
+                    //$seleccionables = array(1);
+//                    $omitidos = array(null);
+//                    $seleccionados = array(775,776);
+                    if ($idarbol>0 && ($nivel>0 || $elegido>0))
+                    {
+                        echo json_encode($this->ArbolSegmentacion_model->getTreeBlock($idarbol,$nivel,$seleccionados,$seleccionable,$elegido,$omitidos,$seleccionables),JSON_UNESCAPED_UNICODE);
+                    }
+                    else
+                        echo "Parámetros incorrectos";
+		}
+		else echo 'Acceso denegado';
+            }
+            catch(Exception $e)
+            {
+		echo $e->getMessage();
+            }
+        }
+                        
         /**
          * Accion para obtener los registros de un ASU determinado en cierto nivel y con un ID de filtro
          * 
