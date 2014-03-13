@@ -527,6 +527,13 @@ class ArbolSegmentacion_model extends CI_Model {
                            }
                         }
                         $resultado = array();
+                        
+                        foreach($resultadotemp as $resul)
+                        {
+                            print_r($resul);
+                            echo "<br/><br/>";
+                        }
+                        
                         foreach($resultadotemp as $clave1 => $valor1)
                         {
                            foreach($resultadotemp as $clave2 => $valor2)
@@ -550,6 +557,11 @@ class ArbolSegmentacion_model extends CI_Model {
                                }
                             } 
                         }
+                        foreach($resultadotemp as $resul)
+                        {
+                            print_r($resul);
+                            echo "<br/><br/>";
+                        }
                         foreach($resultadotemp as $clave1 => $valor1)
                         {
                             if ($clave1>0 && $resultadotemp[$clave1]["resultado"] != null)
@@ -567,6 +579,12 @@ class ArbolSegmentacion_model extends CI_Model {
                             }
                         }
                         $resultadotemp[0]["resultado"] = $this->convertType($resultadotemp[0]["resultado"],in_array($resultadotemp[0]["resultado"][0]->nivel, $seleccionables),$seleccionados);
+                        
+                        foreach($resultadotemp as $resul)
+                        {
+                            print_r($resul);
+                            echo "<br/><br/>";
+                        }
                         
                         return $resultadotemp[0]["resultado"];
                         
@@ -669,7 +687,7 @@ class ArbolSegmentacion_model extends CI_Model {
                     $str_datos = file_get_contents($ruta);
                     $datos = json_decode($str_datos,true);
                     //if (count($seleccionados)>0)
-                    $datos = $this->_addSelectedItems($datos,$seleccionados, $nivel , $omitidos, $seleccionables);
+                    $datos = $this->_addSelectedItems_($datos,$seleccionados, $nivel , $omitidos, $seleccionables);
                     //var_dump($datos);
                                         
                     return $datos;
@@ -823,6 +841,38 @@ class ArbolSegmentacion_model extends CI_Model {
                         $datos[$clave]["unselectable"] = true;
                         $datos[$clave]["hideCheckbox"] = true;
                     }
+                }
+            }
+            return $datos;
+        }
+        
+        public function _addSelectedItems_($datos,$seleccionados, $nivel, $omitidos, $seleccionables)
+        {
+            while(in_array($nivel, $omitidos))
+                $nivel += 1;
+            
+            //var_dump($nivel);
+            
+            foreach($datos as $clave => $dato)
+            {
+                if (array_key_exists('children', $dato) && count($dato['children'])>0)
+                {
+                    $nivel += 1;
+                    $datos[$clave]['children'] = $this->_addSelectedItems_($datos[$clave]['children'],$seleccionados, $nivel, $omitidos , $seleccionables);
+                    $nivel -= 1;
+                }
+                if (in_array($dato["key"],$seleccionados))
+                {
+                    $datos[$clave]["select"] = true;
+                }
+                if (count($seleccionables)>0)
+                if (!in_array($nivel,$seleccionables))
+                {
+                   // echo $nivel;
+                   // var_dump($seleccionables);
+                   // echo "<br/><br/><br/>";
+                    $datos[$clave]["unselectable"] = true;
+                    $datos[$clave]["hideCheckbox"] = true;
                 }
             }
             return $datos;
