@@ -67,7 +67,7 @@ class Reporteador extends CI_Controller {
      * @param   string $title
      * @param   int    $nivel
      * @param   int    $id
-     * @param   date   $fecha
+     * @param   string   $fecha
 	 * @return 	void
 	 */
 	public function view($op, $title, $nivel, $id, $fecha = '')
@@ -82,9 +82,20 @@ class Reporteador extends CI_Controller {
             $array=array();
 			$data['title'] = $title;
             $data['datos'] = $array;
+            $fechaFin = null;
 
 			if($op==0) {
                 $this->load->helper('formatFecha');
+                                
+                // Si es entero, significa que selecciono una semana nacional de salud
+                if(!isDate($fecha)) {
+                    $this->load->model(DIR_TES.'/Semana_nacional_model');
+                    // Se debe obtener la semana nacional 
+                    $semana_nacional = $this->Semana_nacional_model->getById($fecha);
+                    
+                    $fecha = formatFecha($semana_nacional->fecha_fin, 'Y-m-d');
+                }
+                
 				$array = $this->Reporteador_model->getCoberturaBiologicoListado($nivel, $id, $fecha);
                 $grupo = $this->Reporteador_model->getGrupoVacunas();
                 

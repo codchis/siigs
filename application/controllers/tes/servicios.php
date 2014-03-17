@@ -386,6 +386,7 @@ class Servicios extends CI_Controller {
 					//	$cadena["tes_notificacion"]= 'Error recuperando tes_notificacion';
 					
 				}
+				$noti=0;
 				if(count($array)>0)
 				{
 					if($inicio_asu==1)
@@ -397,6 +398,7 @@ class Servicios extends CI_Controller {
 					ob_flush();
 					unset($cadena);
 					$cadena=array();
+					$noti=1;
 				}	
 				//************ fin notificacion ************
 				
@@ -409,7 +411,7 @@ class Servicios extends CI_Controller {
 				$pendiente=$this->Enrolamiento_model->get_catalog2("tes_pendientes_tarjeta","resuelto","0");
 				if($pendiente)
 				{
-					if($sf=="")
+					if($noti==1||$inicio_asu==1)
 					echo ",";
 					$cadena["tes_pendientes_tarjeta"]= $pendiente;
 					$micadena=json_encode($cadena);
@@ -506,6 +508,7 @@ class Servicios extends CI_Controller {
 			{
 				//************ inicio persona ************
 				$asu_um = $this->ArbolSegmentacion_model->getUMParentsById($tableta->id_asu_um);
+				
 				if($tableta->id_tipo_censo!=5)
 				{
 					$asu_um = array_reverse($asu_um);
@@ -740,7 +743,7 @@ class Servicios extends CI_Controller {
 						{
 							$b_campo="id_persona";
 							$b_valor=$midato->id_persona;
-							if($catalog->descripcion=="cns_antiguo_domicilio")
+							if($catalog->descripcion=="cns_antiguo_domicilio"||$catalog->descripcion=="cns_antigua_um")
 							{
 								$f_campo='fecha_cambio';
 								$f_valor=$midato->fecha_cambio;
@@ -754,6 +757,7 @@ class Servicios extends CI_Controller {
 								$f_campo='fecha';
 							if($f_valor=="")	
 							$f_valor=$midato->fecha;
+							
 						}
 						if(array_key_exists("id_invitado",$midato))
 							unset($midato->id_invitado);
@@ -1113,7 +1117,7 @@ class Servicios extends CI_Controller {
 		 json_encode(array("id_tab"=>$id_tab)) , 
 		 json_encode(array("id_sesion"=>$id_sesion)), 
 		 $version,
-		 '{"cns_control_nutricional":[{"talla":"0","peso":"20","id_persona":"60f4c276d0b7297abe808710030899e7","altura":"50","fecha":"2014-02-24 15:30:54","id_asu_um":"20169","id_invitado":null}],"sis_bitacora":[{"parametros":"paciente:60f4c276d0b7297abe808710030899e7, altura:50, peso:20.0","fecha_hora":"2014-02-24 15:30:54","id_usuario":"23","id_controlador_accion":"87"}]}' );
+		 '{"cns_antiguo_domicilio":[{"fecha_cambio":"2014-03-13 11:10:13","id_asu_localidad_domicilio":"255","calle_domicilio":"2A AVENIDA ORIENTE NORTE","colonia_domicilio":null,"numero_domicilio":"SN","cp_domicilio":"0","id_persona":"2963091b0b95e0ceae236e1da027cc1f","referencia_domicilio":null},{"fecha_cambio":"2014-03-13 11:16:23","id_asu_localidad_domicilio":"255","calle_domicilio":"2A AVENIDA ORIENTE NORTE","colonia_domicilio":"Los manzanos","numero_domicilio":"SN","cp_domicilio":"0","id_persona":"2963091b0b95e0ceae236e1da027cc1f","referencia_domicilio":""},{"fecha_cambio":"2014-03-13 11:16:39","id_asu_localidad_domicilio":"255","calle_domicilio":"2A AVENIDA ORIENTE NORTE","colonia_domicilio":"Los manzanos","numero_domicilio":"SN","cp_domicilio":"18500","id_persona":"2963091b0b95e0ceae236e1da027cc1f","referencia_domicilio":""}],"cns_persona_x_alergia":[{"id_persona":"2963091b0b95e0ceae236e1da027cc1f","id_alergia":"12","ultima_actualizacion":"2014-03-13 11:39:46"},{"id_persona":"2963091b0b95e0ceae236e1da027cc1f","id_alergia":"3","ultima_actualizacion":"2014-03-13 11:59:20"}],"sis_bitacora":[{"parametros":"paciente:2963091b0b95e0ceae236e1da027cc1f","fecha_hora":"2014-03-13 11:10:13","id_usuario":"17","id_controlador_accion":"98"},{"parametros":"paciente:2963091b0b95e0ceae236e1da027cc1f","fecha_hora":"2014-03-13 11:16:23","id_usuario":"17","id_controlador_accion":"98"},{"parametros":"paciente:2963091b0b95e0ceae236e1da027cc1f","fecha_hora":"2014-03-13 11:16:39","id_usuario":"17","id_controlador_accion":"98"},{"parametros":"paciente:2963091b0b95e0ceae236e1da027cc1f","fecha_hora":"2014-03-13 11:32:24","id_usuario":"17","id_controlador_accion":"97"},{"parametros":"paciente:2963091b0b95e0ceae236e1da027cc1f, alergia:12","fecha_hora":"2014-03-13 11:39:46","id_usuario":"17","id_controlador_accion":"99"},{"parametros":"paciente:2963091b0b95e0ceae236e1da027cc1f, alergia:3","fecha_hora":"2014-03-13 11:59:20","id_usuario":"17","id_controlador_accion":"99"}],"cns_persona":[{"sector":"","id_nacionalidad":"142","calle_domicilio":"2A AVENIDA ORIENTE NORTE","colonia_domicilio":"Los manzanos","numero_domicilio":"SN","telefono_domicilio":null,"cp_domicilio":"18500","fecha_registro":"2014-02-27 00:00:00","ageb":"0155","sexo":"M","manzana":"","id_asu_localidad_nacimiento":"255","referencia_domicilio":"","id_asu_um_tratante":"20140","fecha_nacimiento":"2009-11-03","nombre":"HECTOR ADRIAN","id":"2963091b0b95e0ceae236e1da027cc1f","id_asu_localidad_domicilio":"255","id_tipo_sanguineo":"9","apellido_materno":"VAZQUEZ","apellido_paterno":"PEREZ","id_operadora_celular":null,"ultima_actualizacion":"2014-03-13 11:32:24","curp":"PEVH091103HCSRZC05","celular":null}],"cns_antigua_um":[{"fecha_cambio":"2014-03-13 11:32:24","id_persona":"2963091b0b95e0ceae236e1da027cc1f","id_asu_um_tratante":"20736"}],"cns_control_nutricional":[{"talla":"0","peso":"6.5","id_persona":"0c417380cc549e24e63e48aa0cacde50","altura":"61","fecha":"2301-12-15 00:00:00","id_asu_um":"28434"},{"talla":"0","peso":"11","id_persona":"11b3b8babbefdb8f70e90e8e44c1ea0f","altura":"80","fecha":"2014-08-15 00:00:00","id_asu_um":"20736"},{"talla":"0","peso":"15.4","id_persona":"9c7e78cd824d683be01a73469b6ea4b5","altura":"107","fecha":"2014-04-26 00:00:00","id_asu_um":"28434"}],"cns_control_vacuna":[{"id_persona":"0624f2e47590750afb51d1b1100c616a","codigo_barras":"","fecha":"2017-02-27 00:00:00","id_asu_um":"20736","id_vacuna":"19"},{"id_persona":"0969d0271222ac05ec556ad3179784b0","codigo_barras":"","fecha":"2014-12-23 00:00:00","id_asu_um":"21354","id_vacuna":"9"},{"id_persona":"0ea2856502442ad4a666d56f77f7dd08","codigo_barras":"","fecha":"2231-02-26 00:00:00","id_asu_um":"20736","id_vacuna":"17"},{"id_persona":"10349cdd07c2f9d1d8a83dea47f03785","codigo_barras":"","fecha":"2019-02-27 00:00:00","id_asu_um":"20736","id_vacuna":"21"},{"id_persona":"1aa1cdb25408000fb52368d1b15b9a12","codigo_barras":"","fecha":"2014-04-03 00:00:00","id_asu_um":"20736","id_vacuna":"16"},{"id_persona":"5054211bc85a686c17ee79419b6f9daf","codigo_barras":"","fecha":"2062-02-26 00:00:00","id_asu_um":"20736","id_vacuna":"11"},{"id_persona":"8ec3a57acf175a8a9c83e6e3d175212f","codigo_barras":"","fecha":"2014-05-27 00:00:00","id_asu_um":"28434","id_vacuna":"21"},{"id_persona":"b812dc891c0215e7de3e546c7a9183ab","codigo_barras":"","fecha":"2014-05-27 00:00:00","id_asu_um":"20736","id_vacuna":"21"},{"id_persona":"f76ec7746905417f63d5d05bc8994ee4","codigo_barras":"","fecha":"2014-04-27 00:00:00","id_asu_um":"20736","id_vacuna":"21"}],"sis_error":[{"descripcion":"NFC:null:\njava.io.IOException","fecha_hora":"2014-03-13 12:00:33","id_usuario":"17","id_controlador_accion":"1000"}]}' );
 	}    
 }
 ?>

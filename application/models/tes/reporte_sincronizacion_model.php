@@ -59,7 +59,7 @@ class Reporte_sincronizacion_model extends CI_Model
 		if($sentecia!="")
 			$query=$this->db->query($sentecia);
 		else
-			$query=$this->db->get($tabla);
+			$query=$this->db->get($tabla); 
 		return $query->num_rows();  
 	}
 	

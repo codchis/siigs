@@ -269,5 +269,40 @@ class Semana_nacional extends CI_Controller {
         die();
     }
     
+    /**
+     * Devuelve un json con todos los registros de semanas nacional
+     *
+     * @access public solo por metodo POST
+     * @return json
+     */
+    public function getAll()
+    {
+        $respuesta = array();
+        
+        if (!Usuario_model::checkCredentials(DIR_TES.'::'.__METHOD__, current_url())) {
+            $respuesta = array('error'=>true, 'msj_error'=>'Acceso denegado');
+            echo json_encode($respuesta);
+            die();
+        }
+        
+        if(!isset($this->Semana_nacional_model)) {
+            $respuesta = array('error'=>true, 'msj_error'=>'No se puede cargar el modelo');
+            echo json_encode($respuesta);
+            die();
+        }
+
+        try {
+            $respuesta['registros'] = $this->Semana_nacional_model->getAll();
+            
+            $respuesta['error'] = false;
+            
+        } catch (Exception $e) {
+            $respuesta = array('error'=>true, 'msj_error'=> Errorlog_model::save($this->Semana_nacional_model->getMsgError(), __METHOD__));
+            echo json_encode($respuesta);
+            die();
+        }
+        
+        echo json_encode($respuesta);
+    }
 }
 ?>

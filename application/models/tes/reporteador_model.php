@@ -56,7 +56,7 @@ class Reporteador_model extends CI_Model {
      * @param   date    $fecha  Fecha de corte de elemento
 	 * @return  void
 	 */
-	public function getCoberturaBiologicoListado($nivel, $id, $fecha)
+	public function getCoberturaBiologicoListado($nivel, $id, $fecha, $fechaFin = null)
 	{
         $result = array();
         $idsAsu = array();
@@ -121,9 +121,9 @@ class Reporteador_model extends CI_Model {
                 $idsAsu = array($id);
                 break;
             default:
-                $this->msg_error_usr = "El grado de segmentación especifico no es valido para este reporte";
+                $this->msg_error_usr = "El grado de segmentación especifico no es valido para este reporte. Solo se puede emitir a nivel Estatal, Jurisdicional y Municipal";
                 $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-                throw new Exception("El grado de segmentación especifico no es valido para este reporte");
+                throw new Exception("El grado de segmentación especifico no es valido para este reporte. Solo se puede emitir a nivel Estatal, Jurisdicional y Municipal");
                 break;
         }
         
