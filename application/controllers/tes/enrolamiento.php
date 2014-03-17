@@ -599,18 +599,20 @@ SELECT DISTINCT	r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplica
 	 *
 	 * @return 		echo
 	 */
-	public function file_to_card($id)
+	public function file_to_card($id,$tipo="")
 	{
 		$archivo=date("YmdHis").".tesf";
 		header("Pragma: public");
 		header("Expires: 0");
-		header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
-		header("Content-Type: application/force-download");
-		header("Content-Type: application/octet-stream");
-		header("Content-Type: application/download");
-		header("Content-Disposition: attachment;filename=".$archivo);
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+		if($tipo=="")
+		{
+			header("Content-Type: application/force-download");
+			header("Content-Type: application/octet-stream");
+			header("Content-Type: application/download");
+			header("Content-Disposition: attachment;filename=".$archivo);
+		}
 		header("Content-Transfer-Encoding: binary ");
-		
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
 		$data="";
 		
@@ -1341,5 +1343,11 @@ SELECT DISTINCT	r.id_vacuna,cv.codigo_barras, v.descripcion,r.dia_inicio_aplicac
 			echo "no";
 		else 
 			echo "si";
+	}
+	
+	public function accion()
+	{
+		$data['prefix']='hola';
+		$this->load->view(DIR_TES.'/TESNFC/Web/index',$data);
 	}
 }

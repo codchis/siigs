@@ -9,10 +9,9 @@ $(document).ready(function()
 	<?php if(!empty($id)){?>
 	if(confirm("<?php echo $msgResult ?>\n\n ¿Deseas guardarlo en la tarjeta?"))
 	{
-		$.fancybox.showActivity();
 		$.fancybox({
-			'width'         : '30%',
-			'height'        : '30%',				
+			'width'         : '0%',
+			'height'        : '0%',				
 			'transitionIn'	: 'elastic',
 			'transitionOut'	: 'elastic',
 			'type'			: 'iframe',	
@@ -21,9 +20,7 @@ $(document).ready(function()
 				window.location.href="/<?php echo DIR_TES?>/enrolamiento/";
 			},
 			onComplete      : function(){
-				$('#fancybox-frame').load(function(){
-					$.fancybox.hideActivity();
-				});
+				jQuery.fancybox.close();
 			}
 		});
 	}

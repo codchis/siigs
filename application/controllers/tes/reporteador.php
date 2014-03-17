@@ -89,8 +89,6 @@ class Reporteador extends CI_Controller {
                                 
                 // Si es entero, significa que selecciono una semana nacional de salud
                 if(!isDate($fecha)) {
-                    echo 'FECHA '.$fecha;
-                    echo 'Es entero';
                     $this->load->model(DIR_TES.'/Semana_nacional_model');
                     // Se debe obtener la semana nacional 
                     $semana_nacional = $this->Semana_nacional_model->getById($fecha);
@@ -163,7 +161,7 @@ class Reporteador extends CI_Controller {
 		}
 		catch(Exception $e)
 		{
-			$data['msgResult'] = Errorlog_model::save($e->getMessage().$e->getTraceAsString(), __METHOD__);
+			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 			$data['infoclass'] = 'error';
 		}
 		

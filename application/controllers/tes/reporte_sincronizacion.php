@@ -140,7 +140,7 @@ class Reporte_sincronizacion extends CI_Controller
 			$array=$this->Reporte_sincronizacion_model->getListado("SELECT $campos FROM tes_tableta t $join WHERE id_tes_estado_tableta NOT IN (3,2)");	
 			
 			if($op==9)
-			$array=$this->Reporte_sincronizacion_model->getListado("SELECT distinct *id_persona,fecha,tabla,resuelto,mac FROM tes_pendientes_tarjeta");
+			$array=$this->Reporte_sincronizacion_model->getListado("SELECT distinct id_persona,fecha,tabla,resuelto,mac FROM tes_pendientes_tarjeta");
 			
 			if($op==10)
 			$array=$this->Reporte_sincronizacion_model->getListado("SELECT id_persona,fecha,tabla,resuelto,mac FROM tes_pendientes_tarjeta");
@@ -217,7 +217,7 @@ class Reporte_sincronizacion extends CI_Controller
 			if($lotes=="")$mas="OR codigo_barras IS NULL";else $mas="";
 			$consulta="select distinct(codigo_barras) from cns_control_vacuna where (codigo_barras like '%$lotes%' $mas) $unidad and (fecha between '$desde' and '$hasta') ";
 			
-			$count=$this->Reporte_sincronizacion_model->getCount("",$consulta);
+			$count=$this->Reporte_sincronizacion_model->getCount("",$consulta); 
 			$array=$this->Reporte_sincronizacion_model->getListado($consulta);
 
 			$i=0;$midato=array();
@@ -241,8 +241,7 @@ class Reporte_sincronizacion extends CI_Controller
 					{
 						$tipoa.=$y->descripcion." - ";
 					}
-					$umsx=$this->Reporte_sincronizacion_model->getListado($consultb." IS NULL");
-					
+					$umsx=$this->Reporte_sincronizacion_model->getListado($consultb." IS NULL"); 
 					foreach($umsx as $u)
 					{
 						$in.=$u->id_asu_um.",";
