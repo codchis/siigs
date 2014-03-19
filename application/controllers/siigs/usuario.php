@@ -40,10 +40,10 @@ class Usuario extends CI_Controller {
 			$this->load->helper('url');
 			$this->load->library('form_validation');
 			$this->form_validation->set_rules('nombre_usuario', 'Nombre de Usuario', 'trim|required');
-			$this->form_validation->set_rules('clave', 'Clave', 'trim|required|md5');
+			$this->form_validation->set_rules('clave', 'Clave', 'trim|required');
 			$data['msgResult'] = $this->session->flashdata('msgResult');
 			$data['clsResult'] = $this->session->flashdata('clsResult');
-			
+
 			if ($this->form_validation->run() === FALSE)
 			{
 				$this->template->write_view('content',DIR_SIIGS.'/usuario/login', $data);
@@ -52,7 +52,7 @@ class Usuario extends CI_Controller {
 			}
 			else
 			{
-				$rowUser = $this->Usuario_model->authenticate($this->input->post('nombre_usuario'), $this->input->post('clave'));
+				$rowUser = $this->Usuario_model->authenticate($this->input->post('nombre_usuario'), md5($this->input->post('clave')));
 				if ($rowUser)
 				{
 					if (!$rowUser->activo)
@@ -64,6 +64,7 @@ class Usuario extends CI_Controller {
 					{
 						// almacena en session las variables necesarias
 						$this->session->set_userdata(USERNAME, strtoupper($rowUser->nombre_usuario));
+                        $this->session->set_userdata(PASSWORD, $this->input->post('clave'));
 						$this->session->set_userdata(USER_LOGGED, $rowUser->id);
 						$this->session->set_userdata(GROUP_ID, strtoupper($rowUser->id_grupo));
 						// obtiene los permisos del grupo al que pertenece el usuario logueado
@@ -95,7 +96,7 @@ class Usuario extends CI_Controller {
 		}
 		$this->template->write_view('content',DIR_SIIGS.'/usuario/login', $data);
 		$this->template->render();
-	
+
 	}
 
 	/**
@@ -113,7 +114,7 @@ class Usuario extends CI_Controller {
 		$this->session->sess_destroy();
 		redirect('/index','refresh');
 	}
-	
+
 	/**
 	 * 1) Visualiza los usuarios existentes para su interacción CRUD
 	 * 2) En caso de detectar un texto a buscar se filtran los usuarios existentes acorde a la búsqueda
@@ -132,11 +133,11 @@ class Usuario extends CI_Controller {
 			$data['title'] = 'Catálogo de Usuarios';
 			$this->load->helper('form');
 			$this->load->library('pagination');
-			
+
 			$data['pag'] = $pag;
             $data['msgResult'] = $this->session->flashdata('msgResult');
             $data['clsResult'] = $this->session->flashdata('clsResult');
-			
+
 			// Configuración para el Paginador
 			$configPag['base_url']   = '/'.DIR_SIIGS.'/usuario/index/';
 			$configPag['first_link'] = 'Primero';
@@ -218,7 +219,7 @@ class Usuario extends CI_Controller {
 		{
 			$data['grupos'][$grupo->id] = $grupo->nombre;
 		}
-		
+
 		if ($this->form_validation->run() === FALSE)
 		{
 	 		$this->template->write_view('content',DIR_SIIGS.'/usuario/insert', $data);
@@ -281,7 +282,7 @@ class Usuario extends CI_Controller {
 			$data['grupos'][$grupo->id] = $grupo->nombre;
 		}
 		$data['user_item'] = $this->Usuario_model->getById($id);
-				
+
 		if ($this->form_validation->run() === FALSE)
 		{
 			$this->template->write_view('content',DIR_SIIGS.'/usuario/update', $data);
@@ -340,7 +341,7 @@ class Usuario extends CI_Controller {
 		}
 	    redirect(DIR_SIIGS.'/usuario','refresh');
 	}
-	
+
 	/**
 	 * Callback para validar que un nombre de usuario no se duplique
 	 *
@@ -377,9 +378,9 @@ class Usuario extends CI_Controller {
 			}
 		}
 	}
-	
+
 	//////////////// Recuperar contraseña y modificar datos de usuario
-	
+
 	function form_init()
 	{
 		$this->load->helper('form');     
@@ -412,18 +413,18 @@ class Usuario extends CI_Controller {
 			{
 				$data['infoclass']= 'error';
 				$data['msgResult']= 'No se pudo comprobar sus datos';
-				
+
 				$this->template->write_view('content',DIR_SIIGS.'/usuario/recordar_datos',$data);
 	 			$this->template->render();
 			}
 			else
 			{
-				
+
 				$todos = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 				$valor="";
 				for($i=0;$i<64;$i++) 
 				$valor.= substr($todos,rand(0,62),1);								
-				
+
 				$url="http://".$_SERVER['HTTP_HOST']."/siigs/usuario/token/$valor";
 				//$url="http://www.siigs.com/siigs/usuario/token/$valor";
 				$subject="Cómo restablecer su contraseña de SIIGS";
@@ -492,7 +493,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 				$correo=$datos->correo;
 				$CC="";
 				$CCO="";				
-				
+
 				$fecha=date("d/m/Y H:i:s");
 				$fp = fopen(APPPATH."logs/recuperalog.siigs", "a");
 				fputs($fp, "[$fecha][$valor][$correo]\r\n");
@@ -517,7 +518,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 	public function token($str)
 	{
 		$variable="";
-		
+
 		$file = fopen(APPPATH."logs/recuperalog.siigs", "r") or exit("No se puedo abri!");
 		while(!feof($file))
 		{
@@ -598,7 +599,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		$data['title'] = 'Reset Contraseña';
 		$data["info"]="1.- Compruebe sus datos ";
 		$data["info2"]="2.- Escriba su nueva contraseña";
-				
+
 		if ($this->form_validation->run() === FALSE)
 		{			
 	 		$this->template->write_view('content',DIR_SIIGS.'/usuario/reset_pass',$data);
@@ -607,7 +608,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		else
 		{
 			$variable="";
-		
+
 			$file = fopen(APPPATH."logs/recuperalog.siigs", "r") or exit("No se puedo abri!");
 			while(!feof($file))
 			{
@@ -618,7 +619,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 			{
 				$this->load->model(DIR_SIIGS.'/usuario_model');
 				$datos=$this->usuario_model->check_data(strtoupper($this->input->post('nombre_usuario')),$this->input->post('correo'));
-		
+
 				if(sizeof($datos)==0)
 				{
 					$data["error"]="";
@@ -630,7 +631,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 				else
 				{
 					$this->usuario_model->update_pass($this->input->post('pass'),$datos->id);															
-				
+
 					$pt=stripos($variable,$str);
 					$cad=substr($variable,0,$pt);
 					$cad.=substr($variable,($pt+64),strlen($variable)-($pt+64));
@@ -648,9 +649,9 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 				show_error('', 403, 'El enlace ha caducado');
 		}
 	}
-	
+
 	///////////// modificar datos de usuario
-	
+
 	public function load_update()
 	{
 		$this->load->helper('url');		
@@ -688,7 +689,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		$id=$this->session->userdata(USER_LOGGED);
 		$datos=$this->usuario_model->getuser($id);			
 		$grup=$this->usuario_model->getgrupo($grupo);
-		
+
 		$this->load->helper('form');     
 		$this->load->helper('url');
 		$this->load->library('form_validation');
@@ -774,9 +775,9 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 	{
 		if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
 				show_error('', 403, 'Acceso denegado');
-				
-		$user="admin";
-		$pass="adminSM2015";		
+			
+		$user=$this->session->userdata(USERNAME);
+		$pass=$this->session->userdata(PASSWORD);
 		if($this->session->userdata('session_etab')=="iniciado")
 		{
 			$this->session->unset_userdata('session_etab');
@@ -785,13 +786,12 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 			  </script>';
 			$this->cerrar_etab();
 		}
-		
+		$token="";
+		//while(strlen(str_replace(" ","",$token))<40)
 		$token=$this->get_token('http://etab.sm2015.com.mx/admin/login',true,'name="_csrf_token" value="',26,40);
-		$valida=$this->get_token('http://etab.sm2015.com.mx/admin/login_check',true,'<ul class="nav">',906,20,"_username=$user&_password=$pass&_csrf_token=$token&_submit=Entrar");
+		//$valida=$this->get_token('http://etab.sm2015.com.mx/admin/login_check',true,'<ul class="nav">',906,20,"_username=$user&_password=$pass&_csrf_token=$token&_submit=Entrar");
 		
-		if($valida=='li class="dropdown">')
-			$this->session->set_userdata( 'session_etab', "iniciado" );
-		else $this->automatic_access();
+		$this->session->set_userdata( 'session_etab', "iniciado" );
 
 		echo '<script src="/resources/js/jquery.js"></script>
 
@@ -826,10 +826,10 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 	function get_token($url,$var,$valor="",$num="",$count="",$par="")
 	{
 		global $mas;
-		
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		
+
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
@@ -847,7 +847,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)");
 		$html = curl_exec($ch);
 		$token=substr($html,stripos($html,$valor)+$num,$count);
-		
+
 		$err = 0;
 		$err = curl_errno($ch); 
 		curl_close($ch);
@@ -879,4 +879,6 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		return substr($variable,stripos($variable,"PHPSESSID")+10,26);
 	}
 }
+
+
 	
