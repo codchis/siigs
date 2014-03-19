@@ -547,7 +547,7 @@ class ArbolSegmentacion_model extends CI_Model {
 //                        
 //                        var_dump($search);
 //                        echo "<br/><br/>";
-                        while($search["nivel"]>1 && $contador<20)
+                        while($search["nivel"]>1/* && $contador<200*/)
                         {
                             $contador +=1;
                             $clave1 = $search["id"];
