@@ -778,6 +778,8 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 			
 		$user=$this->session->userdata(USERNAME);
 		$pass=$this->session->userdata(PASSWORD);
+		if(strtoupper($user)=="ADMIN")
+		$pass="adminSM2015";
 		if($this->session->userdata('session_etab')=="iniciado")
 		{
 			$this->session->unset_userdata('session_etab');
@@ -792,18 +794,11 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		//$valida=$this->get_token('http://etab.sm2015.com.mx/admin/login_check',true,'<ul class="nav">',906,20,"_username=$user&_password=$pass&_csrf_token=$token&_submit=Entrar");
 		
 		$this->session->set_userdata( 'session_etab', "iniciado" );
-
-		echo '<script src="/resources/js/jquery.js"></script>
-
-		<form action="http://etab.sm2015.com.mx/admin/login_check" method="post" >
-				<input type="hidden" name="_csrf_token" value="'.$token.'" />
-				<input type="hidden" id="username" name="_username" value="'.$user.'" />
-				<input type="hidden" id="password" name="_password"  value="'.$pass.'" />
-				<input type="submit" class="btn btn-primary" id="_submit" name="_submit" value="" style="width:0px; height:0px; margin-left:-50px;" />
-			  </form>
-			  <script>
-			    document.getElementById("_submit").click();
-			  </script>';
+		
+		$data["user"]=$user;
+		$data["pass"]=$pass;
+		$data["token"]=$token;
+		$this->load->view(DIR_TES.'/enrolamiento/etab',$data);
 	}
 	/**
 	 *Acción para cerrar el login en otro sistema
@@ -813,7 +808,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 	 */
 	function cerrar_etab()
 	{
-		$token=$this->get_token('http://etab.sm2015.com.mx/admin/logout',false);
+		$token=$this->get_token('http://etab.sm2015.com.mx/admin/logout',false,'name="_csrf_token" value="',26,40);
 		$this->session->unset_userdata('session_etab');
 		redirect($_SERVER['HTTP_REFERER'],"refresh");
 	}
@@ -877,7 +872,7 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 		}
 		fclose($file);
 		return substr($variable,stripos($variable,"PHPSESSID")+10,26);
-	}
+	}	
 }
 
 
