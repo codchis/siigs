@@ -810,7 +810,6 @@ Copyright © 2013. Todos los derechos reservados.</p></td>
 	{
 		$token=$this->get_token('http://etab.sm2015.com.mx/admin/logout',false,'name="_csrf_token" value="',26,40);
 		$this->session->unset_userdata('session_etab');
-		redirect($_SERVER['HTTP_REFERER'],"refresh");
 	}
 	/**
 	 *Acción para obtener el token oculto en el login

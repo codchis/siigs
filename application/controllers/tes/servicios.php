@@ -768,7 +768,7 @@ class Servicios extends CI_Controller {
 					}
 					
 				}
-				catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);$bien++;}
+				catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);//$bien++;}
 			}
 		}
 		if($bien==0)
