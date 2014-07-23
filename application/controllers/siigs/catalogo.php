@@ -150,13 +150,14 @@ class Catalogo extends CI_Controller {
 			 {
 			 	array_push($tiposdatos, array('clave' => $item->id , 'valor' => $item->descripcion));
 			 }
-			 while (!feof($fp))
+			 //while (!feof($fp))
+                         while (($data = fgetcsv($fp)) !== FALSE)
 			 {
 			  	$utf8_encode = function($val)
                                 {
                                     return utf8_encode($val);
                                 };
-			  	$data  = array_map($utf8_encode,explode(",", fgets($fp)));
+			  	$data  = array_map($utf8_encode,$data);
                                 
 			  	$cont +=1;
 				$data = preg_replace("!\r?\n!", "", $data);
@@ -204,7 +205,7 @@ class Catalogo extends CI_Controller {
 			  		}
 			  	}
 			 }
-
+                         fclose($fp);
 			 //Inserta los datos en lotes a la tabla temporal
 			 $this->db->insert_batch('tmp_catalogo',$rows);
 
@@ -342,7 +343,8 @@ class Catalogo extends CI_Controller {
 			 }
                          ini_set('memory_limit', '1024M');
                          $error = false;
-			 while (!feof($fp))
+			 //while (!feof($fp))
+                         while (($data = fgetcsv($fp)) !== FALSE)
 			 {
 			  	//$data  = explode(",", fgets($fp));
 			  	
@@ -350,7 +352,7 @@ class Catalogo extends CI_Controller {
                                 {
                                     return utf8_encode(addslashes($val));
                                 };
-			  	$data  = array_map($utf8_encode,explode(",", fgets($fp)));
+			  	$data  = array_map($utf8_encode,$data);
 			  	
                                 
 			  	$cont +=1;
@@ -467,6 +469,7 @@ class Catalogo extends CI_Controller {
                                         }
 			  	}
 			 }
+                         fclose($fp);
 			 if (count($datallaves) > count($this->_array_unique_recursive($datallaves)))
 			 {
 			 	echo json_encode(array("Error","El archivo contiene llaves primarias duplicadas"));

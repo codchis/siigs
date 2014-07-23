@@ -21,7 +21,7 @@
 	Concurrent.Thread.create(function()
 	{
 		var start = new Date().getSeconds();
-		var a=1; var r=0; r2=200000;
+		var a=1; var r=0; r2=1000000;
 		while ( a=1 )
 		{
 			if (r==r2)
@@ -30,7 +30,7 @@
 				{
 					if(result=="no")
 					{
-						r2=(200000*30);
+						r2=(1000000*30);
 						$.fancybox.showActivity();
 						$.fancybox({
 							'width'         : '70%',
@@ -40,7 +40,7 @@
 							'type'			: 'iframe',	
 							'href'			: "/<?php echo DIR_SIIGS?>/usuario/login",
 							'onClosed'		: function(){
-								r2=200000;
+								r2=1000000;
 							},
 							onComplete      : function(){
 								$('#fancybox-frame').load(function(){
@@ -150,7 +150,7 @@
 						if(uri.substr(uri.search("/")+1,uri.length)=="lnacimientoT")
 						{
 							$("#curp").focus();
-							getcurp();
+							//getcurp();
 						}
 					});
 				}				
@@ -187,11 +187,11 @@
 		?>
 		$("#nombre,#paterno,#materno,#fnacimiento,#lnaciminetoT").blur(function()
 		{       
-			getcurp();
+			//getcurp();
 		});	
 		$("#fnacimiento").change(function()
 		{       
-			getcurp();
+			//getcurp();
 			$("#vc").html('<span style="color:green;margin-left:10px;">Creando... Espere</span>');
 			$("#vc").load("/tes/enrolamiento/vacunacion/"+this.value);
 		});
@@ -265,10 +265,10 @@
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%" align="right">
                               <label style=" margin-left:10px; float:left">
-                                <input type="radio" name="sexo" value="M" <?php echo set_radio('sexo', 'M'); ?> id="sexo_1" onclick="getcurp();" title='requiere' required style="margin-top:-3px;" onkeydown="return entertab(event,2)" tabindex="8">
+                                <input type="radio" name="sexo" value="M" <?php echo set_radio('sexo', 'M'); ?> id="sexo_1" onclick="return false;getcurp();" title='requiere' required style="margin-top:-3px;" onkeydown="return entertab(event,2)" tabindex="8">
                                 Masculino</label>
                               <label style=" float:left">
-                                <input type="radio" name="sexo" value="F" <?php echo set_radio('sexo', 'F'); ?> id="sexo_2" onclick="getcurp();" style="margin-top:-3px;" onkeydown="return entertab(event,4)" tabindex="9">
+                                <input type="radio" name="sexo" value="F" <?php echo set_radio('sexo', 'F'); ?> id="sexo_2" onclick="return false;getcurp();" style="margin-top:-3px;" onkeydown="return entertab(event,4)" tabindex="9">
                                 Femenino</label>
                              </td>
                           </tr>
@@ -297,17 +297,35 @@
                           <tr>
                             <td><p align="right">Pre CURP</p></td>
                             <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp', ''); ?>" maxlength="12" onkeydown="return entertab(event,10)" tabindex="5">
-                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:24.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp2', ''); ?>" maxlength="6" onkeydown="return entertab(event,12)" tabindex="6"></td>
+                            <input name="curp2" type="text" id="curp2"  style="letter-spacing:1px; width:24.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo set_value('curp2', ''); ?>" maxlength="6" onkeydown="return entertab(event,12)" tabindex="6">
+                            <input type="hidden" id="precurp" name="precurp" value="0" />
+                            </td>
                             <td><p align="right">Nacionalidad</p></td>
-                            <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,13)" tabindex="12">
+                            <td><select name="nacionalidad" id="nacionalidad" style="width:70%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,12)" tabindex="12">
                             </select></td>
+                          </tr>
+                          <tr>
+                              <td><p align="right">&nbsp;</p></td>
+                              <td>
+                                  <button style="width:52%;margin-left:10px;margin-bottom:5px;" class="btn btn-primary" onclick="return calcula_curp();">Calcular RFC<i class="icon-search"></i></button>
+                                  <button id="editacurp" style="width:33%;visibility:hidden;" class="btn btn-primary" onclick="return edita_curp();">Editar<i class="icon-edit"></i></button>
+                              </td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              
                           </tr>
                           <tr>
                             <td><p align="right">Parto Multiple</p></td>
                             <td ><select name="parto" id="parto" style="width:85%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,1)" tabindex="7">
                             </select></td>
-                            <td><p align="right">&nbsp;</p></td>
-                            <td>&nbsp;</td>
+                            <td><p align="right">Tamiz neonatal</p></td>
+                            <td>
+                                <select name="tamiz" id="tamiz" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,13)" tabindex="12">
+                                    <option value="2">Se ignora</option>
+                                    <option value="1">Si</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </td>
                           </tr>
                           <tr>
                             <td>&nbsp;</td>

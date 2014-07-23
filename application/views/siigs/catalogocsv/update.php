@@ -177,7 +177,7 @@ if (!empty($datos))
            <?php }
                 
         } ?>
-        <?php if (!empty($dato->id)) {?>
+        <?php if (!empty($dato->id) && !empty($dato->activo)) {?>
         <td>
             <input class="check_activar" type="checkbox" id="<?php echo $dato->id;?>" catalogo="<?php echo $catalogo_item->nombre; ?>" <?php echo ($dato->activo == false) ? "" : "checked" ; ?> >
             <label for="<?php echo $dato->id;?>"><?php echo ($dato->activo == false) ? "Activar" : "Desactivar" ; ?></label>

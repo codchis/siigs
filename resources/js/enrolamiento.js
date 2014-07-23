@@ -209,7 +209,7 @@ function importarDatos(id)
 }
 function omitirAcentos(text) 
 {
-	var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
+	var acentos = "�?À�?ÄÂ�?ÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
 	var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
 	for (var i=0; i<acentos.length; i++) 
 		text = text.replace(acentos.charAt(i), original.charAt(i));
@@ -217,7 +217,83 @@ function omitirAcentos(text)
 	return text;
 }
 
-function getcurp()
+function edita_curp()
+{
+    $("#precurp").val('0');
+    $("#editacurp").css({'visibility':'hidden'});
+    $("#curp , #curp2").removeAttr('disabled');
+    return false;
+}
+
+function calcula_curp()
+{
+        var ap=omitirAcentos($("#paterno").val());
+	var am=omitirAcentos($("#materno").val());
+	var no=omitirAcentos($("#nombre").val());
+	var se=$("input[name='sexo']:checked").val();
+	var fn=$("#fnacimiento").val();
+	var ed=$("#lnacimientoT").val().split(",");
+	ed=ed[ed.length-1];
+	
+	ed=$.trim(ed);
+	var d=fn.substr(0,2);
+	var m=fn.substr(3,2);
+	var a=fn.substr(6,4);
+	var x=parseInt(a)+"";
+	
+	if(ap!=""&&am!=""&&no!=""&&(se!=""&&typeof(se)!="undefined")&&fn!=""&&ed!="")
+	{
+		if(x.length>3)
+		{
+                        $("#precurp").val('0');
+			$("#nocurp").html('<span style="color:blue">Calculando Curp... Espere</span>');
+			$("#curp").val("");
+			$("#curpl").html("");		
+			$("#curp2").val("");
+			$.ajax({
+				url: "/tes/obtenercurp/calculacurp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
+				type: "POST",
+				data: "json",
+				success:function(data){
+					if(data)
+					{
+						var obj = jQuery.parseJSON( data );
+						var curp=obj[0]["curp"];
+						$("#curp").val(curp.substr(0,curp.length-5));
+						$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
+						$("#curp2").val(curp.substr(curp.length-5,5));
+                                                $("#precurp").val("0");
+                                                $("#curp , #curp2").attr('disabled',"disabled");
+						$("#nocurp").html('<span style="color:green">Curp calculada correctamente</span>');
+                                                $("#precurp").val('1');
+                                                $("#editacurp").css({'visibility':'visible'});
+					}
+					else
+					{
+						$("#nocurp").html('<span style="color:red">No se pudo calcular la curp. Por favor dig&iacute;tela</span>');	
+						//calcular_curp(ap,am,no,d,m,a,se,ed,0);
+					}
+				}
+			});
+		}
+		else 
+                {
+                    $("#fnacimiento").val("");
+                    $("#fnacimiento").attr("placeholder","dd-mm-yyyy"); $("#fnacimiento").focus();
+                }
+	}
+        else
+        {
+            $("#nocurp").html('<span style="color:blue">Datos insuficientes...</span>');
+            $('#nocurp').fadeOut(2000,function(){
+                $('#nocurp').html('');
+                $('#nocurp').fadeIn(500);
+            });
+        }
+	return false;
+}
+
+function getcurp(event)
 {
 	var ap=omitirAcentos($("#paterno").val());
 	var am=omitirAcentos($("#materno").val());
@@ -253,6 +329,8 @@ function getcurp()
 						$("#curp").val(curp.substr(0,curp.length-5));
 						$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
 						$("#curp2").val(curp.substr(curp.length-5,5));
+                                                $("#precurp").val("0");
+                                                $("#curp , #curp2").css({disabled:"disabled"});
 						$("#nocurp").html('<span style="color:green">Curp encontrada en la base de la federación</span>');		
 					}
 					else
@@ -286,10 +364,10 @@ function getcurpTutor()
 		{
 			if(x.length>3)
 			{
-				$("#errorcurptutor").html('<span style="color:blue">Buscando Curp... Espere</span>');
+				$("#errorcurptutor").html('<span style="color:blue">Calculando Curp... Por favor espere</span>');
 				$("#curpT").val("");
 				$.ajax({
-					url: "/tes/obtenercurp/curp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
+					url: "/tes/obtenercurp/calculacurp/"+ap+"/"+am+"/"+no+"/"+d+"/"+m+"/"+a+"/"+se+"/"+ed+"/2",
 					type: "POST",
 					data: "json",
 					success:function(data){
@@ -298,12 +376,12 @@ function getcurpTutor()
 							var obj = jQuery.parseJSON( data );
 							var curp=obj[0]["curp"];
 							$("#curpT").val(curp);
-							$("#errorcurptutor").html('<span style="color:green">Curp encontrada en la base de la federación</span>');		
+							$("#errorcurptutor").html('<span style="color:green">Curp calculada correctamente</span>');		
 						}
 						else
 						{
-							$("#errorcurptutor").html('<span style="color:red">Curp no encontrada en la base de la federación calculando manualmente... Espere</span>');	
-							calcular_curp(ap,am,no,d,m,a,se,ed,1);
+							$("#errorcurptutor").html('<span style="color:red">No se pudo calcular la curp. Por favor dig&iacute;tela</span>');	
+							//calcular_curp(ap,am,no,d,m,a,se,ed,1);
 						}
 					}
 				});
@@ -340,9 +418,9 @@ function calcular_curp(ap,am,no,d,m,a,se,ed,op)
 			else
 			{
 				if(op==1)
-					$("#errorcurptutor").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');
+					$("#errorcurptutor").html('<span style="color:red">No se pudo calcular la curp. Por favor dig&iacute;tela</span>');
 				else
-					$("#nocurp").html('<span style="color:red">No se pudo calcular la curp. Por favor digitela</span>');	
+					$("#nocurp").html('<span style="color:red">No se pudo calcular la curp. Por favor dig&iacute;tela</span>');	
 			}
 		}
 	});

@@ -20,7 +20,7 @@ $(document).ready(function()
 				window.location.href="/<?php echo DIR_TES?>/enrolamiento/";
 			},
 			onComplete      : function(){
-				jQuery.fancybox.close();
+				setTimeout(function(){jQuery.fancybox.close()},500);
 			}
 		});
 	}
@@ -104,9 +104,9 @@ Buscar usuario
 				$interval  = date_diff($datetime1, $datetime2);
 				echo "A:".$interval->format('%y')." M:".$interval->format('%m')." D:".$interval->format('%d');
 			?></td>
-		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" id="detalles">Detalles<i class="icon-eye-open"></i></a></td><?php } ?>
-		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary">Modificar<i class="icon-pencil"></i></a></td><?php } ?>
-        <?php if($opcion_print) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $user_item->id ?>" class="btn btn-small btn-primary" target="_blank">Descargar<i class="icon-download-alt"></i></a></td><?php } ?>
+		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon" id="detalles">Detalles<i class="icon-eye-open"></i></a></td><?php } ?>
+		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon">Modificar<i class="icon-pencil"></i></a></td><?php } ?>
+        <?php if($opcion_print) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon" target="_blank">Descargar<i class="icon-download-alt"></i></a></td><?php } ?>
 	</tr>
 	<?php endforeach ?>
     <tfoot>

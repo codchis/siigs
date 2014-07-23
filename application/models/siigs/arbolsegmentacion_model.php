@@ -462,7 +462,7 @@ class ArbolSegmentacion_model extends CI_Model {
 
                 $ruta.= $archivo;
 
-                if (file_exists($ruta) && (count($seleccionados)==0 || $seleccionados[0]==""))
+                if (file_exists($ruta) && (count($seleccionados)==0 || $seleccionados[0]=="") && false)
                 {
                     $str_datos = file_get_contents($ruta);
                     $datos = json_decode($str_datos,true);
@@ -520,72 +520,66 @@ class ArbolSegmentacion_model extends CI_Model {
                                                 $resultadotemp[$ultimaclave]["resultado"][$clave]->parent = $itempadre[0]->id_padre;
                                            //     echo        $resultadotemp[$ultimaclave]["resultado"][$clave]->parent."...".$itempadre[0]->id_padre."<br/>" ;
                                             }
+                                            //$resultadotemp[$itempadre[0]->id] = $resultadotemp[$ultimaclave];
+                                            //$resultadotemp[$ultimaclave]["resultado"] = null;
                                         }
                                         $tempnivel -=1;
                                     }
                                }
                            }
                         }
+                        
                         $resultado = array();
                         
-                        foreach($resultadotemp as $resul)
-                        {
-                            print_r($resul);
-                            echo "<br/><br/>";
-                        }
+//                        foreach ($resultadotemp as $clave => $valor)
+//                        {
+//                            echo $clave;
+//                            var_dump($resultadotemp[$clave]);
+//                            echo "<br/><br/>";
+//                        }
+                        //die();
                         
-                        foreach($resultadotemp as $clave1 => $valor1)
+                        //Nivel de busqueda para ir agregando hijos a padres
+                        $search = 0;
+                        //el nivel mayor en la lista de items
+                        $search = $this->getListChildrenLevel($resultadotemp);
+                        $contador = 0;
+//                        
+//                        var_dump($search);
+//                        echo "<br/><br/>";
+                        while($search["nivel"]>1/* && $contador<200*/)
                         {
-                           foreach($resultadotemp as $clave2 => $valor2)
+                            $contador +=1;
+                            $clave1 = $search["id"];
+//                        foreach($resultadotemp as $clave1 => $valor1)
+//                        {
+                            $childrens = array();
+                            $childrens = $this->getListChildrenLevel($resultadotemp,$clave1);
+//                          var_dump($childrens);
+//                          echo "<br/><br/>";
+                           foreach($childrens as $clave2)
                             {
-                               if ($clave1 != $clave2)
-                               {
-                                   if (!empty($resultadotemp[$clave1]["resultado"]) && !empty($resultadotemp[$clave2]["resultado"]) && $resultadotemp[$clave1]["resultado"][0]->nivel>$resultadotemp[$clave2]["resultado"][0]->nivel)
-                                   {
-                                        foreach($resultadotemp[$clave2]["resultado"] as $clave=>$valor)
-                                        {
-                                           if ($resultadotemp[$clave2]["resultado"][$clave]->id == $clave1)
-                                           {
-                                     //          echo $resultadotemp[$clave2]["resultado"][$clave]->id."...".$clave1."<br/>";
-                                               $resultadotemp[$clave2]["resultado"][$clave]->children = $this->convertType($resultadotemp[$clave1]["resultado"],in_array($resultadotemp[$clave1]["resultado"][0]->nivel, $seleccionables),$seleccionados);
-                                               $resultadotemp[$clave1]["resultado"] = null;
-                                               continue;
-                                           }
-                                           
-                                        }
-                                   }
-                               }
-                            } 
-                        }
-                        foreach($resultadotemp as $resul)
-                        {
-                            print_r($resul);
-                            echo "<br/><br/>";
-                        }
-                        foreach($resultadotemp as $clave1 => $valor1)
-                        {
-                            if ($clave1>0 && $resultadotemp[$clave1]["resultado"] != null)
-                            {
-                                foreach($resultadotemp[0]["resultado"] as $clave2 => $valor2)
-                                {
-                                   // var_dump($resultadotemp[0]["resultado"][$clave2]);
-                                    if ($resultadotemp[0]["resultado"][$clave2]->id == $resultadotemp[$clave1]["resultado"][0]->parent)
+                                
+                               //echo $clave1."....".$clave2."<br/><br/>";
+                                                                
+                                 foreach($resultadotemp[$clave2]["resultado"] as $clave=>$valor)
+                                 {
+                                    if (!empty($resultadotemp[$clave1]["resultado"]) && $resultadotemp[$clave2]["resultado"][$clave]->id == $resultadotemp[$clave1]["resultado"][0]->parent)
                                     {
-                                        $resultadotemp[0]["resultado"][$clave2]->children = $this->convertType($resultadotemp[$clave1]["resultado"],in_array($resultadotemp[$clave1]["resultado"][0]->nivel, $seleccionables),$seleccionados);
+                                        //echo $resultadotemp[$clave2]["resultado"][$clave]->id."----".$clave1."<br/>";
+                                        $resultadotemp[$clave2]["resultado"][$clave]->children = $this->convertType($resultadotemp[$clave1]["resultado"],in_array($resultadotemp[$clave1]["resultado"][0]->nivel, $seleccionables),$seleccionados);
                                         $resultadotemp[$clave1]["resultado"] = null;
-                                        break;
+                                        continue;
                                     }
-                                }
+
+                                 }
                             }
+                        //}
+                            $search = $this->getListChildrenLevel($resultadotemp);
+                            //var_dump($search);
                         }
                         $resultadotemp[0]["resultado"] = $this->convertType($resultadotemp[0]["resultado"],in_array($resultadotemp[0]["resultado"][0]->nivel, $seleccionables),$seleccionados);
-                        
-                        foreach($resultadotemp as $resul)
-                        {
-                            print_r($resul);
-                            echo "<br/><br/>";
-                        }
-                        
+                                                       
                         return $resultadotemp[0]["resultado"];
                         
                     }
@@ -600,40 +594,40 @@ class ArbolSegmentacion_model extends CI_Model {
 
                         $resultado = $this->convertType($arbol["resultado"], $seleccionable, $seleccionados);
                     }
-                        try
-                        {
-                            $fh = fopen($ruta, 'c');
-                            if(!$fh)
-                            {
-                               return "false";
-                            }
-
-                            fwrite($fh, json_encode($resultado,JSON_UNESCAPED_UNICODE));
-                            fclose($fh);
-
-                            $fechas = $this->db->query("select distinct fecha_update as fecha from asu_arbol_segmentacion where id_raiz=".$idarbol);
-                            if (!$fechas)
-                            {
-                                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-                                $this->msg_error_usr = "Ocurrió un error al obtener el registro de actualizaciones del asu";
-                                return "false";
-                            }
-                            else
-                            {
-                                foreach ($fechas->result() as $item)
-                                {
-                                    $archivotemp = 'asu_data_'.$idarbol.'_'.$nivel.'_'.$elegido.'_'.$seleccionable.'_'.strtotime($item->fecha).'.json';
-                                    if ($archivo != $archivotemp)
-                                        if (file_exists($ruta_temp.$archivotemp))
-                                            unlink($ruta_temp.$archivotemp);                            
-                                }
-                            }               
-                        }
-                        catch(Exception $e)
-                        {
-                            $this->msg_error_log = "(". __METHOD__.") => " .'ASU'.': '."No se pudo crear el archivo JSON para el asu (".$ruta.") ::".$e->getMessage();
-                            return "false";
-                        }
+//                        try
+//                        {
+//                            $fh = fopen($ruta, 'c');
+//                            if(!$fh)
+//                            {
+//                               return "false";
+//                            }
+//
+//                            fwrite($fh, json_encode($resultado,JSON_UNESCAPED_UNICODE));
+//                            fclose($fh);
+//
+//                            $fechas = $this->db->query("select distinct fecha_update as fecha from asu_arbol_segmentacion where id_raiz=".$idarbol);
+//                            if (!$fechas)
+//                            {
+//                                $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+//                                $this->msg_error_usr = "Ocurrió un error al obtener el registro de actualizaciones del asu";
+//                                return "false";
+//                            }
+//                            else
+//                            {
+//                                foreach ($fechas->result() as $item)
+//                                {
+//                                    $archivotemp = 'asu_data_'.$idarbol.'_'.$nivel.'_'.$elegido.'_'.$seleccionable.'_'.strtotime($item->fecha).'.json';
+//                                    if ($archivo != $archivotemp)
+//                                        if (file_exists($ruta_temp.$archivotemp))
+//                                            unlink($ruta_temp.$archivotemp);                            
+//                                }
+//                            }               
+//                        }
+//                        catch(Exception $e)
+//                        {
+//                            $this->msg_error_log = "(". __METHOD__.") => " .'ASU'.': '."No se pudo crear el archivo JSON para el asu (".$ruta.") ::".$e->getMessage();
+//                            return "false";
+//                        }
                         return $resultado;
                 }
             }
@@ -643,6 +637,57 @@ class ArbolSegmentacion_model extends CI_Model {
             }
         }
         
+        public function getListChildrenLevel($resultadotemp, $clave2=0)
+        {
+            if ($clave2==0)
+            {
+                $nivel = array("nivel"=>0,"id"=>0);
+                foreach($resultadotemp as $clave1 => $valor1)
+                {
+                 if (!empty($resultadotemp[$clave1]["resultado"]))
+                 {
+                  if ($resultadotemp[$clave1]["resultado"][0]->nivel>$nivel["nivel"])
+                  {
+                      $nivel = array("nivel"=>$resultadotemp[$clave1]["resultado"][0]->nivel,"id"=>$clave1);
+                  }
+                 }
+                }
+                return $nivel;
+            }
+            else 
+            {
+                $lista = array();
+                foreach($resultadotemp as $clave1 => $valor1)
+                {
+                 if (!empty($resultadotemp[$clave1]["resultado"]) && !empty($resultadotemp[$clave2]["resultado"])) 
+                 {
+                    if($resultadotemp[$clave1]["resultado"][0]->nivel<$resultadotemp[$clave2]["resultado"][0]->nivel)
+                     {
+                        //echo "coincidencia...".$clave1;
+                         array_push($lista, $clave1);
+                     }
+                 }
+                }
+                return $lista;
+            }
+        }
+        
+//        public function checkChildren($arreglo,$indice,$seleccionables,$seleccionados) {
+//            foreach($arreglo[0]["resultado"] as $clave2 => $valor2)
+//            {
+//                if ($arreglo[0]["resultado"][$clave2]->id == $arreglo[$clave1]["resultado"][0]->parent)
+//                {
+//                    $arreglo[0]["resultado"][$clave2]->children = $this->convertType($arreglo[$clave1]["resultado"],in_array($arreglo[$clave1]["resultado"][0]->nivel, $seleccionables),$seleccionados);
+//                    $arreglo[$clave1]["resultado"] = null;
+//                    break;
+//                }
+//                else if (isset($arreglo[0]["resultado"][$clave2]->children))
+//                {
+//                 $arreglo[0]["resultado"][$clave2]->children = $this->checkChildren($arreglo, $clave2, $seleccionables, $seleccionados)   ;
+//                }
+//            }
+//            return $arreglo;
+//        }
         
         /**
          * Accion para devolver el esquema completo del ASU a partir de un nivel especificado, niveles omitidos y elementos preseleccionados

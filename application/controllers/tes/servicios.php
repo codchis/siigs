@@ -238,6 +238,7 @@ class Servicios extends CI_Controller {
 				// obtiene usuarios de las tabletas
 				$cadena["id_tipo_censo"] = $tableta->id_tipo_censo;
 				$cadena["id_asu_um"]     = $tableta->id_asu_um;
+                                $cadena["id_nivel_atencion"]     = 1;
 				
 				$micadena=json_encode($cadena);
 				echo substr($micadena,0,strlen($micadena)-1).",";
@@ -347,6 +348,18 @@ class Servicios extends CI_Controller {
 						$cadena=array();
 						$inicio_asu=1;
 					}
+                                        else 
+                                        {
+                                                $cadena["asu_arbol_segmentacion"]=array(array(
+                                                "id" => "0",
+                                                ));
+                                                $micadena=json_encode($cadena);
+                                                echo substr($micadena,1,strlen($micadena)-2);
+                                                $micadena="";
+                                                ob_flush();
+                                                unset($cadena);
+                                                $cadena=array();
+                                        }
 				}
 				else 
 				{
@@ -453,7 +466,7 @@ class Servicios extends CI_Controller {
 	 */
 	public function is_step_3($id_sesion,$datos)
 	{
-		$fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a");
+		$fp = fopen(APPPATH."logs/sincronizacionsecuencial.txt", "a");
 		fputs($fp, "FECHA: ".date("d/m/Y H:i:s")." => MAC:"
 			.$this->session->userdata('mac')." => VERSION:"
 			.$this->session->userdata('id_version')." => PASO:"
@@ -680,7 +693,7 @@ class Servicios extends CI_Controller {
 	{
 		header('Content-Type: text/html; charset=UTF-8');
 		$bien=0;
-		$fp = fopen(APPPATH."logs/sinconizacionsecuencial.txt", "a");
+		$fp = fopen(APPPATH."logs/sincronizacionsecuencial.txt", "a");
 		fputs($fp, "FECHA: ".date("d/m/Y H:i:s")." => MAC:"
 			.$this->session->userdata('mac')." => VERSION:"
 			.$this->session->userdata('id_version')." => PASO:"
@@ -768,7 +781,7 @@ class Servicios extends CI_Controller {
 					}
 					
 				}
-				catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);$bien++;}
+				catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
 			}
 		}
 		if($bien==0)
