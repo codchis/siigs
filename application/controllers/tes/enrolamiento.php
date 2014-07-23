@@ -162,67 +162,18 @@ class Enrolamiento extends CI_Controller
 			$data['alergias'] = $this->Enrolamiento_model->getAlergia($id);
 			$data['afiliaciones'] = $this->Enrolamiento_model->getAfiliaciones($id);
 			
-			$data['iras']=$this->Enrolamiento_model->get_catalog_view("ira",$id);
-			$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);
 			$data['consultas']=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 			$fecha=$data['enrolado']->fecha_nacimiento;
-			$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("
-SELECT DISTINCT	r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, CASE WHEN cv.fecha IS NULL THEN CONCAT('Desde:',r.dia_inicio_aplicacion_nacido,' Hasta:',r.dia_fin_aplicacion_nacido) ELSE CONCAT('Fecha Aplicada: ',' ',DATE_FORMAT(cv.fecha, '%d-%m-%Y')) END AS fecha,DATEDIFF(NOW(),'$fecha') AS dias,CASE WHEN DATEDIFF(NOW(),'$fecha')>=r.dia_inicio_aplicacion_nacido AND DATEDIFF(NOW(),'$fecha')<=r.dia_fin_aplicacion_nacido  THEN '1' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')>r.dia_fin_aplicacion_nacido AND cv.fecha IS NULL THEN '2' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')<r.dia_inicio_aplicacion_nacido AND cv.fecha IS NULL THEN '3' END) END) END AS prioridad FROM cns_regla_vacuna r LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  LEFT JOIN cns_persona p ON p.id=cv.id_persona GROUP BY v.descripcion ORDER BY r.id_vacuna,r.orden_esq_com ASC");
+			$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("SELECT DISTINCT r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, CASE WHEN cv.fecha IS NULL THEN CONCAT('Desde:',r.dia_inicio_aplicacion_nacido,' Hasta:',r.dia_fin_aplicacion_nacido) ELSE CONCAT('Fecha Aplicada: ',' ',DATE_FORMAT(cv.fecha, '%d-%m-%Y')) END AS fecha,DATEDIFF(NOW(),'$fecha') AS dias,CASE WHEN DATEDIFF(NOW(),'$fecha')>=r.dia_inicio_aplicacion_nacido AND DATEDIFF(NOW(),'$fecha')<=r.dia_fin_aplicacion_nacido  THEN '1' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')>r.dia_fin_aplicacion_nacido AND cv.fecha IS NULL THEN '2' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')<r.dia_inicio_aplicacion_nacido AND cv.fecha IS NULL THEN '3' END) END) END AS prioridad FROM cns_regla_vacuna r LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  LEFT JOIN cns_persona p ON p.id=cv.id_persona GROUP BY v.descripcion ORDER BY r.id_vacuna,r.orden_esq_com ASC");
 			
-			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
-			$peso_x_edad   = $this->Enrolamiento_model->get_catalog2("cns_peso_x_edad","sexo"  ,$data['enrolado']->sexo);
-			$altura_x_edad = $this->Enrolamiento_model->get_catalog2("cns_altura_x_edad","sexo",$data['enrolado']->sexo);
-			
-			$array=array(); $array2=array(); $i=0;$meses=0;$peso=0;
-			foreach($peso_x_edad as $x)
-			{
-				if(count($nutricion)>$i)
-				{
-					$fecha     = date("Y-m-d",strtotime($nutricion[$i]->fecha));
-					$datetime1 = date_create($fecha);
-					$datetime2 = date_create(date("Y-m-d", strtotime($data['enrolado']->fecha_nacimiento)));
-					$interval  = date_diff($datetime2, $datetime1);
-					$dias      = $interval->format('%R%a dias');
-					$meses=(int)($dias/30);
-					$peso=$nutricion[$i]->peso;
-				}
-				else {$meses=""; $peso="";}
-				$dato = array(
-					"d1"=>"[".$x->meses.",".$x->peso_bajo."]", 
-					"d2"=>"[".$x->meses.",".$x->sobrepeso."]", 
-					"d3"=>"[".$x->meses.",".$x->obesidad."]",
-					"d4"=>"[".$meses.",".$peso."]");
-				$array[$i] = $dato;
-				$i++;
-			}
-			$i=0;
-			foreach($altura_x_edad as $x)
-			{
-				if(count($nutricion)>$i)
-				{
-					$fecha     = date("Y-m-d",strtotime($nutricion[$i]->fecha));
-					$datetime1 = date_create($fecha);
-					$datetime2 = date_create(date("Y-m-d", strtotime($data['enrolado']->fecha_nacimiento)));
-					$interval  = date_diff($datetime2, $datetime1);
-					$dias      = $interval->format('%R%a dias');
-					$meses=(int)($dias/30);
-					$altura=$nutricion[$i]->altura;
-				}
-				else {$meses=""; $altura="";}
-				$dato = array(
-					"d1"=>"[".$x->meses.",".$x->minima."]", 
-					"d2"=>"[".$x->meses.",".$x->ideal."]", 
-					"d3"=>"[".$meses.",".$altura."]");
-				$array2[$i] = $dato;
-				$i++;
-			}
-			$data['label']=json_encode(array("d1"=>"Peso_Bajo","d2"=>"Sobrepeso","d3"=>"Obesidad","d4"=>"Peso"));
-			$data['control_nutricional']=json_encode($array);
-			
-			$data['label_altura']=json_encode(array("d1"=>"Minima","d2"=>"Ideal","d3"=>"Altura"));
-			$data['control_nutricional_altura']=json_encode($array2);
-			
+            // Obtiene los datos para las graficas
+            $data['peso_edad']  = json_encode($this->Enrolamiento_model->get_datos_grafica('peso_edad', $data['enrolado']->sexo, $data['enrolado']->edad_meses, $data['enrolado']->id));
+            $data['peso_talla'] = json_encode($this->Enrolamiento_model->get_datos_grafica('peso_talla', $data['enrolado']->sexo, $data['enrolado']->edad_meses, $data['enrolado']->id));
+            $data['talla_edad'] = json_encode($this->Enrolamiento_model->get_datos_grafica('talla_edad', $data['enrolado']->sexo, $data['enrolado']->edad_meses, $data['enrolado']->id));
+            $data['imc']        = json_encode($this->Enrolamiento_model->get_datos_grafica('imc', $data['enrolado']->sexo, $data['enrolado']->edad_meses, $data['enrolado']->id));
+            $data['peri_cefa']  = json_encode($this->Enrolamiento_model->get_datos_grafica('peri_cefa', $data['enrolado']->sexo, $data['enrolado']->edad_meses, $data['enrolado']->id));
+            $data['con_hemo']   = json_encode($this->Enrolamiento_model->get_datos_grafica('con_hemo', $data['enrolado']->sexo, $data['enrolado']->edad_meses, $data['enrolado']->id, $data['enrolado']->id_asu_localidad_domicilio));
 		}
 		catch(Exception $e)
 		{

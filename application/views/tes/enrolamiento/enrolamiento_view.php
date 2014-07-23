@@ -1,6 +1,11 @@
     <link href="/resources/css/grid.css" rel="stylesheet" type="text/css" /> 
     <link href="/resources/SpryAssets/SpryAccordion.css" rel="stylesheet" type="text/css" /> 
 	<script src="/resources/SpryAssets/SpryAccordion.js" type="text/javascript"></script>
+    
+    <link href="/resources/flot/jquery.flot.css" rel="stylesheet" type="text/css">
+	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/resources/flot/excanvas.min.js"></script><![endif]-->
+	<script language="javascript" type="text/javascript" src="/resources/flot/jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="/resources/flot/jquery.flot.axislabels.js"></script>
 <?php 
 if($enrolado)
 {
@@ -8,8 +13,15 @@ if($enrolado)
 	$ci->load->model(DIR_TES.'/Reporte_sincronizacion_model');
 ?>
     <script>
+    peso_edad = <?php echo $peso_edad; ?>;
+    peso_talla = <?php echo $peso_talla; ?>;
+    talla_edad = <?php echo $talla_edad; ?>;
+    imc = <?php echo $imc; ?>;
+    peri_cefa = <?php echo $peri_cefa; ?>;
+    con_hemo = <?php echo $con_hemo; ?>;
+    
 	$(document).ready(function()
-	{
+	{   
 		$.ajax({
 		type: "POST",
 		data: {
@@ -93,7 +105,38 @@ if($enrolado)
 				document.getElementById("localidadT").innerHTML=des;
 			}
 		});
+        
+        $('#cambiar_grafica').change(function(event){
+            seleccion = $(this).val();
+            titulo = $(this).children('option:selected').text();
+            
+            switch(seleccion){
+                case 'peso_edad':
+                    dibujaGrafica(peso_edad.series, peso_edad.labels, "flot-graph");
+                    break;
+                case 'peso_talla':
+                    dibujaGrafica(peso_talla.series, peso_talla.labels, "flot-graph");
+                    break;
+                case 'talla_edad':
+                    dibujaGrafica(talla_edad.series, talla_edad.labels, "flot-graph");
+                    break;
+                case 'imc':
+                    dibujaGrafica(imc.series, imc.labels, "flot-graph");
+                    break;
+                case 'peri_cefa':
+                    dibujaGrafica(peri_cefa.series, peri_cefa.labels, "flot-graph");
+                    break;
+                case 'con_hemo':
+                    dibujaGrafica(con_hemo.series, con_hemo.labels, "flot-graph");
+                    break;
+            }
+            
+            $("#titulo_grafica").text(titulo);
+        });
+        
+        dibujaGrafica(peso_edad.series, peso_edad.labels, "flot-graph");
 	});
+    
 function vacunacion(id,tiene,fecha,prioridad)
 {
 	if(prioridad==1)
@@ -508,67 +551,10 @@ $i++;
                       </div>
                     </div>
                     
-                    <!-- ira  -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/iras.png"/></span>Control de IRA</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:100%">
-                        <table width="100%">
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="28%" align="left">IRA</th>
-                                        <th width="15%" align="left">Fecha</th>
-                                        <th width="20%" align="left">Tipo</th>
-                                        <th width="27%" align="left">Tratamiento</th>
-                                    </tr>
-                                  </table> 
-                                  </div>
-                                  
-                                  	<div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($iras,"ira");?></div>
-                                       
-                              </td>
-                                 <td valign="top">&nbsp;</td>
-                          </tr>                     
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <!-- eda  -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/edas.png"/></span>Control de EDA</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:100%">
-                        <table width="100%">
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="28%" align="left">EDA</th>
-                                        <th width="15%" align="left">Fecha</th>
-                                        <th width="20%" align="left">Tipo</th>
-                                        <th width="27%" align="left">Tratamiento</th>
-                                    </tr>
-                                  </table> 
-                                  </div>
-                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($edas,"eda");?></div>                           
-                              </td>
-                                 <td valign="top">&nbsp;</td>
-                          </tr>                     
-                          </table>
-                        </div>
-                      </div>
-                    </div>
                     
                     <!-- consulta  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consulta</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consultas</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:100%">
                         <table width="100%">
@@ -619,22 +605,28 @@ $i++;
                         </div>
                       </div>
                     </div>
-                    <!-- nutricion PESO -->
+                    
+                    <!-- Gráficas -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><img src="/resources/images/peso.png"/>Control Nutricional (PESO)</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/altura.png"/>Gráficas Control Nutricional</div>
                       <div class="AccordionPanelContent"><br />
-                      <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/graph/graph_init/Grafica/Nutrición PESO/<?php  echo urlencode(($control_nutricional));?>/<?php  echo urlencode(($label));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
+                          &nbsp;  Cambiar Gráfica: 
+                          <select id="cambiar_grafica">
+                            <option value="peso_edad" selected="">Peso para edad</option>
+                            <option value="peso_talla">Peso para talla</option>
+                            <option value="talla_edad">Talla para edad</option>
+                            <option value="imc">Índice de masa corporal</option>
+                            <option value="peri_cefa">Perímetro cefálico</option>
+                            <option value="con_hemo">Concentración de Hemoglobina</option>
+                          </select>
+                          
+                          <h3 id="titulo_grafica" align="Center">Peso para edad</h3>
+                        <div class="flot-container">
+                            <div id="flot-graph" class="flot-placeholder"></div>
+                        </div>
                       </div>
                     </div>  
                     
-                    <!-- nutricion ALTURA -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><img src="/resources/images/altura.png"/>Control Nutricional (ALTURA)</div>
-                      <div class="AccordionPanelContent"><br />
-                      <iframe width='98.5%' style='margin-left:5px;' border=0 height='700' src='/<?php  echo DIR_TES?>/graph/graph_init/Grafica/Nutrición Altura/<?php  echo urlencode(($control_nutricional_altura));?>/<?php  echo urlencode(($label_altura));?>/time_basic_axis/<?php echo $enrolado->fecha_nacimiento;?>'></iframe>
-                      </div>
-                    </div>  
-                                                          
                     
                     </td>
             </tr>

@@ -1788,7 +1788,7 @@ class Enrolamiento_model extends CI_Model
 	public function getById($id)
 	{
 		
-		$this->db->select('p.*,s.id as sangre, s.descripcion as tsangre, n.id as nacionalidadid, n.descripcion as nacionalidad, o.id as operadoraid,o.descripcion as operadora, t.id as idT, t.curp as curpT, t.nombre as nombreT, t.apellido_paterno as paternoT, t.apellido_materno as maternoT, t.sexo as sexoT, t.telefono as telefonoT, t.celular as celularT,o1.id as operadoraTid, o1.descripcion as operadoraT, rc.id_localidad_registro_civil, pm.descripcion as parto');
+		$this->db->select('p.*,s.id as sangre, s.descripcion as tsangre, n.id as nacionalidadid, n.descripcion as nacionalidad, o.id as operadoraid,o.descripcion as operadora, t.id as idT, t.curp as curpT, t.nombre as nombreT, t.apellido_paterno as paternoT, t.apellido_materno as maternoT, t.sexo as sexoT, t.telefono as telefonoT, t.celular as celularT,o1.id as operadoraTid, o1.descripcion as operadoraT, rc.id_localidad_registro_civil, pm.descripcion as parto, TIMESTAMPDIFF(month, fecha_nacimiento, CURDATE()) AS edad_meses');
 		$this->db->from('cns_persona p');
 		$this->db->join('cns_nacionalidad n', 'n.id = p.id_nacionalidad','left');
 		$this->db->join('cns_tipo_sanguineo s', 's.id = p.id_tipo_sanguineo','left');
@@ -2457,6 +2457,201 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 		if ($value == 'log')
 			return $this->msg_error_log;
 		return $this->msg_error_usr;
+	}
+    
+    /**
+     * Obtiene los datos especificos de un catálogo para ser visualizados en una gráfica
+     *
+     * @access public
+     * @param  int    $catalogo   Determina el catalogo a consultar
+     * @param  int    $sexo       El sexo del paciente (F, M)
+     * @param  int    $edad_meses Edad del paciente en meses
+     * @param  int    $id_persona Identificador del paciente
+     * @param  int    $asu_locali Identificador del asu de la localidad del domicilio
+     * @return void
+     */
+    public function get_datos_grafica($catalogo, $sexo, $edad_meses, $id_persona, $asu_locali='')
+	{
+        $datos = array('series' => NULL, 
+                       'labels' => NULL
+                );
+        $talla = 45; // Talla ideal al nacimiento
+        $series = NULL;
+        $puntos = NULL;
+        
+        // Obtiene datos del paciente
+        $queryPaciente = 'SELECT
+                TIMESTAMPDIFF(MONTH, fecha_nacimiento, fecha) AS edad_meses,
+                peso, altura, hemoglobina,
+                ROUND((peso/POW((altura/100),2)), 1) AS imc
+            FROM cns_control_nutricional
+            INNER JOIN cns_persona ON cns_persona.id = cns_control_nutricional.id_persona
+            WHERE cns_control_nutricional.id_persona="'.$id_persona.'"
+            ORDER BY fecha ASC';
+                
+        $objQueryPac = $this->db->query($queryPaciente);
+        $objResultPac = $objQueryPac->result();
+
+        if($this->db->_error_number()) {
+            $this->error = true;
+            $this->msg_error_usr = 'Error al obtener los datos para las gráficas';
+            $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+            throw new Exception($this->msg_error_log);
+        }
+        
+        switch($catalogo){
+            case 'peso_edad':
+                foreach ($objResultPac as $pac) {
+                    $puntos[] = array($pac->edad_meses, $pac->peso);
+                }
+                break;
+            case 'peso_talla':
+                foreach ($objResultPac as $pac) {
+                    $puntos[] = array($pac->altura, $pac->peso);
+                    
+                    if($pac->altura > $talla){
+                        $talla = $pac->altura;
+                    }
+                }
+                break;
+            case 'talla_edad':
+                foreach ($objResultPac as $pac) {
+                    $puntos[] = array($pac->edad_meses, $pac->altura);
+                }
+                break;
+            case 'imc':
+                foreach ($objResultPac as $pac) {
+                    $puntos[] = array($pac->edad_meses, $pac->imc);
+                }
+                break;
+            case 'peri_cefa':
+                $queryPaciente = 'SELECT
+                        TIMESTAMPDIFF(MONTH, fecha_nacimiento, fecha) AS edad_meses,
+                        perimetro_cefalico
+                    FROM cns_control_peri_cefa
+                    INNER JOIN cns_persona ON cns_persona.id = cns_control_peri_cefa.id_persona
+                    WHERE cns_control_peri_cefa.id_persona="'.$id_persona.'"
+                    ORDER BY fecha ASC';
+
+                $objQueryPac = $this->db->query($queryPaciente);
+                $objResultPac = $objQueryPac->result();
+                
+                if($this->db->_error_number()) {
+                    $this->error = true;
+                    $this->msg_error_usr = 'Error al obtener los datos para las gráficas';
+                    $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+                    throw new Exception($this->msg_error_log);
+                }
+                
+                foreach ($objResultPac as $pac) {
+                    $puntos[] = array($pac->edad_meses, $pac->perimetro_cefalico);
+                }
+                break;
+            case 'con_hemo':
+                foreach ($objResultPac as $pac) {
+                    if($pac->hemoglobina) {
+                        $puntos[] = array($pac->edad_meses, $pac->hemoglobina);
+                    }
+                }
+        }
+        
+        $series[] = array(
+                'color' => 'black',
+                'label' => ' &nbsp; Paciente',
+                'data'  => $puntos,
+            );
+        
+        $puntos = NULL;
+        
+        // Obtiene datos de los catálogos
+        if ($catalogo == 'con_hemo') {
+            $objQueryDat = $this->db->query('SELECT mujer_embarazada_ninio_6_59_meses AS hb FROM asu_hemoglobina_altitud WHERE id_localidad_asu='.$asu_locali);
+            $objResultDat = $objQueryDat->row();
+            
+            if($this->db->_error_number()) {
+                $this->error = true;
+                $this->msg_error_usr = 'Error al obtener los datos para las gráficas';
+                $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+                throw new Exception($this->msg_error_log);
+            }
+            
+            $puntos[] = array(0, $objResultDat->hb);
+            $puntos[] = array(($edad_meses+3), $objResultDat->hb);
+            
+            $series[] = array(
+                'color' => 'blue',
+                'label' => ' &nbsp; Concentración de Hemoglobina',
+                'data'  => $puntos,
+            );
+            
+            $datos['labels'] = array('xaxes'=>'Edad (meses)', 'yaxes'=>'Hb (g/dL)');    
+            $datos['series'] = $series;
+        } else {
+            switch($catalogo){
+                case 'peso_edad':
+                    $queryCatalogo = 'SELECT id, descripcion, color FROM cns_estado_nutricion_peso';
+                    $queryDatos = 'SELECT edad_meses AS x, peso AS y FROM cns_edo_nutri_peso_x_edad WHERE sexo="'.$sexo.'" AND edad_meses<='.($edad_meses+3).' AND id_estado_nutricion_peso=';
+                    $datos['labels'] = array('xaxes'=>'Edad (meses)', 'yaxes'=>'Peso (Kg)');
+                    break;
+                case 'peso_talla':
+                    $queryCatalogo = 'SELECT id, descripcion, color FROM cns_estado_nutricion_peso';
+                    $queryDatos = 'SELECT altura AS x, peso AS y FROM cns_edo_nutri_peso_x_altura WHERE sexo="'.$sexo.'" AND altura<='.($talla+10).' AND id_estado_nutricion_peso=';
+                    $datos['labels'] = array('xaxes'=>'Talla (cm)', 'yaxes'=>'Peso (Kg)');
+                    break;
+                case 'talla_edad':
+                    $queryCatalogo = 'SELECT id, descripcion, color FROM cns_estado_nutricion_altura';
+                    $queryDatos = 'SELECT edad_meses AS x, altura AS y FROM cns_edo_nutri_altura_x_edad WHERE sexo="'.$sexo.'" AND edad_meses<='.($edad_meses+3).' AND id_estado_nutricion_altura=';
+                    $datos['labels'] = array('xaxes'=>'Edad (meses)', 'yaxes'=>'Talla (cm)');
+                    break;
+                case 'imc':
+                    $queryCatalogo = 'SELECT id, descripcion, color FROM cns_estado_imc';
+                    $queryDatos = 'SELECT edad_meses AS x, imc AS y FROM cns_imc_x_edad WHERE sexo="'.$sexo.'" AND edad_meses<='.($edad_meses+3).' AND id_estado_imc=';
+                    $datos['labels'] = array('xaxes'=>'Edad (meses)', 'yaxes'=>'IMC (Kg/m2)');
+                    break;
+                case 'peri_cefa':
+                    $queryCatalogo = 'SELECT id, descripcion, color FROM cns_estado_peri_cefa';
+                    $queryDatos = 'SELECT edad_meses AS x, perimetro AS y FROM cns_perimetro_cefalico WHERE sexo="'.$sexo.'" AND edad_meses<='.($edad_meses+3).' AND id_estado_peri_cefa=';
+                    $datos['labels'] = array('xaxes'=>'Edad (meses)', 'yaxes'=>'Perímetro cefálico (cm)');
+            }
+
+            $objQueryCat = $this->db->query($queryCatalogo);
+            $objResultCat = $objQueryCat->result();
+
+            if($this->db->_error_number()) {
+                $this->error = true;
+                $this->msg_error_usr = 'Error al obtener los datos para las gráficas';
+                $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+                throw new Exception($this->msg_error_log);
+            }
+            
+            foreach ($objResultCat as $cat) {
+                $objQueryDat = $this->db->query($queryDatos.$cat->id);
+                $objResultDat = $objQueryDat->result();
+                
+                if($this->db->_error_number()) {
+                    $this->error = true;
+                    $this->msg_error_usr = 'Error al obtener los datos para las gráficas';
+                    $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+                    throw new Exception($this->msg_error_log);
+                }
+                
+                $puntos = NULL;
+                
+                foreach ($objResultDat as $dat) {
+                    $puntos[] = array($dat->x, $dat->y);
+                }
+                
+                $series[] = array(
+                    'color' => $cat->color,
+                    'label' => ' &nbsp; '.$cat->descripcion,
+                    'data'  => $puntos,
+                );
+            }
+            
+            $datos['series'] = $series;
+        }
+        
+        return $datos;
 	}
 }
 ?>
