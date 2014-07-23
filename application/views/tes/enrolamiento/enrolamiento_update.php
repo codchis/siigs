@@ -90,7 +90,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
         });
 		$("#fnacimiento").change(function()
 		{   
-			getcurp();
+			//getcurp();
 			comparar_captura();
 			$("#vc").html('<span style="color:green;margin-left:10px;">Creando... Espere</span>');
 			$("#vc").load("/tes/enrolamiento/vacunacion/"+this.value+"/<?php echo $id;?>");
@@ -177,7 +177,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 						if(uri.substr(uri.search("/")+1,uri.length)=="lnacimientoT")
 						{
 							$("#curp").focus();
-							getcurp();
+							//getcurp();
 						}
 					});
 				}
@@ -311,7 +311,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		
 		$("#nombre,#paterno,#materno,#fnacimiento,#lnaciminetoT").blur(function()
 		{       
-			getcurp();
+			//getcurp();
 		});	
 		<?php if($cn_tutor) {?>
 		$("#captura").click(function(e) {
@@ -372,10 +372,10 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td width="25%">
                             
                               <label style=" margin-left:10px; float:left">
-                                <input type="radio" name="sexo" value="M" <?php if($enrolado->sexo=="M") echo "checked"; ?> id="sexo_1" onclick="getcurp();" title='requiere' required style="margin-top:-3px;">
+                                <input type="radio" name="sexo" value="M" <?php if($enrolado->sexo=="M") echo "checked"; ?> id="sexo_1" onclick="return false;getcurp();" title='requiere' required style="margin-top:-3px;">
                                 Masculino</label>
                               <label style=" float:left">
-                                <input type="radio" name="sexo" value="F" <?php if($enrolado->sexo=="F") echo "checked"; ?> id="sexo_2" onclick="getcurp();" style="margin-top:-3px;">
+                                <input type="radio" name="sexo" value="F" <?php if($enrolado->sexo=="F") echo "checked"; ?> id="sexo_2" onclick="return false;getcurp();" style="margin-top:-3px;">
                                 Femenino</label>
                              </td>
                           </tr>
@@ -407,16 +407,33 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td><p align="right">Pre CURP</p></td>
                             <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,0,12); ?>" maxlength="12">
                             <input name="curp2" type="text"  id="curp2"  style="letter-spacing:1px; width:22.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,12,15); ?>" maxlength="6"></td>
+                            <input type="hidden" id="precurp" name="precurp" value="<?php echo $enrolado->precurp; ?>" />
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required">
                             </select></td>
                           </tr>
                           <tr>
+                              <td><p align="right">&nbsp;</p></td>
+                              <td>
+                                  <button style="width:52%;margin-left:10px;" class="btn btn-primary" onclick="return calcula_curp();">Calcular RFC<i class="icon-search"></i></button>
+                                  <button id="editacurp" style="width:33%;visibility:hidden;" class="btn btn-primary" onclick="return edita_curp();">Editar<i class="icon-edit"></i></button>
+                              </td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              
+                          </tr>
+                          <tr>
                             <td><p align="right">Parto Multiple</p></td>
                             <td ><select name="parto" id="parto" style="width:85%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,1)">
                             </select></td>
-                            <td><p align="right">&nbsp;</p></td>
-                            <td>&nbsp;</td>
+                            <td><p align="right">Tamiz neonatal</p></td>
+                            <td>
+                                <select name="tamiz" id="tamiz" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required" onkeydown="return entertab(event,13)" tabindex="12">
+                                    <option value="2" <?php echo (is_null($enrolado->tamiz_neonatal) || $enrolado->tamiz_neonatal == 2) ? 'selected="selected"' : "" ; ?>>Se ignora</option>
+                                    <option value="1" <?php echo ($enrolado->tamiz_neonatal == 1) ? 'selected="selected"' : "" ; ?>>Si</option>
+                                    <option value="0" <?php echo (!is_null($enrolado->tamiz_neonatal) && $enrolado->tamiz_neonatal == 0) ? 'selected="selected"' : "" ; ?>>No</option>
+                                </select>
+                            </td>
                           </tr>
                           <tr>
                             <td>&nbsp;</td>

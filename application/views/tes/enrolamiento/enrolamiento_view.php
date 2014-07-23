@@ -163,8 +163,8 @@ function vacunacion(id,tiene,fecha,prioridad)
                           <tr>
                             <td><p align="right">Parto Multiple</p></td>
                             <td ><div style="width:100%; margin-left:20px; margin-top:-5px" id="parto"><?php  echo $enrolado->parto;?></div></td>
-                            <td><p align="right">&nbsp;</p></td>
-                            <td>&nbsp;</td>
+                            <td><p align="right">Tamiz neonatal</p></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php echo (($enrolado->tamiz_neonatal == null)?"Se ignora":(($enrolado->tamiz_neonatal == 1) ? "Si" : "No")); ?></div></td>
                           </tr>
                         </table>
                         <br />

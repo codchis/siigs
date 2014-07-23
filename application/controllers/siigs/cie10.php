@@ -218,16 +218,17 @@ class Cie10 extends CI_Controller {
 			 $fp = fopen($_FILES['archivocsv']['tmp_name'], "r");
 		//	 $fp = fopen('catalogos/estados.csv', "r");
                          $columnas = array('cie10','descripcion');
-			 while (!feof($fp))
+			 //while (!feof($fp))
+                         while (($data = fgetcsv($fp)) !== FALSE)
 			 {
-			  	$data  = explode(",", fgets($fp));
+			  	//$data  = explode(",", fgets($fp));
                                 if (count($data) == 2)
                                 {
                                     $utf8_encode = function($val)
                                     {
                                         return utf8_encode(addslashes($val));
                                     };
-                                    $data  = array_map($utf8_encode,explode(",", fgets($fp)));
+                                    $data  = array_map($utf8_encode,$data);
 			  	
                                     $data = preg_replace("!\r?\n!", "", $data);
                                     {
@@ -240,6 +241,7 @@ class Cie10 extends CI_Controller {
                                     }
                                 }
 			 }
+                          fclose($fp);
 
 			 //Inserta los datos en lotes a la tabla temporal
 			 $this->db->insert_batch('cns_cie10',$rows);
@@ -395,13 +397,14 @@ class Cie10 extends CI_Controller {
 			 }
                          ini_set('memory_limit', '1024M');
                          $error = false;
-			 while (!feof($fp))
+			 //while (!feof($fp))
+                         while (($data = fgetcsv($fp)) !== FALSE)
 			 {
                                 $utf8_encode = function($val)
                                 {
                                     return utf8_encode(addslashes($val));
                                 };
-			  	$data  = array_map($utf8_encode,explode(",", fgets($fp)));
+			  	$data  = array_map($utf8_encode,$data);
 			  	
 			  	$cont +=1;
 				$data = preg_replace("!\r?\n!", "", $data);
@@ -513,6 +516,7 @@ class Cie10 extends CI_Controller {
                                         }
 			  	}
 			 }
+                         fclose($fp);
 			 if (count($datallaves) > count($this->_array_unique_recursive($datallaves)))
 			 {
 			 	echo json_encode(array("Error","El archivo contiene llaves primarias duplicadas"));

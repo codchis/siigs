@@ -97,22 +97,30 @@ class Obtenercurp extends CI_Controller
 		if ($ap!=""&&$am!=""&&$na!=""&&$d!=""&&$m!=""&&$y!=""&&$se!=""&&$edo!="")
 		{
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, "http://consultas.curp.gob.mx/CurpSP/curp1.do?strPrimerApellido=$ap&strSegundoAplido=$am&strNombre=$na&strdia=$d&strmes=$m&stranio=$y&sSexoA=$se&sEntidadA=$edo&rdbBD=myoracle&strTipo=A");
-			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_URL, "http://consultas.curp.gob.mx/CurpSP/curp11.do?strPrimerApellido=$ap&strSegundoAplido=$am&strNombre=$na&strdia=$d&strmes=$m&stranio=$y&sSexoA=$se&sEntidadA=$edo&rdbBD=myoracle&strTipo=A&codigo=bf139");
+			
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie: JSESSIONID=XrQFT2YSf8BMmwnbJ7HyFlnfttYcjqp3dtJDjQ7HM2NRz84GGW12!-767651644"));
+			
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			
+                        
 			curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)");
 			$html = curl_exec($ch);
 			curl_close($ch);
+                        
+                        echo "http://consultas.curp.gob.mx/CurpSP/curp11.do?strPrimerApellido=$ap&strSegundoAplido=$am&strNombre=$na&strdia=$d&strmes=$m&stranio=$y&sSexoA=$se&sEntidadA=$edo&rdbBD=myoracle&strTipo=A";
+                        echo $html;
 			
 			$pos=stripos($html,'<td class="TablaTitulo2"><span class="NotaBlanca">Curp</span></td>
 	<td><b class="Nota">');
 			$t=34;
 			$html=substr($html,$pos,strlen($html)-$pos);
 			
+                        //echo "http://consultas.curp.gob.mx/CurpSP/curp11.do?strPrimerApellido=$ap&strSegundoAplido=$am&strNombre=$na&strdia=$d&strmes=$m&stranio=$y&sSexoA=$se&sEntidadA=$edo&rdbBD=myoracle&strTipo=A";
+                        //print($html);
+                        
 			$cu=substr($html,stripos($html,'>Curp')+($t+6),18);
 			
 			$ap=substr($html,stripos($html,'>Primer Apellido')+($t+17),38);
@@ -175,6 +183,7 @@ class Obtenercurp extends CI_Controller
 			
 		}
 	}
+        
 	/**
 	 * @access public
 	 *
@@ -228,8 +237,10 @@ class Obtenercurp extends CI_Controller
 			curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)");
 			$html = curl_exec($ch);
 			curl_close($ch);
-			$cur=substr($html,stripos($html,'CURP</span>')+(140),18);
-			$rfc=substr($html,stripos($html,'RFC</span>')+(139),13);
+                        //modificados los valores de offset para recortar los TAGS del DOM 
+                        //correspondientes a RFC y CURP (Podría cambiar con el paso del tiempo)
+			$cur=substr($html,stripos($html,'CURP      </span>')+(160),18);
+			$rfc=substr($html,stripos($html,'RFC      </span>')+(159),13);
 			$array=
 			array(
 				array(
@@ -237,6 +248,107 @@ class Obtenercurp extends CI_Controller
 					"rfc"=>$rfc,
 				)
 			);
+			if(strlen($cur)>10&&!stripos($cur,"<"))
+			{
+				if($regresar==1)
+					return $array;
+				else
+					echo json_encode($array);
+			}			
+		}
+	}
+        
+        /**
+	 * @access public
+	 *
+	 * Calcula la curp y el rfc con los datos proporcionados
+	 * 
+	 * @param		string 		$paterno        Apellido paterno de la persona 
+	 * @param		string 		$materno        Apellido materno
+	 * @param		string 		$nombre         Nombre o nombres
+	 * @param		int 		$dia            Dia de nacimiento
+	 * @param		int 		$mes            Mes de nacimiento
+	 * @param		int 		$year           Año de nacimiento
+	 * @param		string 		$sexo           Sexo
+	 * @param		string 		$estado         Lugar de nacimiento
+	 * @param		string 		$regresar       Tipo de retorno =1 return array !=1 json
+	 *
+	 * @return 		echo
+	 */
+	public function calculacurp($paterno,$materno,$nombre,$dia,$mes,$year,$sexo,$estado,$regresar="")
+	{
+		$estados=$this->estados;
+		$ap=strtoupper($paterno);
+		$am=strtoupper($materno);
+		$na=strtoupper($nombre);
+		
+		$d=$dia;
+		if($d<10) $d="0".(int)$d;
+		$m=$mes;
+		if($m<10) $m="0".(int)$m;
+		
+		$y=$year;
+		$se=$sexo;
+		$se=strtoupper($se);
+		if($se=="HOMBRE"||$se=="MASCULINO"||$se=="M")
+			$se="H";
+		if($se=="MUJER"||$se=="FEMENINO"||$se=="F")
+			$se="M";
+		$estado=strtoupper($estado); 
+		
+		$edo=$estados[0][$estado];
+		if ($ap!=""&&$am!=""&&$na!=""&&$d!=""&&$m!=""&&$y!=""&&$se!=""&&$edo!="")
+		{
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, "http://losimpuestos.com.mx/rfc/calcular-rfc.php");
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS,"paterno=$ap&materno=$am&nombre=$na&dia=$d&mes=$m&anno=$y&sexo=$se&entidad=$edo");
+			curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.0.6) Gecko/2009011913 Firefox/3.0.6 (.NET CLR 3.5.30729)");
+			$html = curl_exec($ch);
+			curl_close($ch);
+
+                        //modificados los valores de offset para recortar los TAGS del DOM 
+                        //correspondientes a RFC y CURP (Podría cambiar con el paso del tiempo)
+			$infoinicio=substr($html,stripos($html,'<table>'));
+			$info=substr($infoinicio,0,stripos($infoinicio,'</table>'));
+                        $info = str_replace(' ', '', $info);
+                        
+                        $rfc = substr($info,  stripos($info, '<strong>RFC</strong>'));
+                        $cur = substr($info,  stripos($info, '<strong>CURP</strong>'));
+                        
+                        $rfc = substr($rfc, 0,stripos($rfc,'</span></strong>'));
+                        $cur = substr($cur, 0,stripos($cur,'</span></strong>'));
+                        
+                        $rfc = preg_replace('/[^ A-Za-z0-9_-ñÑ]/', '', $rfc);
+                        $cur = preg_replace('/[^ A-Za-z0-9_-ñÑ]/', '', $cur);
+                        
+                        $replaces = array(
+                            'strong' => '',
+                            'td' => '',
+                            'RFC'=>'',
+                            'CURP'=>'',
+                            'span' => '',
+                            'style' => '',
+                            'color'=>'',
+                            'f00' => ''
+                        );
+                        
+                        $rfc = str_replace(array_keys($replaces),array_values($replaces), $rfc);
+                        $cur = str_replace(array_keys($replaces),array_values($replaces), $cur);
+                                                
+			$array=
+			array(
+				array(
+					"curp"=>$cur,
+					"rfc"=>$rfc,
+				)
+			);
+                      
 			if(strlen($cur)>10&&!stripos($cur,"<"))
 			{
 				if($regresar==1)

@@ -34,6 +34,8 @@ class Enrolamiento_model extends CI_Model
 	private $fnacimiento;
 	private $tbeneficiario;
 	private $parto;
+        private $tamiz_neonatal;
+        private $precurp;
 	
 	// civil
    	private $fechacivil;
@@ -219,10 +221,30 @@ class Enrolamiento_model extends CI_Model
 	{
 	    return $this->parto;
 	}
+        
+        public function gettamiz()
+	{
+	    return $this->tamiz_neonatal;
+	}
+        
+        public function getprecurp()
+	{
+	    return $this->precurp;
+	}
+        
+        public function setprecurp($value) 
+	{
+		$this->precurp = $value;
+	}
 
 	public function setparto($value) 
 	{
 		$this->parto = $value;
+	}
+        
+        public function settamiz($value) 
+	{
+		$this->tamiz_neonatal = $value;
 	}
 	//tutor
 	public function getidtutor()
@@ -763,6 +785,8 @@ class Enrolamiento_model extends CI_Model
 			'id_tipo_sanguineo' => $this->sangre,
 			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)),
 			'id_parto_multiple' => $this->parto,
+                        'tamiz_neonatal' => $this->tamiz_neonatal,
+                        'precurp' => $this->precurp,
 			
 			// civil
 			'fecha_registro' => date('Y-m-d H:i:s', strtotime($this->fechacivil)),
@@ -1142,6 +1166,8 @@ class Enrolamiento_model extends CI_Model
 			'sexo' => $this->sexo,
 			'id_tipo_sanguineo' => $this->sangre,
 			'id_parto_multiple' => $this->parto,
+                        'tamiz_neonatal' => $this->tamiz_neonatal,
+                        'precurp' => $this->precurp,
 			'fecha_nacimiento' => date('Y-m-d H:i:s', strtotime($this->fnacimiento)));
 		$this->db->where('id' , $this->id);
 		$result = $this->db->update('cns_persona', $data); 

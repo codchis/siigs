@@ -196,13 +196,13 @@ class CatalogoCsv extends CI_Controller {
 			 }
                          ini_set('memory_limit', '1024M');
                          $error = false;
-			 while (!feof($fp))
+			 while (($datatemp = fgetcsv($fp)) !== FALSE)
 			 {
 			  	$utf8_encode = function($val)
                                 {
                                     return utf8_encode(addslashes($val));
                                 };
-                                $datatemp = explode(",", fgets($fp));
+                                //$datatemp = explode(",", fgets($fp));
 			  	$data  = array_map($utf8_encode,$datatemp);
 			  	$cont +=1;
 				$data = preg_replace("!\r?\n!", "", $data);
@@ -314,6 +314,7 @@ class CatalogoCsv extends CI_Controller {
                                         }
 			  	}
 			 }
+                         fclose($fp);
                          //var_dump($datallaves);
 			 if (count($datallaves) > count($this->_array_unique_recursive($datallaves)))
 			 {
@@ -598,6 +599,39 @@ class CatalogoCsv extends CI_Controller {
             try
             {
                 $this->Ageb_model->process();
+                $this->session->set_flashdata('msgResult', 'Datos procesados correctamente');
+                $this->session->set_flashdata('clsResult', 'success');
+            }
+            catch (Exception $e) {
+                    $this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));
+                    $this->session->set_flashdata('clsResult', 'error');
+            }
+        
+        redirect(DIR_SIIGS.'/catalogocsv/', 'refresh');
+        //die();
+	}
+        
+        /**
+	 *Acción para ejecutar la creación de la tabla Asu Ageb
+	 *No recibe parámetros
+	 *
+	 *@return void
+	 */
+	public function createTableHemoGlobina()
+	{
+            ini_set('max_execution_time',1000);
+            
+            $this->load->model(DIR_SIIGS.'/Hemoglobina_model');
+
+                    if (empty($this->Hemoglobina_model)) {
+                echo 'No se puede cargar el modelo Ageb';
+                            return false;
+            }
+            if (!Usuario_model::checkCredentials(DIR_SIIGS.'::'.__METHOD__, current_url()))
+                    show_error('', 403, 'Acceso denegado');
+            try
+            {
+                $this->Hemoglobina_model->process();
                 $this->session->set_flashdata('msgResult', 'Datos procesados correctamente');
                 $this->session->set_flashdata('clsResult', 'success');
             }

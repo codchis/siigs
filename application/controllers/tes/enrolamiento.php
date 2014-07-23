@@ -271,8 +271,8 @@ SELECT DISTINCT	r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplica
 			
 			$data['vacunas']=$this->Enrolamiento_model->get_catalog_view("vacuna",$id,"id_vacuna");
 			
-			$data['iras']=$this->Enrolamiento_model->get_catalog_view("ira",$id);
-			$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);
+			//$data['iras']=$this->Enrolamiento_model->get_catalog_view("ira",$id);
+			//$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);
 			$data['consultas']=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 			
@@ -960,6 +960,8 @@ SELECT DISTINCT	r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplica
 		$this->Enrolamiento_model->setfnacimiento($this->input->post('fnacimiento'));
 		$this->Enrolamiento_model->settbeneficiario($this->input->post('tbeneficiario'));
 		$this->Enrolamiento_model->setparto($this->input->post('parto'));
+                $this->Enrolamiento_model->settamiz($this->input->post('tamiz'));
+                $this->Enrolamiento_model->setprecurp($this->input->post('precurp'));
 		
 		$this->Enrolamiento_model->setidtutor($this->input->post('idtutor'));				
 		$this->Enrolamiento_model->setnombreT(trim(strtoupper($this->input->post('nombreT'))));
