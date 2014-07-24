@@ -80,3 +80,73 @@ function showAlerta(parametros) {
     
     $(alert).html(parametros.mensaje).fadeIn(2000, function(){ setTimeout(function(){ $(alert).fadeOut(2000); }, 1000); });
 }
+
+// funcion dependiente de jquery.flot
+function dibujaGrafica(datos, etiquetasEjes, idDiv) {
+    $grafica = $.plot("#"+idDiv, datos, {
+        xaxes: [{
+            axisLabel: etiquetasEjes.xaxes,
+            axisLabelPadding: 20
+        }],
+        yaxes: [{
+            axisLabel: etiquetasEjes.yaxes,
+            axisLabelPadding: 40
+        }],
+        legend: {
+            position: "nw"
+        },
+        series: {
+            lines: {
+                show: true
+            },
+            points: {
+                show: true
+            }
+        },
+        grid: {
+            show: true,
+            hoverable: true,
+            clickable: true,
+            margin: {
+                left: -10,
+                bottom: 0
+            },
+            labelMargin: 22,
+            borderColor: "#000",
+            backgroundColor: { colors: ["#fff", "#fff"] }
+        }
+    });
+    
+    if($("#tooltip-flot").length == 0) {
+        $("<div id='tooltip-flot'></div>").css({
+            position: "absolute",
+            display: "none",
+            border: "1px solid #fdd",
+            padding: "2px",
+            "background-color": "#fee",
+            opacity: 0.80
+        }).appendTo("body");
+    }
+
+    $("#"+idDiv).bind("plothover", function (event, pos, item) {
+        if (item) {
+            var x = item.datapoint[0].toFixed(2),
+                y = item.datapoint[1].toFixed(2);
+            
+            var xaxisLabel = $(this).find('.xaxisLabel').text(),
+                yaxisLabel = $(this).find('.yaxisLabel').text();
+            
+            // Obtiene los datos que estan dentro del parentesis
+            xaxisLabel = xaxisLabel.substring(xaxisLabel.indexOf('(')+1, xaxisLabel.indexOf(')'));
+            yaxisLabel = yaxisLabel.substring(yaxisLabel.indexOf('(')+1, yaxisLabel.indexOf(')'));
+
+            $("#tooltip-flot").html("(" + x + " " + xaxisLabel + ", " + y + " " + yaxisLabel + ")")
+                .css({top: item.pageY+5, left: item.pageX+5})
+                .fadeIn(200);
+        } else {
+            $("#tooltip-flot").hide();
+        }
+    });
+    
+    return $grafica.getCanvas();
+}
