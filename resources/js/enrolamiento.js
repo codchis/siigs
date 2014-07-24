@@ -221,7 +221,7 @@ function edita_curp()
 {
     $("#precurp").val('0');
     $("#editacurp").css({'visibility':'hidden'});
-    $("#curp , #curp2").removeAttr('disabled');
+    $("#curp , #curp2").removeAttr('readonly');
     return false;
 }
 
@@ -263,7 +263,7 @@ function calcula_curp()
 						$("#curpl").html('<strong>'+curp.substr(0,curp.length-5)+'&nbsp;</strong>');		
 						$("#curp2").val(curp.substr(curp.length-5,5));
                                                 $("#precurp").val("0");
-                                                $("#curp , #curp2").attr('disabled',"disabled");
+                                                $("#curp , #curp2").attr('readonly',"readonly");
 						$("#nocurp").html('<span style="color:green">Curp calculada correctamente</span>');
                                                 $("#precurp").val('1');
                                                 $("#editacurp").css({'visibility':'visible'});

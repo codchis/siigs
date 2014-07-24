@@ -405,8 +405,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             </tr>
                           <tr>
                             <td><p align="right">Pre CURP</p></td>
-                            <td ><input name="curp" type="text" id="curp"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,0,12); ?>" maxlength="12">
-                            <input name="curp2" type="text"  id="curp2"  style="letter-spacing:1px; width:22.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,12,15); ?>" maxlength="6"></td>
+                            <td ><input name="curp" type="text" id="curp" readonly="readonly"  style="letter-spacing:1px; width:50%;margin-left:10px;" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,0,12); ?>" maxlength="12">
+                                <input name="curp2" type="text"  id="curp2" readonly="readonly"  style="letter-spacing:1px; width:22.5%" onkeypress="return validar(event,'NL',this.id)" value="<?php echo substr($enrolado->curp,12,15); ?>" maxlength="6"></td>
                             <input type="hidden" id="precurp" name="precurp" value="<?php echo $enrolado->precurp; ?>" />
                             <td><p align="right">Nacionalidad</p></td>
                             <td><select name="nacionalidad" id="nacionalidad" style="width:80%; margin-left:10px;" title='requiere' required="title='requiere' required">
@@ -415,8 +415,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                           <tr>
                               <td><p align="right">&nbsp;</p></td>
                               <td>
-                                  <button style="width:52%;margin-left:10px;" class="btn btn-primary" onclick="return calcula_curp();">Calcular RFC<i class="icon-search"></i></button>
-                                  <button id="editacurp" style="width:33%;visibility:hidden;" class="btn btn-primary" onclick="return edita_curp();">Editar<i class="icon-edit"></i></button>
+                                  <button style="width:55%;margin-left:5px;" class="btn btn-primary" onclick="return calcula_curp();">Calcular CURP<i class="icon-search"></i></button>
+                                  <button id="editacurp" style="width:33%;visibility:visible;" class="btn btn-primary" onclick="return edita_curp();">Editar<i class="icon-edit"></i></button>
                               </td>
                               <td>&nbsp;</td>
                               <td>&nbsp;</td>

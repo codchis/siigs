@@ -307,7 +307,7 @@
                           <tr>
                               <td><p align="right">&nbsp;</p></td>
                               <td>
-                                  <button style="width:52%;margin-left:10px;margin-bottom:5px;" class="btn btn-primary" onclick="return calcula_curp();">Calcular RFC<i class="icon-search"></i></button>
+                                  <button style="width:55%;margin-left:5px;margin-bottom:5px;" class="btn btn-primary" onclick="return calcula_curp();">Calcular CURP<i class="icon-search"></i></button>
                                   <button id="editacurp" style="width:33%;visibility:hidden;" class="btn btn-primary" onclick="return edita_curp();">Editar<i class="icon-edit"></i></button>
                               </td>
                               <td>&nbsp;</td>
