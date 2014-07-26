@@ -151,6 +151,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 						if(dato)
 						{
 							var obj = jQuery.parseJSON( dato );
+                            if(obj.length == 0) return null;
 							var des=obj[0]["descripcion"];
 							var ed=des.split(",");
 							ed=ed[ed.length-2];
@@ -205,6 +206,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+                if(obj.length == 0) return null;
 				var des=obj[0]["descripcion"];
 				var ed=des.split(",");
 				ed=ed[ed.length-2];
@@ -229,6 +231,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+                if(obj.length == 0) return null;
 				var des=obj[0]["descripcion"];
 				var ed=des.split(",");
 				ed=ed[ed.length-2];
@@ -252,6 +255,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+                if(obj.length == 0) return null;
 				var des=obj[0]["descripcion"];
 				var ed=des.split(",");
 				ed=ed[ed.length-2];
@@ -275,6 +279,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+                if(obj.length == 0) return null;
 				var des=obj[0]["descripcion"];
 				var ed=des.split(",");
 				ed=ed[ed.length-2];
@@ -835,7 +840,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 					<th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'.$num.'" style="width:85%;" value="'.$altura.'"></th>  
 					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'"  style="width:85%;" value="'.$talla.'"></th>  
 					<th width="18%"><input type="number" step=".01" min="0" name="chemoglobina[]" id="chemoglobina'.$num.'"  style="width:85%;" value="'.$hemoglobina.'"></th>  
-					<th width="18%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'" style="width:85%"></th>
+					<th width="18%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'" style="width:75%"></th>
 				</tr>
 				</table> 
 			  </div></span>
@@ -862,6 +867,40 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                               </tr>                     
                           </table>
                         <input name="id_cns_nutricion" type="hidden" id="id_cns_nutricion" value="<?php echo $id;?>"  />
+                        
+                        <br />
+                        <h4>Registro de Perímetro Cefálico</h4>
+                        <table id="tabla_peri_cefa">
+                            <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">
+                                <tr style="height:35px;">
+                                    <th>No.</th>
+                                    <th>Perímetro Cefálico</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?PHP if(!empty($peri_cefa)) {
+                                    if(count($peri_cefa) >0 ) {
+                                        $index = 0;
+                                        foreach($peri_cefa as $reg_peri_cefa){
+                                            echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                <td>'.($index+1).'</td>
+                                                <td><input name="peri_cefa[]" type="number" step=".01" min="0" value="'.$reg_peri_cefa->perimetro_cefalico.'" style="width:75% !important"></td>
+                                                <td><input name="fecha_peri_cefa[]" class="fecha_peri_cefa" type="text" step=".01" min="0" value="'.date("d-m-Y",strtotime($reg_peri_cefa->fecha)).'" style="width:75% !important"></td>
+                                            </tr>';
+                                            $index++;
+                                        }
+                                    }
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+
+                        <br />
+                        <button type="button" class="btn btn-primary" onclick="addPeriCefa()" >Agregar <i class="icon-plus"></i></button>
+                        <button type="button" class="btn btn-primary" onclick="remPeriCefa()" >Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
+                        <br /><br />
+                        
                         </div>
                       </div>
                       <?php }?>

@@ -227,6 +227,8 @@ class Enrolamiento extends CI_Controller
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 			$data['nutriciones']=$nutricion;
+            
+            $data['peri_cefa'] = $this->Enrolamiento_model->get_peri_cefa($id);
 		}
 		catch(Exception $e)
 		{
@@ -270,13 +272,7 @@ class Enrolamiento extends CI_Controller
 						
 					if(isset($_POST["id_cns_vacuna"]))
 						$id=$this->Enrolamiento_model->update_vacuna();
-						
-					if(isset($_POST["id_cns_ira"]))
-						$id=$this->Enrolamiento_model->update_ira();
-						
-					if(isset($_POST["id_cns_eda"]))
-						$id=$this->Enrolamiento_model->update_eda();
-						
+					
 					if(isset($_POST["id_cns_consulta"]))
 						$id=$this->Enrolamiento_model->update_consulta();
 						
@@ -286,6 +282,9 @@ class Enrolamiento extends CI_Controller
 					if(isset($_POST["id_cns_nutricion"]))
 						$id=$this->Enrolamiento_model->update_nutricion();
 					
+                    if(isset($_POST["peri_cefa"]))
+						$id=$this->Enrolamiento_model->update_peri_cefa();
+                    
 					$data['id'] = $this->Enrolamiento_model->getId();	
 					$midata['infoclass'] = 'success';
 					$midata['msgResult'] = 'Registro Actualizado Exitosamente';

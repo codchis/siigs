@@ -36,6 +36,7 @@ function obtener_um_responsabilidad()
 						if(datos)
 						{
 							var obj1 = jQuery.parseJSON( datos );
+                            if(obj1.length == 0) return null;
 							var des=obj1[0]["descripcion"];
 							var ed=des.split(",");
 							ed=ed[ed.length-2];
@@ -194,6 +195,7 @@ function importarDatos(id)
 				if(dato)
 				{
 					var obj = jQuery.parseJSON( dato );
+                    if(obj.length == 0) return null;
 					var des=obj[0]["descripcion"];
 					var ed=des.split(",");
 					ed=ed[ed.length-2];
@@ -494,7 +496,7 @@ function addNutricional()
                         <th width="18%"><input type="number" step=".001" min="0" max="300" name="caltura[]" id="caltura'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
                         <th width="18%"><input type="number" step=".001" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
                         <th width="18%"><input type="number" step=".001" min="0" name="chemoglobina[]" id="chemoglobina'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
-                        <th width="18%"><input name="fCNu[]" type="text" id="fCNu'+num+'" style="width:85%"></th> \n\
+                        <th width="18%"><input name="fCNu[]" type="text" id="fCNu'+num+'" style="width:75%"></th> \n\
                     </tr>\n\
                 </table>\n\
                 </div>\n\
@@ -586,4 +588,20 @@ function comparar_captura()
 			}
 		});
 	}
+}
+
+function addPeriCefa(){
+    no = $('#tabla_peri_cefa tbody tr').length + 1;
+    fila = '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">\n\
+                <td align="center">'+no+'</td>\n\
+                <td><input name="peri_cefa[]" id="peri_cefa-'+no+'" type="number" step=".01" min="0" style="width:75% !important"></td>\n\
+                <td><input name="fecha_peri_cefa[]" id="fecha_peri_cefa-'+no+'" type="text" step=".01" min="0" style="width:75% !important"></td>\n\
+            </tr>';
+    $(fila).appendTo('#tabla_peri_cefa tbody');
+    
+	$('#fecha_peri_cefa-'+no).datepicker(optionsFecha);
+}
+
+function remPeriCefa(){
+    $('#tabla_peri_cefa tbody tr:last').remove();
 }
