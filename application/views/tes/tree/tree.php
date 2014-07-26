@@ -36,9 +36,9 @@
                 var omitidos = <?php echo json_encode($omitidos);?>;
                 var seleccionados = parent.document.getElementById("<?php echo $id;?>").value.split(',');
                 var seleccionables = <?php echo json_encode($seleccionables);?>;
-                console.log(seleccionables);
-                console.log(omitidos);
-                console.log(seleccionados);
+                //console.log(seleccionables);
+                //console.log(omitidos);
+                //console.log(seleccionados);
 		$.ajax({
 			type: "GET",
 			data: {
@@ -63,6 +63,7 @@
 				<?php } ?>
 				selectMode: <?php echo $seleccion;?>,// 3 seleccion multiple parcial 2 multiselect 1 select unico
 				children: treeData,
+                debugLevel: 0,
 				onSelect: function(select, node) 
 				{
 					// Display list of selected nodes
@@ -125,14 +126,14 @@
 				},
                                 onLazyRead: function(node){
                                     nivel = node.data.tooltip/1+1;
-                                    console.log(nivel);
+                                    //console.log(nivel);
                                     var cambio = false;
                                     while(jQuery.inArray(nivel,omitidos)>-1)
                                     {
                                         cambio = true;
                                         nivel +=1;
                                     }
-                                    console.log(nivel);
+                                    //console.log(nivel);
                                 node.appendAjax({url: '/<?php echo DIR_SIIGS.'/raiz/getTreeBlock';?>',
                                 data: { "nivel" : ((cambio == true) ? nivel : 0),
                                         "idarbol" : idarbol,

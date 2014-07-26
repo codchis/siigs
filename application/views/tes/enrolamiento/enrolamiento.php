@@ -495,7 +495,7 @@
                             <td width="19%" height="50"><p align="right">Lugar</p></td>
                             <td width="81%" colspan="3"><span style="font-size:12px; margin-left:10px; font-style:italic;">um, localidad ,municipio, estado</span>
                             <div class="input-append" style="width:100%">
-                            <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('lugarcivilT', ''); ?>" readonly="readonly" title="requiere" tabindex="300">
+                            <input name="umt" type="text" id="umt" style="width:68%; margin-left:10px;"  value="<?php echo set_value('umt', ''); ?>" readonly="readonly" title="requiere" tabindex="300">
                               <input name="um" type="hidden" id="um"  value="<?php echo set_value('um', ''); ?>"/>
                               <a href="/<?php echo DIR_TES?>/tree/create/TES/Unidad Medica/1/radio/0/um/umt/1/1/<?php echo urlencode(json_encode(array(2)));?>/<?php echo urlencode(json_encode(array(4,5)));?>" id="fba1" class="btn btn-primary">Seleccionar <i class="icon-search"></i></a>        
                             </div></td>
@@ -588,89 +588,10 @@
                       </div>
                     </div>
                     
-                    <!-- ira  -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/iras.png"/></span>Control de IRA</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
-                        <table>
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="28%" align="left">IRA</th>
-                                        <th width="15%" align="left">Fecha</th>
-                                        <th width="20%" align="left">Tipo</th>
-                                        <th width="27%" align="left">Tratamiento</th>
-                                    </tr>
-                                  </table> 
-                                  </div>
-                                  <?php
-								  	  $array=array();
-									  if(isset($_POST["ira"])) $array= $_POST["ira"];
-									   
-									  echo getArray($array,'ira','in');
-								  ?>
-                                  <div id="ic"></div>
-                                  
-                                  <div id="icic">
-                                  </div>                           
-                                 </td>
-                                 <td valign="top"> 
-                                   <button type="button" class="btn btn-primary" onclick="add('ira','in','ic');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
-                                   <button type="button" class="btn btn-primary" onclick="rem('ira','in');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
-                                  
-                                  </td>
-                              </tr>                     
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <!-- eda  -->
-                    <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/edas.png"/></span>Control de EDA</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
-                        <table>
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="28%" align="left">EDA</th>
-                                        <th width="15%" align="left">Fecha</th>
-                                        <th width="20%" align="left">Tipo</th>
-                                        <th width="27%" align="left">Tratamiento</th>
-                                    </tr>
-                                  </table> 
-                                  </div>
-                                  <?php
-								  	  $array=array();
-									  if(isset($_POST["eda"])) $array= $_POST["eda"];
-									   
-									  echo getArray($array,'eda','en');
-								  ?>
-                                  <div id="ec">
-                                  </div>                           
-                                 </td>
-                                 <td valign="top"> 
-                                   <button type="button" class="btn btn-primary" onclick="add('eda','en','ec');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
-                                   <button type="button" class="btn btn-primary" onclick="rem('eda','en');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
-                                   
-                                  </td>
-                              </tr>                     
-                          </table>
-                        </div>
-                      </div>
-                    </div>
                     
                     <!-- consulta  -->
                     <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consulta</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consultas</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -720,10 +641,11 @@
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="18%" align="left">Peso (kg)</th>
-                                        <th width="18%" align="left">Altura (cm)</th>
-                                        <th width="18%" align="left">Talla cintura (cm)</th>
-                                        <th width="36%" align="left">Fecha</th>
+                                        <th width="18%" align="center">Peso (kg)</th>
+                                        <th width="18%" align="center">Altura (cm)</th>
+                                        <th width="18%" align="center">Talla cintura (cm)</th>
+                                        <th width="18%" align="center">Hemoglobina</th>
+                                        <th width="18%" align="center">Fecha</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -738,6 +660,7 @@
 		$talla=$_POST["ctalla"][$i-1];
 		$altura=$_POST["caltura"][$i-1];
 		$peso=$_POST["cpeso"][$i-1];
+		$hemoglobina=$_POST["chemoglobina"][$i-1];
 		$fecha=$_POST["fCNu"][$i-1];
 		$clase="row2";
 		if($i%2)$clase="row1";
@@ -750,7 +673,8 @@
 					<th width="18%" align="left"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'.$num.'" style="width:85%;" value="'.$peso.'"></th> 
 					<th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'.$num.'" style="width:85%;" value="'.$altura.'"></th>  
 					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'"  style="width:85%;" value="'.$talla.'"></th>  
-					<th width="36%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("Y-m-d",strtotime($fecha)).'"></th>
+					<th width="18%"><input type="number" step=".01" min="0" name="chemoglobina[]" id="chemoglobina'.$num.'"  style="width:85%;" value="'.$hemoglobina.'"></th>  
+					<th width="18%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("Y-m-d",strtotime($fecha)).'"  style="width:85%"></th>
 				</tr>
 				</table> 
 			  </div></span>';

@@ -209,7 +209,7 @@ function importarDatos(id)
 }
 function omitirAcentos(text) 
 {
-	var acentos = "�?À�?ÄÂ�?ÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
+	var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
 	var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
 	for (var i=0; i<acentos.length; i++) 
 		text = text.replace(acentos.charAt(i), original.charAt(i));
@@ -485,7 +485,20 @@ function addNutricional()
 	if((num%2)==0) miclase="row2"; else miclase="row1";
 	if(num<10)num="0"+num;
 	
-	campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".001" min="0" name="cpeso[]" id="cpeso'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th> <th width="18%"><input type="number" step=".001" min="0" max="300" name="caltura[]" id="caltura'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="18%"><input type="number" step=".001" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
+	campo = '<span id="r'+"CNu"+num+'" >\n\
+                <div class="'+miclase+'" style="width:100%">\n\
+                <table width="100%" >\n\
+                    <tr>\n\
+                        <th width="10%">'+num+'</th>\n\
+                        <th width="18%"><input type="number" step=".001" min="0" name="cpeso[]" id="cpeso'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
+                        <th width="18%"><input type="number" step=".001" min="0" max="300" name="caltura[]" id="caltura'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
+                        <th width="18%"><input type="number" step=".001" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
+                        <th width="18%"><input type="number" step=".001" min="0" name="chemoglobina[]" id="chemoglobina'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
+                        <th width="18%"><input name="fCNu[]" type="text" id="fCNu'+num+'" style="width:85%"></th> \n\
+                    </tr>\n\
+                </table>\n\
+                </div>\n\
+            </span>';
 	$("#cNu").append(campo);
 	$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 	$("#fCNu"+num).datepicker(optionsFecha );

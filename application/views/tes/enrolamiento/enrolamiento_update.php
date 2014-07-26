@@ -751,80 +751,11 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                     </div>
                     <?php }?>
                     
-                    <!-- ira  -->
-                    <?php if($cn_ira){ ?>
-                  <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/iras.png"/></span>Control de IRA</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
-                        <table>
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="28%" align="left">IRA</th>
-                                        <th width="15%" align="left">Fecha</th>
-                                        <th width="20%" align="left">Tipo</th>
-                                        <th width="27%" align="left">Tratamiento</th>
-                                    </tr>
-                                  </table> 
-                                  </div>
-                                  <?php echo getArray($iras,'ira','in');?>
-                                  <div id="ic">
-                                  </div>                           
-                                 </td>
-                              <td valign="top"> 
-                                   <button type="button" class="btn btn-primary" onclick="add('ira','in','ic');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
-                                   <button type="button" class="btn btn-primary" onclick="rem('ira','in');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> </td>
-                              </tr>                     
-                          </table>
-                        <input name="id_cns_ira" type="hidden" id="id_cns_ira" value="<?php echo $id;?>"  />
-                        </div>
-                      </div>
-                    </div>
-                    <?php }?>
-                    
-                    <!-- eda  -->
-                    <?php if($cn_eda){ ?>
-                  <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><span class="icono"><img src="/resources/images/edas.png"/></span>Control de EDA</div>
-                      <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
-                        <table>
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="28%" align="left">EDA</th>
-                                        <th width="15%" align="left">Fecha</th>
-                                        <th width="20%" align="left">Tipo</th>
-                                        <th width="27%" align="left">Tratamiento</th>
-                                    </tr>
-                                  </table> 
-                                  </div>
-                                  <?php echo getArray($edas,'eda','en');?>
-                                  <div id="ec">
-                                  </div>                           
-                                 </td>
-                                 <td valign="top"> 
-                                   <button type="button" class="btn btn-primary" onclick="add('eda','en','ec');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
-                                   <button type="button" class="btn btn-primary" onclick="rem('eda','en');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> </td>
-                              </tr>                     
-                          </table>
-                        <input name="id_cns_eda" type="hidden" id="id_cns_beneficiario2" value="<?php echo $id;?>"  />
-                        </div>
-                      </div>
-                    </div>
-                    <?php }?>
                     
                     <!-- consulta  -->
                     <?php if($cn_consulta){ ?>
                   <div class="AccordionPanel">
-                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consulta</div>
+                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consultas</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
                         <table>
@@ -873,10 +804,11 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                                   <table width="100%" >
                                     <tr>
                                         <th width="10%" >No</th>
-                                        <th width="18%" align="left">Peso (kg)</th>
-                                        <th width="18%" align="left">Altura (cm)</th>
-                                        <th width="18%" align="left">Talla cintura (cm)</th>
-                                        <th width="36%" align="left">Fecha</th>
+                                        <th width="18%" align="center">Peso (kg)</th>
+                                        <th width="18%" align="center">Altura (cm)</th>
+                                        <th width="18%" align="center">Talla cintura (cm)</th>
+                                        <th width="18%" align="center">Hemoglobina</th>
+                                        <th width="18%" align="center">Fecha</th>
                                     </tr>
                                   </table> 
                                   </div>
@@ -889,6 +821,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		$talla=$dato["talla"];
 		$altura=$dato["altura"];
 		$peso=$dato["peso"];
+        $hemoglobina=$dato["hemoglobina"];
 		$fecha=$dato["fecha"];
 		$clase="row2";
 		if($i%2)$clase="row1";
@@ -901,7 +834,8 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 					<th width="18%" align="left"><input type="number" step=".01" min="0" name="cpeso[]" id="cpeso'.$num.'"  style="width:85%;" value="'.$peso.'"></th> 
 					<th width="18%"><input type="number" step=".01" min="0" max="3000" name="caltura[]" id="caltura'.$num.'" style="width:85%;" value="'.$altura.'"></th>  
 					<th width="18%"><input type="number" step=".01" min="0" name="ctalla[]" id="ctalla'.$num.'"  style="width:85%;" value="'.$talla.'"></th>  
-					<th width="36%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'"></th>
+					<th width="18%"><input type="number" step=".01" min="0" name="chemoglobina[]" id="chemoglobina'.$num.'"  style="width:85%;" value="'.$hemoglobina.'"></th>  
+					<th width="18%"><input name="fCNu[]" type="text" id="fCNu'.$num.'" value="'.date("d-m-Y",strtotime($fecha)).'" style="width:85%"></th>
 				</tr>
 				</table> 
 			  </div></span>

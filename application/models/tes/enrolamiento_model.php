@@ -90,6 +90,7 @@ class Enrolamiento_model extends CI_Model
 	private $peso= array();
 	private $altura= array();
 	private $talla= array();
+	private $hemoglobina= array();
 	private $fnutricion= array();
 	
    	/********************************************
@@ -644,6 +645,16 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->talla = $value;
 	}
+    
+    public function gethemoglobina()
+	{
+	    return $this->hemoglobina;
+	}
+
+	public function sethemoglobina($value) 
+	{
+		$this->hemoglobina = $value;
+	}
 	
 	public function getfnutricion()
 	{
@@ -912,7 +923,7 @@ class Enrolamiento_model extends CI_Model
 					// vacuna
 					'id_persona' => $this->id,
 					'id_vacuna' => $this->vacuna[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
+					'fecha' => date('Y-m-d', strtotime($this->fvacuna[$i])). ' '.date('H:i:s'),
 					'id_asu_um' => $id_asu_um,
 					'codigo_barras' => $this->codigo_barras[$i],
 				);
@@ -1036,11 +1047,12 @@ class Enrolamiento_model extends CI_Model
 					'peso' => $this->peso[$i],
 					'altura' => $this->altura[$i],
 					'talla' => $this->talla[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
+					'hemoglobina' => $this->hemoglobina[$i],
+					'fecha' => date('Y-m-d', strtotime($this->fnutricion[$i])). ' ' . date('H:i:s'),
 					'id_asu_um' => $id_asu_um,
 					
 				);
-				if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!="")
+				if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!=""||$this->hemoglobina[$i]!="")
 				{
 					$result7 = $this->db->insert('cns_control_nutricional', $data7);
 					if (!$result7)
@@ -1388,7 +1400,7 @@ class Enrolamiento_model extends CI_Model
 				// vacuna
 				'id_persona' => $this->id,
 				'id_vacuna' => $this->vacuna[$i],
-				'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
+				'fecha' => date('Y-m-d', strtotime($this->fvacuna[$i])). ' '.date('H:i:s'),
 				'id_asu_um' => $id_asu_um,
 				'codigo_barras' => $this->codigo_barras[$i],
 			);
@@ -1536,7 +1548,7 @@ class Enrolamiento_model extends CI_Model
 				// accion nutricional
 				'id_persona' => $this->id,
 				'id_accion_nutricional' => $this->accion_nutricional[$i],
-				'fecha' => date('Y-m-d H:i:s', strtotime($this->faccion_nutricional[$i])),
+				'fecha' => date('Y-m-d', strtotime($this->faccion_nutricional[$i])). ' '.date('H:i:s'),
 				'id_asu_um' => $id_asu_um,
 				
 			);
@@ -1572,11 +1584,12 @@ class Enrolamiento_model extends CI_Model
 				'peso' => $this->peso[$i],
 				'altura' => $this->altura[$i],
 				'talla' => $this->talla[$i],
-				'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
+				'hemoglobina' => $this->hemoglobina[$i],
+				'fecha' => date('Y-m-d', strtotime($this->fnutricion[$i])). ' '.date('H:i:s'),
 				'id_asu_um' => $id_asu_um,
 				
 			);
-			if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!="")
+			if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!=""||$this->hemoglobina[$i]!="")
 			{
 				$result7 = $this->db->insert('cns_control_nutricional', $data7);
 				if (!$result7)

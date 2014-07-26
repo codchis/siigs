@@ -222,24 +222,11 @@ class Enrolamiento extends CI_Controller
 			
 			$data['vacunas']=$this->Enrolamiento_model->get_catalog_view("vacuna",$id,"id_vacuna");
 			
-			//$data['iras']=$this->Enrolamiento_model->get_catalog_view("ira",$id);
-			//$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);
 			$data['consultas']=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 			$data['nutriciones']=$nutricion;
-			$array=array();$i=0;
-			foreach($nutricion as $x)
-			{
-				$fecha=strtotime($x->fecha);
-				$dato = array("d1"=>"[".$fecha.",".$x->talla."]", "d2"=>"[".$fecha.",".$x->peso."]", "d3"=>"[".$fecha.",".$x->altura."]");
-				$array[$i] = $dato;
-				$i++;
-			}
-			$data['label']=json_encode(array("d1"=>"Talla","d2"=>"Peso","d3"=>"Altura"));
-			$data['control_nutricional']=json_encode($array);
-			
 		}
 		catch(Exception $e)
 		{
@@ -703,6 +690,7 @@ class Enrolamiento extends CI_Controller
 			$data.=$x->peso."=";
 			$data.=$x->altura."=";
 			$data.=$x->talla."=";
+			$data.=$x->hemoglobina."=";
 			$data.=$x->fecha."=";
 			$data.=$x->id_asu_um."°";
 		}
@@ -966,6 +954,7 @@ class Enrolamiento extends CI_Controller
 		$this->Enrolamiento_model->setpeso($this->input->post('cpeso'));
 		$this->Enrolamiento_model->setaltura($this->input->post('caltura'));
 		$this->Enrolamiento_model->settalla($this->input->post('ctalla'));
+		$this->Enrolamiento_model->sethemoglobina($this->input->post('chemoglobina'));
 		$this->Enrolamiento_model->setfnutricion($this->input->post('fCNu'));
 	}
 	
