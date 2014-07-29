@@ -320,7 +320,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 		});	
 		<?php if($cn_tutor) {?>
 		$("#captura").click(function(e) {
-			$("#idtutor").val("");
+			/*$("#idtutor").val("");
 			$("#nombreT").val("");
 			$("#paternoT").val("");
 			$("#maternoT").val("");
@@ -330,7 +330,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
 			$("#companiaT").val("");
 			$("#sexoT_1").attr("checked",false);
 			$("#sexoT_2").attr("checked",false);
-			$("#buscarError").html('');
+			$("#buscarError").html('');*/
             habilitarTutor();
         });
 		$("#buscarCurp").click(function(e) {
@@ -508,7 +508,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td colspan="2"><div class="input-append">
                               <input name="buscar" type="text" id="buscar" style="width:100%; margin-left:10px;" value="<?php echo set_value('buscar', '') ?>" class="spa10" placeholder="Buscar"/>
                               <a href="#" id="buscarCurp" class="btn btn-primary">Buscar <i class="icon-search"></i></a>
-                              <input name="id_cns_tutor" type="hidden" id="id_cns_tutor" value="<?php echo $id;?>"  />
+                              <input name="id_cns_tutor" type="hidden" id="id_cns_tutor" value="<?php echo $enrolado->idT ? $enrolado->idT : set_value('id_cns_tutor', '');?>"  />
                               
                             </td>
                           </tr>
@@ -517,7 +517,7 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <label for="captura"></label></td>
                             <td colspan="2" align="left">
                               <input type="checkbox" name="captura" id="captura" style="margin-left:10px; margin-top:-10px;" value="1"  />
-                              <input name="idtutor" type="hidden" id="idtutor"  />
+                              <input name="idtutor" type="hidden" id="idtutor" value="<?php echo $enrolado->idT ? $enrolado->idT : set_value('idtutor', '');?>" />
                               &nbsp;
                               <span id="buscarError" style="color:#F00"></span>
                             </td>

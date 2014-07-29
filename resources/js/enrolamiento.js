@@ -73,11 +73,11 @@ function habilitarTutor()
 		$("#companiaT").attr("readonly",true);
 		$("#sexoT_1").attr("readonly",true);	
 		$("#sexoT_2").attr("readonly",true);
-		var buscar=$("#curpT").val();
+        /*var buscar=$("#curpT").val();
 		if($("#buscar").val()!="")
 			buscar=$("#buscar").val().substr(0,18);
 		if(buscar!="")		
-		buscarTutor(buscar);		
+		buscarTutor(buscar);*/		
 	}
 }
 
@@ -123,7 +123,7 @@ function buscarTutor(buscar)
 				$("#sexoT_2").attr("checked",true);
 				$("#tutoredit").html("Editar datos de la Madre o Tutor");
 				$("#captura").attr("checked","true");
-				$("#curpT").click();
+				//$("#curpT").click();
 				if($("#compartetutor"))
 				$.get('/tes/enrolamiento/brothers_search/'+$("#idtutor").val(), function(respuesta) 
 				{

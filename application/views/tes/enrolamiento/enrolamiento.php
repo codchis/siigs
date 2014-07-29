@@ -215,7 +215,7 @@
 		$("#companiaT").load("/tes/enrolamiento/catalog_select/operadora_celular/<?php echo set_value('companiaT', ''); ?>");
 		
 		$("#captura").click(function(e) {
-			$("#idtutor").val("");
+			/*$("#idtutor").val("");
 			$("#nombreT").val("");
 			$("#paternoT").val("");
 			$("#maternoT").val("");
@@ -225,7 +225,7 @@
 			$("#companiaT").val("");
 			$("#sexoT_1").attr("checked",false);
 			$("#sexoT_2").attr("checked",false);
-			$("#buscarError").html('');
+			$("#buscarError").html('');*/
             habilitarTutor();
         });
 		$("#buscarCurp").click(function(e) {
@@ -354,7 +354,7 @@
                             <td colspan="2"><p align="right" id="tutoredit">Capturar Nueva Madre o Tutor</p>                              <label for="captura"></label></td>
                             <td colspan="2" align="left">
                               <input type="checkbox" name="captura" id="captura" style="margin-left:10px; margin-top:-10px;" value="1"  <?php echo set_checkbox('captura', '1'); ?>/>
-                              <input name="idtutor" type="hidden" id="idtutor"  />
+                              <input name="idtutor" type="hidden" id="idtutor" value="<?php echo set_value('idtutor', ''); ?>" />
                               &nbsp;
                               <span id="buscarError" style="color:#F00"></span>
                             </td>

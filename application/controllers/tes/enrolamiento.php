@@ -282,7 +282,7 @@ class Enrolamiento extends CI_Controller
 					if(isset($_POST["id_cns_nutricion"]))
 						$id=$this->Enrolamiento_model->update_nutricion();
 					
-                    if(isset($_POST["peri_cefa"]))
+                    if(!empty($_POST["peri_cefa"]))
 						$id=$this->Enrolamiento_model->update_peri_cefa();
                     
 					$data['id'] = $this->Enrolamiento_model->getId();	
@@ -955,6 +955,7 @@ class Enrolamiento extends CI_Controller
 		$this->Enrolamiento_model->settalla($this->input->post('ctalla'));
 		$this->Enrolamiento_model->sethemoglobina($this->input->post('chemoglobina'));
 		$this->Enrolamiento_model->setfnutricion($this->input->post('fCNu'));
+        $this->Enrolamiento_model->setperi_cefa($this->input->post('peri_cefa'));
 	}
 	
 	/**
@@ -1211,7 +1212,7 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 				$similar=$similar+$percent;
 				
 				$total=$similar/8;
-				if($total>50&&($nacimiento == $x->fecha_nacimiento)||$total>92)
+				if($total>50&&(date('Y-m-d', strtotime($nacimiento)) == $x->fecha_nacimiento)||$total>92)
 				$array[]=array("nombre" => $x->nombre.' '.$x->apellido_paterno.' '.$x->apellido_materno, "id" => $x->id, "total" => round($total, 2));
 			}
 		}
