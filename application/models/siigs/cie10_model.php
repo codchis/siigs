@@ -142,7 +142,7 @@ class Cie10_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-                $consulta = 'select a.id as id,a.cie10 as cie10,a.descripcion as descripcion,case when ifnull(b.id,"") = "" then false else true end as eda,case when  ifnull(c.id,"") = "" then false else true end as ira,case when  ifnull(d.id,"") = "" then false else true end as consulta from cns_cie10 a left outer join cns_eda b on b.id_cie10 = a.id and b.activo = 1 left outer join cns_ira c on c.id_cie10 = a.id and c.activo = 1 left outer join cns_consulta d on d.id_cie10 = a.id and d.activo = 1';
+                $consulta = 'select a.id as id,a.cie10 as cie10,a.descripcion as descripcion from cns_cie10 a';
 		if ((!empty($this->offset) || $this->offset == 0) && !empty($this->rows))
 		$consulta .= ' limit '.$this->offset. ','.$this->rows;
                 
