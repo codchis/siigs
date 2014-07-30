@@ -222,24 +222,13 @@ class Enrolamiento extends CI_Controller
 			
 			$data['vacunas']=$this->Enrolamiento_model->get_catalog_view("vacuna",$id,"id_vacuna");
 			
-			//$data['iras']=$this->Enrolamiento_model->get_catalog_view("ira",$id);
-			//$data['edas']=$this->Enrolamiento_model->get_catalog_view("eda",$id);
 			$data['consultas']=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 			$data['nutriciones']=$nutricion;
-			$array=array();$i=0;
-			foreach($nutricion as $x)
-			{
-				$fecha=strtotime($x->fecha);
-				$dato = array("d1"=>"[".$fecha.",".$x->talla."]", "d2"=>"[".$fecha.",".$x->peso."]", "d3"=>"[".$fecha.",".$x->altura."]");
-				$array[$i] = $dato;
-				$i++;
-			}
-			$data['label']=json_encode(array("d1"=>"Talla","d2"=>"Peso","d3"=>"Altura"));
-			$data['control_nutricional']=json_encode($array);
-			
+            
+            $data['peri_cefa'] = $this->Enrolamiento_model->get_peri_cefa($id);
 		}
 		catch(Exception $e)
 		{
@@ -283,13 +272,7 @@ class Enrolamiento extends CI_Controller
 						
 					if(isset($_POST["id_cns_vacuna"]))
 						$id=$this->Enrolamiento_model->update_vacuna();
-						
-					if(isset($_POST["id_cns_ira"]))
-						$id=$this->Enrolamiento_model->update_ira();
-						
-					if(isset($_POST["id_cns_eda"]))
-						$id=$this->Enrolamiento_model->update_eda();
-						
+					
 					if(isset($_POST["id_cns_consulta"]))
 						$id=$this->Enrolamiento_model->update_consulta();
 						
@@ -299,6 +282,9 @@ class Enrolamiento extends CI_Controller
 					if(isset($_POST["id_cns_nutricion"]))
 						$id=$this->Enrolamiento_model->update_nutricion();
 					
+                    if(!empty($_POST["peri_cefa"]))
+						$id=$this->Enrolamiento_model->update_peri_cefa();
+                    
 					$data['id'] = $this->Enrolamiento_model->getId();	
 					$midata['infoclass'] = 'success';
 					$midata['msgResult'] = 'Registro Actualizado Exitosamente';
@@ -703,6 +689,7 @@ class Enrolamiento extends CI_Controller
 			$data.=$x->peso."=";
 			$data.=$x->altura."=";
 			$data.=$x->talla."=";
+			$data.=$x->hemoglobina."=";
 			$data.=$x->fecha."=";
 			$data.=$x->id_asu_um."°";
 		}
@@ -966,7 +953,9 @@ class Enrolamiento extends CI_Controller
 		$this->Enrolamiento_model->setpeso($this->input->post('cpeso'));
 		$this->Enrolamiento_model->setaltura($this->input->post('caltura'));
 		$this->Enrolamiento_model->settalla($this->input->post('ctalla'));
+		$this->Enrolamiento_model->sethemoglobina($this->input->post('chemoglobina'));
 		$this->Enrolamiento_model->setfnutricion($this->input->post('fCNu'));
+        $this->Enrolamiento_model->setperi_cefa($this->input->post('peri_cefa'));
 	}
 	
 	/**
@@ -1223,7 +1212,7 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 				$similar=$similar+$percent;
 				
 				$total=$similar/8;
-				if($total>50&&($nacimiento == $x->fecha_nacimiento)||$total>92)
+				if($total>50&&(date('Y-m-d', strtotime($nacimiento)) == $x->fecha_nacimiento)||$total>92)
 				$array[]=array("nombre" => $x->nombre.' '.$x->apellido_paterno.' '.$x->apellido_materno, "id" => $x->id, "total" => round($total, 2));
 			}
 		}

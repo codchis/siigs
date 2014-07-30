@@ -90,7 +90,9 @@ class Enrolamiento_model extends CI_Model
 	private $peso= array();
 	private $altura= array();
 	private $talla= array();
+	private $hemoglobina= array();
 	private $fnutricion= array();
+	private $peri_cefa= array();
 	
    	/********************************************
    	 * Estas variables no pertenecen a la tabla *
@@ -644,6 +646,16 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->talla = $value;
 	}
+    
+    public function gethemoglobina()
+	{
+	    return $this->hemoglobina;
+	}
+
+	public function sethemoglobina($value) 
+	{
+		$this->hemoglobina = $value;
+	}
 	
 	public function getfnutricion()
 	{
@@ -693,6 +705,16 @@ class Enrolamiento_model extends CI_Model
 	public function setnacionalidad($value) 
 	{
 		$this->nacionalidad = $value;
+	}
+    
+    public function getperi_cefa()
+	{
+	    return $this->peri_cefa;
+	}
+
+	public function setperi_cefa($value) 
+	{
+		$this->peri_cefa = $value;
 	}
 	 /**
 	 * @access public
@@ -831,7 +853,7 @@ class Enrolamiento_model extends CI_Model
 			$unico_idtutor=md5(uniqid());
 			$data0 = array(
 					// tutor
-				'id' => $unico_idtutor,
+				//'id' => $unico_idtutor,
 				'nombre' => $this->nombreT,
 				'apellido_paterno' => $this->paternoT,
 				'apellido_materno' => $this->maternoT,
@@ -845,6 +867,8 @@ class Enrolamiento_model extends CI_Model
 			);
 			if($this->idtutor=="")
 			{
+                // Se le asigna ID al tutor en caso de que sea una nueva captura
+                $data0['id'] = $unico_idtutor;
 				$companiaT=$this->companiaT;
 				if($companiaT=="")$companiaT=NULL;
 				
@@ -928,58 +952,6 @@ class Enrolamiento_model extends CI_Model
 				}
 			}
 			
-			for($i=0;$i<sizeof($this->ira);$i++)
-			{
-				$t=$this->tira[$i];
-				if($t=="")$t=1;
-				$data3 = array(
-					// ira
-					'id_persona' => $this->id,
-					'id_ira' => $this->ira[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
-					'id_asu_um' => $id_asu_um,
-					'id_tratamiento' => $t,
-					'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
-					
-				);
-				if($this->ira[$i]!="")
-				{
-					$result3 = $this->db->insert('cns_control_ira', $data3);
-					if (!$result3)
-					{
-						$this->msg_error_usr = "Error IRA.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
-					}
-				}
-			}
-			
-			for($i=0;$i<sizeof($this->eda);$i++)
-			{
-				$t=$this->teda[$i];
-				if($t=="")$t=1;
-				$data4 = array(
-					// eda
-					'id_persona' => $this->id,
-					'id_eda' => $this->eda[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
-					'id_asu_um' => $id_asu_um,
-					'id_tratamiento' => $t,
-					'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
-					
-				);
-				if($this->eda[$i]!="")
-				{
-					$result4 = $this->db->insert('cns_control_eda', $data4);
-					if (!$result4)
-					{
-						$this->msg_error_usr = "Error EDA.";
-						$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-						throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
-					}
-				}
-			}
-			
 			for($i=0;$i<sizeof($this->consulta);$i++)
 			{
 				$t=$this->tconsulta[$i];
@@ -1036,11 +1008,12 @@ class Enrolamiento_model extends CI_Model
 					'peso' => $this->peso[$i],
 					'altura' => $this->altura[$i],
 					'talla' => $this->talla[$i],
+					'hemoglobina' => $this->hemoglobina[$i],
 					'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
 					'id_asu_um' => $id_asu_um,
 					
 				);
-				if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!="")
+				if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!=""||$this->hemoglobina[$i]!="")
 				{
 					$result7 = $this->db->insert('cns_control_nutricional', $data7);
 					if (!$result7)
@@ -1071,6 +1044,24 @@ class Enrolamiento_model extends CI_Model
 					}
 				}
 			}
+            
+            if(!empty($this->peri_cefa)){
+                for($index=0; $index<sizeof($this->peri_cefa); $index++){
+                    $datosPeriCefa = array(
+                        'id_persona' => $this->id,
+                        'fecha' => date('Y-m-d H:i:s', strtotime($this->peri_cefa[$index])),
+                        'perimetro_cefalico' => $this->peri_cefa[$index],
+                        'id_asu_um' => $id_asu_um);
+
+                    $resultPeriCefa = $this->db->insert('cns_control_peri_cefa', $datosPeriCefa);
+                    if (!$resultPeriCefa)
+                    {
+                        $this->msg_error_usr = "Error Afiliacion.";
+                        $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                        throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                    }
+                }
+            }
 		}
 		return $this->id;
 	}
@@ -1407,82 +1398,6 @@ class Enrolamiento_model extends CI_Model
 	/**
 	 * @access public
 	 *
-	 * Actualiza el control de ira del paciente
-	 *
-	 * @return 		result()
-	 *
-	 */
-	public function update_ira()
-	{
-		$id_asu_um=$this->umt;
-		if ($this->db->delete('cns_control_ira', array('id_persona' => $this->id)))
-		for($i=0;$i<sizeof($this->ira);$i++)
-		{
-			$t=$this->tira[$i];
-			if($t=="")$t=1;
-			$data3 = array(
-				// ira
-				'id_persona' => $this->id,
-				'id_ira' => $this->ira[$i],
-				'fecha' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
-				'id_asu_um' => $id_asu_um,
-				'id_tratamiento' => $t,
-				'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->fira[$i])),
-				
-			);
-			if($this->ira[$i]!="")
-			{
-				$result3 = $this->db->insert('cns_control_ira', $data3);
-				if (!$result3)
-				{
-					$this->msg_error_usr = "Error  actualizando IRA.";
-					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
-				}
-			}
-		}
-	}
-	/**
-	 * @access public
-	 *
-	 * Actualiza el control eda del paciente
-	 *
-	 * @return 		result()
-	 *
-	 */
-	public function update_eda()
-	{
-		$id_asu_um=$this->umt;
-		if ($this->db->delete('cns_control_eda', array('id_persona' => $this->id)))
-		for($i=0;$i<sizeof($this->eda);$i++)
-		{
-			$t=$this->teda[$i];
-			if($t=="")$t=1;
-			$data4 = array(
-				// eda
-				'id_persona' => $this->id,
-				'id_eda' => $this->eda[$i],
-				'fecha' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
-				'id_asu_um' => $id_asu_um,
-				'id_tratamiento' => $t,
-				'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->feda[$i])),
-				
-			);
-			if($this->eda[$i]!="")
-			{
-				$result4 = $this->db->insert('cns_control_eda', $data4);
-				if (!$result4)
-				{
-					$this->msg_error_usr = "Error actualizando EDA.";
-					$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
-					throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
-				}
-			}
-		}
-	}
-	/**
-	 * @access public
-	 *
 	 * Actualiza el control consulta del paciente
 	 *
 	 * @return 		result()
@@ -1572,11 +1487,12 @@ class Enrolamiento_model extends CI_Model
 				'peso' => $this->peso[$i],
 				'altura' => $this->altura[$i],
 				'talla' => $this->talla[$i],
+				'hemoglobina' => $this->hemoglobina[$i],
 				'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
 				'id_asu_um' => $id_asu_um,
 				
 			);
-			if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!="")
+			if($this->peso[$i]!=""||$this->altura[$i]!=""||$this->talla[$i]!=""||$this->hemoglobina[$i]!="")
 			{
 				$result7 = $this->db->insert('cns_control_nutricional', $data7);
 				if (!$result7)
@@ -2592,23 +2508,26 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
         // Obtiene datos de los catálogos
         if ($catalogo == 'con_hemo') {
             $objQueryDat = $this->db->query('SELECT mujer_embarazada_ninio_6_59_meses AS hb FROM asu_hemoglobina_altitud WHERE id_localidad_asu='.$asu_locali);
-            $objResultDat = $objQueryDat->row();
             
-            if($this->db->_error_number()) {
-                $this->error = true;
-                $this->msg_error_usr = 'Error al obtener los datos para las gráficas';
-                $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
-                throw new Exception($this->msg_error_log);
+            if ($objQueryDat->num_rows() > 0) {
+                $objResultDat = $objQueryDat->row();
+
+                if($this->db->_error_number()) {
+                    $this->error = true;
+                    $this->msg_error_usr = 'Error al obtener los datos para las gráficas';
+                    $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+                    throw new Exception($this->msg_error_log);
+                }
+
+                $puntos[] = array(0, $objResultDat->hb);
+                $puntos[] = array(($edad_meses+3), $objResultDat->hb);
+
+                $series[] = array(
+                    'color' => 'blue',
+                    'label' => ' &nbsp; Concentración de Hemoglobina',
+                    'data'  => $puntos,
+                );
             }
-            
-            $puntos[] = array(0, $objResultDat->hb);
-            $puntos[] = array(($edad_meses+3), $objResultDat->hb);
-            
-            $series[] = array(
-                'color' => 'blue',
-                'label' => ' &nbsp; Concentración de Hemoglobina',
-                'data'  => $puntos,
-            );
             
             $datos['labels'] = array('xaxes'=>'Edad (meses)', 'yaxes'=>'Hb (g/dL)');    
             $datos['series'] = $series;
@@ -2678,6 +2597,68 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
         }
         
         return $datos;
+	}
+    
+    /**
+	 * @access public
+	 *
+	 * Obtiene los datos del control nutricional asociados a una persona
+	 * 
+	 * @param		string 		$id       identificador de la persona
+	 * @param		strin 		$order    nombre del campo para hacer el order by
+	 *
+	 * @return 		result()
+	 *
+	 */
+	public function get_peri_cefa($id,$order="")
+	{
+		$this->db->select('*');
+		$this->db->from('cns_control_peri_cefa');
+		$this->db->where('id_persona', $id);
+		if($order!="")
+		$this->db->order_by($order, "desc");
+		else
+		$this->db->order_by("fecha", "ASC");
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+		}
+		else
+			return $query->result();
+		return null;
+	}
+    
+    /**
+	 * @access public
+	 *
+	 * Actualiza los registros de perimetro cefalico
+	 *
+	 * @return 		result()
+	 *
+	 */
+	public function update_peri_cefa()
+	{
+		$id_asu_um = $this->umt;
+		if ($this->db->delete('cns_control_peri_cefa', array('id_persona' => $this->id))) {
+            for($index=0; $index<sizeof($this->peri_cefa); $index++){
+                $datosPeriCefa = array(
+                    'id_persona' => $this->id,
+                    'fecha' => date('Y-m-d H:i:s', strtotime($this->peri_cefa[$index])),
+                    'perimetro_cefalico' => $this->peri_cefa[$index],
+                    'id_asu_um' => $id_asu_um);
+
+                $resultPeriCefa = $this->db->insert('cns_control_peri_cefa', $datosPeriCefa);
+                if (!$resultPeriCefa)
+                {
+                    $this->msg_error_usr = "Error Afiliacion.";
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                }
+            }
+        }
 	}
 }
 ?>

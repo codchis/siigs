@@ -36,6 +36,7 @@ function obtener_um_responsabilidad()
 						if(datos)
 						{
 							var obj1 = jQuery.parseJSON( datos );
+                            if(obj1.length == 0) return null;
 							var des=obj1[0]["descripcion"];
 							var ed=des.split(",");
 							ed=ed[ed.length-2];
@@ -72,11 +73,11 @@ function habilitarTutor()
 		$("#companiaT").attr("readonly",true);
 		$("#sexoT_1").attr("readonly",true);	
 		$("#sexoT_2").attr("readonly",true);
-		var buscar=$("#curpT").val();
+        /*var buscar=$("#curpT").val();
 		if($("#buscar").val()!="")
 			buscar=$("#buscar").val().substr(0,18);
 		if(buscar!="")		
-		buscarTutor(buscar);		
+		buscarTutor(buscar);*/		
 	}
 }
 
@@ -122,7 +123,7 @@ function buscarTutor(buscar)
 				$("#sexoT_2").attr("checked",true);
 				$("#tutoredit").html("Editar datos de la Madre o Tutor");
 				$("#captura").attr("checked","true");
-				$("#curpT").click();
+				//$("#curpT").click();
 				if($("#compartetutor"))
 				$.get('/tes/enrolamiento/brothers_search/'+$("#idtutor").val(), function(respuesta) 
 				{
@@ -194,6 +195,7 @@ function importarDatos(id)
 				if(dato)
 				{
 					var obj = jQuery.parseJSON( dato );
+                    if(obj.length == 0) return null;
 					var des=obj[0]["descripcion"];
 					var ed=des.split(",");
 					ed=ed[ed.length-2];
@@ -209,7 +211,7 @@ function importarDatos(id)
 }
 function omitirAcentos(text) 
 {
-	var acentos = "�?À�?ÄÂ�?ÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
+	var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
 	var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
 	for (var i=0; i<acentos.length; i++) 
 		text = text.replace(acentos.charAt(i), original.charAt(i));
@@ -485,7 +487,20 @@ function addNutricional()
 	if((num%2)==0) miclase="row2"; else miclase="row1";
 	if(num<10)num="0"+num;
 	
-	campo = '<span id="r'+"CNu"+num+'" ><div class="'+miclase+'" style="width:100%"><table width="100%" >  <tr>   <th width="10%">'+num+'</th>  <th width="18%"><input type="number" step=".001" min="0" name="cpeso[]" id="cpeso'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th> <th width="18%"><input type="number" step=".001" min="0" max="300" name="caltura[]" id="caltura'+num+'"  style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="18%"><input type="number" step=".001" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>  <th width="36%"><input name="fCNu[]" type="text" id="fCNu'+num+'" ></th> </tr> </table> </div></span>';
+	campo = '<span id="r'+"CNu"+num+'" >\n\
+                <div class="'+miclase+'" style="width:100%">\n\
+                <table width="100%" >\n\
+                    <tr>\n\
+                        <th width="10%">'+num+'</th>\n\
+                        <th width="18%"><input type="number" step=".001" min="0" name="cpeso[]" id="cpeso'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
+                        <th width="18%"><input type="number" step=".001" min="0" max="300" name="caltura[]" id="caltura'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
+                        <th width="18%"><input type="number" step=".001" min="0" name="ctalla[]" id="ctalla'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
+                        <th width="18%"><input type="number" step=".001" min="0" name="chemoglobina[]" id="chemoglobina'+num+'" style="width:85%;" onkeydown="return entertab(event,0)"></th>\n\
+                        <th width="18%"><input name="fCNu[]" type="text" id="fCNu'+num+'" style="width:75%"></th> \n\
+                    </tr>\n\
+                </table>\n\
+                </div>\n\
+            </span>';
 	$("#cNu").append(campo);
 	$("#fCNu"+num).val($.datepicker.formatDate('dd-mm-yy', new Date()));
 	$("#fCNu"+num).datepicker(optionsFecha );
@@ -573,4 +588,20 @@ function comparar_captura()
 			}
 		});
 	}
+}
+
+function addPeriCefa(){
+    no = $('#tabla_peri_cefa tbody tr').length + 1;
+    fila = '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">\n\
+                <td align="center">'+no+'</td>\n\
+                <td><input name="peri_cefa[]" id="peri_cefa-'+no+'" type="number" step=".01" min="0" style="width:75% !important"></td>\n\
+                <td><input name="fecha_peri_cefa[]" id="fecha_peri_cefa-'+no+'" type="text" step=".01" min="0" style="width:75% !important"></td>\n\
+            </tr>';
+    $(fila).appendTo('#tabla_peri_cefa tbody');
+    
+	$('#fecha_peri_cefa-'+no).datepicker(optionsFecha);
+}
+
+function remPeriCefa(){
+    $('#tabla_peri_cefa tbody tr:last').remove();
 }

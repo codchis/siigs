@@ -14,7 +14,7 @@
                 echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
             ?>
             <input type="text" name="nombre_usuario" value="<?php echo set_value('nombre_usuario', ''); ?>" 
-                   class="input-block-level" placeholder="Nombre de Usuario">
+                   class="input-block-level" placeholder="Nombre de Usuario" autofocus="true">
             <input type="password" class="input-block-level" name="clave" placeholder="Contraseña">
             <label class="checkbox">
             <input type="checkbox" value="remember-me">Recordar mis datos

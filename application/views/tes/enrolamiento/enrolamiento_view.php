@@ -34,6 +34,7 @@ if($enrolado)
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+                if(obj.length == 0) return null;
 				var des=obj[0]["descripcion"];
 				var ed=des.split(",");
 				ed=ed[ed.length-2];
@@ -55,6 +56,7 @@ if($enrolado)
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+                if(obj.length == 0) return null;
 				var des=obj[0]["descripcion"];
 				var ed=des.split(",");
 				ed=ed[ed.length-2];
@@ -76,6 +78,7 @@ if($enrolado)
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+                if(obj.length == 0) return null;
 				var des=obj[0]["descripcion"];
 				var ed=des.split(",");
 				ed=ed[ed.length-2];
@@ -97,6 +100,7 @@ if($enrolado)
 			if(dato)
 			{
 				var obj = jQuery.parseJSON( dato );
+                if(obj.length == 0) return null;
 				var des=obj[0]["descripcion"];
 				var ed=des.split(",");
 				ed=ed[ed.length-2];
