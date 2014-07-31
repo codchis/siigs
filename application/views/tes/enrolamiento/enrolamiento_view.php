@@ -560,26 +560,49 @@ $i++;
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consultas</div>
                       <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:100%">
-                        <table width="100%">
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%; margin-left:20px; margin-top:-3px">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="28%" align="left">Consulta</th>
-                                        <th width="15%" align="left">Fecha</th>
-                                        <th width="20%" align="left">Tipo</th>
-                                        <th width="27%" align="left">Tratamiento</th>
+                      	<div style="margin-left:20px; width:90%">
+                        
+                            <table id="tabla_consultas" style="width: 100%;">
+                                <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">
+                                    <tr style="height:35px;">
+                                        <th>No.</th>
+                                        <th>Padecimiento</th>
+                                        <th>Fecha</th>
+                                        <th>Tratamiento</th>
                                     </tr>
-                                  </table> 
-                                  </div>
-                                  <div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo getArrayView($consultas,"consulta");?></div>                           
-                              </td>
-                                 <td valign="top">&nbsp;</td>
-                          </tr>                     
-                          </table>
+                                </thead>
+                                <tbody>
+                                    
+                                    <?PHP if(!empty($consultas)) {
+                                        if(count($consultas) >0 ) {
+                                            for($index=0; $index<sizeof($consultas); $index++){
+                                                echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                    <td align="center"><label>'.($index+1).'</label></td>
+                                                    <td>
+                                                        <label class="enfermedad_consulta">'.$consultas[$index]->descripCIE10.'</label>
+                                                    </td>
+                                                    <td>
+                                                        <label class="fecha_consulta">'.date('d-m-Y', strtotime($consultas[$index]->fecha)).'</label>
+                                                    </td>
+                                                    <td>
+                                                        <label class="tratamiento_consulta">'.$consultas[$index]->descripTratamiento.'</label>
+                                                    </td>
+                                                </tr>';
+                                            }
+                                        } else {
+                                            echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                    <td align="center" colspan="4"><label>No hay datos</label></td>
+                                                </tr>';
+                                        }
+                                    } else {
+                                        echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                <td align="center" colspan="4"><label>No hay datos</label></td>
+                                            </tr>';
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        
                         </div>
                       </div>
                     </div>
@@ -606,6 +629,86 @@ $i++;
                                  <td valign="top">&nbsp;</td>
                           </tr>                     
                           </table>
+                            
+                            <h4>Registro de entrega de Sales de Rehidratación Oral</h4>
+                            <table id="tabla_sro" style="min-width: 50%;">
+                                <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">
+                                    <tr style="height:35px;">
+                                        <th>No.</th>
+                                        <th>Fecha</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?PHP if(!empty($sales)) {
+                                        if(count($sales) >0 ) {
+                                            for($index=0; $index<sizeof($sales); $index++){
+                                                echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                    <td align="center"><label>'.($index+1).'</label></td>
+                                                    <td align="center"><label>'.date('d-m-Y', strtotime($sales[$index]->fecha)).'</label></td>
+                                                    <td align="center"><label>'.$sales[$index]->cantidad.'</label></td>
+                                                </tr>';
+                                            }
+                                        } else {
+                                            echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                    <td align="center" colspan="3"><label>No hay datos</label></td>
+                                                </tr>';
+                                        }
+                                    } else {
+                                        echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                <td align="center" colspan="3"><label>No hay datos</label></td>
+                                            </tr>';
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- estimulación temprana  -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Estimulación temprana</div>
+                      <div class="AccordionPanelContent"><br />
+                      	<div style="margin-left:20px; width:90%">
+                        
+                            <table id="tabla_estimulacion" style="width: 80%;" align="center">
+                                <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">
+                                    <tr style="height:35px;">
+                                        <th>No.</th>
+                                        <th>Fecha</th>
+                                        <th>Tutor capacitado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?PHP 
+                                    if(!empty($estimulacion_temprana)) {
+                                        if(count($estimulacion_temprana) >0 ) {
+                                            for($index=0; $index<sizeof($estimulacion_temprana); $index++){
+                                                echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                    <td align="center">'.($index+1).'</td>
+                                                    <td align="center">
+                                                        <label>'.date('d-m-Y', strtotime($estimulacion_temprana[$index]->fecha)).'</label>
+                                                    </td>
+                                                    <td align="center">
+                                                        <label>'.($estimulacion_temprana[$index]->tutor_capacitado == 1 ? 'Si' : 'No').'</label>
+                                                    </td>
+                                                </tr>';
+                                            }
+                                        } else {
+                                            echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                    <td align="center" colspan="3"><label>No hay datos</label></td>
+                                                </tr>';
+                                        }
+                                    } else {
+                                        echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                <td align="center" colspan="3"><label>No hay datos</label></td>
+                                            </tr>';
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        
                         </div>
                       </div>
                     </div>

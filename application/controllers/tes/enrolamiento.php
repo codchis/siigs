@@ -162,11 +162,13 @@ class Enrolamiento extends CI_Controller
 			$data['alergias'] = $this->Enrolamiento_model->getAlergia($id);
 			$data['afiliaciones'] = $this->Enrolamiento_model->getAfiliaciones($id);
 			
-			$data['consultas']=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
+			$data['consultas']=$this->Enrolamiento_model->getControlConsultas($id);
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 			$fecha=$data['enrolado']->fecha_nacimiento;
 			$data['vacunacion']=$this->Reporte_sincronizacion_model->getListado("SELECT DISTINCT r.id_vacuna, cv.codigo_barras, v.descripcion,r.dia_inicio_aplicacion_nacido, r.dia_fin_aplicacion_nacido, p.fecha_nacimiento, CASE WHEN r.id_vacuna = cv.id_vacuna THEN 'X' ELSE '' END AS tiene, CASE WHEN cv.fecha IS NULL THEN CONCAT('Desde:',r.dia_inicio_aplicacion_nacido,' Hasta:',r.dia_fin_aplicacion_nacido) ELSE CONCAT('Fecha Aplicada: ',' ',DATE_FORMAT(cv.fecha, '%d-%m-%Y')) END AS fecha,DATEDIFF(NOW(),'$fecha') AS dias,CASE WHEN DATEDIFF(NOW(),'$fecha')>=r.dia_inicio_aplicacion_nacido AND DATEDIFF(NOW(),'$fecha')<=r.dia_fin_aplicacion_nacido  THEN '1' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')>r.dia_fin_aplicacion_nacido AND cv.fecha IS NULL THEN '2' ELSE (CASE WHEN DATEDIFF(NOW(),'$fecha')<r.dia_inicio_aplicacion_nacido AND cv.fecha IS NULL THEN '3' END) END) END AS prioridad FROM cns_regla_vacuna r LEFT JOIN cns_vacuna v ON v.id=r.id_vacuna LEFT JOIN cns_control_vacuna cv ON cv.id_persona='$id' AND cv.id_vacuna=r.id_vacuna  LEFT JOIN cns_persona p ON p.id=cv.id_persona GROUP BY v.descripcion ORDER BY r.id_vacuna,r.orden_esq_com ASC");
-			
+			$data['estimulacion_temprana'] = $this->Enrolamiento_model->get_estimulacion($id);
+			$data['sales'] = $this->Enrolamiento_model->get_sales($id);
+            
             // Obtiene los datos para las graficas
             $data['peso_edad']  = json_encode($this->Enrolamiento_model->get_datos_grafica('peso_edad', $data['enrolado']->sexo, $data['enrolado']->edad_meses, $data['enrolado']->id));
             $data['peso_talla'] = json_encode($this->Enrolamiento_model->get_datos_grafica('peso_talla', $data['enrolado']->sexo, $data['enrolado']->edad_meses, $data['enrolado']->id));
@@ -222,16 +224,19 @@ class Enrolamiento extends CI_Controller
 			
 			$data['vacunas']=$this->Enrolamiento_model->get_catalog_view("vacuna",$id,"id_vacuna");
 			
-			$data['consultas']=$this->Enrolamiento_model->get_catalog_view("consulta",$id);
+			$data['consultas']=$this->Enrolamiento_model->getControlConsultas($id);
 			$data['nutricionales']=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id);
 			
 			$nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 			$data['nutriciones']=$nutricion;
             
             $data['peri_cefa'] = $this->Enrolamiento_model->get_peri_cefa($id);
+            $data['estimulacion_temprana'] = $this->Enrolamiento_model->get_estimulacion($id);
+            $data['sales'] = $this->Enrolamiento_model->get_sales($id);
 		}
 		catch(Exception $e)
 		{
+            $data['infoclass'] = 'error';
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
 		try
@@ -285,6 +290,12 @@ class Enrolamiento extends CI_Controller
                     if(!empty($_POST["peri_cefa"]))
 						$id=$this->Enrolamiento_model->update_peri_cefa();
                     
+                    if(!empty($_POST["estimulacion_fecha"]))
+						$id=$this->Enrolamiento_model->update_estimulacion();
+                    
+                    if(!empty($_POST["sales_fecha"]))
+						$id=$this->Enrolamiento_model->update_sales();
+                    
 					$data['id'] = $this->Enrolamiento_model->getId();	
 					$midata['infoclass'] = 'success';
 					$midata['msgResult'] = 'Registro Actualizado Exitosamente';
@@ -314,6 +325,7 @@ class Enrolamiento extends CI_Controller
 		}
 		catch(Exception $e)
 		{
+            $data['infoclass'] = 'error';
 			$data['msgResult'] = Errorlog_model::save($e->getMessage(), __METHOD__);
 		}
  		
@@ -356,7 +368,7 @@ class Enrolamiento extends CI_Controller
 	/**
 	 * @access public
 	 *
-	 * Genera los options de un campo tipo select para los tratamientos de ira, eda y consulta
+	 * Genera los options de un campo tipo select para los tratamientos de consultas
 	 * 
 	 * @param		string 		$campo      campo de la tabla para hacer el where
 	 * @param		string 		$valor      valor a comparar en el where
@@ -368,7 +380,7 @@ class Enrolamiento extends CI_Controller
 	public function tratamiento_select($campo="",$valor="",$sel="",$orden="")
 	{
 		$opcion="";
-		$valor=urldecode($valor);echo $valor;
+		$valor=urldecode($valor);
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
 		$datos=$this->Enrolamiento_model->get_catalog_tratamiento("cns_tratamiento",$campo,$valor,$orden);
 		if(sizeof($datos)!=0)
@@ -633,36 +645,10 @@ class Enrolamiento extends CI_Controller
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
-		$iras=$this->Enrolamiento_model->get_catalog_view("ira",$id,'','fecha');
-		foreach($iras as $x)
-		{
-			$data.=$x->id."=";
-			$data.=$x->fecha."=";
-			$data.=$x->id_asu_um."=";
-			$data.=$x->id_tratamiento;					 if($x->id_tratamiento=="")$data.="¬=";else $data.="=";
-			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬°";else $data.="°";
-		}
-		if(empty($iras))
-			$data.="~";
-		else
-		$data=substr($data,0,strlen($data)-2)."~";
-		$edas=$this->Enrolamiento_model->get_catalog_view("eda",$id,'','fecha');
-		foreach($edas as $x)
-		{
-			$data.=$x->id."=";
-			$data.=$x->fecha."=";
-			$data.=$x->id_asu_um."=";
-			$data.=$x->id_tratamiento;					 if($x->id_tratamiento=="")$data.="¬=";else $data.="=";
-			$data.=$x->grupo_fecha_secuencial;			 if($x->grupo_fecha_secuencial=="")$data.="¬°";else $data.="°";
-		}
-		if(empty($edas))
-			$data.="~";
-		else
-		$data=substr($data,0,strlen($data)-2)."~";
-		$consultas=$this->Enrolamiento_model->get_catalog_view("consulta",$id,'','fecha');
+		$consultas=$this->Enrolamiento_model->get_catalog("cns_control_consulta", 'id_persona', $id, 'fecha');
 		foreach($consultas as $x)
 		{
-			$data.=$x->id."=";
+			$data.=$x->clave_cie10."=";
 			$data.=$x->fecha."=";
 			$data.=$x->id_asu_um."=";
 			$data.=$x->id_tratamiento;					 if($x->id_tratamiento=="")$data.="¬=";else $data.="=";
@@ -935,17 +921,9 @@ class Enrolamiento extends CI_Controller
 		$this->Enrolamiento_model->setfvacuna($this->input->post('fvacuna'));
 		$this->Enrolamiento_model->setcodigo_barras($this->input->post('ffoliovacuna'));
 		
-		$this->Enrolamiento_model->setira($this->input->post('ira'));
-		$this->Enrolamiento_model->setfira($this->input->post('fira'));
-		$this->Enrolamiento_model->settira($this->input->post('tratamiento_desira'));
-		
-		$this->Enrolamiento_model->seteda($this->input->post('eda'));
-		$this->Enrolamiento_model->setfeda($this->input->post('feda'));
-		$this->Enrolamiento_model->setteda($this->input->post('tratamiento_deseda'));
-		
-		$this->Enrolamiento_model->setconsulta($this->input->post('consulta'));
-		$this->Enrolamiento_model->setfconsulta($this->input->post('fconsulta'));
-		$this->Enrolamiento_model->settconsulta($this->input->post('tratamiento_desconsulta'));
+		$this->Enrolamiento_model->setconsulta($this->input->post('id_enfermedad_consulta'));
+		$this->Enrolamiento_model->setfconsulta($this->input->post('fecha_consulta'));
+		$this->Enrolamiento_model->settconsulta($this->input->post('ids_tratamiento_consulta'));
 		
 		$this->Enrolamiento_model->setaccion_nutricional($this->input->post('accion_nutricional'));
 		$this->Enrolamiento_model->setfaccion_nutricional($this->input->post('faccion_nutricional'));
@@ -956,6 +934,11 @@ class Enrolamiento extends CI_Controller
 		$this->Enrolamiento_model->sethemoglobina($this->input->post('chemoglobina'));
 		$this->Enrolamiento_model->setfnutricion($this->input->post('fCNu'));
         $this->Enrolamiento_model->setperi_cefa($this->input->post('peri_cefa'));
+        $this->Enrolamiento_model->setfecha_peri_cefa($this->input->post('fecha_peri_cefa'));
+        $this->Enrolamiento_model->setestimulacion_fecha($this->input->post('estimulacion_fecha'));
+        $this->Enrolamiento_model->setestimulacion_capacitado($this->input->post('estimulacion_capacitado'));
+        $this->Enrolamiento_model->setsales_fecha($this->input->post('sales_fecha'));
+        $this->Enrolamiento_model->setsales_cantidad($this->input->post('sales_cantidad'));
 	}
 	
 	/**
@@ -1294,4 +1277,60 @@ SELECT DISTINCT	r.id_vacuna,cv.codigo_barras, v.descripcion,r.dia_inicio_aplicac
 		$data['prefix']='hola';
 		$this->load->view(DIR_TES.'/TESNFC/Web/index',$data);
 	}
+    
+	/**
+	 * @access public
+	 *
+	 * Genera los options de un campo tipo select para las categorías de CIE10
+	 * 
+	 * @return 		echo
+	 */
+	public function categoriacie10_select()
+	{
+        $this->load->model(DIR_TES.'/Enrolamiento_model');
+        
+		$opcion = "";
+		$datos = $this->Enrolamiento_model->getCategoriaCIE10();
+        
+		if(sizeof($datos) != 0)
+		{
+			$opcion .= "<option value=''>Seleccione...</option>";
+			foreach($datos as $dato)
+			{
+				$opcion .= "<option value='$dato->id' >$dato->descripcion</option>";
+			}
+			echo $opcion;
+		}
+		else
+            echo "<option>No hay Datos</option>";
+	}
+    
+    /**
+	 * @access public
+	 *
+	 * Genera los options de un campo tipo select para los CIE10 correspondientes a una categoría
+	 * 
+	 * @param		string 		$categoria   Categoría de la CIE10
+	 * @return 		echo
+	 */
+	public function cie10_select($categoria)
+	{
+        $this->load->model(DIR_TES.'/Enrolamiento_model');
+        
+		$opcion = "";
+		$datos = $this->Enrolamiento_model->getCIE10($categoria);
+        
+		if(sizeof($datos) != 0)
+		{
+			$opcion .= "<option value=''>Seleccione...</option>";
+			foreach($datos as $dato)
+			{
+				$opcion .= "<option value='$dato->id_cie10' >$dato->descripcion</option>";
+			}
+			echo $opcion;
+		}
+		else
+            echo "<option>No hay Datos</option>";
+	}
+    
 }

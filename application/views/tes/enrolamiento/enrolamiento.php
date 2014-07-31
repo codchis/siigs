@@ -12,6 +12,9 @@
     
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
     <style>
+    /*Corrige la posición de la X en el botón cerrar*/
+    .ui-dialog .ui-dialog-titlebar-close span { transform:translate(-9px,-9px); -ms-transform:translate(-9px,-9px); -webkit-transform:translate(-9px,-9px); }
+    legend {font-size: 16px !important; line-height: 26px !important; font-weight: bold;}
 	td p
 	{
 		font-family:Open Sans Condensed ,sans-serif; font-size: 18px; font-weight: bold; text-shadow: 0 0px 0 #FFFFFF;
@@ -236,6 +239,67 @@
             buscarTutor(this.value);
         });
 		habilitarTutor();
+        
+        $("#dialog-nuevaConsulta").dialog({
+            autoOpen: false,
+            height: 650,
+            width: 600,
+            modal: true,
+            buttons: {
+                "Aceptar": function() {
+                    nombres_medicamentos = '';
+                    ids_medicamentos = '';
+                    $('#tbl_tratamientos tbody tr').each(function(){
+                        nombres_medicamentos += $(this).find('.txtMedicamento').text() + ', ';
+                        ids_medicamentos += $(this).find('button').data('idmedicamento') + ',';
+                    });
+                    nombres_medicamentos = nombres_medicamentos.substring(0, nombres_medicamentos.length-2);
+                    ids_medicamentos = ids_medicamentos.substring(0, ids_medicamentos.length-1);
+                    
+                    enfermedad = $('#enfermedad option:selected').text();
+                    id_enfermedad = $('#enfermedad option:selected').val();
+                    
+                    no = $('#tabla_consultas tbody tr').length + 1;
+                    fila = '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">\n\
+                                <td align="center"><label>'+no+'</label></td>\n\
+                                <td>\n\
+                                    <label class="enfermedad_consulta">'+enfermedad+'</label>\n\
+                                    <input name="enfermedad_consulta[]" type="hidden" value="'+enfermedad+'">\n\
+                                    <input name="id_enfermedad_consulta[]" type="hidden" value="'+id_enfermedad+'">\n\
+                                </td>\n\
+                                <td>\n\
+                                    <label class="fecha_consulta">'+$("#form_fecha_consulta").val()+'</label>\n\
+                                    <input name="fecha_consulta[]" type="hidden" value="'+$("#form_fecha_consulta").val()+'" >\n\
+                                </td>\n\
+                                <td>\n\
+                                    <label class="tratamiento_consulta">'+nombres_medicamentos+'</label>\n\
+                                    <input name="tratamiento_consulta[]" type="hidden" value="'+nombres_medicamentos+'">\n\
+                                    <input name="ids_tratamiento_consulta[]" type="hidden" value="'+ids_medicamentos+'">\n\
+                                </td>\n\
+                            </tr>';
+                    $(fila).appendTo('#tabla_consultas tbody');
+
+                    $(this).dialog("close");
+                },
+                Cancelar: function() {
+                    $(this).dialog("close");
+                }
+            },
+            close: function() {
+            }
+        });
+        
+        $("#form_fecha_consulta").datepicker(optionsFecha);
+        
+        $("#categoria_medicamento").load("/tes/enrolamiento/tratamiento_select/activo/1/0/tipo");
+        $("#categoria_medicamento").change(function(){
+            $("#medicamento").load("/tes/enrolamiento/tratamiento_select/tipo/"+encodeURIComponent($(this).val())+"/0/descripcion/");
+        });
+        
+        $("#categoria_enfermedad").load("/tes/enrolamiento/categoriacie10_select");
+        $("#categoria_enfermedad").change(function(){
+            $("#enfermedad").load("/tes/enrolamiento/cie10_select/"+encodeURIComponent($(this).val()));
+        });
 	});
 	</script><!-- mensaje-->
         <?php 	
@@ -595,36 +659,53 @@
                       <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consultas</div>
                       <div class="AccordionPanelContent"><br />
                       	<div style="margin-left:20px; width:90%">
-                        <table>
-                            <tr>
-                                <td width="85%" valign="top">
-                                <div class="detalle" style="width:100%">
-                                  <table width="100%" >
-                                    <tr>
-                                        <th width="10%" >No</th>
-                                        <th width="28%" align="left">Consulta</th>
-                                        <th width="15%" align="left">Fecha</th>
-                                        <th width="20%" align="left">Tipo</th>
-                                        <th width="27%" align="left">Tratamiento</th>
+                        
+                        <table width='100%'><tr><td width='85%' valign='top'>
+                        
+                            <table id="tabla_consultas" style="width: 100%;">
+                                <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">
+                                    <tr style="height:35px;">
+                                        <th>No.</th>
+                                        <th>Padecimiento</th>
+                                        <th>Fecha</th>
+                                        <th>Tratamiento</th>
                                     </tr>
-                                  </table> 
-                                  </div>
-                                  <?php
-								  	  $array=array();
-									  if(isset($_POST["consulta"])) $array= $_POST["consulta"];
-									   
-									  echo getArray($array,'consulta','ncc');
-								  ?>
-                                  <div id="ccc">
-                                  </div>                           
-                                 </td>
-                                 <td valign="top"> 
-                                   <button type="button" class="btn btn-primary" onclick="add('consulta','ncc','ccc');" style="height:40px; width:100px;">Agregar <i class="icon-plus"></i></button>
-                                   <button type="button" class="btn btn-primary" onclick="rem('consulta','ncc');" style="height:40px; width:100px;">Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
-                                                                      
-                                  </td>
-                              </tr>                     
-                          </table>
+                                </thead>
+                                <tbody>
+                                    <?PHP if(!empty($_POST)) {
+                                        if(count($_POST['enfermedad_consulta']) >0 ) {
+                                            for($index=0; $index<sizeof($_POST['enfermedad_consulta']); $index++){
+                                                echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                    <td align="center"><label>'.($index+1).'</label></td>
+                                                    <td>
+                                                        <label class="enfermedad_consulta">'.$_POST['enfermedad_consulta'][$index].'</label>
+                                                        <input name="enfermedad_consulta[]" type="hidden" value="'.$_POST['enfermedad_consulta'][$index].'">
+                                                        <input name="id_enfermedad_consulta[]" type="hidden" value="'.$_POST['id_enfermedad_consulta'][$index].'">
+                                                    </td>
+                                                    <td>
+                                                        <label class="fecha_consulta">'.$_POST['fecha_consulta'][$index].'</label>
+                                                        <input name="fecha_consulta[]" type="hidden" value="'.$_POST['fecha_consulta'][$index].'" >
+                                                    </td>
+                                                    <td>
+                                                        <label class="tratamiento_consulta">'.$_POST['tratamiento_consulta'][$index].'</label>
+                                                        <input name="tratamiento_consulta[]" type="hidden" value="'.$_POST['tratamiento_consulta'][$index].'">
+                                                        <input name="ids_tratamiento_consulta[]" type="hidden" value="'.$_POST['ids_tratamiento_consulta'][$index].'">
+                                                    </td>
+                                                </tr>';
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                            
+                            </td><td width='15%' valign='top'>
+                                <button type="button" class="btn btn-primary" onclick="addConsulta()" style="height:40px; width:100px;" >Agregar <i class="icon-plus"></i></button>
+                                <button type="button" class="btn btn-primary" onclick="remConsulta()" style="height:40px; width:100px;" >Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
+                            </td></tr>
+                            
+                        </table>
+                        
                         </div>
                       </div>
                     </div>
@@ -699,7 +780,7 @@
                             
                             <br />
                             <h4>Registro de Perímetro Cefálico</h4>
-                            <table id="tabla_peri_cefa">
+                            <table id="tabla_peri_cefa" style="min-width: 50%;">
                                 <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">
                                     <tr style="height:35px;">
                                         <th>No.</th>
@@ -714,7 +795,7 @@
                                                 echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
                                                     <td>'.($index+1).'</td>
                                                     <td><input name="peri_cefa[]" type="number" step=".01" min="0" value="'.$_POST['peri_cefa'][$index].'" style="width:75% !important"></td>
-                                                    <td><input name="fecha_peri_cefa[]" class="fecha_peri_cefa" type="text" step=".01" min="0" value="'.$_POST['fecha_peri_cefa'][$index].'" style="width:75% !important"></td>
+                                                    <td><input name="fecha_peri_cefa[]" class="fecha_peri_cefa" type="text" value="'.$_POST['fecha_peri_cefa'][$index].'" style="width:75% !important"></td>
                                                 </tr>';
                                             }
                                         }
@@ -766,9 +847,92 @@
                                   </td>
                               </tr>                     
                           </table>
+                            
+                        <br />
+                        <h4>Registro de entrega de Sales de Rehidratación Oral</h4>
+                        <table id="tabla_sro" style="min-width: 50%;">
+                            <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">
+                                <tr style="height:35px;">
+                                    <th>No.</th>
+                                    <th>Fecha</th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?PHP if(!empty($_POST)) {
+                                    if(count($_POST['sales_fecha']) >0 ) {
+                                        for($index=0; $index<sizeof($_POST['sales_fecha']); $index++){
+                                            echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                <td align="center">'.($index+1).'</td>
+                                                <td align="center"><input name="sales_fecha[]" class="sales_fecha" type="text" value="'.$_POST['sales_fecha'][$index].'" style="width:75% !important"></td>
+                                                <td align="center"><input name="sales_cantidad[]" type="number" value="'.$_POST['sales_cantidad'][$index].'" style="width:75% !important"></td>
+                                            </tr>';
+                                        }
+                                    }
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+
+                        <br />
+                        <button type="button" class="btn btn-primary" onclick="addSRO()" >Agregar <i class="icon-plus"></i></button>
+                        <button type="button" class="btn btn-primary" onclick="remSRO()" >Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
+                        <br /><br />
+                        
                         </div>
                       </div>
                     </div>
+                    
+                    <!-- estimulación temprana  -->
+                    <div class="AccordionPanel">
+                      <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Estimulación temprana</div>
+                      <div class="AccordionPanelContent"><br />
+                      	<div style="margin-left:20px; width:90%">
+                        
+                        <table width='100%'><tr><td width='85%' valign='top' align="center">
+                        
+                            <table id="tabla_estimulacion" style="width: 80%;" align="center">
+                                <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">
+                                    <tr style="height:35px;">
+                                        <th>No.</th>
+                                        <th>Fecha</th>
+                                        <th>Tutor capacitado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?PHP if(!empty($_POST)) {
+                                        if(count($_POST['estimulacion_fecha']) >0 ) {
+                                            for($index=0; $index<sizeof($_POST['estimulacion_fecha']); $index++){
+                                                echo '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">
+                                                    <td align="center">'.($index+1).'</td>
+                                                    <td align="center">
+                                                        <input name="estimulacion_fecha[]" class="estimulacion_fecha" type="text" value="'.$_POST['estimulacion_fecha'][$index].'" style="width:50% !important">
+                                                    </td>
+                                                    <td align="center">
+                                                        <select name="estimulacion_capacitado[]" >
+                                                            <option value="1" '.($_POST['estimulacion_capacitado'][$index] == 1 ? 'selected' : '').'>Si</option>
+                                                            <option value="0" '.($_POST['estimulacion_capacitado'][$index] == 0 ? 'selected' : '').'>No</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>';
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                            
+                            </td><td width='15%' valign='top'>
+                                <button type="button" class="btn btn-primary" onclick="addEstimulacion()" style="height:40px; width:100px;" >Agregar <i class="icon-plus"></i></button>
+                                <button type="button" class="btn btn-primary" onclick="remEstimulacion()" style="height:40px; width:100px;" >Quitar &nbsp;&nbsp;<i class="icon-remove"></i></button> 
+                            </td></tr>
+                            
+                        </table>
+                        
+                        </div>
+                      </div>
+                    </div>
+                    
                     </td>
             </tr>
             <tr>
@@ -789,3 +953,41 @@
 <script type="text/javascript">
 var Accordion1 = new Spry.Widget.Accordion("Accordion1", { useFixedPanelHeights: false, defaultPanel: 0 });
 </script>
+
+<div id="dialog-nuevaConsulta" title="Registrar Consutla">
+    <p class="validateTips"></p>
+    <form name="form-addConsulta" id="form-addConsulta">
+        <label>Fecha: <input name="form_fecha_consulta" id="form_fecha_consulta" type="text"></label>
+        <br>
+        <fieldset><legend>Padecimiento</legend>
+            <label>Categoria: 
+                <select id="categoria_enfermedad"></select>
+            </label>
+            <label>Enfermedad: 
+                <select id="enfermedad"></select>
+            </label>
+        </fieldset>
+        <br>
+        <fieldset><legend>Medicamento</legend>
+            <label>Categoria: 
+                <select id="categoria_medicamento"></select>
+            </label>
+            <label>Medicamento: 
+                <select id="medicamento"></select>
+            </label>
+            <button type="button" class="btn btn-primary" onclick="addMedicamento()" >Agregar <i class="icon-plus"></i></button>
+        </fieldset>
+        <br>
+        <fieldset><legend>Tratamiento</legend>
+            <table width='100%' id="tbl_tratamientos">
+                <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">
+                    <tr style="height:35px;">
+                        <th align="center">Eliminar</th>
+                        <th align="center">Medicamento</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </fieldset>
+    </form>
+</div>
