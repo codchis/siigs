@@ -2118,7 +2118,7 @@ class Enrolamiento_model extends CI_Model
 	 */
 	public function get_cns_persona($array,$fecha="")
 	{
-		$this->db->select('id, curp, nombre, apellido_paterno, apellido_materno, sexo, id_tipo_sanguineo, fecha_nacimiento, id_asu_localidad_nacimiento, calle_domicilio, numero_domicilio, colonia_domicilio, referencia_domicilio, ageb, manzana, sector, id_asu_localidad_domicilio, cp_domicilio, telefono_domicilio, fecha_registro, id_asu_um_tratante, celular, ultima_actualizacion, id_nacionalidad, id_operadora_celular, ultima_sincronizacion, id_parto_multiple');
+		$this->db->select('id, curp, nombre, apellido_paterno, apellido_materno, sexo, id_tipo_sanguineo, fecha_nacimiento, id_asu_localidad_nacimiento, calle_domicilio, numero_domicilio, colonia_domicilio, referencia_domicilio, ageb, manzana, sector, id_asu_localidad_domicilio, cp_domicilio, telefono_domicilio, fecha_registro, id_asu_um_tratante, celular, ultima_actualizacion, id_nacionalidad, id_operadora_celular, ultima_sincronizacion, id_parto_multiple, tamiz_neonatal');
 		$this->db->from("cns_persona");
 		if($fecha!="")
 		$this->db->where("ultima_actualizacion >=", $fecha);

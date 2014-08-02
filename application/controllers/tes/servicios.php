@@ -359,6 +359,7 @@ class Servicios extends CI_Controller {
                                                 ob_flush();
                                                 unset($cadena);
                                                 $cadena=array();
+                                                $inicio_asu=1;
                                         }
 				}
 				else 

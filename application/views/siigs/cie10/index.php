@@ -133,16 +133,16 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 	<tr>
 	<th><h2>CIE10</h2></th>
 	<th><h2>Descripción</h2></th>
-        <th></th>
-	<th>
-            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/eda" class="btn btn-primary btn-small btn-icon">Catálogo&nbsp;EDA<i class="icon-list-alt"></i></a>
+        <th>Modificar</th>
+	<!--th>
+            <a href="/<?php //echo DIR_SIIGS; ?>/cie10/view/eda" class="btn btn-primary btn-small btn-icon">Catálogo&nbsp;EDA<i class="icon-list-alt"></i></a>
         </th>
 	<th>
-            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/ira" class="btn btn-primary btn-small btn-icon">Catálogo&nbsp;IRA<i class="icon-list-alt"></i></a>
+            <a href="/<?php //echo DIR_SIIGS; ?>/cie10/view/ira" class="btn btn-primary btn-small btn-icon">Catálogo&nbsp;IRA<i class="icon-list-alt"></i></a>
         </th>
         <th>
-            <a href="/<?php echo DIR_SIIGS; ?>/cie10/view/consulta" class="btn btn-primary btn-small btn-icon">Consultas<i class="icon-list-alt"></i></a>
-        </th>
+            <a href="/<?php //echo DIR_SIIGS; ?>/cie10/view/consulta" class="btn btn-primary btn-small btn-icon">Consultas<i class="icon-list-alt"></i></a>
+        </th-->
 	</tr>
 </thead>
 <?php foreach ($datos as $item): ?>
@@ -150,19 +150,19 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		<td><?php echo $item->cie10 ?></td>
 		<td><?php echo $item->descripcion ?></td>
                 <td><a href="/<?php echo DIR_SIIGS; ?>/cie10/update/<?php echo $item->id ?>" class="btn btn-primary btn-small btn-icon">Modificar<i class="icon-pencil"></i></a></td>
-                <td>
-                    <input class="check_catalogo" type="checkbox" id="eda<?php echo $item->id;?>" valor="<?php echo $item->id;?>" catalogo="eda" <?php echo ($item->eda == false) ? "" : "checked" ; ?> >
-                    <label for="eda<?php echo $item->id;?>"><?php echo ($item->eda == false) ? "Agregar" : "Quitar" ; ?></label>
+                <!--td>
+                    <input class="check_catalogo" type="checkbox" id="eda<?php //echo $item->id;?>" valor="<?php //echo $item->id;?>" catalogo="eda" <?php //echo ($item->eda == false) ? "" : "checked" ; ?> >
+                    <label for="eda<?php //echo $item->id;?>"><?php //echo ($item->eda == false) ? "Agregar" : "Quitar" ; ?></label>
                 </td>
                 <td>
-                    <input class="check_catalogo" type="checkbox" id="ira<?php echo $item->id;?>" valor="<?php echo $item->id;?>" catalogo="ira" <?php echo ($item->ira == false) ? "" : "checked" ; ?> >
-                    <label for="ira<?php echo $item->id;?>"><?php echo ($item->ira == false) ? "Agregar" : "Quitar" ; ?></label>
+                    <input class="check_catalogo" type="checkbox" id="ira<?php //echo $item->id;?>" valor="<?php //echo $item->id;?>" catalogo="ira" <?php //echo ($item->ira == false) ? "" : "checked" ; ?> >
+                    <label for="ira<?php //echo $item->id;?>"><?php //echo ($item->ira == false) ? "Agregar" : "Quitar" ; ?></label>
                 </td>
                 <td>
-                    <input class="check_catalogo" type="checkbox" id="consulta<?php echo $item->id;?>" valor="<?php echo $item->id;?>" catalogo="consulta" <?php echo ($item->consulta == false) ? "" : "checked" ; ?> >
-                    <label for="consulta<?php echo $item->id;?>"><?php echo ($item->consulta == false) ? "Agregar" : "Quitar" ; ?></label>
-                </td>
-		<!--td><a href="/<?php //echo DIR_SIIGS; ?>/cie10/delete/<?php echo $item->cie10 ?>" onclick="if (confirm('Realmente desea eliminar este registro?')) { return true; } else {return false;}">Eliminar</a></td-->
+                    <input class="check_catalogo" type="checkbox" id="consulta<?php //echo $item->id;?>" valor="<?php //echo $item->id;?>" catalogo="consulta" <?php //echo ($item->consulta == false) ? "" : "checked" ; ?> >
+                    <label for="consulta<?php //echo $item->id;?>"><?php //echo ($item->consulta == false) ? "Agregar" : "Quitar" ; ?></label>
+                </td-->
+		<!--td><a href="/<?php //echo DIR_SIIGS; ?>/cie10/delete/<?php //echo $item->cie10 ?>" onclick="if (confirm('Realmente desea eliminar este registro?')) { return true; } else {return false;}">Eliminar</a></td-->
 	</tr>
 <?php endforeach ?>
 <tr>
