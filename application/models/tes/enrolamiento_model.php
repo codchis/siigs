@@ -1760,7 +1760,7 @@ class Enrolamiento_model extends CI_Model
 	public function getById($id)
 	{
 		
-		$this->db->select('p.*,s.id as sangre, s.descripcion as tsangre, n.id as nacionalidadid, n.descripcion as nacionalidad, o.id as operadoraid,o.descripcion as operadora, t.id as idT, t.curp as curpT, t.nombre as nombreT, t.apellido_paterno as paternoT, t.apellido_materno as maternoT, t.sexo as sexoT, t.telefono as telefonoT, t.celular as celularT,o1.id as operadoraTid, o1.descripcion as operadoraT, rc.id_localidad_registro_civil, pm.descripcion as parto, TIMESTAMPDIFF(month, fecha_nacimiento, CURDATE()) AS edad_meses');
+		$this->db->select('p.*,s.id as sangre, s.descripcion as tsangre, n.id as nacionalidadid, n.descripcion as nacionalidad, o.id as operadoraid,o.descripcion as operadora, t.id as idT, t.curp as curpT, t.nombre as nombreT, t.apellido_paterno as paternoT, t.apellido_materno as maternoT, t.sexo as sexoT, t.telefono as telefonoT, t.celular as celularT,o1.id as operadoraTid, o1.descripcion as operadoraT, rc.id_localidad_registro_civil, pm.descripcion as parto, TIMESTAMPDIFF(month, fecha_nacimiento, CURDATE()) AS edad_meses, tamiz_neonatal');
 		$this->db->from('cns_persona p');
 		$this->db->join('cns_nacionalidad n', 'n.id = p.id_nacionalidad','left');
 		$this->db->join('cns_tipo_sanguineo s', 's.id = p.id_tipo_sanguineo','left');

@@ -595,7 +595,7 @@ class Enrolamiento extends CI_Controller
 		$data.=$enrolado["celular"] ;                         if($enrolado["celular"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["ultima_actualizacion"] ;            if($enrolado["ultima_actualizacion"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["id_nacionalidad"] ;                 if($enrolado["id_nacionalidad"]=="")$data.="¬=";else $data.="=";
-		$data.=$enrolado["id_operadora_celular"];             if($enrolado["id_operadora_celular"]=="")$data.="¬";
+		$data.=$enrolado["id_operadora_celular"];             if($enrolado["id_operadora_celular"]=="")$data.="¬";else $data.="=";
 		$data.=$enrolado["tamiz_neonatal"];                   if($enrolado["tamiz_neonatal"]=="")$data.="¬";
 		$data.="~";
 		
