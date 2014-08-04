@@ -74,6 +74,8 @@ function getArray($array,$id,$nu)
 		$xa="98%"; $xb="78%"; $ha="40%"; $hb="30%";
 	}
 	$i=0; $grid="";
+    
+    if(!empty($array))
 	foreach($array as $dato)
 	{
 		$i++; 

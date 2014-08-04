@@ -595,7 +595,7 @@ function addPeriCefa(){
     fila = '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">\n\
                 <td align="center">'+no+'</td>\n\
                 <td><input name="peri_cefa[]" id="peri_cefa-'+no+'" type="number" step=".01" min="0" style="width:75% !important"></td>\n\
-                <td><input name="fecha_peri_cefa[]" id="fecha_peri_cefa-'+no+'" type="text" step=".01" min="0" style="width:75% !important"></td>\n\
+                <td><input name="fecha_peri_cefa[]" id="fecha_peri_cefa-'+no+'" type="text" style="width:75% !important"></td>\n\
             </tr>';
     $(fila).appendTo('#tabla_peri_cefa tbody');
     
@@ -604,4 +604,62 @@ function addPeriCefa(){
 
 function remPeriCefa(){
     $('#tabla_peri_cefa tbody tr:last').remove();
+}
+
+function addConsulta(){
+    $('#tbl_tratamientos tbody').html("");
+    $("#dialog-nuevaConsulta").dialog("open");
+}
+
+function remConsulta(){
+    $('#tabla_consultas tbody tr:last').remove();
+}
+
+function addMedicamento() {
+    fila = '<tr><td align="center"><button type="button" class="btn btn-primary" onclick="remMedicamento(this)" data-idMedicamento="'+$('#medicamento option:selected').val()+'" ><i class="icon-remove"></i></button></td>\n\
+            <td class="txtMedicamento">'+$('#medicamento option:selected').text()+'</td></tr>';
+    $(fila).appendTo('#tbl_tratamientos tbody');
+    
+}
+
+function remMedicamento(obj) {
+    $(obj).parent().parent().remove();
+}
+
+function addEstimulacion() {
+    no = $('#tabla_estimulacion tbody tr').length + 1;
+    fila = '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">\n\
+                <td align="center">'+no+'</td>\n\
+                <td align="center">\n\
+                    <input name="estimulacion_fecha[]" class="estimulacion_fecha" type="text" value="" style="width:50% !important">\n\
+                </td>\n\
+                <td align="center">\n\
+                    <select name="estimulacion_capacitado[]" >\n\
+                        <option value="1">Si</option>\n\
+                        <option value="0">No</option>\n\
+                    </select>\n\
+                </td>\n\
+            </tr>';
+    $(fila).appendTo('#tabla_estimulacion tbody');
+    $('.estimulacion_fecha').datepicker(optionsFecha);
+}
+
+function remEstimulacion(obj) {
+    $('#tabla_estimulacion tbody tr:last').remove();
+}
+
+function addSRO(){
+    no = $('#tabla_sro tbody tr').length + 1;
+    fila = '<tr style="background-color: #f0f0f0; padding-top:4px; padding-bottom:4px; height:50px;">\n\
+                <td align="center">'+no+'</td>\n\
+                <td align="center"><input name="sales_fecha[]" id="sales_fecha-'+no+'" type="text" style="width:75% !important"></td>\n\
+                <td align="center"><input name="sales_cantidad[]" type="number" style="width:75% !important"></td>\n\
+            </tr>';
+    $(fila).appendTo('#tabla_sro tbody');
+    
+	$('#sales_fecha-'+no).datepicker(optionsFecha);
+}
+
+function remSRO(){
+    $('#tabla_sro tbody tr:last').remove();
 }

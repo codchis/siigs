@@ -93,6 +93,13 @@ class Enrolamiento_model extends CI_Model
 	private $hemoglobina= array();
 	private $fnutricion= array();
 	private $peri_cefa= array();
+	private $fecha_peri_cefa= array();
+    
+	private $estimulacion_fecha= array();
+	private $estimulacion_capacitado= array();
+    
+    private $sales_fecha= array();
+	private $sales_cantidad= array();
 	
    	/********************************************
    	 * Estas variables no pertenecen a la tabla *
@@ -508,66 +515,6 @@ class Enrolamiento_model extends CI_Model
 		$this->codigo_barras = $value;
 	}
 	
-	public function getira()
-	{
-	    return $this->ira;
-	}
-
-	public function setira($value) 
-	{
-		$this->ira = $value;
-	}
-	
-	public function getfira()
-	{
-	    return $this->fira;
-	}
-
-	public function setfira($value) 
-	{
-		$this->fira = $value;
-	}
-	
-	public function gettira()
-	{
-	    return $this->tira;
-	}
-
-	public function settira($value) 
-	{
-		$this->tira = $value;
-	}
-	
-	public function geteda()
-	{
-	    return $this->eda;
-	}
-
-	public function seteda($value) 
-	{
-		$this->eda = $value;
-	}
-	
-	public function getfeda()
-	{
-	    return $this->feda;
-	}
-
-	public function setfeda($value) 
-	{
-		$this->feda = $value;
-	}
-	
-	public function getteda()
-	{
-	    return $this->teda;
-	}
-
-	public function setteda($value) 
-	{
-		$this->teda = $value;
-	}
-	
 	public function getconsulta()
 	{
 	    return $this->consulta;
@@ -716,6 +663,57 @@ class Enrolamiento_model extends CI_Model
 	{
 		$this->peri_cefa = $value;
 	}
+    
+    public function getfecha_peri_cefa()
+	{
+	    return $this->fecha_peri_cefa;
+	}
+
+	public function setfecha_peri_cefa($value) 
+	{
+		$this->fecha_peri_cefa = $value;
+	}
+    
+    public function getestimulacion_fecha()
+	{
+	    return $this->estimulacion_fecha;
+	}
+
+	public function setestimulacion_fecha($value) 
+	{
+		$this->estimulacion_fecha = $value;
+	}
+    
+    public function getestimulacion_capacitado()
+	{
+	    return $this->estimulacion_capacitado;
+	}
+
+	public function setestimulacion_capacitado($value) 
+	{
+		$this->estimulacion_capacitado = $value;
+	}
+    
+    public function getsales_cantidad()
+	{
+	    return $this->sales_cantidad;
+	}
+
+	public function setsales_cantidad($value) 
+	{
+		$this->sales_cantidad = $value;
+	}
+    
+    public function getsales_fecha()
+	{
+	    return $this->sales_fecha;
+	}
+
+	public function setsales_fecha($value) 
+	{
+		$this->sales_fecha = $value;
+	}
+    
 	 /**
 	 * @access public
 	 *
@@ -954,15 +952,13 @@ class Enrolamiento_model extends CI_Model
 			
 			for($i=0;$i<sizeof($this->consulta);$i++)
 			{
-				$t=$this->tconsulta[$i];
-				if($t=="")$t=1;
 				$data5 = array(
 					// consulta
 					'id_persona' => $this->id,
-					'id_consulta' => $this->consulta[$i],
+					'clave_cie10' => $this->consulta[$i],
 					'fecha' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
 					'id_asu_um' => $id_asu_um,
-					'id_tratamiento' => $t,
+					'id_tratamiento' => $this->tconsulta[$i],
 					'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
 					
 				);
@@ -1049,14 +1045,50 @@ class Enrolamiento_model extends CI_Model
                 for($index=0; $index<sizeof($this->peri_cefa); $index++){
                     $datosPeriCefa = array(
                         'id_persona' => $this->id,
-                        'fecha' => date('Y-m-d H:i:s', strtotime($this->peri_cefa[$index])),
+                        'fecha' => date('Y-m-d H:i:s', strtotime($this->fecha_peri_cefa[$index])),
                         'perimetro_cefalico' => $this->peri_cefa[$index],
                         'id_asu_um' => $id_asu_um);
 
                     $resultPeriCefa = $this->db->insert('cns_control_peri_cefa', $datosPeriCefa);
                     if (!$resultPeriCefa)
                     {
-                        $this->msg_error_usr = "Error Afiliacion.";
+                        $this->msg_error_usr = "Error Perímetro Cefálico.";
+                        $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                        throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                    }
+                }
+            }
+            
+            if(!empty($this->estimulacion_fecha)){
+                for($index=0; $index<sizeof($this->estimulacion_fecha); $index++){
+                    $datosEstimulacion = array(
+                        'id_persona' => $this->id,
+                        'fecha' => date('Y-m-d H:i:s', strtotime($this->estimulacion_fecha[$index])),
+                        'tutor_capacitado' => $this->estimulacion_capacitado[$index],
+                        'id_asu_um' => $id_asu_um);
+
+                    $resultEstimulacion = $this->db->insert('cns_estimulacion_temprana', $datosEstimulacion);
+                    if (!$resultEstimulacion)
+                    {
+                        $this->msg_error_usr = "Error Estimulación Temprana.";
+                        $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                        throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                    }
+                }
+            }
+            
+            if(!empty($this->sales_fecha)){
+                for($index=0; $index<sizeof($this->sales_fecha); $index++){
+                    $datosSRO = array(
+                        'id_persona' => $this->id,
+                        'fecha' => date('Y-m-d H:i:s', strtotime($this->sales_fecha[$index])),
+                        'cantidad' => $this->sales_cantidad[$index],
+                        'id_asu_um' => $id_asu_um);
+
+                    $resultSRO = $this->db->insert('cns_sales_rehidratacion', $datosSRO);
+                    if (!$resultSRO)
+                    {
+                        $this->msg_error_usr = "Error Sales de Rehidratración Oral.";
                         $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
                         throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
                     }
@@ -1409,15 +1441,13 @@ class Enrolamiento_model extends CI_Model
 		if ($this->db->delete('cns_control_consulta', array('id_persona' => $this->id)))
 		for($i=0;$i<sizeof($this->consulta);$i++)
 		{
-			$t=$this->tconsulta[$i];
-			if($t=="")$t=1;
 			$data5 = array(
 				// consulta
 				'id_persona' => $this->id,
-				'id_consulta' => $this->consulta[$i],
-				'fecha' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
-				'id_asu_um' => $id_asu_um,
-				'id_tratamiento' => $t,
+                'clave_cie10' => $this->consulta[$i],
+                'fecha' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
+                'id_asu_um' => $id_asu_um,
+                'id_tratamiento' => $this->tconsulta[$i],
 				'grupo_fecha_secuencial' => date('Y-m-d H:i:s', strtotime($this->fconsulta[$i])),
 				
 			);
@@ -1946,7 +1976,7 @@ class Enrolamiento_model extends CI_Model
 	/**
 	 * @access public
 	 *
-	 * Hace select de los tratamientos de las iras, edas y consulta
+	 * Hace select de los tratamientos de las consultas
 	 * 
 	 * @param		string 		$catalog  Nombre de la tabla 
 	 * @param		strin 		$campo    nombre del campo para hacer el where
@@ -2602,7 +2632,7 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
     /**
 	 * @access public
 	 *
-	 * Obtiene los datos del control nutricional asociados a una persona
+	 * Obtiene los registros de perimetro cefalico asociados a una persona
 	 * 
 	 * @param		string 		$id       identificador de la persona
 	 * @param		strin 		$order    nombre del campo para hacer el order by
@@ -2646,19 +2676,259 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
             for($index=0; $index<sizeof($this->peri_cefa); $index++){
                 $datosPeriCefa = array(
                     'id_persona' => $this->id,
-                    'fecha' => date('Y-m-d H:i:s', strtotime($this->peri_cefa[$index])),
+                    'fecha' => date('Y-m-d H:i:s', strtotime($this->fecha_peri_cefa[$index])),
                     'perimetro_cefalico' => $this->peri_cefa[$index],
                     'id_asu_um' => $id_asu_um);
 
                 $resultPeriCefa = $this->db->insert('cns_control_peri_cefa', $datosPeriCefa);
                 if (!$resultPeriCefa)
                 {
-                    $this->msg_error_usr = "Error Afiliacion.";
+                    $this->msg_error_usr = "Error Perímetro Cefálico.";
                     $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
                     throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
                 }
             }
         }
+	}
+    
+    /**
+	 * @access public
+	 *
+	 * Obtiene los registros de estimulacion temprana asociados a una persona
+	 * 
+	 * @param		string 		$id       identificador de la persona
+	 * @param		strin 		$order    nombre del campo para hacer el order by
+	 *
+	 * @return 		result()
+	 *
+	 */
+	public function get_estimulacion($id,$order="")
+	{
+		$this->db->select('*');
+		$this->db->from('cns_estimulacion_temprana');
+		$this->db->where('id_persona', $id);
+		if($order!="")
+		$this->db->order_by($order, "desc");
+		else
+		$this->db->order_by("fecha", "ASC");
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+		}
+		else
+			return $query->result();
+		return null;
+	}
+    
+    /**
+	 * @access public
+	 *
+	 * Actualiza los registros de estimulacion temprana
+	 *
+	 * @return 		result()
+	 *
+	 */
+	public function update_estimulacion()
+	{
+		$id_asu_um = $this->umt;
+		if ($this->db->delete('cns_estimulacion_temprana', array('id_persona' => $this->id))) {
+            for($index=0; $index<sizeof($this->estimulacion_fecha); $index++){
+                $datosEstimulacion = array(
+                    'id_persona' => $this->id,
+                    'fecha' => date('Y-m-d H:i:s', strtotime($this->estimulacion_fecha[$index])),
+                    'tutor_capacitado' => $this->estimulacion_capacitado[$index],
+                    'id_asu_um' => $id_asu_um);
+
+                $resultEstimulacion = $this->db->insert('cns_estimulacion_temprana', $datosEstimulacion);
+                if (!$resultEstimulacion)
+                {
+                    $this->msg_error_usr = "Error Estimulación Temprana.";
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                }
+            }
+        }
+	}
+    
+    /**
+     * Obtiene el listado de categorias de CIE10
+     *
+     * @access public
+     * @return object|boolean Devuelve el objeto con sus datos correspondientes, de lo contrario, false Si no se encontró el registro
+     */
+    public function getCategoriaCIE10()
+    {
+        $result = false;
+        
+        $this->db->select('*');
+        $this->db->from('cns_categoria_cie10');
+        $this->db->order_by('descripcion', 'ASC'); 
+        
+        $query = $this->db->get();
+        $result = $query->result();
+
+        if($this->db->_error_number()) {
+            $this->error = true;
+            $this->msg_error_usr = 'No se encontraron registros en la busqueda';
+            $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+            throw new Exception();
+        } else if(empty($result)) {
+            $this->msg_error_usr = 'No se encontraron registros en la busqueda';
+        }
+
+        return $result;
+    }
+    
+    /**
+     * Obtiene el listado de CIE10 correspondientes a una CIE10
+     *
+     * @access public
+     * @return object|boolean Devuelve el objeto con sus datos correspondientes, de lo contrario, false Si no se encontró el registro
+     */
+    public function getCIE10($categoria)
+    {
+        $result = false;
+        
+        $this->db->select('*');
+        $this->db->from('cns_cie10');
+        $this->db->where('id_categoria' , $categoria);
+        $this->db->order_by('descripcion', 'ASC'); 
+        
+        $query = $this->db->get();
+        $result = $query->result();
+
+        if($this->db->_error_number()) {
+            $this->error = true;
+            $this->msg_error_usr = 'No se encontraron registros en la busqueda';
+            $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+            throw new Exception();
+        } else if(empty($result)) {
+            $this->msg_error_usr = 'No se encontraron registros en la busqueda';
+        }
+
+        return $result;
+    }
+    
+    /**
+     * Obtiene todas las consultas asociadas a un paciente
+     *
+     * @access public
+     * @return object|boolean Devuelve el objeto con sus datos correspondientes, de lo contrario, false Si no se encontró el registro
+     */
+    public function getControlConsultas($idPersona)
+    {
+        $result = false;
+        
+        $this->db->select('*');
+        $this->db->from('cns_control_consulta');
+        $this->db->where('id_persona' , $idPersona);
+        $this->db->order_by('fecha', 'ASC'); 
+        
+        $query = $this->db->get();
+        $result = $query->result();
+
+        if($this->db->_error_number()) {
+            $this->error = true;
+            $this->msg_error_usr = 'No se encontraron registros en la busqueda';
+            $this->msg_error_log = '('.__METHOD__.') => '.$this->db->_error_number().': '.$this->db->_error_message();
+            throw new Exception();
+        } else if(empty($result)) {
+            $this->msg_error_usr = 'No se encontraron registros en la busqueda';
+        } else {
+            foreach ($result as $idxConsulta => $consulta) {
+                $this->db->select('descripcion');
+                $this->db->from('cns_cie10');
+                $this->db->where('id_cie10' , $consulta->clave_cie10);
+
+                $query = $this->db->get();
+                $cie10 = $query->row();
+                
+                $result[$idxConsulta]->descripCIE10 = $cie10->descripcion;
+                
+                $medicamentos = '';
+                $idsMedicamentos = explode(',', $result[$idxConsulta]->id_tratamiento);
+                
+                foreach ($idsMedicamentos as $idMed) {
+                    $this->db->select('descripcion');
+                    $this->db->from('cns_tratamiento');
+                    $this->db->where('id' , $idMed);
+
+                    $query = $this->db->get();
+                    $med = $query->row();
+
+                    $medicamentos .= $med->descripcion.', ';
+                }
+                
+                $result[$idxConsulta]->descripTratamiento = substr($medicamentos, 0, -2);
+            }
+        }
+
+        return $result;
+    }
+    
+    /**
+	 * @access public
+	 *
+	 * Actualiza los registros de sales de rehidratacion oral
+	 *
+	 * @return 		result()
+	 *
+	 */
+	public function update_sales()
+	{
+		$id_asu_um = $this->umt;
+		if ($this->db->delete('cns_sales_rehidratacion', array('id_persona' => $this->id))) {
+            for($index=0; $index<sizeof($this->sales_fecha); $index++){
+                $datosSRO = array(
+                    'id_persona' => $this->id,
+                    'fecha' => date('Y-m-d H:i:s', strtotime($this->sales_fecha[$index])),
+                    'cantidad' => $this->sales_cantidad[$index],
+                    'id_asu_um' => $id_asu_um);
+
+                $resultSRO = $this->db->insert('cns_sales_rehidratacion', $datosSRO);
+                if (!$resultSRO)
+                {
+                    $this->msg_error_usr = "Error Sales de Rehidratación Oral.";
+                    $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+                    throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+                }
+            }
+        }
+	}
+    
+    /**
+	 * @access public
+	 *
+	 * Obtiene los registros de sales de rehidratación oral asociados a una persona
+	 * 
+	 * @param		string 		$id       identificador de la persona
+	 * @param		strin 		$order    nombre del campo para hacer el order by
+	 *
+	 * @return 		result()
+	 *
+	 */
+	public function get_sales($id,$order="")
+	{
+		$this->db->select('*');
+		$this->db->from('cns_sales_rehidratacion');
+		$this->db->where('id_persona', $id);
+		if($order!="")
+		$this->db->order_by($order, "desc");
+		else
+		$this->db->order_by("fecha", "ASC");
+		$query = $this->db->get(); 
+		if (!$query)
+		{
+			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
+			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
+		}
+		else
+			return $query->result();
+		return null;
 	}
 }
 ?>
