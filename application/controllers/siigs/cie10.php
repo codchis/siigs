@@ -382,8 +382,8 @@ class Cie10 extends CI_Controller {
 			 	$consultaagregar = array();
 			 	
 			 	//filtro solo los nombres de los campos
-			 	$campos = array('cie10','descripcion');
-			 	$llaves = array('cie10');
+			 	$campos = array('id_categoria','id_cie10','descripcion','activo');
+			 	$llaves = array('id_cie10');
 			 				 	
 		 		//obtiene las llaves primarias del catalogo
 		 		$rowsllaves = $this->db->query("select ".implode(",",$llaves)." from cns_cie10");
@@ -537,6 +537,7 @@ class Cie10 extends CI_Controller {
 			 {
                             if (count($consultaagregar)>0)
                             {
+                                
                                 if ($this->db->insert_batch('cns_cie10',$consultaagregar)==0)
                                 {
                                     $error = true;

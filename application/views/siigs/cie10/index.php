@@ -132,6 +132,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <thead>
 	<tr>
 	<th><h2>CIE10</h2></th>
+        <th><h2>Categor&iacute;a</h2></th>
 	<th><h2>Descripción</h2></th>
         <th>Modificar</th>
 	<!--th>
@@ -148,8 +149,9 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 <?php foreach ($datos as $item): ?>
 	<tr>
 		<td><?php echo $item->cie10 ?></td>
+                <td><?php echo $item->categoria ?></td>
 		<td><?php echo $item->descripcion ?></td>
-                <td><a href="/<?php echo DIR_SIIGS; ?>/cie10/update/<?php echo $item->id ?>" class="btn btn-primary btn-small btn-icon">Modificar<i class="icon-pencil"></i></a></td>
+                <td><a href="/<?php echo DIR_SIIGS; ?>/cie10/update/<?php echo $item->cie10 ?>" class="btn btn-primary btn-small btn-icon">Modificar<i class="icon-pencil"></i></a></td>
                 <!--td>
                     <input class="check_catalogo" type="checkbox" id="eda<?php //echo $item->id;?>" valor="<?php //echo $item->id;?>" catalogo="eda" <?php //echo ($item->eda == false) ? "" : "checked" ; ?> >
                     <label for="eda<?php //echo $item->id;?>"><?php //echo ($item->eda == false) ? "Agregar" : "Quitar" ; ?></label>

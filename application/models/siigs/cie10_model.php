@@ -142,7 +142,7 @@ class Cie10_model extends CI_Model {
 	 */
 	public function getAll()
 	{
-                $consulta = 'select a.id as id,a.cie10 as cie10,a.descripcion as descripcion from cns_cie10 a';
+                $consulta = 'SELECT id_cie10 AS cie10, b.`descripcion` AS categoria, a.descripcion AS descripcion, a.activo FROM cns_cie10 a, cns_categoria_cie10 b WHERE a.id_categoria = b.id AND b.`activo` = 1';
 		if ((!empty($this->offset) || $this->offset == 0) && !empty($this->rows))
 		$consulta .= ' limit '.$this->offset. ','.$this->rows;
                 
@@ -169,7 +169,7 @@ class Cie10_model extends CI_Model {
 	 */
 	public function getData()
 	{
-                $consulta = 'select cie10,descripcion from cns_cie10';                
+                $consulta = 'select id_cie10,descripcion from cns_cie10';                
                 $datos = $this->db->query($consulta);
                 
                 if (!$datos)
@@ -219,7 +219,7 @@ class Cie10_model extends CI_Model {
 	 */
 	public function getById($id)
 	{
-		$query = $this->db->get_where('cns_cie10', array('id' => $id));
+		$query = $this->db->get_where('cns_cie10', array('id_cie10' => $id));
 
 		if (!$query)
 		{

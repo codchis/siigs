@@ -23,7 +23,7 @@ define('CAT_POBLACION', 'cat_poblacion');
 define('CAT_GEOREFERENCIA', 'cat_georeferencia');
 define('CAT_AGEB', 'cat_ageb');
 define('CAT_HEMOGLOBINA', 'cat_hemoglobina_altitud');
-define('CATALOGOSCSV', '"cns_vacuna","cns_nacionalidad","cns_accion_nutricional","cns_afiliacion","cns_operadora_celular","cns_alergia","cns_tipo_sanguineo","cns_altura_x_edad","cns_peso_x_edad","cns_imc_x_edad","cns_tratamiento","cns_estado_visita","cns_estado_nutricion_peso","cns_edo_nutri_peso_x_edad","cns_edo_nutri_peso_x_altura","cns_estado_nutricion_altura","cns_edo_nutri_altura_x_edad","cns_estado_imc","cns_imc_x_edad","cns_perimetro_cefalico","cns_estado_peri_cefa","cns_grupo_atencion","cns_tratamiento","'.CAT_POBLACION.'","'.CAT_GEOREFERENCIA.'","'.CAT_AGEB.'","'.CAT_HEMOGLOBINA.'"');
+define('CATALOGOSCSV', '"cns_categoria_cie10","cns_vacuna","cns_nacionalidad","cns_accion_nutricional","cns_afiliacion","cns_operadora_celular","cns_alergia","cns_tipo_sanguineo","cns_altura_x_edad","cns_peso_x_edad","cns_imc_x_edad","cns_tratamiento","cns_estado_visita","cns_estado_nutricion_peso","cns_edo_nutri_peso_x_edad","cns_edo_nutri_peso_x_altura","cns_estado_nutricion_altura","cns_edo_nutri_altura_x_edad","cns_estado_imc","cns_imc_x_edad","cns_perimetro_cefalico","cns_estado_peri_cefa","cns_grupo_atencion","cns_tratamiento","'.CAT_POBLACION.'","'.CAT_GEOREFERENCIA.'","'.CAT_AGEB.'","'.CAT_HEMOGLOBINA.'"');
 define('USERNAME', 'username');
 define('PASSWORD', 'password');
 define('USER_LOGGED', 'user_id');
