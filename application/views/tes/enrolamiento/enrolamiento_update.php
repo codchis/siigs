@@ -30,7 +30,6 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
     <link href="/resources/themes/jquery.ui.all.css" rel="stylesheet" type="text/css" />
     <style>
 	/*Corrige la posición de la X en el botón cerrar*/
-    .ui-dialog .ui-dialog-titlebar-close span { transform:translate(-9px,-9px); -ms-transform:translate(-9px,-9px); -webkit-transform:translate(-9px,-9px); }
     legend {font-size: 16px !important; line-height: 26px !important; font-weight: bold;}
 	td p
 	{

@@ -195,7 +195,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                             <td><p align="right">Apellido Materno</p></td>
                             <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->apellido_materno;?></div></td>
                             <td><p align="right">Fecha de Nacimiento</p></td>
-                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo $enrolado->fecha_nacimiento;?></div></td>
+                            <td><div style="width:100%; margin-left:20px; margin-top:-5px"><?php  echo date("d-m-Y",strtotime($enrolado->fecha_nacimiento));?></div></td>
                           </tr>
                           <tr>
                             <td><p align="right">Lugar de Nacimiento</p></td>
@@ -560,7 +560,7 @@ $i++;
                     <div class="AccordionPanel">
                       <div class="AccordionPanelTab"><img src="/resources/images/consultas.png"/>Control de Consultas</div>
                       <div class="AccordionPanelContent"><br />
-                      	<div style="margin-left:20px; width:90%">
+                      	<div style="margin-left:20px; width:96%">
                         
                             <table id="tabla_consultas" style="width: 100%;">
                                 <thead style="color: #000; font-size: 14px; font-weight: bold; background-color: #e8eced; border: 0px solid #DF7000;">

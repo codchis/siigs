@@ -596,6 +596,7 @@ class Enrolamiento extends CI_Controller
 		$data.=$enrolado["ultima_actualizacion"] ;            if($enrolado["ultima_actualizacion"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["id_nacionalidad"] ;                 if($enrolado["id_nacionalidad"]=="")$data.="¬=";else $data.="=";
 		$data.=$enrolado["id_operadora_celular"];             if($enrolado["id_operadora_celular"]=="")$data.="¬";
+		$data.=$enrolado["tamiz_neonatal"];                   if($enrolado["tamiz_neonatal"]=="")$data.="¬";
 		$data.="~";
 		
 		$data.=$enrolado["idT"]."=";
@@ -658,6 +659,7 @@ class Enrolamiento extends CI_Controller
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
+        
 		$anutricional=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id,'','fecha');
 		foreach($anutricional as $x)
 		{
@@ -669,7 +671,8 @@ class Enrolamiento extends CI_Controller
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
-		$nutricion=$this->Enrolamiento_model->get_control_nutricional($id,'fecha');
+		
+        $nutricion=$this->Enrolamiento_model->get_control_nutricional($id,'fecha');
 		foreach($nutricion as $x)
 		{
 			$data.=$x->peso."=";
@@ -683,6 +686,43 @@ class Enrolamiento extends CI_Controller
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2);
+        
+        $peri_cefa=$this->Enrolamiento_model->get_peri_cefa($id);
+		foreach($peri_cefa as $x)
+		{
+			$data.=$x->perimetro_cefalico."=";
+			$data.=$x->fecha."=";
+			$data.=$x->id_asu_um."°";
+		}
+		if(empty($peri_cefa))
+			$data.="~";
+		else
+            $data=substr($data,0,strlen($data)-2);
+        
+        $sales=$this->Enrolamiento_model->get_sales($id);
+		foreach($sales as $x)
+		{
+			$data.=$x->cantidad."=";
+			$data.=$x->fecha."=";
+			$data.=$x->id_asu_um."°";
+		}
+		if(empty($sales))
+			$data.="~";
+		else
+            $data=substr($data,0,strlen($data)-2);
+        
+        $estimulacion=$this->Enrolamiento_model->get_estimulacion($id);
+		foreach($estimulacion as $x)
+		{
+			$data.=$x->tutor_capacitado."=";
+			$data.=$x->fecha."=";
+			$data.=$x->id_asu_um."°";
+		}
+		if(empty($estimulacion))
+			$data.="~";
+		else
+            $data=substr($data,0,strlen($data)-2);
+        
 		$this->update_card($id,0,'',$archivo,4);
 		echo $data;
 	}
