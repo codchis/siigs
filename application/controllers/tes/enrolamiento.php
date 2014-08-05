@@ -685,7 +685,7 @@ class Enrolamiento extends CI_Controller
 		if(empty($nutricion))
 			$data.="~";
 		else
-		$data=substr($data,0,strlen($data)-2);
+            $data=substr($data,0,strlen($data)-2)."~";
         
         $peri_cefa=$this->Enrolamiento_model->get_peri_cefa($id);
 		foreach($peri_cefa as $x)
@@ -694,10 +694,10 @@ class Enrolamiento extends CI_Controller
 			$data.=$x->fecha."=";
 			$data.=$x->id_asu_um."°";
 		}
-		if(empty($peri_cefa))
+		if(empty($peri_cefa)) 
 			$data.="~";
-		else
-            $data=substr($data,0,strlen($data)-2);
+		else 
+            $data=substr($data,0,strlen($data)-2)."~";
         
         $sales=$this->Enrolamiento_model->get_sales($id);
 		foreach($sales as $x)
@@ -709,7 +709,7 @@ class Enrolamiento extends CI_Controller
 		if(empty($sales))
 			$data.="~";
 		else
-            $data=substr($data,0,strlen($data)-2);
+            $data=substr($data,0,strlen($data)-2)."~";
         
         $estimulacion=$this->Enrolamiento_model->get_estimulacion($id);
 		foreach($estimulacion as $x)
