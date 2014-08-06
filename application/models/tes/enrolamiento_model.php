@@ -2794,7 +2794,7 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
         
         $this->db->select('*');
         $this->db->from('cns_cie10');
-        $this->db->where('id_categoria' , $categoria);
+        $this->db->where('id_categoria' , urldecode($categoria));
         $this->db->order_by('descripcion', 'ASC'); 
         
         $query = $this->db->get();
