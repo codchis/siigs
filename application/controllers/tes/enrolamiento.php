@@ -551,6 +551,8 @@ class Enrolamiento extends CI_Controller
 	public function file_to_card($id,$tipo="")
 	{
 		$archivo=date("YmdHis").".tesf";
+        $SEPARADOR_BLOQUE = '^';
+        
 		header("Pragma: public");
 		header("Expires: 0");
 		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -565,6 +567,8 @@ class Enrolamiento extends CI_Controller
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
 		$data="";
 		
+        // Bloque Comun
+        
 		$version =$this->Enrolamiento_model->get_version();
 		$data.=$version[0]->version."~";
 		
@@ -646,6 +650,10 @@ class Enrolamiento extends CI_Controller
 			$data.="~";
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
+        
+        // Bloque exclusivo ISECH
+        echo $SEPARADOR_BLOQUE;
+        
 		$consultas=$this->Enrolamiento_model->get_catalog("cns_control_consulta", 'id_persona', $id, 'fecha');
 		foreach($consultas as $x)
 		{
@@ -725,6 +733,9 @@ class Enrolamiento extends CI_Controller
         
 		$this->update_card($id,0,'',$archivo,4);
 		echo $data;
+        
+        // Bloque exclusivo ICSS
+        echo $SEPARADOR_BLOQUE;
 	}
 	 /**
 	 * @access public
