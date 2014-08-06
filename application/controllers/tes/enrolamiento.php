@@ -652,7 +652,7 @@ class Enrolamiento extends CI_Controller
 		$data=substr($data,0,strlen($data)-2)."~";
         
         // Bloque exclusivo ISECH
-        echo $SEPARADOR_BLOQUE;
+        $data .= $SEPARADOR_BLOQUE;
         
 		$consultas=$this->Enrolamiento_model->get_catalog("cns_control_consulta", 'id_persona', $id, 'fecha');
 		foreach($consultas as $x)
