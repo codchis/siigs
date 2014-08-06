@@ -88,7 +88,7 @@ class Reporteador extends CI_Controller {
                 $this->load->helper('formatFecha');
                                 
                 // Si es entero, significa que selecciono una semana nacional de salud
-                if(!isDate($fecha)) {
+                if(!isDate($fecha, 'd-m-Y')) {
                     $this->load->model(DIR_TES.'/Semana_nacional_model');
                     // Se debe obtener la semana nacional 
                     $semana_nacional = $this->Semana_nacional_model->getById($fecha);

@@ -61,6 +61,8 @@ class Reporteador_model extends CI_Model {
         $result = array();
         $idsAsu = array();
         $idsUMs = array();
+        $isLocalidad = false;
+        $isUnidadMedica = false;
         // NOTA: Excluir el grupo etareo menor de ocho
 		$sqlGrupoEtareo = "SELECT * FROM asu_grupo_etareo WHERE id!=9 ORDER BY dia_fin";
         
@@ -68,7 +70,7 @@ class Reporteador_model extends CI_Model {
         $resultGrupoEtareo = $queryGrupoEtareo->result();
         
         if (!$resultGrupoEtareo){
-			$this->msg_error_usr = "Servicio temporalmente no disponible.";
+			$this->msg_error_usr = "Error al obtener los grupos etareos.";
 			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
 		}
@@ -78,8 +80,8 @@ class Reporteador_model extends CI_Model {
         $resultAsu = $queryAsu->row();
         
         if (!$resultAsu){
-			$this->msg_error_usr = "Servicio temporalmente no disponible.";
-			$this->msg_error_log = "No se encuentra el Identificador de ASU para el nivel de filtro seleccionado";
+			$this->msg_error_usr = "Error al obtener los datos del ASU.";
+			$this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
 			throw new Exception("No se encuentra el Identificador de ASU para el nivel de filtro seleccionado");
 		}
         
@@ -120,6 +122,14 @@ class Reporteador_model extends CI_Model {
             case 3: // Municipio
                 $idsAsu = array($id);
                 break;
+            case 4: // Localidad
+                $isLocalidad = true;
+                $idsAsu = array($id);
+                break;
+            case 5: // Unidad Medica
+                $isUnidadMedica = true;
+                $idsAsu = array($id);
+                break;
             default:
                 $this->msg_error_usr = "El grado de segmentación especifico no es valido para este reporte. Solo se puede emitir a nivel Estatal, Jurisdicional y Municipal";
                 $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
@@ -148,12 +158,17 @@ class Reporteador_model extends CI_Model {
         }
         
         // Obtiene el id asu de las UMs
-        $queryIdsUMs = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
-                            SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre IN ('.implode(',', $idsAsu).') )');
-        $resultIdsUMs = $queryIdsUMs->result();
+        if($isLocalidad) {
+            $queryIdsUMs = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id_padre IN ('.implode(',', $idsAsu).')');
+            $resultIdsUMs = $queryIdsUMs->result();
+        }
+        if($isUnidadMedica) {
+            $queryIdsUMs = $this->db->query('SELECT id FROM asu_arbol_segmentacion WHERE id_raiz=1 AND id IN ('.implode(',', $idsAsu).')');
+            $resultIdsUMs = $queryIdsUMs->result();
+        }
 
         if (!$resultIdsUMs){
-            $this->msg_error_usr = "Servicio temporalmente no disponible.";
+            $this->msg_error_usr = "No se encontraron unidades médicas con los parametros especificados.";
             $this->msg_error_log = "(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message();
             throw new Exception("(". __METHOD__.") => " .$this->db->_error_number().': '.$this->db->_error_message());
         }
@@ -189,7 +204,9 @@ class Reporteador_model extends CI_Model {
             if (!$resultPob) {
                 $this->msg_error_usr = "No se pudo obtener los datos de la población";
                 $this->msg_error_log = "No se pudo obtener los datos de la población";
-                throw new Exception("No se pudo obtener los datos de la población");
+                //throw new Exception("No se pudo obtener los datos de la población");
+                $resultPob = new stdClass();
+                $resultPob->poblacion = 0;
             }
             
             $queryNom = $this->db->query('SELECT 
