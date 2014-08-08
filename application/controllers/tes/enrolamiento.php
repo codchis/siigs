@@ -668,7 +668,7 @@ class Enrolamiento extends CI_Controller
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
         
-		$anutricional=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id,'','fecha');
+		$anutricional=$this->Enrolamiento_model->get_catalog_view("accion_nutricional",$id,'fecha','');
 		foreach($anutricional as $x)
 		{
 			$data.=$x->id."=";
@@ -680,7 +680,7 @@ class Enrolamiento extends CI_Controller
 		else
 		$data=substr($data,0,strlen($data)-2)."~";
 		
-        $nutricion=$this->Enrolamiento_model->get_control_nutricional($id,'fecha');
+        $nutricion=$this->Enrolamiento_model->get_control_nutricional($id);
 		foreach($nutricion as $x)
 		{
 			$data.=$x->peso."=";

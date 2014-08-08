@@ -1826,7 +1826,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->join('cns_alergia a', 'a.id = p.id_alergia','left');
 		$this->db->where('p.id_persona', $id);
 		if($order!="")
-		$this->db->order_by($order, "desc"); 
+		$this->db->order_by($order, "asc"); 
 		$query = $this->db->get();
 		
 		if (!$query){
@@ -1858,7 +1858,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->join('cns_afiliacion a', 'a.id = p.id_afiliacion','left');
 		$this->db->where('p.id_persona', $id);
 		if($order!="")
-		$this->db->order_by($order, "desc");
+		$this->db->order_by($order, "asc");
 		$query = $this->db->get();
 		
 		if (!$query){
@@ -2646,7 +2646,7 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 		$this->db->from('cns_control_peri_cefa');
 		$this->db->where('id_persona', $id);
 		if($order!="")
-		$this->db->order_by($order, "desc");
+		$this->db->order_by($order, "asc");
 		else
 		$this->db->order_by("fecha", "ASC");
 		$query = $this->db->get(); 
@@ -2708,7 +2708,7 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 		$this->db->from('cns_estimulacion_temprana');
 		$this->db->where('id_persona', $id);
 		if($order!="")
-		$this->db->order_by($order, "desc");
+		$this->db->order_by($order, "asc");
 		else
 		$this->db->order_by("fecha", "ASC");
 		$query = $this->db->get(); 
@@ -2916,7 +2916,7 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 		$this->db->from('cns_sales_rehidratacion');
 		$this->db->where('id_persona', $id);
 		if($order!="")
-		$this->db->order_by($order, "desc");
+		$this->db->order_by($order, "asc");
 		else
 		$this->db->order_by("fecha", "ASC");
 		$query = $this->db->get(); 
