@@ -1893,7 +1893,7 @@ class Enrolamiento_model extends CI_Model
 		if($order1!="")
 		$this->db->order_by($order1, "asc");
 		if($order2!="")
-		$this->db->order_by($order2, "desc");
+		$this->db->order_by($order2, "asc");
 		$query = $this->db->get(); 
 		if (!$query)
 		{
@@ -1922,7 +1922,7 @@ class Enrolamiento_model extends CI_Model
 		$this->db->from('cns_control_nutricional');
 		$this->db->where('id_persona', $id);
 		if($order!="")
-		$this->db->order_by($order, "desc");
+		$this->db->order_by($order, "asc");
 		else
 		$this->db->order_by("fecha", "ASC");
 		$query = $this->db->get(); 
