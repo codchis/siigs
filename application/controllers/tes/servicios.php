@@ -62,12 +62,12 @@ class Servicios extends CI_Controller {
 	 * @access public
 	 *
 	 * Paso 0 se procesa las peticiones segun la accion:
-     * Si la acción es 1: Valida la disponibilidad del dispositivo especificado y genera una session que se mantiene activa en toda la sincronizacion
-     * Si la acción es 2: Regresa la informacion de todos los catalogos
-	 * Si la acción es 3: Recibe un mensaje si es ok actualiza el estado de la tableta si es error se crea un archivo log con la descripcion
-	 * Si la acción es 4: Regresa la informacion de la persona que pertenescan a la unidad medica de la tableta
-	 * Si la acción es 5: Recibe la informacion que envia la tableta y la almacena en sus respectivas tablas
-	 * Si la acción es 6: Regresa la informacion de los catalogos y personas que se actuailzaron o agregaron depues de la ultima sincronizacion de la tableta
+     * Si la acciï¿½n es 1: Valida la disponibilidad del dispositivo especificado y genera una session que se mantiene activa en toda la sincronizacion
+     * Si la acciï¿½n es 2: Regresa la informacion de todos los catalogos
+	 * Si la acciï¿½n es 3: Recibe un mensaje si es ok actualiza el estado de la tableta si es error se crea un archivo log con la descripcion
+	 * Si la acciï¿½n es 4: Regresa la informacion de la persona que pertenescan a la unidad medica de la tableta
+	 * Si la acciï¿½n es 5: Recibe la informacion que envia la tableta y la almacena en sus respectivas tablas
+	 * Si la acciï¿½n es 6: Regresa la informacion de los catalogos y personas que se actuailzaron o agregaron depues de la ultima sincronizacion de la tableta
      *
 	 * @param		int 		$id_accion     Representa el tipo de accion que se ejecutara
 	 * @param		int 		$id_tab        Representa a la MAC de la tableta
@@ -81,7 +81,7 @@ class Servicios extends CI_Controller {
     public function is_step_0($id_accion, $id_tab = null, $id_sesion = null, $id_version = null, $datos = null)
     {
         if(!isset($this->Tableta_model))
-            echo json_encode(array("id_resultado" => 'No hay conexión')); 
+            echo json_encode(array("id_resultado" => 'No hay conexiï¿½n')); 
         try 
 		{
 			$this->load->library('session');
@@ -133,7 +133,7 @@ class Servicios extends CI_Controller {
 		$tableta = $this->Tableta_model->getByMac($id_tab);
 		if (count($tableta) == 1)
 		{
-			// debe tener usuarios asignados, el tipo de censo y la unidad médica
+			// debe tener usuarios asignados, el tipo de censo y la unidad mï¿½dica
 			if ($tableta->usuarios_asignados == 1)
 			{
 				if( $tableta->id_tes_estado_tableta  == 2 || $tableta->id_tes_estado_tableta  == 3 || $tableta->id_tes_estado_tableta  == 4)
@@ -230,7 +230,7 @@ class Servicios extends CI_Controller {
 		{
 			// se obtiene el dispositivo por token
 			$tableta = $this->Tableta_model->getByMac($this->session->userdata('mac'));
-			// se obtienen los usuarios asignados, el tipo de censo y la unidad médica
+			// se obtienen los usuarios asignados, el tipo de censo y la unidad mï¿½dica
 			if ($tableta->usuarios_asignados == 1 && $tableta->id_tipo_censo != null && $tableta->id_asu_um != null)
 			{
 				//************ inicio usuario ************
@@ -517,7 +517,7 @@ class Servicios extends CI_Controller {
 			$cadena="";
 			// se obtiene el dispositivo por token
 			$tableta = $this->Tableta_model->getByMac($this->session->userdata('mac'));
-			// se obtienen los usuarios asignados, el tipo de censo y la unidad médica
+			// se obtienen los usuarios asignados, el tipo de censo y la unidad mï¿½dica
 			if ($tableta->usuarios_asignados == 1 && $tableta->id_tipo_censo != null && $tableta->id_asu_um != null)
 			{
 				//************ inicio persona ************
@@ -762,7 +762,7 @@ class Servicios extends CI_Controller {
 								$f_campo='fecha_cambio';
 								$f_valor=$midato->fecha_cambio;
 							}
-							if($catalog->descripcion=="cns_persona_x_alergia")
+							else if($catalog->descripcion=="cns_persona_x_alergia")
 							{
 								$f_campo='ultima_actualizacion';
 								$f_valor=$midato->ultima_actualizacion;
@@ -855,7 +855,7 @@ class Servicios extends CI_Controller {
 		{
 			// se obtiene el dispositivo por token
 			$tableta = $this->Tableta_model->getByMac($this->session->userdata('mac'));
-			// se obtienen los usuarios asignados, el tipo de censo y la unidad médica
+			// se obtienen los usuarios asignados, el tipo de censo y la unidad mï¿½dica
 			if ($tableta->usuarios_asignados == 1 && $tableta->id_tipo_censo != null && $tableta->id_asu_um != null)
 			{
 				//************ inicio asu ************
@@ -1034,7 +1034,7 @@ class Servicios extends CI_Controller {
 		{
 			// se obtiene el dispositivo por token
 			$tableta = $this->Tableta_model->getByMac($this->session->userdata('mac'));
-			// se obtienen los usuarios asignados, el tipo de censo y la unidad médica
+			// se obtienen los usuarios asignados, el tipo de censo y la unidad mï¿½dica
 			if ($tableta->usuarios_asignados == 1 && $tableta->id_tipo_censo != null && $tableta->id_asu_um != null)
 			{
 				// si todo la operacion ok actualiza estado de tableta (id_tes_estado_tableta), version (version) y la fecha  (ultima_actualizacion)
@@ -1058,7 +1058,7 @@ class Servicios extends CI_Controller {
 	 * @return 		echo
 	 */
 	public function esquema_incompleto($id_persona,$fecha,$vacunas)
-	{//agregar dias a la fecha si periodo de colchon ver tabla tableta agregar bit de prioridad 1 ya le toca 0 periodo de ventana "prioridad"=>1 ó 0
+	{//agregar dias a la fecha si periodo de colchon ver tabla tableta agregar bit de prioridad 1 ya le toca 0 periodo de ventana "prioridad"=>1 ï¿½ 0
 		$cadena= array();
 		$regla=$this->ReglaVacuna_model->getAll(); 
 		
