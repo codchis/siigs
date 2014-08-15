@@ -233,7 +233,7 @@ class Catalogo extends CI_Controller {
 		if (!$this->input->is_ajax_request())
                 show_error('', 403, 'Acceso denegado');
             
-                ini_set('max_execution_time',1000);
+                ini_set('max_execution_time',10000);
                 
 		if (isset($_FILES["archivocsv"]) && is_uploaded_file($_FILES['archivocsv']['tmp_name']))
 		//if (TRUE)
