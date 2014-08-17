@@ -319,6 +319,7 @@ class Raiz extends CI_Controller {
                 try
                 {
                      ini_set('max_execution_time',10000);
+                     ini_set('memory_limit', '-1');
                         $catalogos = $this->Catalogo_x_raiz_model->getByArbol($id);
 
                         foreach ($catalogos as $item) {
@@ -427,6 +428,7 @@ class Raiz extends CI_Controller {
 		try
 		{
                      ini_set('max_execution_time',10000);
+                     ini_set('memory_limit', '-1');
 			$catalogos = $this->Catalogo_x_raiz_model->getByArbol($id);		
                         $nuevos_registros = array();
                         $cambios_registros = array();
