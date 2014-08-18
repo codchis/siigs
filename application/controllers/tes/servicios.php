@@ -211,7 +211,7 @@ class Servicios extends CI_Controller {
 	public function is_step_2($id_sesion, $si="", $sf="")
 	{
 		ini_set("max_execution_time", 999999999);
-		ini_set("memory_limit","300M");
+		ini_set("memory_limit","-1");
 		$micadena="";
 		$misesion=$this->session->userdata('session');
 		$mac=$this->session->userdata('mac');

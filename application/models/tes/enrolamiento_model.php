@@ -2051,6 +2051,8 @@ class Enrolamiento_model extends CI_Model
 	 */
 	public function get_catalog2($catalog,$campo1="",$id1="",$campo2="",$id2="",$l1="",$l2="")
 	{
+            ini_set("memory_limit","-1");
+            
 		if($catalog=="tes_notificacion")
 			$this->db->select('id,titulo,contenido,fecha_inicio,fecha_fin');
 		else if($catalog=="asu_arbol_segmentacion")
