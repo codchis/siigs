@@ -333,7 +333,10 @@ class Servicios extends CI_Controller {
 					
 					$fecha=$this->session->userdata('fecha');
 					if($sf=="")
-						$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","id_raiz","1");
+                                        {
+                                            $asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","fecha_update >=",'2014-08-17 16:59:02',"id_raiz","1");
+						//$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","id_raiz","1");
+                                        }
 					else
 						$asu=$this->Enrolamiento_model->get_catalog2("asu_arbol_segmentacion","fecha_update >=",$fecha,"id_raiz","1");
 					
