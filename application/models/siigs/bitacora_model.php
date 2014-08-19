@@ -211,7 +211,8 @@ class Bitacora_model extends CI_Model
         $id_controlador_accion = self::$CI->ControladorAccion_model->getIdByPath($path);
 
         if(empty($id_controlador_accion)) {
-            Errorlog_model::insert(DIR_SIIGS.'::'.__METHOD__, '(Bitacora_model::insert) No se encuentra la relación entre el controlador y la acción: '.$path.', Error '.self::$CI->db->_error_number().': '.self::$CI->db->_error_message());
+            Errorlog_model::insert(DIR_SIIGS.'::'.__METHOD__, '(Bitacora_model::insert) No se encuentra la relación entre el controlador y la acción: '.$path.', Bitacora '.$parametros);
+            return false;
         }
 
         $data = array(

@@ -164,7 +164,8 @@ class Errorlog_model extends CI_Model
         
             if(empty($id_controlador_accion)) {
                 log_message('error', '(Errorlog_model::insert) No se encuentra la relación entre el controlador y la acción: '.$path.', Error '.
-                            self::$CI->db->_error_number().': '.self::$CI->db->_error_message());
+                            $descripcion);
+                return false;
             }
 
             $data = array(
@@ -387,12 +388,12 @@ class Errorlog_model extends CI_Model
             $msgErrUsr = self::$CI->$model->getMsgError();
             $msgErrLog = self::$CI->$model->getMsgError('log');
 
-            Errorlog_model::insert(DIR_SIIGS.'::'.$method, $msgErrLog);
+            Errorlog_model::insert($method, $msgErrLog);
         }
         else
         {
             $msgErrUsr = $model;
-            Errorlog_model::insert(DIR_SIIGS.'::'.$method, $msgErrUsr);
+            Errorlog_model::insert($method, $msgErrUsr);
         }
 
         return $msgErrUsr;

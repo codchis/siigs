@@ -151,6 +151,9 @@ class ControladorAccion_model extends CI_Model {
  			$this->msg_error_usr = "El formato de la cadena no es correcto";
  			throw new Exception(__CLASS__);
 		}
+        
+        // Elimina el texto '_model' para que pueda encontrar el nombre la clase en la base de datos
+        $arreglo[1] = str_replace('_model', '', $arreglo[1]);
 
 		$query = $this->db->query("SELECT c.id FROM sis_entorno a join sis_controlador b on a.id = b.id_entorno join sis_controlador_x_accion c on b.id = c.id_controlador join sis_accion d on c.id_accion = d.id where a.directorio = '".$arreglo[0]."' and b.clase = '".$arreglo[1]."' and d.metodo = '".$arreglo[2]."'");
 
