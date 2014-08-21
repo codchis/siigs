@@ -431,7 +431,7 @@ function vacunacion(id,tiene,fecha,prioridad)
                               </tr>
                            </thead>
                            <?php 
-							$tem=0; $i=0;
+							$tem=0; $i=0; $a=0;
 							if(isset($vacunacion))
 						   foreach($vacunacion as $vacuna)
 						   {
@@ -442,7 +442,7 @@ function vacunacion(id,tiene,fecha,prioridad)
 								$a++;
 							 echo " 
                            	  <tr>
-                           		<td ><div id='var0$i' style='padding-left:14px; background-color:".@$color[$a]."; color:white;font-size:16px;'>".str_replace('Primera','',$vc)."</div></td>
+                           		<td ><div id='var0$i' style='padding-left:14px; background-color:".(array_key_exists($a, $color) ? $color[$a] : '')."; color:white;font-size:16px;'>".str_replace('Primera','',$vc)."</div></td>
                                 <td ><div id='var1$i' align='center'></div></td>                                
                                 <td ><div id='var3$i' align='center'></div></td>
                                 <td ><div id='var4$i' align='center'></div></td>
