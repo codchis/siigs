@@ -66,16 +66,9 @@ class Enrolamiento_model extends CI_Model
 	private $vacuna= array();
 	private $fvacuna= array();
 	private $codigo_barras= array();
-	
-	// IRA
-	private $ira= array();
-	private $fira= array();
-	private $tira= array();
-	
-	// EDA
-	private $eda= array();
-	private $feda= array();
-	private $teda= array();
+    private $lat_vac= array();
+    private $lon_vac= array();
+    private $temp_vac= array();
 	
 	// Consulta
 	private $consulta= array();
@@ -519,6 +512,30 @@ class Enrolamiento_model extends CI_Model
 	{
 	    return $this->consulta;
 	}
+    
+    public function setlat_vac($value)  {
+		$this->lat_vac = $value;
+	}
+	
+	public function getlat_vac() {
+	    return $this->lat_vac;
+	}
+    
+    public function setlon_vac($value)  {
+		$this->lon_vac = $value;
+	}
+	
+	public function getlon_vac() {
+	    return $this->lon_vac;
+	}
+    
+    public function settemp_vac($value)  {
+		$this->temp_vac = $value;
+	}
+	
+	public function gettemp_vac() {
+	    return $this->temp_vac;
+	}
 
 	public function setconsulta($value) 
 	{
@@ -934,9 +951,12 @@ class Enrolamiento_model extends CI_Model
 					// vacuna
 					'id_persona' => $this->id,
 					'id_vacuna' => $this->vacuna[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
+					'fecha' => date('Y-m-d', strtotime($this->fvacuna[$i])).' '.date('H:i:s'),
 					'id_asu_um' => $id_asu_um,
 					'codigo_barras' => $this->codigo_barras[$i],
+					'latitud' => $this->lat_vac[$i],
+					'longitud' => $this->lon_vac[$i],
+					'temperatura' => ( $this->temp_vac[$i] ? number_format($this->temp_vac[$i], 2) : null ),
 				);
 				if($this->fvacuna[$i]!="")
 				{
@@ -980,7 +1000,7 @@ class Enrolamiento_model extends CI_Model
 					// accion nutricional
 					'id_persona' => $this->id,
 					'id_accion_nutricional' => $this->accion_nutricional[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->faccion_nutricional[$i])),
+					'fecha' => date('Y-m-d', strtotime($this->faccion_nutricional[$i])).' '.date('H:i:s'),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -1005,7 +1025,7 @@ class Enrolamiento_model extends CI_Model
 					'altura' => $this->altura[$i],
 					'talla' => $this->talla[$i],
 					'hemoglobina' => $this->hemoglobina[$i],
-					'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
+					'fecha' => date('Y-m-d', strtotime($this->fnutricion[$i])).' '.date('H:i:s'),
 					'id_asu_um' => $id_asu_um,
 					
 				);
@@ -1045,7 +1065,7 @@ class Enrolamiento_model extends CI_Model
                 for($index=0; $index<sizeof($this->peri_cefa); $index++){
                     $datosPeriCefa = array(
                         'id_persona' => $this->id,
-                        'fecha' => date('Y-m-d H:i:s', strtotime($this->fecha_peri_cefa[$index])),
+                        'fecha' => date('Y-m-d', strtotime($this->fecha_peri_cefa[$index])).' '.date('H:i:s'),
                         'perimetro_cefalico' => $this->peri_cefa[$index],
                         'id_asu_um' => $id_asu_um);
 
@@ -1063,7 +1083,7 @@ class Enrolamiento_model extends CI_Model
                 for($index=0; $index<sizeof($this->estimulacion_fecha); $index++){
                     $datosEstimulacion = array(
                         'id_persona' => $this->id,
-                        'fecha' => date('Y-m-d H:i:s', strtotime($this->estimulacion_fecha[$index])),
+                        'fecha' => date('Y-m-d', strtotime($this->estimulacion_fecha[$index])).' '.date('H:i:s'),
                         'tutor_capacitado' => $this->estimulacion_capacitado[$index],
                         'id_asu_um' => $id_asu_um);
 
@@ -1081,7 +1101,7 @@ class Enrolamiento_model extends CI_Model
                 for($index=0; $index<sizeof($this->sales_fecha); $index++){
                     $datosSRO = array(
                         'id_persona' => $this->id,
-                        'fecha' => date('Y-m-d H:i:s', strtotime($this->sales_fecha[$index])),
+                        'fecha' => date('Y-m-d', strtotime($this->sales_fecha[$index])).' '.date('H:i:s'),
                         'cantidad' => $this->sales_cantidad[$index],
                         'id_asu_um' => $id_asu_um);
 
@@ -1411,9 +1431,12 @@ class Enrolamiento_model extends CI_Model
 				// vacuna
 				'id_persona' => $this->id,
 				'id_vacuna' => $this->vacuna[$i],
-				'fecha' => date('Y-m-d H:i:s', strtotime($this->fvacuna[$i])),
+				'fecha' => date('Y-m-d', strtotime($this->fvacuna[$i])).' '.date('H:i:s'),
 				'id_asu_um' => $id_asu_um,
 				'codigo_barras' => $this->codigo_barras[$i],
+                'latitud' => $this->lat_vac[$i],
+                'longitud' => $this->lon_vac[$i],
+                'temperatura' => ( $this->temp_vac[$i] ? number_format($this->temp_vac[$i], 2) : null ),
 			);
 			if($this->fvacuna[$i]!="")
 			{
@@ -1481,7 +1504,7 @@ class Enrolamiento_model extends CI_Model
 				// accion nutricional
 				'id_persona' => $this->id,
 				'id_accion_nutricional' => $this->accion_nutricional[$i],
-				'fecha' => date('Y-m-d H:i:s', strtotime($this->faccion_nutricional[$i])),
+				'fecha' => date('Y-m-d', strtotime($this->faccion_nutricional[$i])).' '.date('H:i:s'),
 				'id_asu_um' => $id_asu_um,
 				
 			);
@@ -1518,7 +1541,7 @@ class Enrolamiento_model extends CI_Model
 				'altura' => $this->altura[$i],
 				'talla' => $this->talla[$i],
 				'hemoglobina' => $this->hemoglobina[$i],
-				'fecha' => date('Y-m-d H:i:s', strtotime($this->fnutricion[$i])),
+				'fecha' => date('Y-m-d', strtotime($this->fnutricion[$i])).' '.date('H:i:s'),
 				'id_asu_um' => $id_asu_um,
 				
 			);
@@ -2678,7 +2701,7 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
             for($index=0; $index<sizeof($this->peri_cefa); $index++){
                 $datosPeriCefa = array(
                     'id_persona' => $this->id,
-                    'fecha' => date('Y-m-d H:i:s', strtotime($this->fecha_peri_cefa[$index])),
+                    'fecha' => date('Y-m-d', strtotime($this->fecha_peri_cefa[$index])).' '.date('H:i:s'),
                     'perimetro_cefalico' => $this->peri_cefa[$index],
                     'id_asu_um' => $id_asu_um);
 
@@ -2740,7 +2763,7 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
             for($index=0; $index<sizeof($this->estimulacion_fecha); $index++){
                 $datosEstimulacion = array(
                     'id_persona' => $this->id,
-                    'fecha' => date('Y-m-d H:i:s', strtotime($this->estimulacion_fecha[$index])),
+                    'fecha' => date('Y-m-d', strtotime($this->estimulacion_fecha[$index])).' '.date('H:i:s'),
                     'tutor_capacitado' => $this->estimulacion_capacitado[$index],
                     'id_asu_um' => $id_asu_um);
 
@@ -2886,7 +2909,7 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
             for($index=0; $index<sizeof($this->sales_fecha); $index++){
                 $datosSRO = array(
                     'id_persona' => $this->id,
-                    'fecha' => date('Y-m-d H:i:s', strtotime($this->sales_fecha[$index])),
+                    'fecha' => date('Y-m-d', strtotime($this->sales_fecha[$index])).' '.date('H:i:s'),
                     'cantidad' => $this->sales_cantidad[$index],
                     'id_asu_um' => $id_asu_um);
 

@@ -15,8 +15,6 @@ $cn_direccion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::direccion_edit')
 
 $cn_alergia = Menubuilder::isGranted(DIR_TES.'::enrolamiento::alergia_edit');
 $cn_vacuna = Menubuilder::isGranted(DIR_TES.'::enrolamiento::vacuna_edit');
-$cn_ira = Menubuilder::isGranted(DIR_TES.'::enrolamiento::ira_edit');
-$cn_eda = Menubuilder::isGranted(DIR_TES.'::enrolamiento::eda_edit');
 $cn_consulta = Menubuilder::isGranted(DIR_TES.'::enrolamiento::consulta_edit');
 $cn_accion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::accion_edit');
 $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit');
