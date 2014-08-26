@@ -86,7 +86,7 @@ $showView   = Menubuilder::isGranted(DIR_SIIGS.'::bitacora::view');
 ?>
 <br />
 
-<?php echo form_open(site_url().DIR_SIIGS.'/bitacora/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
+<?php echo form_open(site_url().DIR_SIIGS.'/bitacora/', array('onsubmit'=>"return confirm('¿Esta seguro de eliminar los elementos seleccionados?');")); ?>
 
 <div class="table table-striped">
 <table>

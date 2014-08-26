@@ -44,7 +44,7 @@ echo '<br />';
 if($showInsert) 
     echo '<a href="'.site_url().DIR_TES.'/semana_nacional/insert/" class="btn btn-small btn-primary btn-icon">Registrar nuevo <i class="icon-plus"></i></a><br><br>';
 
-echo form_open(site_url().DIR_TES.'/semana_nacional/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); 
+echo form_open(site_url().DIR_TES.'/semana_nacional/', array('onsubmit'=>"return confirm('¿Esta seguro de eliminar los elementos seleccionados?');")); 
 ?>
 
 <div class="table table-striped">
@@ -74,7 +74,7 @@ echo form_open(site_url().DIR_TES.'/semana_nacional/', array('onsubmit'=>"return
                     if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/semana_nacional/update/'.$fila->id.'" class="btn btn-small btn-primary btn-icon">Modificar <i class="icon-pencil"></i></a></td>';
                     
                     if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/semana_nacional/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary btn-icon">Eliminar <i class="icon-remove"></i></a></td>';
+                        onclick="if(confirm(\'¿Realmente desea eliminar el registro?\')) { return true; } else { return false; }" class="btn btn-small btn-primary btn-icon">Eliminar <i class="icon-remove"></i></a></td>';
                 echo '</tr>';
             }
         } else {

@@ -53,7 +53,7 @@ class Bitacora extends CI_Controller {
             $data['pag'] = $pag;
             $data['msgResult'] = $this->session->flashdata('msgResult');
             $data['clsResult'] = $this->session->flashdata('clsResult');
-            $data['title'] = 'Bitacora';
+            $data['title'] = 'Bitácora';
             
             /*** Inicia Campos para Filtros ***/
             $usuarios = $this->Usuario_model->getOnlyActives();

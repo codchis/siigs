@@ -58,7 +58,7 @@ $(document).ready(function(){
             event.stopPropagation();
             return false;
         } else {
-            confirma = confirm('¿Esta seguro que desea elminar el elemento?');
+            confirma = confirm('¿Está seguro que desea elminar el elemento?');
             
             if(!confirma) {
                 event.preventDefault();

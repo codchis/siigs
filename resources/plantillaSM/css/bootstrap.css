@@ -952,6 +952,7 @@ table {
 .table {
   width: 100%;
   margin-bottom: 20px;
+  overflow: auto;
 }
 .table th,
 .table td {
