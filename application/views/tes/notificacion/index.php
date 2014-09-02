@@ -70,7 +70,8 @@ Buscar:<input type="text" name="busqueda" value="<?php echo set_value('busqueda'
 	<tr>
 		<td><?php echo $notification_item->titulo ?></td>
 		<td><?php echo $notification_item->contenido ?></td>
-		<td><?php foreach($notification_item->tabletas as $tableta){
+        <td><?php if(!empty($notification_item->tabletas))
+        foreach($notification_item->tabletas as $tableta){
 			echo $tableta.'<br>';
 		} ?></td>
 		<td><?php $time = strtotime($notification_item->fecha_inicio);

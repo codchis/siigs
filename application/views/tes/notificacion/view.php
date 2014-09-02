@@ -31,9 +31,11 @@
 	</tr>
 	<tr>
 		<td><label for="id_arr_asu">Tabletas</label></td>
-		<td><?php foreach($notificacion_item->tabletas as $tableta){
-			echo $tableta.'<br>';
-		} ?></td>
+		<td><?php 
+        if(!empty($notification_item->tabletas))
+            foreach($notificacion_item->tabletas as $tableta){
+                echo $tableta.'<br>';
+            } ?></td>
 	</tr>
 </table>
 </div>
