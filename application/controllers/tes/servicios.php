@@ -779,15 +779,15 @@ class Servicios extends CI_Controller {
 					
 				}
 				catch (Exception $e) {Errorlog_model::save($e->getMessage(), __METHOD__);}
+                }
 			}
-		}
 		if($bien==0)
 		{
 			if(array_key_exists("tes_pendientes_tarjeta",$datos))
 			foreach($datos["tes_pendientes_tarjeta"] as  $midato)
 			{
 				if($this->Enrolamiento_model->get_catalog2("tes_pendientes_tarjeta","fecha",$midato->fecha,"id_persona",$midato->id_persona))
-					$this->Enrolamiento_model->cns_update("tes_pendientes_tarjeta",$midato,$midato->fecha,"id_persona",$midato->id_persona);
+					$this->Enrolamiento_model->cns_update("tes_pendientes_tarjeta",$midato,'',"id_persona",$midato->id_persona,'fecha',$midato->fecha);
 				else
 					$this->Enrolamiento_model->cns_insert("tes_pendientes_tarjeta",$midato);
 			}

@@ -55,7 +55,7 @@ echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 		</form>
 		</td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/entorno/update/<?php echo $entorno_item->id ?>" class="btn btn-primary btn-small btn-icon">Modificar<i class="icon-pencil"></i></a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/entorno/delete/<?php echo $entorno_item->id ?>"  class="btn btn-primary btn-small btn-icon"onclick="if (confirm('Realmente desea eliminar este entorno?')) { return true; } else {return false;}">Eliminar<i class="icon-remove"></i></a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS; ?>/entorno/delete/<?php echo $entorno_item->id ?>"  class="btn btn-primary btn-small btn-icon"onclick="if (confirm('¿Realmente desea eliminar este entorno?')) { return true; } else {return false;}">Eliminar<i class="icon-remove"></i></a></td><?php } ?>
 	</tr>
 <?php endforeach ?>
 

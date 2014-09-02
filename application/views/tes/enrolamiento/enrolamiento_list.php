@@ -1,9 +1,14 @@
 <link href="/resources/css/alert.css" rel="stylesheet" type="text/css" /> 
 <script type="text/javascript" src="/resources/fancybox/jquery.easing-1.3.pack.js"></script>
-	<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
-    <script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-    <link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
+<script type="text/javascript" src="/resources/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="/resources/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link   type="text/css" href="/resources/fancybox/jquery.fancybox-1.3.4.css" media="screen" rel="stylesheet"/>
+<script type="text/javascript" src="/resources/js/libNFC.js"></script>
+
 <script type="text/javascript">
+tesNFC = new libNFC();
+tesNFC.connect();
+
 $(document).ready(function()
 {
 	<?php if(!empty($id)){?>
@@ -57,6 +62,25 @@ $(document).ready(function()
 	$("a#detalles").click(function(e) {
         $.fancybox.showActivity();
     });
+    
+    $(".btnGrabarTarjeta").click(function(event){
+        ruta = $(this).attr('href');
+
+        $.get(ruta, function(datos) {
+            tesNFC.write(datos);
+
+            if(tesNFC.error) {
+                alert("Error al guardar los datos del paciente, intentelo nuevamente");
+            };
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            alert("Error al obtener los datos del paciente, intentelo nuevamente.");
+            console.log("status: "+textStatus+", statusText: "+errorThrown);
+        });
+
+        event.stopPropagation();
+        event.preventDefault();
+    });
 });
 </script>
 <?php 
@@ -83,21 +107,18 @@ Buscar usuario
 <thead>
 	<tr>
 		<th><h2>CURP</h2></th>
-		<th><h2>Nombre</h2></th>
-		<th><h2>Ap. Paterno</h2></th>
-		<th><h2>Ap. Materno</h2></th>
+		<th><h2>Nombre completo</h2></th>
         <th><h2>Edad</h2></th>
 		<?php if($opcion_view) { ?><th></th><?php } ?>
 		<?php if($opcion_update) { ?><th></th><?php } ?>
         <?php if($opcion_print) { ?><th></th><?php } ?>
+        <!-- <th></th> -->
 	</tr>
     </thead>
 	<?php if (isset($users)) foreach ($users as $user_item): ?>
 	<tr >
 		<td><?php echo $user_item->curp ?></td>
-		<td><?php echo $user_item->nombre ?></td>
-		<td><?php echo $user_item->apellido_paterno ?></td>
-		<td><?php echo $user_item->apellido_materno ?></td>
+		<td><?php echo $user_item->nombre.' '.$user_item->apellido_paterno.' '.$user_item->apellido_materno ?></td>
         <td><?php 
 				$datetime1 = date_create($user_item->fecha_nacimiento);
 				$datetime2 = date_create(date("Y-m-d"));
@@ -107,6 +128,7 @@ Buscar usuario
 		<?php if($opcion_view) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon" id="detalles">Detalles<i class="icon-eye-open"></i></a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon">Modificar<i class="icon-pencil"></i></a></td><?php } ?>
         <?php if($opcion_print) { ?><td><a href="/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon" target="_blank">Descargar<i class="icon-download-alt"></i></a></td><?php } ?>
+        <!-- <td><a href="/<?php echo DIR_TES?>/enrolamiento/file_to_card/<?php echo $user_item->id ?>/false" class="btn btn-small btn-primary btn-icon btnGrabarTarjeta" style="width: 95px;">Grabar tarjeta<i class="icon-hdd"></i></a></td> -->
 	</tr>
 	<?php endforeach ?>
     <tfoot>

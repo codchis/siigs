@@ -211,9 +211,9 @@ class Reporte_sincronizacion extends CI_Controller
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre IN (
 							SELECT id FROM asu_arbol_segmentacion WHERE id_padre=".$jurid.") ) )"; // mpios por juris		
-			if($lotes=="")$mas="OR codigo_barras IS NULL";else $mas="";
+			if($lotes=="")$mas="OR codigo_barras IS NULL OR codigo_barras=''";else $mas="";
 			$consulta="select distinct(codigo_barras) from cns_control_vacuna where (codigo_barras like '%$lotes%' $mas) $unidad and (fecha between '$desde' and '$hasta') ";
-			
+			            
 			$count=$this->Reporte_sincronizacion_model->getCount("",$consulta); 
 			$array=$this->Reporte_sincronizacion_model->getListado($consulta);
 
@@ -229,16 +229,16 @@ class Reporte_sincronizacion extends CI_Controller
 				{
 					$tipoa="";
 					$midato[$i]["lote"]="Sin lote";
-					$cantidad=$this->Reporte_sincronizacion_model->getCount("",$consulta." IS NULL");
-					$ums=$this->Reporte_sincronizacion_model->getCount("",$consultb." IS NULL");
-					$personas=$this->Reporte_sincronizacion_model->getCount("",$consultd." IS NULL");
+					$cantidad=$this->Reporte_sincronizacion_model->getCount("",$consulta." IS NULL OR codigo_barras=''");
+					$ums=$this->Reporte_sincronizacion_model->getCount("",$consultb." IS NULL OR codigo_barras=''");
+					$personas=$this->Reporte_sincronizacion_model->getCount("",$consultd." IS NULL OR codigo_barras=''");
 					
-					$tipo1=$this->Reporte_sincronizacion_model->getListado($consultc." IS NULL");
+					$tipo1=$this->Reporte_sincronizacion_model->getListado($consultc." IS NULL OR codigo_barras=''");
 					foreach($tipo1 as $y)
 					{
 						$tipoa.=$y->descripcion." - ";
 					}
-					$umsx=$this->Reporte_sincronizacion_model->getListado($consultb." IS NULL"); 
+					$umsx=$this->Reporte_sincronizacion_model->getListado($consultb." IS NULL OR codigo_barras=''"); 
 					foreach($umsx as $u)
 					{
 						$in.=$u->id_asu_um.",";
@@ -250,7 +250,7 @@ class Reporte_sincronizacion extends CI_Controller
 					$midato[$i]["ums"]=$ums;
 					$midato[$i]["localidades"]=$localidades;
 					$midato[$i]["personas"]=$personas;
-					$vacunas=$this->Reporte_sincronizacion_model->getListado("select distinct(id_asu_um) from cns_control_vacuna where codigo_barras IS NULL");
+					$vacunas=$this->Reporte_sincronizacion_model->getListado("select distinct(id_asu_um) from cns_control_vacuna where codigo_barras IS NULL OR codigo_barras=''");
 					$dom=$this->ArbolSegmentacion_model->getDescripcionById(array($vacunas[0]->id_asu_um),5);
 					$dom=(explode(",",$dom[0]->descripcion));
 					$midato[$i]["lugar"]=$dom[count($dom)-1];

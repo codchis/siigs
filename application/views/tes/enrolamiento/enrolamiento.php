@@ -330,10 +330,10 @@
                             <td width="25%"><p align="right">Sexo</p></td>
                             <td width="25%" align="right">
                               <label style=" margin-left:10px; float:left">
-                                <input type="radio" name="sexo" value="M" <?php echo set_radio('sexo', 'M'); ?> id="sexo_1" onclick="return false;getcurp();" title='requiere' required style="margin-top:-3px;" onkeydown="return entertab(event,2)" tabindex="8">
+                                <input type="radio" name="sexo" value="M" <?php echo set_radio('sexo', 'M'); ?> id="sexo_1" onclick="getcurp();" title='requiere' required style="margin-top:-3px;" onkeydown="return entertab(event,2)" tabindex="8">
                                 Masculino</label>
                               <label style=" float:left">
-                                <input type="radio" name="sexo" value="F" <?php echo set_radio('sexo', 'F'); ?> id="sexo_2" onclick="return false;getcurp();" style="margin-top:-3px;" onkeydown="return entertab(event,4)" tabindex="9">
+                                <input type="radio" name="sexo" value="F" <?php echo set_radio('sexo', 'F'); ?> id="sexo_2" onclick="getcurp();" style="margin-top:-3px;" onkeydown="return entertab(event,4)" tabindex="9">
                                 Femenino</label>
                              </td>
                           </tr>

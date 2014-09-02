@@ -63,7 +63,7 @@ Buscar usuario
 		<td><?php echo $user_item->apellido_materno ?></td>
 		<?php if($opcion_view) { ?><td><a id='detalles' href="/<?php echo DIR_SIIGS?>/usuario/view/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon">Detalles <i class="icon-eye-open"></a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/update/<?php echo $user_item->id ?>" class="btn btn-small btn-primary btn-icon">Modificar <i class="icon-pencil"></a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/delete/<?php echo $user_item->id ?>"  class="btn btn-small btn-primary btn-icon" onclick="if (confirm('Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar <i class="icon-remove"></a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/usuario/delete/<?php echo $user_item->id ?>"  class="btn btn-small btn-primary btn-icon" onclick="if (confirm('¿Realmente desea eliminar este usuario?')) { return true; } else {return false;}">Eliminar <i class="icon-remove"></a></td><?php } ?>
 	</tr>
 </tbody>
 	<?php endforeach ?>

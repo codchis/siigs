@@ -34,6 +34,8 @@ class Menubuilder
      */
     public static function build($todos=false)
     {
+        self::$CI->load->helper('phpQuery');
+        
         $strMenu = '<ul class="nav">';
 
         if(self::$CI->session->userdata(GROUP_ID)) {
@@ -53,8 +55,21 @@ class Menubuilder
             
             $strMenu .= '</ul>';
         }
+        
+        if(self::$CI->session->userdata(USERNAME)) {
+            $doc = phpQuery::newDocument($strMenu);
 
-        return $strMenu;
+            if(!Usuario_model::checkCredentials('TES::reporte_sincronizacion::lote', ''))
+                pq("a:contains('Lote Vacunación']")->parent()->remove();
+            
+            pq('ul:empty')->parent()->remove();
+            pq('ul:empty')->parent()->remove();
+            pq("a:contains('eTAB']")->parent()->remove();
+            
+            return $doc->html();
+        } else {
+            return $strMenu;
+        }
     }
 
     /**

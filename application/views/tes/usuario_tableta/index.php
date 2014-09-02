@@ -16,7 +16,7 @@ $showDelete = Menubuilder::isGranted(DIR_TES.'::usuario_tableta::delete');
 if(!empty($msgResult))
     echo '<div class="'.($clsResult ? $clsResult : 'info').'">'.$msgResult.'</div>';
 
-echo form_open(site_url().DIR_TES.'/usuario_tableta/index/'.$tableta->id, array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); 
+echo form_open(site_url().DIR_TES.'/usuario_tableta/index/'.$tableta->id, array('onsubmit'=>"return confirm('¿Esta seguro de eliminar los elementos seleccionados?');")); 
 
 echo '<center><strong>Datos generales de la tableta</strong></center>
 
@@ -66,7 +66,7 @@ echo '<center><strong>Datos generales de la tableta</strong></center>
                     <td>'.htmlentities(($fila['grupo'])).'</td>';
                 
                 if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/usuario_tableta/delete/'.$fila['id'].'/'.$tableta->id.'"
-                        class="btn btn-primary" onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }">Eliminar <i class="icon-remove"></i></a></td>';
+                        class="btn btn-primary" onclick="if(confirm(\'¿Realmente desea eliminar el registro?\')) { return true; } else { return false; }">Eliminar <i class="icon-remove"></i></a></td>';
                 '</tr>';
             }
         } else {

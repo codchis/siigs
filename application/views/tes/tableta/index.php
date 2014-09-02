@@ -61,7 +61,7 @@ if($showInsert) { ?>
     <?php 
 }
 
-echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm('Esta seguro de eliminar los elementos seleccionados');")); ?>
+echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm('¿Esta seguro de eliminar los elementos seleccionados?');")); ?>
 
 <?php 
     if($showInsert) 
@@ -114,7 +114,7 @@ echo form_open(site_url().DIR_TES.'/tableta/', array('onsubmit'=>"return confirm
                     if($showUpdate) echo '<td><a href="'.site_url().DIR_TES.'/tableta/update/'.$fila->id.'" class="btn btn-small btn-primary btn-icon">Modificar <i class="icon-pencil"></i></a></td>';
                     
                     if($showDelete) echo '<td><a href="'.site_url().DIR_TES.'/tableta/delete/'.$fila->id.'"
-                        onclick="if(confirm(\'Realmente desea eliminar el registro\')) { return true; } else { return false; }" class="btn btn-small btn-primary btn-icon">Eliminar <i class="icon-remove"></i></a></td>';
+                        onclick="if(confirm(\'¿Realmente desea eliminar el registro?\')) { return true; } else { return false; }" class="btn btn-small btn-primary btn-icon">Eliminar <i class="icon-remove"></i></a></td>';
                 echo '</tr>';
             }
         } else {

@@ -62,7 +62,7 @@ Buscar grupo
 		<td><?php echo $group_item->descripcion ?></td>
 		<?php if($opcion_view) { ?><td><a id='detalles' href="/<?php echo DIR_SIIGS?>/grupo/view/<?php echo $group_item->id ?>" class="btn btn-small btn-primary btn-icon">Detalles <i class="icon-eye-open"></i></a></td><?php } ?>
 		<?php if($opcion_update) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/update/<?php echo $group_item->id ?>" class="btn btn-small btn-primary btn-icon">Modificar <i class="icon-pencil"></i></a></td><?php } ?>
-		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/delete/<?php echo $group_item->id ?>" class="btn btn-small btn-primary btn-icon" onclick="if (confirm('Realmente desea eliminar este grupo?')) { return true; } else {return false;}">Eliminar <i class="icon-remove"></i></a></td><?php } ?>
+		<?php if($opcion_delete) { ?><td><a href="/<?php echo DIR_SIIGS?>/grupo/delete/<?php echo $group_item->id ?>" class="btn btn-small btn-primary btn-icon" onclick="if (confirm('¿Realmente desea eliminar este grupo?')) { return true; } else {return false;}">Eliminar <i class="icon-remove"></i></a></td><?php } ?>
 			</tr>
 	<?php endforeach ?>
 </tbody>
