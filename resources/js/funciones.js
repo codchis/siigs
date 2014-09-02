@@ -100,7 +100,7 @@ function dibujaGrafica(datos, etiquetasEjes, idDiv) {
                 show: true
             },
             points: {
-                show: true
+                show: false
             }
         },
         grid: {

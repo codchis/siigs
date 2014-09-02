@@ -2546,16 +2546,17 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
                 break;
             case 'con_hemo':
                 foreach ($objResultPac as $pac) {
-                    if($pac->hemoglobina) {
+                    if($pac->hemoglobina != 0 && $pac->hemoglobina != null && $pac->hemoglobina != '') {
                         $puntos[] = array($pac->edad_meses, $pac->hemoglobina);
                     }
                 }
         }
         
         $series[] = array(
-                'color' => 'black',
-                'label' => ' &nbsp; Paciente',
-                'data'  => $puntos,
+                'color'  => 'black',
+                'label'  => ' &nbsp; Paciente',
+                'data'   => $puntos,
+                'points' => array( 'show' => true )
             );
         
         $puntos = NULL;

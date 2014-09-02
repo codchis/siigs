@@ -548,22 +548,23 @@ class Enrolamiento extends CI_Controller
 	 *
 	 * @return 		echo
 	 */
-	public function file_to_card($id,$tipo="")
+	public function file_to_card($id, $download=true)
 	{
 		$archivo=date("YmdHis").".tesf";
         $SEPARADOR_BLOQUE = '^';
         
-		header("Pragma: public");
-		header("Expires: 0");
-		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-		if($tipo=="")
+		if($download == true)
 		{
+            header("Pragma: public");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 			header("Content-Type: application/force-download");
 			header("Content-Type: application/octet-stream");
 			header("Content-Type: application/download");
 			header("Content-Disposition: attachment;filename=".$archivo);
+            header("Content-Transfer-Encoding: binary ");
 		}
-		header("Content-Transfer-Encoding: binary ");
+        
 		$this->load->model(DIR_TES.'/Enrolamiento_model');
 		$data="";
 		
