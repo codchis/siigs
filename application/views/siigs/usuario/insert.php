@@ -16,7 +16,7 @@ $(document).ready(function()
 	<table>
 	<tr>
 		<td><label for="id_grupo">Grupo</label></td>
-		<td><?php echo form_dropdown('id_grupo', $grupos, '', 'title=\'requiere\''); ?></td>
+		<td><?php echo form_dropdown('id_grupo', $grupos, '', 'title=\'requiere\' required'); ?></td>
 	</tr>
 	<tr>
 		<td><label for="nombre_usuario">Nombre de usuario</label></td>

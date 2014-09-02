@@ -145,7 +145,7 @@ $(document).ready(function(){
 <table width="100%">
 <tr>
 <td>Codigo: </td>
-<td colspan="3"><input type="text" name="lote" style="width:98%" placeholder="<?php if(isset( $_POST["lote"]))echo $_POST["lote"]; else echo "Codigo de barras";?>"  /></td>
+<td colspan="3"><input type="text" name="lote" style="width:98%" value="<?php if(isset( $_POST["lote"]))echo $_POST["lote"]; else echo "Codigo de barras";?>"  /></td>
 </tr>
 <tr>
 <td width="25%">Jurisdicción: </td>
@@ -161,9 +161,9 @@ $(document).ready(function(){
 </tr>
 <tr>
 <td>Desde: </td>
-<td><input name="desde" type="text" id="desde" placeholder="<?php if(isset( $_POST["desde"]))echo $_POST["desde"]; else echo "dd-mm-YYYY";?>" style="width:58%" maxlength="10" readonly="readonly"  /></td>
+<td><input name="desde" type="text" id="desde" value="<?php if(isset( $_POST["desde"]))echo $_POST["desde"]; else echo "";?>" style="width:58%" maxlength="10"  /></td>
 <td>Hasta: </td>
-<td><input name="hasta" type="text" id="hasta" placeholder="<?php if(isset( $_POST["hasta"]))echo $_POST["hasta"]; else echo "dd-mm-YYYY";?>" style="width:58%" maxlength="10" readonly="readonly"  /></td>
+<td><input name="hasta" type="text" id="hasta" value="<?php if(isset( $_POST["hasta"]))echo $_POST["hasta"]; else echo "";?>" style="width:58%" maxlength="10" /></td>
 </tr>
 <tr>
 <td colspan='4'>
