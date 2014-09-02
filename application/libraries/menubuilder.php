@@ -34,7 +34,7 @@ class Menubuilder
      */
     public static function build($todos=false)
     {
-        self::$CI->load->helper('phpQuery');
+        self::$CI->load->helper('phpquery');
         
         $strMenu = '<ul class="nav">';
 
