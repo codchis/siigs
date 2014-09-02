@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 /**
  * Controlador Objetos
  *
- * @package		Librería
+ * @package		Libreria
  * @subpackage	Controlador
  * @author     	Eliecer
  * @created		2013-12-10
@@ -16,7 +16,6 @@ class Graph extends CI_Controller
 		$this->load->helper('url');
 	}
 	/**
-	 * @access public
 	 *
 	 * Crea una grafica en el lugar que se llame
 	 * 
@@ -78,8 +77,8 @@ class Graph extends CI_Controller
 		$data["etiqueta"]=json_decode(urldecode($label));
 		$this->load->view(DIR_TES.$url,$data);
 	}
+        
 	/**
-	 * @access public
 	 *
 	 * crea un objeto mapa con la ayuda de la api de google
 	 * 

@@ -1,9 +1,9 @@
-<?php if ( ! defined('BASEPATH')) exit('No se permite acceso directo al script');
+﻿<?php if ( ! defined('BASEPATH')) exit('No se permite acceso directo al script');
 
 /**
  * Menu Builder
  * 
- * @package    Librería
+ * @package    Libreria
  * @subpackage Clase
  * @author     Pascual
  * @created    2013-01-14

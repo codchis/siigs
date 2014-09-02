@@ -29,6 +29,12 @@ class Raiz extends CI_Controller {
 		}
 	}
         
+        /**
+         * Crea los archivos JSON necesarios para iniciar el ASU en caché y agilizar su carga
+         * 
+         * @param type $id ID del asu
+         */
+        
         public function iniciarasu($id){
             error_reporting(E_ALL);
             try
@@ -301,7 +307,7 @@ class Raiz extends CI_Controller {
 
 	 /**
 	 *
-	 *Acción para crear o actualizar el ASU a partir de una raiz
+	 *Acción para crear el ASU a partir de una raiz
          *Solo se permite su acceso por medio de peticiones AJAX
 	 *
 	 * @param  int $id
@@ -420,8 +426,17 @@ class Raiz extends CI_Controller {
                 echo "Acceso denegado";
             }
 	}
-         
-        	public function updateasu($id)
+        
+         /**
+	 *
+	 *Acción para actualizar el ASU a partir de una raiz
+         *Solo se permite su acceso por medio de peticiones AJAX
+	 *
+	 * @param  int $id
+	 * @return void
+	 */
+        
+        public function updateasu($id)
 	{
             if ($this->input->is_ajax_request())
             {
@@ -576,7 +591,6 @@ class Raiz extends CI_Controller {
          * @param Int $desglose parametro pasado por POST y determina si se requiere información adicional
          * 
          * @return Object JSON con la información requerida
-         * @return 'Acceso denegado si la petición no es de tipo AJAX'
          * **/
         
         public function getDataTreeFromId()
@@ -613,7 +627,6 @@ class Raiz extends CI_Controller {
          * @param Array $claves Este parametro es pasado por POST y es la lista de valores a preseleccionar en el arbol
          * 
          * @return Object JSON con la información requerida
-         * @return 'Acceso denegado si la petición no es de tipo AJAX'
          * **/
 
                 public function getChildrenFromLevel()
@@ -648,6 +661,19 @@ class Raiz extends CI_Controller {
 		echo $e->getMessage();
             }
         }
+        
+        /**
+         * Sirve para obtener bloques del arbol de segmentación única ASU
+         * solo se puede acceder por peticiones AJAX, los parametros son pasados por GET
+         * @param int $idarbol ID del arbol (el arbol usado por la TES es el 1)
+         * @param int $nivel nivel del arbol que se desea obtener
+         * @param array $seleccionados se especifica si dentro del arreglo de retorno, hay valores preseleccionados
+         * @param bool $seleccionable especifica si los elementos del arbol pueden ser seleccionados
+         * @param array $seleccionables especifica que niveles del arbol pueden ser seleccionados
+         * @param array $omitidos especifica niveles omitidos dentro del arbol (Si hay un nivel intermedio omitido, los hijos de este nivel son agregados como hijos de su nivel inmediato superior)
+         * 
+         * @return Object JSON
+         */
         
         public function getTreeBlock()
         {
@@ -717,10 +743,12 @@ class Raiz extends CI_Controller {
             echo json_encode($this->ArbolSegmentacion_model->getDataKeyValue($idarbol,$nivel,$filtro));
         }
         
+        /*
         public function prueba ($id)
         {
             header('Content-type: application/json; charset=utf-8');
             echo json_encode($this->ArbolSegmentacion_model->getChildrenFromLevel($id,1,array(null),array(null)),JSON_UNESCAPED_UNICODE);
             //echo json_encode($this->ArbolSegmentacion_model->getCluesFromId(20063));
         }
+         */
 }

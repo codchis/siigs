@@ -715,7 +715,6 @@ class Enrolamiento_model extends CI_Model
 	}
     
 	 /**
-	 * @access public
 	 *
 	 * Hace insert de las tablas cns_control_x que se reciben en la sincronizacion secuencial
 	 * 
@@ -737,7 +736,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Actualiza la tabla especificada 
 	 * 
@@ -780,7 +778,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Guarda la persona capturada mediante el formulario web 
 	 * 
@@ -1098,7 +1095,6 @@ class Enrolamiento_model extends CI_Model
 		return $this->id;
 	}
 	 /**
-	 * @access public
 	 *
 	 * Este metodo actualiza o inserta los datos que permiten el envio de la informacion a la tarjeta por nfc
 	 * 
@@ -1136,7 +1132,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Este metodo valida que exista un archivo para enviar a la tarjeta por nfc
 	 * 
@@ -1152,7 +1147,6 @@ class Enrolamiento_model extends CI_Model
 		return ($query->num_rows() >0);		
 	}
 	 /**
-	 * @access public
 	 *
 	 * Extrae el folio que se anexa en el envio para la tarjeta 
 	 * 
@@ -1168,7 +1162,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Actualiza los datos basicos del paciente
 	 *
@@ -1202,7 +1195,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * Actualiza la unidad medica tratante del paciente
 	 *
@@ -1226,7 +1218,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * actualiza la direccion del paciente
 	 *
@@ -1265,7 +1256,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * actualiza el registro civil del paciente
 	 *
@@ -1290,7 +1280,6 @@ class Enrolamiento_model extends CI_Model
 			$res = $this->db->insert('cns_registro_civil', $data);
 	}
 	/**
-	 * @access public
 	 *
 	 * Actualiza los datos del tutor del paciente
 	 *
@@ -1362,7 +1351,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * Actualiza los datos de las alergias del paciente
 	 *
@@ -1394,7 +1382,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * Actualiza las vacunas del paciente
 	 *
@@ -1428,7 +1415,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * Actualiza el control consulta del paciente
 	 *
@@ -1464,7 +1450,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * Actualiza el control accion nutricional del paciente
 	 *
@@ -1498,7 +1483,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * Actualiza el control nutricional del paciente
 	 *
@@ -1535,7 +1519,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * Actualiza el tipo de beneficiario del paciente
 	 *
@@ -1569,7 +1552,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	 /**
-	 * @access public
 	 *
 	 * Hace update de la tableta que este sincronizando dependiendo del resultado
 	 * 
@@ -1599,7 +1581,6 @@ class Enrolamiento_model extends CI_Model
 		}
 	}
 	 /**
-	 * @access public
 	 *
 	 * Este metodo retorna el list de las personas enroladas
 	 * 
@@ -1678,7 +1659,6 @@ class Enrolamiento_model extends CI_Model
 		return;
 	}
 	 /**
-	 * @access public
 	 *
 	 * Devuelve el numero de filas en la tabla cns_persona
 	 * 
@@ -1748,7 +1728,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	 /**
-	 * @access public
 	 *
 	 * Obtiene la informacion de la persona
 	 * 
@@ -1782,7 +1761,6 @@ class Enrolamiento_model extends CI_Model
 		return;
 	}
 	/**
-	 * @access public
 	 *
 	 * obtiene informacion del registro civil
 	 * 
@@ -1809,7 +1787,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Obtiene las alergias asociadas a una persona
 	 * 
@@ -1839,8 +1816,7 @@ class Enrolamiento_model extends CI_Model
 		return;
 	}
 	
-		/**
-	 * @access public
+	/**
 	 *
 	 * Obtiene las afiliaciones asociadas a una persona
 	 * 
@@ -1871,7 +1847,6 @@ class Enrolamiento_model extends CI_Model
 		return;
 	}
 	 /**
-	 * @access public
 	 *
 	 * Hace select de los catalogos que tengan relacion con una persona para mostrarlos en el view
 	 * 
@@ -1906,7 +1881,6 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	/**
-	 * @access public
 	 *
 	 * Obtiene los datos del control nutricional asociados a una persona
 	 * 
@@ -1937,7 +1911,6 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	 /**
-	 * @access public
 	 *
 	 * Hace select de las tablas cns_x que representa a los catalogos
 	 * 
@@ -1974,7 +1947,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Hace select de los tratamientos de las consultas
 	 * 
@@ -2012,7 +1984,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Obtiene el numero de resultados de una tabla
 	 * 
@@ -2034,7 +2005,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Obtiene los datos de una tabla
 	 * 
@@ -2080,7 +2050,6 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	/**
-	 * @access public
 	 *
 	 * Este metodo obtiene las notificaciones que se enviaran en la sincronizacion
 	 * 
@@ -2108,7 +2077,6 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	/**
-	 * @access public
 	 *
 	 * Este metodo obtiene las personas que seran enviadas en la sincronizacion
 	 * 
@@ -2140,7 +2108,6 @@ class Enrolamiento_model extends CI_Model
 	}
 
 	 /**
-	 * @access public
 	 *
 	 * Este metodo obtiene los controles que le corresponde a cada persona y que seran incluidas en la sincronizacion
 	 * 
@@ -2179,7 +2146,6 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	 /**
-	 * @access public
 	 *
 	 * Hace el count de personas que se envian en la sincronizacion
 	 * 
@@ -2199,7 +2165,6 @@ class Enrolamiento_model extends CI_Model
 	}
 
 	 /**
-	 * @access public
 	 *
 	 * obtiene los tutores de las personas que se envian en la sincronizacion
 	 * 
@@ -2225,7 +2190,6 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	 /**
-	 * @access public
 	 *
 	 * obtiene los catalogos relevante x entorno para la sincronizacion	 
 	 *
@@ -2251,7 +2215,6 @@ class Enrolamiento_model extends CI_Model
 	}
 
 	 /**
-	 * @access public
 	 *
 	 * Obtiene las transacciones relevante para la sincronizacion
 	 * 
@@ -2277,7 +2240,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	 /**
-	 * @access public
 	 *
 	 * obtiene cual es la ultima version de apk de la tableta
 	 * 
@@ -2302,7 +2264,6 @@ class Enrolamiento_model extends CI_Model
 	}
 
 	 /**
-	 * @access public
 	 *
 	 * obtiene informacion del tutor
 	 * 
@@ -2325,7 +2286,6 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	 /**
-	 * @access public
 	 *
 	 * obtiene informacion del tutor para genberar el autocomplete
 	 * 
@@ -2355,7 +2315,6 @@ class Enrolamiento_model extends CI_Model
 		return null;
 	}
 	 /**
-	 * @access public
 	 *
 	 * valida que no se repita la curp en personas y tutor
 	 * 
@@ -2382,7 +2341,6 @@ class Enrolamiento_model extends CI_Model
 		return;
 	}
 	/**
-	 * @access public
 	 *
 	 * Elimina los pendientes de las personas que no tengan asignado una tarjeta
 	 * 
@@ -2401,7 +2359,6 @@ class Enrolamiento_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * devuelve todos los pacientes de la base de datos
 	 * 
@@ -2632,7 +2589,6 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 	}
     
     /**
-	 * @access public
 	 *
 	 * Obtiene los registros de perimetro cefalico asociados a una persona
 	 * 
@@ -2664,7 +2620,6 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 	}
     
     /**
-	 * @access public
 	 *
 	 * Actualiza los registros de perimetro cefalico
 	 *
@@ -2694,7 +2649,6 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 	}
     
     /**
-	 * @access public
 	 *
 	 * Obtiene los registros de estimulacion temprana asociados a una persona
 	 * 
@@ -2726,7 +2680,6 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 	}
     
     /**
-	 * @access public
 	 *
 	 * Actualiza los registros de estimulacion temprana
 	 *
@@ -2872,7 +2825,6 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
     }
     
     /**
-	 * @access public
 	 *
 	 * Actualiza los registros de sales de rehidratacion oral
 	 *
@@ -2902,7 +2854,6 @@ LEFT JOIN asu_arbol_segmentacion a ON a.id=p.id_asu_localidad_nacimiento");
 	}
     
     /**
-	 * @access public
 	 *
 	 * Obtiene los registros de sales de rehidratación oral asociados a una persona
 	 * 

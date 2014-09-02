@@ -20,7 +20,6 @@ class Reporte_sincronizacion_model extends CI_Model
 	
 	
 	/**
-	 * @access public
 	 *
 	 * Obtiene el resultado de una consulta
 	 * 
@@ -44,7 +43,6 @@ class Reporte_sincronizacion_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * obtiene el numero de registros de una tabla o consulta
 	 * 
@@ -64,7 +62,6 @@ class Reporte_sincronizacion_model extends CI_Model
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * obtiene la ultima version de la apk de las tabletas
 	 *

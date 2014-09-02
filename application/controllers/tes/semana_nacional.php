@@ -272,7 +272,7 @@ class Semana_nacional extends CI_Controller {
     /**
      * Devuelve un json con todos los registros de semanas nacional
      *
-     * @access public solo por metodo POST
+     * @access public
      * @return json
      */
     public function getAll()

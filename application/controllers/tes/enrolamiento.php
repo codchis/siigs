@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Controller Usuario
+ * Controlador de enrolamiento
  *
  * @package     TES
  * @subpackage  Controlador
@@ -26,20 +26,14 @@ class Enrolamiento extends CI_Controller
 		}
 	}
 	
-	/**
-	 *
-	 *se recibe el parametro $pag de tipo int que representa la paginacion
-	 *
-	 */
 	 /**
-	 * @access public
 	 *
-	 * Este es el metodo por default, obtiene el listado de las perosnas
-	 * 
+	 * Este es el metodo por default, obtiene el listado de las personas
+         * se recibe el parametro $pag de tipo int que representa la paginacion
 	 * @param		string 		$pag        numero de pagina para la posicion
 	 * @param		string 		$id         id de una persona
 	 *
-	 * @return 		echo
+	 * @return 		echo object
 	 */
 	public function index($pag = 0, $id="", $array="")
 	{
@@ -82,7 +76,6 @@ class Enrolamiento extends CI_Controller
  		$this->template->render();
 	}
 	 /**
-	 * @access public
 	 *
 	 * Este metodo estrae la informacion del paciente que sera impreso en la tarjeta
 	 * 
@@ -90,6 +83,7 @@ class Enrolamiento extends CI_Controller
 	 *
 	 * @return 		echo
 	 */
+        
 	public function print_card($id)
 	{
 		$this->load->model(DIR_SIIGS.'/ArbolSegmentacion_model');
@@ -128,8 +122,8 @@ class Enrolamiento extends CI_Controller
 		
 		echo implode("|",$datos);
 	}
+        
 	  /**
-	 * @access public
 	 *
 	 * Crea la pagina para ver la infromacion de la persona
 	 * 
@@ -190,7 +184,6 @@ class Enrolamiento extends CI_Controller
 	}
 	
 	 /**
-	 * @access public
 	 *
 	 * Crea el fromulario para editar la informacion de la persona
 	 * 
@@ -331,7 +324,6 @@ class Enrolamiento extends CI_Controller
  		
 	}
 	/**
-	 * @access public
 	 *
 	 * Genera los options de un campo tipo select 
 	 * 
@@ -366,7 +358,6 @@ class Enrolamiento extends CI_Controller
 	}	 
 	
 	/**
-	 * @access public
 	 *
 	 * Genera los options de un campo tipo select para los tratamientos de consultas
 	 * 
@@ -412,7 +403,6 @@ class Enrolamiento extends CI_Controller
 		echo "<option>No hay Datos</option>";
 	}	 
 	/**
-	 * @access public
 	 *
 	 * Crea un grupo de radio o check con la informacion de los catalogos
 	 * 
@@ -472,7 +462,6 @@ class Enrolamiento extends CI_Controller
 		echo "No hay Datos";
 	}
 	 /**
-	 * @access public
 	 *
 	 * Crea el autocomplete para facilitar la busqueda de un tutor
 	 * 
@@ -493,7 +482,6 @@ class Enrolamiento extends CI_Controller
 		echo json_encode($array);
 	}
 	 /**
-	 * @access public
 	 *
 	 * Obtiene inofrmacion del tutor
 	 * 
@@ -540,7 +528,6 @@ class Enrolamiento extends CI_Controller
 		echo json_encode($array);
 	}
 	 /**
-	 * @access public
 	 *
 	 *  crea un archivo descargable el cual se necesita para el envio por nfc a la tarjeta del paciente
 	 * 
@@ -738,7 +725,6 @@ class Enrolamiento extends CI_Controller
         echo $SEPARADOR_BLOQUE;
 	}
 	 /**
-	 * @access public
 	 *
 	 * Este metodo actualiza el estado del archivo descargado si fue escrito correctamente o no en la tarjeta
 	 * 
@@ -758,7 +744,6 @@ class Enrolamiento extends CI_Controller
 	}
 	 
 	 /**
-	 * @access public
 	 *
 	 * valida que un archivo sea valido para enviar a la tarjeta por nfc
 	 * 
@@ -773,7 +758,6 @@ class Enrolamiento extends CI_Controller
 		echo $this->Enrolamiento_model->valid_card($persona,$archivo);
 	}
 	 /**
-	 * @access public
 	 *
 	 * prepara los datos para insertarlos
 	 *
@@ -839,7 +823,6 @@ class Enrolamiento extends CI_Controller
 	}
 	 
 	 /**
-	 * @access public
 	 *
 	 * valida los datos de entrada en el formulario
 	 * 
@@ -916,7 +899,6 @@ class Enrolamiento extends CI_Controller
 	}
 	
 	 /**
-	 * @access public
 	 *
 	 * Pase de parametros para la insercion o actualizacion
 	 *
@@ -993,7 +975,6 @@ class Enrolamiento extends CI_Controller
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Valida que la curp del paciente no exista
 	 * 
@@ -1036,8 +1017,8 @@ class Enrolamiento extends CI_Controller
 			}
 		}else return true;
 	}
+        
 	/**
-	 * @access public
 	 *
 	 * valida que la curp del tutor no exista
 	 * 
@@ -1078,8 +1059,8 @@ class Enrolamiento extends CI_Controller
 			}
 		}
 	}
+        
 	 /**
-	 * @access public
 	 *
 	 * Este metodo verifica si un paciente comparte un mismo tutor
 	 * 
@@ -1097,7 +1078,6 @@ FROM  cns_persona p WHERE p.id='$id'");
 	}
 	 
 	 /**
-	 * @access public
 	 *
 	 * Este metodo extrae la informacion de las personas con las que se comparte el mismo tutor si se selecciona una de estas importa los datos para el apartado direccion
 	 * 
@@ -1115,8 +1095,8 @@ LEFT JOIN cns_persona p ON p.id=t.id_persona
 WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 		echo json_encode($result);
 	}
+        
 	 /**
-	 * @access public
 	 *
 	 * valida que el nodo seleccionado en el arbol sea una unidad medica
 	 * 
@@ -1134,7 +1114,6 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 	}
         
 	 /**
-	 * @access public
 	 *
 	 * Busca dentro del catalogo asu_ageb la unidad médica de acuerdo a la localidad y ageb
 	 * Solo se permite su acceso por medio de peticiones AJAX
@@ -1168,7 +1147,6 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
         
         
 	 /**
-	 * @access public
 	 *
 	 * Regresa un objeto JSON con la lista de agebs disponibles en la localidad
 	 * Solo se permite su acceso por medio de peticiones AJAX
@@ -1192,7 +1170,6 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
         
         
 	/**
-	 * @access public
 	 *
 	 * Comprueba la similitud de un paciente que se este capturando con los que ya existe en la base de datos, 
 	 * esto con la finalidad de disminuir datos repetidos
@@ -1254,7 +1231,6 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Crea la pagina para ver la infromacion de la persona y comprararla con la persona capturada
 	 * 
@@ -1302,6 +1278,16 @@ WHERE t.id_tutor='$tutor' and t.id_tutor!='ffec1916fae9ee3q3a1a98f0a7b31400'");
  		$this->template->write_view('content',DIR_TES.'/enrolamiento/enrolamiento_compara', $data);
  		$this->template->render();
 	}
+        
+        /**
+	 *
+	 * Obtiene el historial de vacunacion de un paciente cuyo id es pasado por parametro
+	 * 
+	 * @param		date 		$fecha        
+         * @param               string          $id 
+	 *
+	 * @return 		echo
+	 */
 	public function vacunacion($fecha,$id="")
 	{
 		$fecha=date("Y-m-d",strtotime($fecha));
@@ -1314,6 +1300,13 @@ SELECT DISTINCT	r.id_vacuna,cv.codigo_barras, v.descripcion,r.dia_inicio_aplicac
 		$data['id_x']=$id;
 		$this->load->view(DIR_TES.'/enrolamiento/vacuna', $data);
 	}
+        
+        /**
+	 *
+	 * Revisa si la sesión está activa
+	 *
+	 * @return bool
+	 */
 	public function checar_session()
 	{
 		$this->load->library('session');
@@ -1323,14 +1316,15 @@ SELECT DISTINCT	r.id_vacuna,cv.codigo_barras, v.descripcion,r.dia_inicio_aplicac
 			echo "si";
 	}
 	
+        /*
 	public function accion()
 	{
 		$data['prefix']='hola';
 		$this->load->view(DIR_TES.'/TESNFC/Web/index',$data);
 	}
+         */
     
 	/**
-	 * @access public
 	 *
 	 * Genera los options de un campo tipo select para las categorías de CIE10
 	 * 
@@ -1356,8 +1350,7 @@ SELECT DISTINCT	r.id_vacuna,cv.codigo_barras, v.descripcion,r.dia_inicio_aplicac
             echo "<option>No hay Datos</option>";
 	}
     
-    /**
-	 * @access public
+         /**
 	 *
 	 * Genera los options de un campo tipo select para los CIE10 correspondientes a una categoría
 	 * 

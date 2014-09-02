@@ -436,7 +436,7 @@ class Usuario_model extends CI_Model {
 	/** 
 	 * Verifica que el usuario haya iniciado sesión y además tenga permiso en la acción recibida
 	 *
-	 * @access public  	static
+	 * @access public
 	 * @param  string  	$path			entorno::controlador::accion
 	 * @param  int		$group_id		id del grupo a validar permisos
 	 * @return void

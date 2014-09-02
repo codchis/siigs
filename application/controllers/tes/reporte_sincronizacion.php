@@ -26,7 +26,6 @@ class Reporte_sincronizacion extends CI_Controller
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Este es el metodo por default, crea el listado del reporte de sincronizacion
 	 *
@@ -92,7 +91,6 @@ class Reporte_sincronizacion extends CI_Controller
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Muestra detallada por cada list del reporte de sincronizacion
 	 * 
@@ -168,7 +166,6 @@ class Reporte_sincronizacion extends CI_Controller
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Genera el item del reporte de lote de vacunacion
 	 *
@@ -333,7 +330,6 @@ class Reporte_sincronizacion extends CI_Controller
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Muestra detallada por cada list del reporte de lote de vacunacion
 	 * 

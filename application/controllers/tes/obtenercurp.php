@@ -2,7 +2,7 @@
 /**
  * Controlador Objeto
  *
- * @package		Librería
+ * @package		Libreria
  * @subpackage	Controlador
  * @author     	Eliecer
  * @created		2013-12-10
@@ -10,6 +10,10 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Obtenercurp extends CI_Controller 
 {
+    /**
+     *Arreglo con los estados y sus abreviaturas, sirven para el cálculo de la CURP
+     * @var $estados
+     */
 	public $estados=
 		array(
 			array(
@@ -50,13 +54,13 @@ class Obtenercurp extends CI_Controller
 				"NACIDO EN EL EXTRANJERO"=>"NE"
 			)
 		);
+        
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->helper('url');
 	}
 	/**
-	 * @access public
 	 *
 	 * Consulta si la curp existe en la base de datos de la condusef
 	 * 
@@ -185,7 +189,6 @@ class Obtenercurp extends CI_Controller
 	}
         
 	/**
-	 * @access public
 	 *
 	 * Calcula la curp y el rfc con los datos proporcionados
 	 * 
@@ -259,7 +262,6 @@ class Obtenercurp extends CI_Controller
 	}
         
         /**
-	 * @access public
 	 *
 	 * Calcula la curp y el rfc con los datos proporcionados
 	 * 

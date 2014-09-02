@@ -3,7 +3,7 @@
  * Controlador Servicios
  *
  * @package    TES
- * @subpakage  Controlador
+ * @subpackage  Controlador
  * @author     Eliecer
  * @created    2013-11-27
  */
@@ -29,7 +29,6 @@ class Servicios extends CI_Controller {
 		$this->load->model(DIR_TES.'/Reporte_sincronizacion_model');
     }
 	/**
-	 * @access public
 	 *
 	 * Metodo principal al que se le hacen las peticiones y es el que se encarga de distribuir la informacion
 	 * recibe parametros por POST
@@ -59,7 +58,6 @@ class Servicios extends CI_Controller {
 	}	
 
     /**
-	 * @access public
 	 *
 	 * Paso 0 se procesa las peticiones segun la accion:
      * Si la acci�n es 1: Valida la disponibilidad del dispositivo especificado y genera una session que se mantiene activa en toda la sincronizacion
@@ -119,7 +117,6 @@ class Servicios extends CI_Controller {
         }
     }
 	/**
-	 * @access public
 	 *
 	 * valida que la tableta este asignada a una unidad medica y que tenga un status valido para la sincronizacion
 	 * recibe parametros por POST
@@ -198,7 +195,6 @@ class Servicios extends CI_Controller {
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Valida que la session este activa, genera los catalogos a enviar en la sincronizacion por primera vez
 	 * 
@@ -459,7 +455,6 @@ class Servicios extends CI_Controller {
 	}
 	
 	/**
-	 * @access public
 	 *
 	 * Guarda en la base de datos el estado de la sincronizacion
 	 * 
@@ -497,7 +492,6 @@ class Servicios extends CI_Controller {
 		fclose($fp);
 	}
 	/**
-	 * @access public
 	 *
 	 * Prepara la informacion de perssonas con su catalogos transaccionales de cada una
 	 * 
@@ -684,7 +678,6 @@ class Servicios extends CI_Controller {
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * Recibe los datos que genero la tableta para ser almacenados en la base de datos del servidor
 	 * 
@@ -832,7 +825,6 @@ class Servicios extends CI_Controller {
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * prepara los datos para la sincronizacion secuencia, envia unicamente aquellos datos modificados despues de la ultima sincronizacion de la tableta
 	 * 
@@ -1021,7 +1013,6 @@ class Servicios extends CI_Controller {
 		}
 	}
 	/**
-	 * @access public
 	 *
 	 * Actualiza el estatus de la tableta
 	 * 
@@ -1050,7 +1041,6 @@ class Servicios extends CI_Controller {
 		}
     }
 	/**
-	 * @access public
 	 *
 	 * Genera los esquemas incompletos de las personas que correspondan a la unidad medica de la tableta
 	 * 
@@ -1102,7 +1092,6 @@ class Servicios extends CI_Controller {
 		return $cadena;
 	}
 	/**
-	 * @access public
 	 *
 	 * Genera los catalogos relevantes por entorno
 	 * 

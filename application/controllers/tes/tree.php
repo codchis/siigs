@@ -2,7 +2,7 @@
 /**
  * Controlador Objeto
  *
- * @package		Librería
+ * @package		Libreria
  * @subpackage	Controlador
  * @author     	Eliecer
  * @created		2013-12-10
@@ -16,7 +16,6 @@ class Tree extends CI_Controller
 		$this->load->helper('url');
 	}
 	/**
-	 * @access public
 	 *
 	 * Crea el arbol y lo muestra en la view
 	 * 

@@ -94,10 +94,10 @@ class Notificacion extends CI_Controller {
 	}
 
 	/**
-	 * Visualiza los datos de la notificaci�n recibida
+	 * Visualiza los datos de la notificación recibida
 	 *
 	 * @access		public
-	 * @param		int 		$id 	id de notificaci�n a visualizar
+	 * @param		int 		$id 	id de notificación a visualizar
 	 * @return 		void
 	 */
 	public function view($id)
@@ -130,7 +130,7 @@ class Notificacion extends CI_Controller {
 	}
 
 	/**
-	 * 1) Prepara el formulario para la inserción de una notificaci�n nueva
+	 * 1) Prepara el formulario para la inserción de una notificación nueva
 	 * 2) Realiza las validaciones necesarias sobre cada campo del registro
 	 *
 	 * @access		public
@@ -174,7 +174,7 @@ class Notificacion extends CI_Controller {
 				$this->Notificacion_model->insert();
 				$this->session->set_flashdata('msgResult', 'Registro agregado exitosamente');
 				$this->session->set_flashdata('clsResult', 'success');
-				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificaci�n agregada: '.strtoupper($this->input->post('titulo')));
+				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificación agregada: '.strtoupper($this->input->post('titulo')));
 				redirect(DIR_TES.'/notificacion','refresh');
 			}
 			catch (Exception $e){
@@ -187,11 +187,11 @@ class Notificacion extends CI_Controller {
 	}
 
 	/**
-	 * 1) Prepara el formulario para la modificación de una notificaci�n existente
+	 * 1) Prepara el formulario para la modificación de una notificación existente
 	 * 2) Realiza las validaciones necesarias sobre cada campo del registro
 	 *
 	 * @access		public
-	 * @param		int 		$id 	id de la notificaci�n a modificar
+	 * @param		int 		$id 	id de la notificación a modificar
 	 * @return 		void
 	 */
 	public function update($id)
@@ -233,7 +233,7 @@ class Notificacion extends CI_Controller {
 				$this->Notificacion_model->update();
 				$this->session->set_flashdata('msgResult', 'Registro actualizado exitosamente');
 				$this->session->set_flashdata('clsResult', 'success');
-				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificaci�n actualizada: '.$id);
+				Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificación actualizada: '.$id);
 				redirect(DIR_TES.'/notificacion','refresh');
 			}
 			catch (Exception $e){
@@ -246,10 +246,10 @@ class Notificacion extends CI_Controller {
 	}
 
 	/**
-	 * Solicita la eliminación de la notificaci�n recibida
+	 * Solicita la eliminación de la notificación recibida
 	 *
 	 * @access		public
-	 * @param		int 		$id 	id de notificaci�n a eliminar
+	 * @param		int 		$id 	id de notificación a eliminar
 	 * @return 		void
 	 */
 	public function delete($id)
@@ -263,7 +263,7 @@ class Notificacion extends CI_Controller {
 			$this->Notificacion_model->delete();
 			$this->session->set_flashdata('msgResult', 'Registro eliminado exitosamente');
 			$this->session->set_flashdata('clsResult', 'success');
-			Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificaci�n eliminada: '.$id);
+			Bitacora_model::insert(DIR_TES.'::'.__METHOD__, 'Notificación eliminada: '.$id);
 		}
 		catch (Exception $e){
 			$this->session->set_flashdata('msgResult', Errorlog_model::save($e->getMessage(), __METHOD__));

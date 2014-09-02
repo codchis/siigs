@@ -11,55 +11,46 @@
 class Reporte_censo_nominal extends CI_Model
 {
     /**
-     * @access public
      * @var    varchar
      */
     public $apellido_paterno;
 
     /**
-     * @access public
      * @var    varchar
      */
     public $apellido_materno;
 
     /**
-     * @access public
      * @var    varchar
      */
     public $nombre;
     
     /**
-     * @access public
      * @var    varchar
      */
     public $domicilio;
 
     /**
-     * @access public
      * @var    varchar
      */
     public $curp;
     
     /**
-     * @access public
      * @var    varchar
      */
     public $fecha_nacimiento;
 
     /**
-     * @access public
      * @var    varchar
      */
     public $parto_multiple;
     
     /**
-     * @access public
      * @var    varchar
      */
     public $sexo;
     
     /**
-     * @access public
      * @var    array
      */
     public $vacunas;
