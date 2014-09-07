@@ -83,46 +83,19 @@ class Ageb_model extends CI_Model
     {
         $result = false;
         
-//        $sql = "REPLACE INTO 
-//                    asu_ageb (id_asu_localidad, ageb,id_asu_um)
-//                SELECT  
-//                    c.id AS id_asu_localidad,
-//                    LPAD(a.ageb,4,'0000') AS ageb,
-//                    CASE WHEN
-//                        IFNULL(d.id , '') = ''
-//                    THEN
-//                        a.clues
-//                    ELSE
-//                        d.id
-//                    END 
-//                    AS id_asu_um
-//                    FROM 
-//                        cat_ageb a
-//                    JOIN 
-//                        cat_localidad b 
-//                    ON 
-//                        b.id_localidad = a.id_localidad 
-//                        AND b.id_municipio = a.id_municipio 
-//                        AND a.id_estado = b.id_estado
-//                    LEFT OUTER JOIN 
-//                        asu_arbol_segmentacion c 
-//                    ON 
-//                        b.id = c.id_tabla_original 
-//                        AND c.grado_segmentacion = 4 
-//                        AND c.id_raiz = 1 
-//                    LEFT OUTER JOIN 
-//                        asu_arbol_segmentacion d 
-//                    ON 
-//                        d.grado_segmentacion = 5 
-//                        AND d.id_raiz = 1 
-//                        AND d.id_tabla_original = a.clues";
-        
         $sql = "REPLACE INTO 
                     asu_ageb (id_asu_localidad, ageb,id_asu_um)
                 SELECT  
-                    d.id_padre AS id_asu_localidad,
+                    c.id AS id_asu_localidad,
                     LPAD(a.ageb,4,'0000') AS ageb,
-                    d.id AS id_asu_um
+                    CASE WHEN
+                        IFNULL(d.id , '') = ''
+                    THEN
+                        a.clues
+                    ELSE
+                        d.id
+                    END 
+                    AS id_asu_um
                     FROM 
                         cat_ageb a
                     JOIN 
@@ -131,12 +104,39 @@ class Ageb_model extends CI_Model
                         b.id_localidad = a.id_localidad 
                         AND b.id_municipio = a.id_municipio 
                         AND a.id_estado = b.id_estado
-                    JOIN 
+                    LEFT OUTER JOIN 
+                        asu_arbol_segmentacion c 
+                    ON 
+                        b.id = c.id_tabla_original 
+                        AND c.grado_segmentacion = 4 
+                        AND c.id_raiz = 1 
+                    LEFT OUTER JOIN 
                         asu_arbol_segmentacion d 
                     ON 
                         d.grado_segmentacion = 5 
                         AND d.id_raiz = 1 
                         AND d.id_tabla_original = a.clues";
+        
+//        $sql = "REPLACE INTO 
+//                    asu_ageb (id_asu_localidad, ageb,id_asu_um)
+//                SELECT  
+//                    d.id_padre AS id_asu_localidad,
+//                    LPAD(a.ageb,4,'0000') AS ageb,
+//                    d.id AS id_asu_um
+//                    FROM 
+//                        cat_ageb a
+//                    JOIN 
+//                        cat_localidad b 
+//                    ON 
+//                        b.id_localidad = a.id_localidad 
+//                        AND b.id_municipio = a.id_municipio 
+//                        AND a.id_estado = b.id_estado
+//                    JOIN 
+//                        asu_arbol_segmentacion d 
+//                    ON 
+//                        d.grado_segmentacion = 5 
+//                        AND d.id_raiz = 1 
+//                        AND d.id_tabla_original = a.clues";
 
         $result = $this->db->query($sql);
 
