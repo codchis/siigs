@@ -25,7 +25,7 @@ $(document).ready(function()
 				window.location.href="/<?php echo DIR_TES?>/enrolamiento/";
 			},
 			onComplete      : function(){
-				setTimeout(function(){jQuery.fancybox.close()},500);
+				setTimeout(function(){jQuery.fancybox.close()},2000);
 			}
 		});
 	}
