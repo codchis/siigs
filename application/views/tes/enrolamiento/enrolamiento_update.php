@@ -438,10 +438,10 @@ $cn_nutricion = Menubuilder::isGranted(DIR_TES.'::enrolamiento::nutricion_edit')
                             <td width="25%">
                             
                               <label style=" margin-left:10px; float:left">
-                                <input type="radio" name="sexo" value="M" <?php if($enrolado->sexo=="M") echo "checked"; ?> id="sexo_1" onclick="return false;getcurp();" title='requiere' required style="margin-top:-3px;">
+                                <input type="radio" name="sexo" value="M" <?php if($enrolado->sexo=="M") echo "checked"; ?> id="sexo_1" onclick="getcurp();" title='requiere' required style="margin-top:-3px;">
                                 Masculino</label>
                               <label style=" float:left">
-                                <input type="radio" name="sexo" value="F" <?php if($enrolado->sexo=="F") echo "checked"; ?> id="sexo_2" onclick="return false;getcurp();" style="margin-top:-3px;">
+                                <input type="radio" name="sexo" value="F" <?php if($enrolado->sexo=="F") echo "checked"; ?> id="sexo_2" onclick="getcurp();" style="margin-top:-3px;">
                                 Femenino</label>
                              </td>
                           </tr>
