@@ -19,7 +19,10 @@ function vacunacion(control,id,tiene,fecha,prioridad,ff,latvac,lonvac,tempvac)
 		color='#61ac1e';
 	if(tiene=="X")
 	{
-		fv=fecha.substr(fecha.search("Fecha Aplicada:")+17,fecha.length)
+
+        console.log("fecha: "+fecha);
+		fv=fecha.substr(fecha.search("Fecha Aplicada: ")+16,fecha.length);
+        console.log("fv: "+fv);
 		$('#'+control).html("<span style='margin-left:-9px;color:#fff; font-size:20px;'>"+tiene+
                 "<input type='hidden' name='vacuna[]' value='"+id+"'>\n\
                  <input type='hidden' name='fvacuna[]' id='fv"+control+"' value='"+fv+"'>\n\
